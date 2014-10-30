@@ -1,0 +1,48 @@
+Product Backlog (2-3 pages)
+	Complete list of all functionality (actions)
+	English description of each action
+	Organize features into groups/modules based on related functionality
+
+
+Editor
+	Physics Engine
+	Editing Tools
+
+Profile
+
+Collaboration
+
+Gallery
+
+
+
+
+---
+Views:
+
+Login/Register (editor -> save requires login)
+Home (blank editor, hot/top/new stuff maybe)
+(X) Inbox
+(?) Explore/Gallery (hot, top, new, search, etc.)
+Your Tracks (edit/add collections, organize/tag tracks)
+
+Profile Picture
+	Name
+		View Your Profile
+	Favorites
+	Following
+	Settings
+		Profile
+		Account
+	Logout
+
+
+Logo - Search (?) - - - Home - Explore/Gallery (?) - Your Tracks - Profile Picture
+
+
+
+
+
+
+
+

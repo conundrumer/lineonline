@@ -25,17 +25,10 @@ class Track(models.Model):
 	invitees = models.ManyToManyField(User, related_name='invited_tracks')
 	# date_modified
 	# unique_url
+	# public / private / unlisted status code thing
 
 class Conversation(models.Model):
-	participants: models.ManyToManyField(User, related_name='%(class)s')
-	class Meta:
-		abstract = True
-
-class PrivateConversation(Conversation):
-	pass
-
-class ProjectConversation(Conversation):
-	pass
+	participants: models.ManyToManyField(User, related_name='conversations')
 
 class Message(models.Model):
 	author = models.ForeignKey(User, related_name='messages')
@@ -47,4 +40,10 @@ class Invite(models.Model):
 	sender = models.ForeignKey(User, related_name='sent_invites')
 	recipients = models.ManyToManyField(User, related_name='received_invites')
 	track = models.ForeignKey(Track, related_name='invites')
+
+class Collection(models.Model):
+	user = models.ForeignKey(User, related_name='collections')
+	tracks = models.ManyToManyField(Track, related_name='collections')
+	name = models.CharField(max_length=200)
+	description = models.TextField(max_length=20000)
 
