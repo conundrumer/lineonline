@@ -25,6 +25,8 @@
     "socket.io": "^1.2.0"
   },
   "devDependencies": {
+    "gulp": "^3.8.9",
+    "gulp-sass": "^1.2.2",
     "nodemon": "^1.2.1"
   }
 }
