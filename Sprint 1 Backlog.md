@@ -17,10 +17,11 @@ This is the setup / learning stage.
   - Change password / Email: David
 	
 **Ideally**:
+
 5. Edit Profile:
   - Avatar: Jing	
   - Profile description: Snigdha
-6. **Subscription**: David
+6. Subscription: David
 	
 
 
