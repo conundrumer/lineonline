@@ -1,0 +1,27 @@
+{
+  "name": "LineOnline",
+  "version": "0.0.0",
+  "description": "Web Apps Final Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CMU-Web-Application-Development/Team77.git"
+  },
+  "author": "Snigdha Roy, David Lu, Jing Xiao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CMU-Web-Application-Development/Team77/issues"
+  },
+  "homepage": "https://github.com/CMU-Web-Application-Development/Team77",
+  "dependencies": {
+    "bookshelf": "^0.7.9",
+    "email": "^0.2.6",
+    "express": "^4.10.1",
+    "passport": "^0.2.1",
+    "react": "^0.12.0",
+    "socket.io": "^1.2.0"
+  }
+}
