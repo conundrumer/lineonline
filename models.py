@@ -9,8 +9,8 @@ class UserProfile(models.Model):
 	location = models.CharField(max_length=200, default='', blank=True)
 	about = models.TextField(max_length=20000, default='', blank=True)
 	picture = models.ImageField(upload_to='profile-pictures', default='', blank=True)
-	follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
-	blocks = models.ManyToManyField('self', related_name='blocked_by', symmetrical=False)
+	subscriptions = models.ManyToManyField('self', related_name='subscribers', symmetrical=False)
+	
 
 class Track(models.Model):
 	owner = models.ForeignKey(User, related_name='owned_tracks')
