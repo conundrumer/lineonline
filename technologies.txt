@@ -1,0 +1,80 @@
+Technologies:
+
+	Front end: React
+	Back end: express 
+	ORM: bookshelf.js (Knex)
+	DB: postgres
+	Real-time updates: socket.io 
+	email: email.js
+	athentication: passport
+
+	+ RESTful API
+
+Advice: DON'T GET OVERWHELMED. Learn only what you need when you need it. 
+
+
+Salem's steps to learn:
+	0. Get nodemon for auto restart of server per save
+	1. express server running
+	2. get a landing page 		(templating / routing in express -- not needed if just one page?)
+	3. look through madhum's code	
+	4. hook up database			see how Ghost blogging uses bookshelf	
+	5. get login working 		do this after database so you don't have to rewrite stuff
+								also use only HTML and CSS for this -- use what you know
+	6. serve static data
+	And along the way, debug! Yay. 
+
+References:
+	-- madhums		RESTful API, node app structures
+	-- Ghost		bookshelf
+	-- look up: 	"promise", callback hell, next, catchall for all the errors, monads
+	
+Unit testing:
+	-- mocha unit testing framework
+	-- super agent: basically Client()
+Things that have servers:
+	-- express, postgres, socket.io
+Debugging:
+	-- nodemon, restarts your server automatically per save
+	-- node inspector, breakpoints
+
+Sprint 1: 
+	-- 12 hours per week: 
+		-- figure out all the things listed
+		-- get basic server
+		-- store data 
+		-- authenticated 
+
+Technologies Notes:
+		-- Front end: React
+		-- Back end: 
+			-- RESTful APIs 
+			-- socket.io: 	easy to configure, but runs its own server
+							a library
+			-- Node: 		js engine, like python interpreter always running
+			-- express: 	routing + middleware only, 
+							not handling a lot of dependencies => fewer things to maintain but lots of moving parts
+
+		-- ORM: 
+			-- MongoDB: 		NOPE noSQL but NOT reliable and doesn't abide ACID
+			-- bookshelf.js: 	Knex = query building library, migrations
+								stable, by people who made backbone and underscore,
+								need to import "knex". 
+								Call .save()
+			-- Geddy: (see below)
+		-- Misc:
+			-- Ajax vs web sockets
+
+				ajax: 
+					-- for resources
+					-- http requests
+					-- Have to specify destination url
+
+				web sockets: 
+					-- for connecting client to server in realtime
+					-- always connected, chatroom / editor (MMO)
+					-- not 1 url, rather a wsurl
+
+			-- Reference for Restful Api: madhums, good node app structures. 
+			-- Geddy: ORM, password / authentication, big framework, still in development
+
