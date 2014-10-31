@@ -45,4 +45,5 @@ class Collection(models.Model):
 	tracks = models.ManyToManyField(Track, related_name='collections')
 	name = models.CharField(max_length=200)
 	description = models.TextField(max_length=20000)
+	# playlist-style ordering 
 
