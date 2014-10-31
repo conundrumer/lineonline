@@ -9,7 +9,12 @@ class UserProfile(models.Model):
 	location = models.CharField(max_length=200, default='', blank=True)
 	about = models.TextField(max_length=20000, default='', blank=True)
 	picture = models.ImageField(upload_to='profile-pictures', default='', blank=True)
+<<<<<<< HEAD
 	subscriptions = models.ManyToManyField('self', related_name='subscribed_by', symmetrical=False)
+=======
+	subscriptions = models.ManyToManyField('self', related_name='subscribers', symmetrical=False)
+	
+>>>>>>> 20a980d99f930a27fcb8f5c7fbb4d65b25ae0eb3
 
 class Track(models.Model):
 	owner = models.ForeignKey(User, related_name='owned_tracks')
