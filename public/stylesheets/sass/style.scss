@@ -1,0 +1,19 @@
+/* compass */
+// @import 'compass/reset';
+// @import 'compass/css3';
+// @import 'compass/utilities';
+
+/* setup */
+@import 'var';
+@import 'mixins';
+@import 'placeholders';
+@import 'fonts';
+
+/* layout */
+@import 'base';
+@import 'content';
+
+h1 {
+    color: red;
+    font-size: 68px;
+}

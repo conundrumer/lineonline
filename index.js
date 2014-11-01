@@ -34,10 +34,21 @@ var express = require('express');
 var app = express();
 app.set('bookshelf', bookshelf);
 
+//views
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
+//middleware
+// app.use(express.logger('dev')); //log incoming requests to console
+app.use(express.static(__dirname + '/public')); //serve static files
+
+//routes
 app.get('/', function(req, res) {
-    res.send('<div style="color:red;">Hello World!</div>');
+    //res.send('<div style="color:red;">Hello World!</div>');
+    res.render('index', { title: 'LineOnline' });
 });
 
+//server initialization
 var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;

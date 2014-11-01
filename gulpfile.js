@@ -6,14 +6,14 @@ var sass = require('gulp-sass');
 
 // Compile Our Sass
 gulp.task('sass', function() {
-    return gulp.src('scss/*.scss')
+    return gulp.src('public/stylesheets/sass/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest('public/stylesheets/css'));
 });
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('scss/*.scss', ['sass']);
+    gulp.watch('public/stylesheets/sass/*.scss', ['sass']);
 });
 
 // Default Task
