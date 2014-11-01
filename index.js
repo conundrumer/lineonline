@@ -11,20 +11,24 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
-knex.schema.createTable('users', function(table) {
-    table.increments();
-    table.string('username');
-    table.timestamps();
-}).then(function () {
-    var User = bookshelf.Model.extend({
-        tableName: 'users'
-    });
-
-    User.forge({username:'delu'}).save().then(function(){
-        console.log('hi hi hi hihi');
-    });
+var User = bookshelf.Model.extend({
+    tableName: 'users'
 });
 
+// testing what we can do with knex and bookshelf
+knex.schema.dropTableIfExists('users').then(function() {
+    return knex.schema.createTable('users', function(t) {
+        t.increments('id').primary();
+        t.string('username', 100);
+        t.string('password', 100);
+    });
+}).then(function () {
+    User.forge({username:'delu',password:'yourmother'}).save().then(function(){
+        console.log('hi hi hi hihi');
+    });
+}).then(function() {
+    knex.schema.dropTable('users');
+});
 
 var express = require('express');
 var app = express();
