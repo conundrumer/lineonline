@@ -1,5 +1,24 @@
-var express = require('express')
-var app = express()
+var knex = require('knex')({
+    client: 'pg',
+    connection: {
+        host: 'localhost',
+        user: 'webapps',
+        password: 'fun',
+        database: 'lineonline',
+        charset: 'utf8'
+    }
+});
+
+var bookshelf = require('bookshelf')(knex);
+
+var User = bookshelf.Model.extend({
+    tableName: 'users'
+});
+
+var express = require('express');
+var app = express();
+app.set('bookshelf', bookshelf);
+
 app.get('/', function(req, res) {
     res.send('<div style="color:red;">Hello World!</div>');
 });
