@@ -11,9 +11,20 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
-var User = bookshelf.Model.extend({
-    tableName: 'users'
+knex.schema.createTable('users', function(table) {
+    table.increments();
+    table.string('username');
+    table.timestamps();
+}).then(function () {
+    var User = bookshelf.Model.extend({
+        tableName: 'users'
+    });
+
+    User.forge({username:'delu'}).save().then(function(){
+        console.log('hi hi hi hihi');
+    });
 });
+
 
 var express = require('express');
 var app = express();
