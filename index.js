@@ -22,10 +22,37 @@ knex.schema.dropTableIfExists('users').then(function() {
         t.string('username', 100);
         t.string('password', 100);
     });
+// create user with password
 }).then(function () {
-    User.forge({username:'delu',password:'yourmother'}).save().then(function(){
-        console.log('hi hi hi hihi');
+    return User.forge({username:'delu',password:'yourmother'}).save().then(function(){
+        console.log('created user "delu" with password "yourmother"');
     });
+// change user password
+}).then(function() {
+    return User.where({username:'delu',password:'yourmother'}).fetch().then(function(model){
+        console.log('before password: '+ model.get('password'));
+        model.set({password: 'mymother'});
+        return model.save(); // save/return async promises
+    });
+// password changed
+}).then(function() {
+    return User.where({username:'delu'}).fetch().then(function(model){
+        console.log('after password: '+ model.get('password'));
+    });
+// delete users
+}).then(function() {
+    return User.where({username:'delu'}).destroy();
+// check to see delu has been deleted
+}).then(function() {
+    return User.where({username:'delu'}).fetch().then(function(model){
+        if (model === null) {
+            console.log("delu has been destroyed");
+        }
+    });
+// add other elements to users
+}).then(function() {
+
+// destroy the table
 }).then(function() {
     knex.schema.dropTable('users');
 });
