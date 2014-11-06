@@ -24,8 +24,7 @@ gulp.task('watch', function() {
 gulp.task('browserify', function() {
     var path = './public/js/src/';
     var files = [
-        path + 'scripts.js',
-        path + 'scripts2.js'
+        path + 'scripts.js'
     ];
     var bundler = browserify(files, watchify.args);
 
