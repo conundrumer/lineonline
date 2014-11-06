@@ -30,15 +30,19 @@ var LocalStrategy = require('passport-local').Strategy;
 //   serialize users into and deserialize users out of the session.  Typically,
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
+passport.serializeUser(function(model, done) {
+    log("serializing: " + model.get('id'));
+  done(null, model.get('id'));
 });
 
 passport.deserializeUser(function(id, done) {
-  User.where({username: username}).fetch().then(function(err, user){
-  //findById(id, function (err, user) {
-    done(err, user);
-  });
+    log("DEserializing: " + id);
+    User.where({id:id}).fetch().then(function(model) {
+        done(null, model);
+    }).catch(function (err) {
+        console.error(err);
+        done(err, null);
+    });
 });
 
 
@@ -63,10 +67,8 @@ passport.use(new LocalStrategy(
                 return done(null, false, { message: 'Invalid password'});
             }
             log("Correct password! Logging you in!");
-            return done(null, model);
-        }).catch(function(err) {
-            console.error(err);
-        });
+            return done(null, model); // TODO: parse the model to something easier to work with
+        }).catch(console.error);
     })
 );
 
@@ -133,11 +135,14 @@ var server = app.listen(3000, function() {
 // app.configure(function() {
     // ALL OF THESE NO LONGER BUNDLED WITH EXPRESS
     // app.use(express.logger());
-    // app.use(express.cookieParser());
+    var cookieParser = require('cookie-parser');
+    app.use(cookieParser());
     var bodyParser = require('body-parser');
+    // need to specify which parsers we want to use
     app.use(bodyParser.urlencoded({ extended: false }));
     // app.use(express.methodOverride());
-    // app.use(express.session({ secret: 'supa secret homies!' }));
+    var session = require('express-session');
+    app.use(session({ secret: 'supa secret homies!', resave: true, saveUninitialized: true }));
     app.set('bookshelf', bookshelf);
 
     app.use(passport.initialize());
@@ -151,6 +156,7 @@ var server = app.listen(3000, function() {
 // These are the urls we route to
 // req = request, res = response
 app.get('/', function(req, res) {
+    console.log("Logged in user: " + req.user);
     res.send('<div style="color:red;">Hello World!</div>');
 });
 app.get('/login', function(req,res){
@@ -170,3 +176,8 @@ app.post('/login',
                                    failureFlash: false })
 );
 
+// that was easy
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
