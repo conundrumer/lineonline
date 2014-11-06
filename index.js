@@ -51,19 +51,21 @@ passport.use(new LocalStrategy(
     function(username, password, done) {
         // check also if the database had errors!
         log("Trying to authenticate someone 1.");
-        User.where({username: username}).fetch().then(function(err, user){
-            if (err) { return done(err); }
+        User.where({username: username}).fetch().then(function(model){
+            if (false) { return done(false); }
 
-            if (user === null) {
+            if (model === null) {
                 console.log("This username did not exist!");
                 return done(null, false, { message: 'Unknown user ' + username });
             }
-            if (user.get('password') != password) {
+            if (model.get('password') != password) {
                 log("Incorrect password.");
                 return done(null, false, { message: 'Invalid password'});
             }
             log("Correct password! Logging you in!");
-            return done(null, user);
+            return done(null, model);
+        }).catch(function(err) {
+            console.error(err);
         });
     })
 );
@@ -101,7 +103,7 @@ knex.schema.dropTableIfExists('users').then(function() {
     });
 // delete users
 }).then(function() {
-    return User.where({username:'delu'}).destroy();
+    // return User.where({username:'delu'}).destroy();
 // check to see delu has been deleted
 // }).then(function() {
 //     return User.where({username:'delu'}).fetch().then(function(model){
@@ -114,7 +116,7 @@ knex.schema.dropTableIfExists('users').then(function() {
 
 // destroy the table
 }).then(function() {
-    knex.schema.dropTable('users');
+    // knex.schema.dropTable('users');
 });
 
 // Start the app / server
@@ -132,7 +134,8 @@ var server = app.listen(3000, function() {
     // ALL OF THESE NO LONGER BUNDLED WITH EXPRESS
     // app.use(express.logger());
     // app.use(express.cookieParser());
-    // app.use(express.bodyParser());
+    var bodyParser = require('body-parser');
+    app.use(bodyParser.urlencoded({ extended: false }));
     // app.use(express.methodOverride());
     // app.use(express.session({ secret: 'supa secret homies!' }));
     app.set('bookshelf', bookshelf);
@@ -157,11 +160,13 @@ app.get('/login', function(req,res){
 app.get('/faillogin', function(req,res){
    res.sendFile(__dirname + '/nologin.html');
 });
-app.post('/login', function(req, res){
-    log("User is: " + req.user.username);
-    passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/faillogin'})//,
-                                   // failureFlash: true })
-});
+// app.post('/login', function(req, res){
+//     log("User is: " + req.body.username);
+// });
 
+app.post('/login',
+    passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/faillogin',
+                                   failureFlash: false })
+);
 
