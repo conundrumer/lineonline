@@ -1,11 +1,13 @@
+/* reset/normalize */
+// @import 'reset';
+// @import 'normalize';
+
 /* compass */
-// @import 'compass/reset';
-// @import 'compass/css3';
-// @import 'compass/utilities';
+@import 'compass/reset';
+@import 'compass/css3';
+@import 'compass/utilities';
 
 /* setup */
-// @import 'reset';
-@import 'normalize';
 @import 'var';
 @import 'mixins';
 @import 'placeholders';
@@ -15,7 +17,6 @@
 @import 'base';
 @import 'content';
 
-h1 {
+* {
     color: red;
-    font-size: 68px;
 }

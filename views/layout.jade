@@ -4,13 +4,12 @@ html
         title #{title}
         link(rel='stylesheet', href='/stylesheets/css/style.css')
     body
-        header
+        //- header
             h1 LineOnline
+        include ./includes/navbar.jade
         .container
             .main-content
                 block content
-            .sidebar
-                block sidebar
         footer
             p WHOAAAaaaaa
 

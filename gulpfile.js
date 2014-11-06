@@ -2,16 +2,21 @@
 var gulp = require('gulp');
 
 // Include Our Plugins
-var sass = require('gulp-sass');
-// var compass = require('gulp-compass');
+var sass = require('gulp-ruby-sass');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 
-// Compile Our Sass
+// Compass & Compile our Sass
 gulp.task('sass', function() {
     return gulp.src('./public/stylesheets/sass/*.scss')
-        .pipe(sass())
+        .pipe(sass({
+        compass: true,
+        // bundleExec: true,
+        // sourcemap: true,
+        sourcemapPath: '../sass',
+        style: 'compressed'
+    }))
         .pipe(gulp.dest('./public/stylesheets/css/'));
 });
 
