@@ -176,8 +176,17 @@ app.post('/login',
                                    failureFlash: false })
 );
 
-// that was easy
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
+});
+
+function loginRequired(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+}
+
+// example @login_required usage
+app.get('/isloggedin', loginRequired, function (req, res) {
+    res.send('<div style="color:red;font-size:100px">YES</div>');
 });
