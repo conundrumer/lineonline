@@ -48,6 +48,10 @@ app.get('/', function(req, res) {
     res.render('index', { title: 'LineOnline' });
 });
 
+app.get('/home', function(req, res) {
+    res.render('home', { title: 'Home' });
+});
+
 //server initialization
 var server = app.listen(3000, function() {
     var host = server.address().address;
