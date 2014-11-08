@@ -1,13 +1,18 @@
 * {
     @include box-sizing(border-box);
     -webkit-appearance: none;
+    // height: 100%;
 }
 
+html {
+    height: 100%;
+}
 
 body {
     // margin: 0 auto;
     // width: 100%;
     // position: relative;
+    height: 100%;
     font-family: 'Source Sans Pro', 'Roboto', sans-serif;
     color: #000;
 }

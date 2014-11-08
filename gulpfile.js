@@ -9,7 +9,12 @@ var watchify = require('watchify');
 
 // Compass & Compile our Sass
 gulp.task('sass', function() {
-    return gulp.src('./public/stylesheets/sass/*.scss')
+    var path = './public/stylesheets/';
+    var files = [
+        path + 'sass/*.scss',
+        path + 'sass/grid/*.scss'
+    ]
+    return gulp.src(files)
         .pipe(sass({
         compass: true,
         // bundleExec: true,
