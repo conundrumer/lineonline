@@ -1,0 +1,46 @@
+* {
+    @include box-sizing(border-box);
+    -webkit-appearance: none;
+}
+
+
+body {
+    // margin: 0 auto;
+    // width: 100%;
+    // position: relative;
+    font-family: 'Source Sans Pro', 'Roboto', sans-serif;
+    color: #000;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: '';
+    display: table;
+    height: 0;
+    overflow: hidden;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+:focus {
+    outline: none;
+}
+
+::selection {
+    background: $selection-col;
+}
+
+::-moz-selection {
+    background: $selection-col;
+}
+
+.hidden {
+    display: none;
+}
