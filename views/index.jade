@@ -1,14 +1,47 @@
 extend layout
 block content
     section.panel.masthead
-    section.panel.editor
-    section.panel.panel-padded.gallery.section.group
-        .tile.col.span_1_of_3
-        .tile.col.span_1_of_3
-        .tile.col.span_1_of_3
+    .scroll-divider
+        a(href='#editor-panel')
+            span.scroll-icon.oi(data-glyph='chevron-bottom', title='chevron-bottom', aria-hidden='true')
+    section.panel.editor(id='editor-panel')
+    .scroll-divider
+        span.oi(data-glyph='chevron-bottom', title='chevron-bottom', aria-hidden='true')
+    section.panel.gallery
+        .panel-padded
+            .section.group.headers
+                .col.span_1_of_3
+                    h2.header-col.
+                        Hot
+                .col.span_1_of_3
+                    h2.header-col.
+                        Top
+                .col.span_1_of_3
+                    h2.header-col.
+                        New
+            .section.group
+                .col.span_1_of_3
+                    article.tile
+                        .preview
+                        .info
+                            h3.
+                                Track Title
+                            p.
+                                Description of track something something blah blah hello world. More description and blah balh blahdsf stuff. Okay just typing random crap now blah goodbye world.
+                .col.span_1_of_3
+                    article.tile
+                        .preview
+                        .info
+                            h3.
+                                Track Title
+                            p.
+                                Bleep bloop blkajsdf dlaksfj oiaysdf cool line rider is cool omgosh I love line rider. No I don't. Just kidding. Hello. Whatevererrerer hello again.
+                .col.span_1_of_3
+                    article.tile.tile-last
+                        .preview
+                        .info
+                            h3.
+                                Track Title
+                            p.
+                                Rawr. This is a description. Okay now.
 
-    //- p.
-    //-     stuffffff
-    //- p.
-    //-     BMOASJDKASLdjkslfjdska
-    //-     skfdjaflkdsjafkldsjafkldsajflsa

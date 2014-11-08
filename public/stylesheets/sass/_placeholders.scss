@@ -3,3 +3,15 @@
     max-width: $content-max-width;
     margin: 0 auto;
 }
+
+%col {
+    margin-right: 5%;
+}
+
+%col-last {
+    margin-right: 0;
+
+    @media only screen and (max-width: 480px) {
+        margin-right: 5%;
+    }
+}

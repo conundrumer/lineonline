@@ -7,6 +7,10 @@ html
         title #{title}
         //- link(rel='stylesheet', href='/stylesheets/css/col.css')
         link(rel='stylesheet', href='/stylesheets/css/style.css')
+        link(rel='stylesheet', href='/stylesheets/css/open-iconic.css')
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic')
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Josefin+Sans:400,700,400italic,700italic')
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Pontano+Sans')
         link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic,300,300italic')
         link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic')
     body(lang='en')
@@ -16,6 +20,7 @@ html
             include ./includes/navbar.jade
             .main-content
                 block content
+                include ./includes/footer.jade
 
         //- footer
             p WHOAAAaaaaa
