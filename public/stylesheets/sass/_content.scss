@@ -10,6 +10,15 @@
 }
 
 .navbar {
+    .navlink-icon {
+        font-size: 16px;
+    }
+
+    .navlink-title {
+        margin-left: 12px;
+        font-size: 16px;
+    }
+
     // background-color: red;
     z-index: 1;
     background: #fff;
@@ -80,7 +89,6 @@
 
 .panel-padded {
     @extend %padded-width-content;
-    padding: 50px 0 50px;
 }
 
 .scroll-divider {
@@ -88,20 +96,22 @@
     display: block;
     opacity: 0.8;
     height: $scroll-divider-height;
-    top: -$scroll-divider-height;
+    margin-top: -$scroll-divider-height;
     position: relative;
     text-align: center;
     // border-top: 1px solid $border-col;
     font-size: 24px;
     // color: $scroll-icon-col;
-
-    .scroll-icon {
-        @include transition(opacity 0.2s ease-in-out 0);
-        @include vertical-align(30%);
+    .scroll-link {
+        @include transition(color 0.2s ease-in-out 0);
+        color: $scroll-icon-col;
         &:hover {
             cursor: pointer;
-            opacity: 0.5;
+            color: #000;
         }
+    }
+    .scroll-icon {
+        @include vertical-align(30%);
     }
 }
 
@@ -116,16 +126,30 @@
 }
 
 .gallery {
-    // background: yellow
-    .headers {
-        margin-bottom: 10px;
+    padding: 45px 0 65px;
+    .row {
+        margin-bottom: 15px;
     }
+
+    .row-last {
+        margin-bottom: 25px;
+    }
+    // background: yellow
+    // .header {
+    //     margin-bottom: 10px;
+    // }
     .header-col {
-        font-weight: bold;
+        @extend %uppercase-header;
         text-align: center;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .header-icon {
+        font-size: 16px;
+    }
+
+    .header-title {
+        margin-left: 12px;
     }
 
     .tile {
@@ -163,6 +187,24 @@
             line-height: 1.8;
         }
     }
+}
+
+.btn {
+    @extend %uppercase-header;
+    @include transition(color 0.2s ease-in-out 0);
+    border: 1px solid $border-col;
+    background: #fff;
+    display: block;
+    padding: 15px 20px;
+    width: 250px;
+    &:hover {
+        cursor: pointer;
+        color: $light-col;
+    }
+}
+
+.btn-see-more {
+    margin: 0 auto;
 }
 
 .footerbar {

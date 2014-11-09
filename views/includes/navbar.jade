@@ -1,18 +1,23 @@
 nav.navbar
     ul.nav-list.section.group
         li.nav-item.nav-item-logo.nav-item-active.col.span_1_of_7
-            span.oi(data-glyph='icon-name', title='icon name', style='color: black; font-size: 15px;')
             a(href='/').
                 LineOnline
         li.nav-item.col.span_1_of_7
-            a(href='/home').
-                Home
+            a(href='/home')
+                span.navlink-icon.oi(data-glyph='home', title='home', style='color: black; font-size: 15px;')
+                span.navlink-title.
+                    Home
         li.nav-item.col.span_1_of_7
-            a(href='/').
-                Gallery
+            a(href='/')
+                span.navlink-icon.oi(data-glyph='image', title='image', style='color: black; font-size: 15px;')
+                span.navlink-title.
+                    Gallery
         li.nav-item.col.span_1_of_7
-            a(href='/').
-                Your Tracks
+            a(href='/')
+                span.navlink-icon.oi(data-glyph='project', title='project', style='color: black; font-size: 15px;')
+                span.navlink-title.
+                    Your Tracks
         li.nav-item.col.span_2_of_7
         //- li.nav-item.col.span_1_of_7
         li.nav-item.nav-item-profile.col.span_1_of_7

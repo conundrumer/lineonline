@@ -22,6 +22,7 @@
     "express": "^4.10.1",
     "jade": "^1.7.0",
     "jquery": "^2.1.1",
+    "jquery-smooth-scroll": "^1.5.3",
     "knex": "^0.7.3",
     "passport": "^0.2.1",
     "pg": "^3.6.2",

@@ -6,12 +6,19 @@
 
 %col {
     margin-right: 5%;
+
+    @media only screen and (max-width: 480px) {
+        margin-right: 0;
+    }
 }
 
 %col-last {
     margin-right: 0;
+}
 
-    @media only screen and (max-width: 480px) {
-        margin-right: 5%;
-    }
+%uppercase-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
 }
