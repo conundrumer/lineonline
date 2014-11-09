@@ -158,6 +158,11 @@ function register(req, res){
     password = req.body.password
     // log(JSON.stringify(req.body));
 
+    if (req.body.username == ""){
+        res.send('<div style="color:red;">This username! Who ARE you???</div>');
+        return;
+    }
+
     // Password non-empty
     if (req.body.password == ""){
         res.send('<div style="color:red;">This password! Where is this password???</div>');
