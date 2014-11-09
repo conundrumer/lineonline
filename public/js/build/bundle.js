@@ -5,7 +5,6 @@ require('jquery-smooth-scroll');
 var LINEONLINE = {
     init: function() {
         this.initVars();
-        this.setVisibility();
         this.initPlugins();
         this.bindEventHandlers();
     },
@@ -20,10 +19,6 @@ var LINEONLINE = {
         this.$loginLink = $('.login-link');
         this.$signupForm = $('#form-signup');
         this.$loginForm = $('#form-login');
-    },
-
-    setVisibility: function() {
-        this.$signupLoginDropdown.hide();
     },
 
     initPlugins: function() {
