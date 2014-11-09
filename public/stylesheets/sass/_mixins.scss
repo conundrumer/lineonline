@@ -1,7 +1,5 @@
 @mixin vertical-align($offset) {
+    @include transform(translateY(-50%));
     position: relative;
     top: $offset;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
 }

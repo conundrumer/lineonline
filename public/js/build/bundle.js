@@ -19,6 +19,8 @@ var LINEONLINE = {
         this.$loginLink = $('.login-link');
         this.$signupForm = $('#form-signup');
         this.$loginForm = $('#form-login');
+        this.$conversation = $('.side-panel-conversation');
+        this.$conversationIcon = $('.conversation-icon');
     },
 
     initPlugins: function() {
@@ -32,6 +34,12 @@ var LINEONLINE = {
         this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
         this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
         this.$loginLink.on('click', this.toggleSignupLoginForm.bind(this));
+        this.$conversationIcon.on('click', this.toggleConversation.bind(this));
+    },
+
+    toggleConversation: function(e) {
+        this.$conversation.toggleClass('minimized');
+        e.preventDefault();
     },
 
     toggleSettingsDropdown: function(e) {

@@ -23,9 +23,21 @@ block content
                                     About
                                 p.
                                     Hello my name is blah blah and blah listen to me okay more stuff my name is blah blah and blah listen to me okay more stuff.
+                            .detail.interact
+                                p
+                                    a(href='/subscribe')
+                                        span.profile-icon.oi(data-glyph='plus', title='plus', aria-hidden='true')
+                                        span.profile-title
+                                            | <span class='subscribe-link'>Subscribe</span> to <span class='bold'>Bob Blob</span>
                 .col.span_3_of_4
                     section.profile-main
                         article.track-featured
+                            span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                            .media-icons
+                                span.media-icon.oi(data-glyph='media-skip-backward', title='media-skip-backward', aria-hidden='true')
+                                span.media-icon.oi(data-glyph='media-play', title='media-play', aria-hidden='true')
+                                span.media-icon.oi(data-glyph='media-pause', title='media-pause', aria-hidden='true')
+                                span.media-icon.oi(data-glyph='media-skip-forward', title='media-skip-forward', aria-hidden='true')
                             aside.info
                                 h3.
                                     Track Title
@@ -50,6 +62,7 @@ block content
                                 .col.span_1_of_3
                                     article.tile.tile-first
                                         .preview
+                                            span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
                                         .info
                                             h3.
                                                 Track/Collection Title
@@ -58,6 +71,7 @@ block content
                                 .col.span_1_of_3
                                     article.tile
                                         .preview
+                                            span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
                                         .info
                                             h3.
                                                 Track/Collection Title
@@ -66,6 +80,7 @@ block content
                                 .col.span_1_of_3
                                     article.tile.tile-last
                                         .preview
+                                            span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
                                         .info
                                             h3.
                                                 Track/Collection Title

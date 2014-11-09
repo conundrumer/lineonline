@@ -86,6 +86,9 @@ app.get('/search-public-gallery', function(req, res) {
 app.get('/search-gallery', function(req, res) {
     res.redirect('/gallery');
 });
+app.get('/subscribe', function(req, res) {
+    res.redirect('/profile');
+});
 
 
 

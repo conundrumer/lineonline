@@ -9,7 +9,8 @@
     height: 100%;
 }
 
-.login-link {
+.login-link,
+.subscribe-link {
     @include transition(color 0.2s ease-in-out 0);
     color: $linerider-red;
     &:hover {
@@ -246,6 +247,113 @@
     // }
 }
 
+.side-panel {
+
+}
+
+.side-panel-conversation {
+    &.minimized {
+        @include transform(translateX(300px));
+    }
+
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 300px;
+    border-left: 1px solid $border-col;
+    height: 100%;
+
+    font-size: 13px;
+    background: #fff;
+    opacity: 0.9;
+
+    .conversation-icon {
+        @include transition(color 0.2s ease-in-out 0);
+        @include vertical-align(calc(50% - 5px));
+        position: absolute;
+        font-size: 20px;
+        color: $light-col;
+        left: -35px;
+        &:hover {
+            cursor: pointer;
+            color: $linerider-red;
+        }
+    }
+
+    .messages {
+        border-top: 1px solid $border-col;
+
+        .message {
+            border-bottom: 1px solid $border-col;
+            height: 100%;
+            position: relative;
+            // &:last-child {
+            //     border: none;
+            // }
+        }
+
+        .message-image {
+            position: absolute;
+            display: block;
+            background: #fff url('../../images/sample_profile.png') no-repeat center center;
+            background-size: cover;
+            width: 25px;
+            height: 25px;
+            border-radius: 100%;
+            left: 12px;
+            top: 12px;
+        }
+
+        .message-body {
+            border-left: 1px solid $border-col;
+            margin-left: 50px;
+            p {
+                padding: 17px 15px;
+            }
+        }
+    }
+
+    .form-message {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        // z-index: 1;
+        border-top: 1px solid $border-col;
+        height: 45px;
+        width: 100%;
+        input {
+            border: none;
+            // border-top: 1px solid $border-col;
+            border-right: 1px solid $border-col;
+            padding: 5px 10px;
+            height: 100%;
+            width: calc(100% - 80px);
+            // background: red;
+        }
+
+        .btn-submit {
+            @include transition(color 0.2s ease-in-out 0);
+            font-weight: bold;
+            border: none;
+            // background: yellow;
+            height: 100%;
+            border: none;
+            width: 80px;
+            &:hover {
+                cursor: pointer;
+                color: $light-col;
+            }
+        }
+    }
+
+    h2 {
+        // position: fixed;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+
 .panel-padded {
     @extend %padded-width-content;
     padding: 35px 0 55px;
@@ -281,6 +389,7 @@
 }
 
 .editor {
+    position: relative;
     background: #fff url('../../images/sample_editor.png') no-repeat top center;
     background-size: 100% auto;//contain;
 }
@@ -341,9 +450,9 @@
             padding-left: 12px;
         }
 
-        .info {
+        .info, .actions {
             border-top: 1px solid $border-col;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
             .detail {
                 padding: 0 20px;
                 margin-bottom: 10px;
@@ -363,10 +472,15 @@
                 }
             }
 
-            .contact {
+            .contact, .interact {
                 p {
                     margin-bottom: 5px;
                 }
+            }
+
+            .interact {
+                border-top: 1px solid $border-col;
+                padding-top: 20px;
             }
 
             .about {
@@ -386,6 +500,32 @@
             background-size: cover;
             border: 1px solid $border-col;
             position: relative;
+
+            .media-icons {
+                font-size: 16px;
+                position: absolute;
+                left: 15px;
+                bottom: 10px;
+                .media-icon {
+                    @include transition(color 0.2s ease-in-out 0);
+                    padding-right: 15px;
+                    &:hover {
+                        cursor: pointer;
+                        color: $light-col;
+                    }
+                }
+            }
+
+            .preview-icon {
+                @include transition(color 0.2s ease-in-out 0);
+                right: 200px + 12px;
+                top: 12px;
+                position: absolute;
+                &:hover {
+                    cursor: pointer;
+                    color: $light-col;
+                }
+            }
 
             .info {
                 opacity: 0.8;
@@ -448,6 +588,19 @@
         //sample image
         background: #fff url('../../images/sample_masthead.png') no-repeat center center;
         background-size: cover;
+        position: relative;
+
+        .preview-icon {
+            @include transition(color 0.2s ease-in-out 0);
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            font-size: 13px;
+            &:hover {
+                color: $light-col;
+                cursor: pointer;
+            }
+        }
     }
 
     .info {

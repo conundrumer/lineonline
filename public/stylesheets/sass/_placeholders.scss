@@ -9,10 +9,12 @@
 }
 
 %col {
-    width: calc(100% - 20px);
+    width: calc(100% - 18px);
     margin: 0 auto;
 
     @media only screen and (max-width: 480px) {
+        margin-left: 0 !important; //hack
+        margin-right: 0 !important; //hack
         //margin-right: 0;
     }
 }
