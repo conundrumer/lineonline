@@ -266,7 +266,7 @@
         color: $scroll-icon-col;
         &:hover {
             cursor: pointer;
-            color: #000;
+            color: $linerider-red;
         }
     }
     .scroll-icon {
@@ -282,6 +282,35 @@
 .editor {
     background: #fff url('../../images/sample_editor.png') no-repeat top center;
     background-size: 100% auto;//contain;
+}
+
+.form-search-gallery {
+    font-size: 16px;
+    .search-bar {
+        position: relative;
+    }
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+    }
+    .input-search {
+        width: 100%;
+        padding: 12px;
+        padding-left: 45px;
+    }
+    .btn-search {
+        @include transition(color 0.2s ease-in-out 0);
+        font-weight: bold;
+        text-transform: uppercase;
+        width: 100%;
+        padding: 12px;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
+    margin-bottom: 10px;
 }
 
 .gallery {

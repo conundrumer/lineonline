@@ -56,6 +56,9 @@ app.get('/home', function(req, res) {
 app.get('/gallery', function(req, res) {
     res.render('gallery', { title: 'Gallery' });
 });
+app.get('/public-gallery', function(req, res) {
+    res.render('public-gallery', { title: 'Gallery', state: 'signedOut' });
+});
 app.get('/your-tracks', function(req, res) {
     res.render('your-tracks', { title: 'Your Tracks' });
 });
@@ -76,6 +79,12 @@ app.get('/logout', function(req, res) {
 });
 app.get('/login', function(req, res) {
     res.redirect('/');
+});
+app.get('/search-public-gallery', function(req, res) {
+    res.redirect('/public-gallery');
+});
+app.get('/search-gallery', function(req, res) {
+    res.redirect('/gallery');
 });
 
 

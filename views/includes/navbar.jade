@@ -13,11 +13,18 @@ nav.navbar
                     span.navlink-icon.oi(data-glyph='home', title='home', aria-hidden='true')
                     span.navlink-title.
                         Home
-        li.nav-item.col.span_1_of_7
-            a.navlink(href='/gallery')
-                span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
-                span.navlink-title.
-                    Gallery
+        if (state != 'signedOut')
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/gallery')
+                    span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
+                    span.navlink-title.
+                        Gallery
+        else
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/public-gallery')
+                    span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
+                    span.navlink-title.
+                        Gallery
         if (state != 'signedOut')
             li.nav-item.col.span_1_of_7
                 a.navlink(href='/your-tracks')

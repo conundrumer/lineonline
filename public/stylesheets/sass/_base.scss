@@ -24,6 +24,17 @@ a {
     color: #000;
 }
 
+form {
+    input {
+        border: 1px solid $border-col;
+    }
+
+    button {
+        background: #fff;
+        border: 1px solid $border-col;
+    }
+}
+
 input, select, textarea, button {
     font-family: inherit;
     font-size: inherit;
