@@ -47,10 +47,38 @@ app.get('/', function(req, res) {
     //res.send('<div style="color:red;">Hello World!</div>');
     res.render('index', { title: 'LineOnline' });
 });
-
+app.get('/signup-login', function(req, res) {
+    res.render('signup-login', { title: 'Signup/Login', state: 'signedOut' });
+});
 app.get('/home', function(req, res) {
     res.render('home', { title: 'Home' });
 });
+app.get('/gallery', function(req, res) {
+    res.render('gallery', { title: 'Gallery' });
+});
+app.get('/your-tracks', function(req, res) {
+    res.render('your-tracks', { title: 'Your Tracks' });
+});
+app.get('/profile', function(req, res) {
+    res.render('profile', { title: 'Profile' });
+});
+app.get('/favorites', function(req, res) {
+    res.render('profile', { title: 'Favorites' });
+});
+app.get('/subscriptions', function(req, res) {
+    res.render('subscriptions', { title: 'Subscriptions' });
+});
+app.get('/settings', function(req, res) {
+    res.render('settings', { title: 'Settings' });
+});
+app.get('/logout', function(req, res) {
+    res.redirect('/signup-login');
+});
+app.get('/login', function(req, res) {
+    res.redirect('/');
+});
+
+
 
 //server initialization
 var server = app.listen(3000, function() {

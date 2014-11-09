@@ -16,6 +16,7 @@ body {
     font-family: 'Source Sans Pro', 'Pontano Sans', 'Roboto', 'Lato', 'Josefin Sans', sans-serif;
     color: #000;
     line-height: 1.2;
+    letter-spacing: 1px;
 }
 
 a {
@@ -25,6 +26,11 @@ a {
 
 input, select, textarea, button {
     font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
 }
 
 .clearfix:before,

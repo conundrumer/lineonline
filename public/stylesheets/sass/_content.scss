@@ -9,16 +9,36 @@
     height: 100%;
 }
 
+.login-link {
+    @include transition(color 0.2s ease-in-out 0);
+    color: $linerider-red;
+    &:hover {
+        cursor: pointer;
+        color: $light-col;
+    }
+}
+
 .dropdown {
     z-index: 1;
     border: 1px solid $border-col;
     position: absolute;
-    right: -35px;
-    top: calc(100% + 13px);
-    width: 175px;
     font-size: 13px;
     line-height: 1.5;
     background: #fff;
+
+    .footnote {
+        text-align: center;
+        font-size: 10px;
+        font-style: italic;
+        padding: 10px;
+        border-top: 1px solid $border-col;
+    }
+}
+
+.dropdown-settings {
+    right: -35px;
+    width: 200px;
+    top: calc(100% + 13px);
 
     .dropdown-item {
         &:hover {
@@ -66,9 +86,69 @@
     }
 }
 
-.dropdown-settings {
-
+.dropdown-signup-login {
+    right: -35px;
+    width: 220px;
+    top: calc(100% + 23px);
 }
+
+.form-signup-login {
+
+    // background: blue;
+
+    // text-align: center;
+    .field {
+        padding: 0 15px;
+        margin-bottom: 10px;
+        &:first-child {
+            margin-top: 15px;
+        }
+        // &:last-child {
+        //     padding-bottom: 35px;
+        // }
+        // display: block;
+        &.field-last {
+            margin-bottom: 20px;
+        }
+    }
+
+    label {
+        display: block;
+        padding-bottom: 3px;
+        font-weight: bold;
+    }
+
+    input {
+        border: 1px solid $border-col;
+        width: 100%;
+        padding: 4px 6px;
+    }
+
+    .btn-submit {
+        @include transition(color 0.2s ease-in-out 0);
+        // width: 100%;
+        border: none;
+        border-top: 1px solid $border-col;
+        display: block;
+        width: 100%;
+        text-align: center;
+        // height: 10px;
+        background: #fff;
+
+        // display: block;
+        // margin: 5px auto 15px;
+        // background: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 10px;
+        // width: 100px;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
+}
+
 
 .navbar {
     .navlink {
@@ -147,6 +227,9 @@
             }
 
         }
+        &.nav-item-signup-login {
+            margin-left: -$logo-margin-offset;
+        }
     }
 }
 
@@ -217,7 +300,7 @@
     .header-col {
         @extend %uppercase-header;
         text-align: center;
-        margin-bottom: 30px;
+        //margin-bottom: 15px;
     }
 
     .header-icon {
