@@ -66,7 +66,7 @@ app.get('/profile', function(req, res) {
     res.render('profile', { title: 'Profile' });
 });
 app.get('/favorites', function(req, res) {
-    res.render('profile', { title: 'Favorites' });
+    res.render('favorites', { title: 'Favorites' });
 });
 app.get('/subscriptions', function(req, res) {
     res.render('subscriptions', { title: 'Subscriptions' });
@@ -89,7 +89,9 @@ app.get('/search-gallery', function(req, res) {
 app.get('/subscribe', function(req, res) {
     res.redirect('/profile');
 });
-
+app.get('/unsubscribe', function(req, res) {
+    res.redirect('/subscriptions');
+});
 
 
 //server initialization
