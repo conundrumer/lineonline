@@ -1,3 +1,4 @@
+var express = require('express');
 function log(someString){
     console.log(someString);
 }
@@ -56,8 +57,6 @@ passport.use(new LocalStrategy(
         // check also if the database had errors!
         log("Trying to authenticate someone 1.");
         User.where({username: username}).fetch().then(function(model){
-            if (false) { return done(false); }
-
             if (model === null) {
                 console.log("This username did not exist!");
                 return done(null, false, { message: 'Unknown user ' + username });
@@ -81,6 +80,7 @@ knex.schema.dropTableIfExists('users').then(function() {
         t.increments('id').primary();
         t.string('username', 100);
         t.string('password', 100);
+
     });
 // create user with password
 }).then(function () {
@@ -122,7 +122,6 @@ knex.schema.dropTableIfExists('users').then(function() {
 });
 
 // Start the app / server
-var express = require('express');
 var app = express();
 var server = app.listen(3000, function() {
     var host = server.address().address;
@@ -153,14 +152,46 @@ var server = app.listen(3000, function() {
 
 
 
+
+function register(req, res){
+    username = req.body.username
+    password = req.body.password
+    // log(JSON.stringify(req.body));
+
+    // Password non-empty
+    if (req.body.password == ""){
+        res.send('<div style="color:red;">This password! Where is this password???</div>');
+        return;
+    }
+
+    // Verify valid input
+    User.where({username: username}).fetch().then(function(model){
+        if (model === null) {
+            User.forge({username:username, password:password}).save().then(function(){
+                console.log(username, password);
+                res.send('<div style="color:red;">You registered for real!</div>');
+            }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
+        } else { // If someone else already has that username
+            res.send('<div style="color:red;">This username already exists!</div>');
+        }
+    }); // PUT A CATCH HERE
+
+}
+
+
+
 // These are the urls we route to
 // req = request, res = response
 app.get('/', function(req, res) {
-    console.log("Logged in user: " + req.user);
-    res.send('<div style="color:red;">Hello World!</div>');
+    res.send('<div style="color:red;">Hello ' + (req.user ? req.user.get('username') : 'it') + '!</div>');
 });
 app.get('/login', function(req,res){
    res.sendFile(__dirname + '/auth.html');
+
+});
+app.get('/register', function(req,res){
+    log("Get register.");
+   res.sendFile(__dirname + '/register.html');
 
 });
 app.get('/faillogin', function(req,res){
@@ -175,6 +206,7 @@ app.post('/login',
                                    failureRedirect: '/faillogin',
                                    failureFlash: false })
 );
+app.post('/register', register);
 
 app.get('/logout', function(req, res){
   req.logout();
