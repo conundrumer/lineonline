@@ -248,6 +248,7 @@
 
 .panel-padded {
     @extend %padded-width-content;
+    padding: 35px 0 55px;
 }
 
 .scroll-divider {
@@ -312,44 +313,133 @@
     }
     margin-bottom: 10px;
 }
+.profile {
+    .profile-section {
 
-.gallery {
-    padding: 35px 0 55px;
-    .row {
-        margin-bottom: 15px;
-    }
 
-    .row-last {
-        margin-bottom: 25px;
     }
-    // background: yellow
-    // .header {
-    //     margin-bottom: 10px;
-    // }
-    .header-col {
-        @extend %uppercase-header;
-        text-align: center;
-        //margin-bottom: 15px;
-    }
-
-    .header-icon {
-        font-size: 16px;
-    }
-
-    .header-title {
-        padding-left: 12px;
-    }
-
-    .tile {
+    .profile-sidebar {
         @extend %col;
-        // margin-right: 10%;
-        // background-color: red;
-    }
+        border: 1px solid $border-col;
+        // padding-top: 20px;
+        .picture {
+            border: 2px solid $border-col;
+            // outline: 1px solid $border-col;
+            background: #fff url('../../images/sample_profile.png') no-repeat center center;
+            background-size: cover;
+            height: 175px;
+            width: 175px;
+            // min-width: 100%;
+            margin: 20px auto 20px;
+            border-radius: 100%;
+        }
 
-    .tile-last {
+        .profile-icon {
+            font-size: 10px;
+        }
+        .profile-title {
+            padding-left: 12px;
+        }
+
+        .info {
+            border-top: 1px solid $border-col;
+            padding-bottom: 15px;
+            .detail {
+                padding: 0 20px;
+                margin-bottom: 10px;
+                &:first-child {
+                    padding-top: 10px;
+                }
+
+                h3 {
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 2.5;
+                }
+
+                p {
+                    font-size: 13px;
+                    line-height: 1.4;
+                }
+            }
+
+            .contact {
+                p {
+                    margin-bottom: 5px;
+                }
+            }
+
+            .about {
+
+            }
+        }
+
+    }
+    .profile-main {
         @extend %col-last;
-    }
 
+
+        .track-featured {
+            height: 350px;
+            margin-bottom: 20px;
+            background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+            background-size: cover;
+            border: 1px solid $border-col;
+            position: relative;
+
+            .info {
+                opacity: 0.8;
+                h3 {
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 2.5;
+                }
+
+                ul, p {
+                    font-size: 13px;
+                    line-height: 1.4;
+                    font-style: italic;
+                    margin-bottom: 5px;
+
+                    li {
+                        margin-bottom: 3px;
+                        &:before {
+                            content: '• ';
+                        }
+                    }
+                }
+
+
+
+                position: absolute;
+                right: 0;
+                top: 0;
+                background: #fff;
+                border-left: 1px solid $border-col;
+                height: 100%;
+                padding: 10px 20px;
+                width: 200px;
+            }
+        }
+
+        .track-collection {
+            .tile {
+                .preview {
+                    height: 175px;
+                }
+            }
+        }
+    }
+}
+
+.tile-first {
+    @extend %col-first;
+}
+
+.tile {
+    @extend %col;
+    // margin-right: 10%;
+    // background-color: red;
     .preview {
         display: block;
         height: 200px;
@@ -375,6 +465,40 @@
             line-height: 1.8;
         }
     }
+}
+
+.tile-last {
+    @extend %col-last;
+}
+
+.gallery {
+    // padding: 35px 0 55px;
+    .row {
+        margin-bottom: 15px;
+    }
+
+    .row-last {
+        margin-bottom: 25px;
+    }
+    // background: yellow
+    // .header {
+    //     margin-bottom: 10px;
+    // }
+    .header-col {
+        @extend %uppercase-header;
+        text-align: center;
+        //margin-bottom: 15px;
+    }
+
+    .header-icon {
+        font-size: 16px;
+    }
+
+    .header-title {
+        padding-left: 12px;
+    }
+
+
 }
 
 .btn {

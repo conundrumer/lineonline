@@ -4,16 +4,21 @@
     margin: 0 auto;
 }
 
+%col-first {
+    margin-left: 0 !important; //hack
+}
+
 %col {
-    margin-right: 5%;
+    width: calc(100% - 20px);
+    margin: 0 auto;
 
     @media only screen and (max-width: 480px) {
-        margin-right: 0;
+        //margin-right: 0;
     }
 }
 
 %col-last {
-    margin-right: 0;
+    margin-right: 0 !important; //hack
 }
 
 %uppercase-header {
