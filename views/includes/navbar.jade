@@ -1,26 +1,57 @@
 nav.navbar
     ul.nav-list.section.group
         li.nav-item.nav-item-logo.nav-item-active.col.span_1_of_7
-            a(href='/').
+            a.navlink(href='/').
                 LineOnline
         li.nav-item.col.span_1_of_7
-            a(href='/home')
-                span.navlink-icon.oi(data-glyph='home', title='home', style='color: black; font-size: 15px;')
+            a.navlink(href='/home')
+                span.navlink-icon.oi(data-glyph='home', title='home', aria-hidden='true')
                 span.navlink-title.
                     Home
         li.nav-item.col.span_1_of_7
-            a(href='/')
-                span.navlink-icon.oi(data-glyph='image', title='image', style='color: black; font-size: 15px;')
+            a.navlink(href='/gallery')
+                span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
                 span.navlink-title.
                     Gallery
         li.nav-item.col.span_1_of_7
-            a(href='/')
-                span.navlink-icon.oi(data-glyph='project', title='project', style='color: black; font-size: 15px;')
+            a.navlink(href='/your-tracks')
+                span.navlink-icon.oi(data-glyph='project', title='project', aria-hidden='true')
                 span.navlink-title.
                     Your Tracks
         li.nav-item.col.span_2_of_7
         //- li.nav-item.col.span_1_of_7
         li.nav-item.nav-item-profile.col.span_1_of_7
-            a(href='/')
+            .navlink
                 span.hidden.
                     Profile
+            .dropdown.dropdown-settings.hidden
+                ul
+                    li.dropdown-item.dropdown-profile
+                        a.dropdown-link(href='/profile')
+                            .name.
+                                Bob Blob
+                            .description
+                                span.dropdown-icon.oi(data-glyph='person', title='person', aria-hidden='true')
+                                span.dropdown-title.
+                                    View Your Profile
+                    li.dropdown-item
+                        a.dropdown-link(href='/favorites')
+                            span.dropdown-icon.oi(data-glyph='heart', title='heart', aria-hidden='true')
+                            span.dropdown-title.
+                                Favorites
+                    li.dropdown-item
+                        a.dropdown-link(href='/Subscriptions')
+                            span.dropdown-icon.oi(data-glyph='people', title='people', aria-hidden='true')
+                            span.dropdown-title.
+                                Subscriptions
+                    li.dropdown-item
+                        a.dropdown-link(href='/settings')
+                            span.dropdown-icon.oi(data-glyph='cog', title='cog', aria-hidden='true')
+                            span.dropdown-title.
+                                Settings
+                    li.dropdown-item
+                        a.dropdown-link(href='/logout')
+                            span.dropdown-icon.oi(data-glyph='account-logout', title='account-logout', aria-hidden='true')
+                            span.dropdown-title.
+                                Logout
+

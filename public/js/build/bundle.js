@@ -6,11 +6,14 @@ var LINEONLINE = {
     init: function() {
         this.initVars();
         this.initPlugins();
+        this.bindEventHandlers();
     },
 
     initVars: function() {
         this.navbarOffset = -70;
         this.$scrollLink = $('.scroll-link');
+        this.$profileNavlink = $('.nav-item-profile').find('.navlink');
+        this.$settingsDropdown = $('.dropdown-settings');
     },
 
     initPlugins: function() {
@@ -18,12 +21,49 @@ var LINEONLINE = {
             offset: this.navbarOffset,
             speed: 600
         });
+    },
+
+    bindEventHandlers: function() {
+        this.$profileNavlink.on('click', this.toggleSettingsDropdown.bind(this));
+    },
+
+    toggleSettingsDropdown: function(e) {
+        // var $el = $(e.currentTarget).parent();
+        // var $dropdown = $el.find('.dropdown');
+        this.$settingsDropdown.stop(true, false).fadeToggle();
+        e.preventDefault();
     }
 }
 
 LINEONLINE.init();
 
-},{"jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js":[function(require,module,exports){
+},{"jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
+//bind polyfill from MDN
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (oThis) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5 internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+
+    var aArgs = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP = function () {},
+        fBound = function () {
+          return fToBind.apply(this instanceof fNOP && oThis
+                                 ? this
+                                 : oThis,
+                               aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
+
+},{}],"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js":[function(require,module,exports){
 /*!
  * jQuery Smooth Scroll - v1.5.3 - 2014-10-15
  * https://github.com/kswedberg/jquery-smooth-scroll
@@ -9486,4 +9526,4 @@ return jQuery;
 
 }));
 
-},{}]},{},["./public/js/src/scripts.js"]);
+},{}]},{},["./public/js/src/util.js","./public/js/src/scripts.js"]);
