@@ -235,6 +235,48 @@
     }
 }
 
+.settings {
+    h2 {
+        @extend %uppercase-header;
+        margin-bottom: 15px;
+    }
+
+    .btn-submit {
+        margin: 15px auto;
+    }
+}
+
+.profile-form {
+    margin-bottom: 30px;
+}
+
+.form-settings {
+    border: 1px solid $border-col;
+    padding: 20px 30px;
+    // background: blue;
+    font-size: 13px;
+    .field {
+        margin-bottom: 20px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px 10px;
+        margin-top: 10px;
+        border: 1px solid $border-col;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    label {
+        // padding-bottom: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+
 .panel {
     width: 100%;
     min-height: 100%;
