@@ -216,7 +216,7 @@
                 position: relative;
                 margin-top: -6px;
                 border-radius: 100%;
-                background: #fff url('../../images/sample_profile.png') no-repeat center center;
+                background: url('../../images/sample_profile.png') no-repeat center center;
                 background-size: cover;
                 display: block;
                 width: 40px;
@@ -242,7 +242,7 @@
     }
 
     .btn-submit {
-        margin: 15px auto;
+        margin: 10px auto 15px;
     }
 }
 
@@ -339,7 +339,7 @@
         .message-image {
             position: absolute;
             display: block;
-            background: #fff url('../../images/sample_profile.png') no-repeat center center;
+            background: url('../../images/sample_profile.png') no-repeat center center;
             background-size: cover;
             width: 25px;
             height: 25px;
@@ -427,9 +427,40 @@
     }
 }
 
-.masthead {
+.masthead,
+.playback {
     background: #fff url('../../images/sample_masthead.png') no-repeat center center;
     background-size: cover;
+}
+
+.playback {
+    position: relative;
+    .media-icons {
+        font-size: 20px;
+        position: absolute;
+        left: 25px;
+        bottom: 20px;
+        .media-icon {
+            @include transition(color 0.2s ease-in-out 0);
+            padding-right: 25px;
+            &:hover {
+                cursor: pointer;
+                color: $light-col;
+            }
+        }
+    }
+
+    .preview-icon {
+        @include transition(color 0.2s ease-in-out 0);
+        right: 25px;
+        top: 20px;
+        position: absolute;
+        font-size: 20px;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
 }
 
 .editor {
@@ -469,7 +500,7 @@
 .picture {
     border: 2px solid $border-col;
     // outline: 1px solid $border-col;
-    background: #fff url('../../images/sample_profile.png') no-repeat center center;
+    background: url('../../images/sample_profile.png') no-repeat center center;
     background-size: cover;
     height: 175px;
     width: 175px;

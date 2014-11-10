@@ -92,6 +92,12 @@ app.get('/subscribe', function(req, res) {
 app.get('/unsubscribe', function(req, res) {
     res.redirect('/subscriptions');
 });
+app.get('/send-message', function(req, res) {
+    res.redirect('/home');
+});
+app.get('/playback-mode', function(req, res) {
+    res.render('playback-mode', { title: 'Playback Mode' });
+});
 
 
 //server initialization
