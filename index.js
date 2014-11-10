@@ -246,6 +246,35 @@ function editProfile(req, res){
 
 }
 
+function editAccount(req, res) {
+    model = req.user;
+
+    newEmail = req.body.newEmail;
+    currentPassword = req.body.currentPassword;
+    newPassword = req.body.newPassword;
+
+    if (newEmail) {
+        log('email changed');
+        model.set({email: newEmail});
+    }
+
+    // this is ugly
+    if (currentPassword) {
+        if (currentPassword === model.get('password')) {
+            // if (currentPassword === newPassword) {
+                log('password changed');
+                model.set({password: newPassword});
+            // } else {
+            //     log('passwords did not match');
+            // }
+        } else {
+            log('current password is incorrect');
+        }
+    }
+
+    model.save();
+    res.redirect('/settings');
+}
 
 
 // These are the urls we route to
@@ -283,6 +312,7 @@ app.post('/login-backend',
 );
 app.post('/register-backend', register);
 app.post('/edit-profile-backend', loginRequired, editProfile);
+app.post('/edit-account-backend', loginRequired, editAccount);
 
 app.get('/logout-backend', function(req, res){
   req.logout();
@@ -363,6 +393,9 @@ app.post('/edit-profile', function(req, res) {
     res.redirect(307, '/edit-profile-backend');
 });
 
+app.post('/edit-account', function(req, res) {
+    res.redirect(307, '/edit-account-backend');
+});
 
 app.get('/search-public-gallery', function(req, res) {
     res.redirect('/public-gallery');
