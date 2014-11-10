@@ -28,7 +28,7 @@ block content
                                     a(href='/subscribe')
                                         span.profile-icon.oi(data-glyph='plus', title='plus', aria-hidden='true')
                                         span.profile-title
-                                            | <span class='subscribe-link'>Subscribe</span> to <span class='bold'>Bob Blob</span>
+                                            | <span class='subscribe-link'>Subscribe</span> to <span class='bold'>#{username}</span>
                 .col.span_3_of_4
                     section.profile-main
                         article.track-featured
@@ -46,7 +46,7 @@ block content
                                 h3.
                                     Owner
                                 p.
-                                    Bob Blob
+                                    #{username}
                                 h3.
                                     Collaborators
                                 ul

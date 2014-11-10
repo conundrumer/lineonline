@@ -207,8 +207,6 @@ function visitProfile(req, res){
         }
     });
 
-
-
 }
 
 function visitUserProfile(req, res, model) {
@@ -378,7 +376,7 @@ app.get('/settings', loginRequired, function(req, res) {
 
 
 //actions
-app.get('/logout', function(req, res) {
+app.get('/logout', loginRequired, function(req, res) {
     res.redirect('/logout-backend');
 });
 app.post('/login', function(req, res) {
@@ -389,27 +387,27 @@ app.post('/signup', function(req, res) {
 });
 
 
-app.post('/edit-profile', function(req, res) {
+app.post('/edit-profile', loginRequired, function(req, res) {
     res.redirect(307, '/edit-profile-backend');
 });
 
-app.post('/edit-account', function(req, res) {
+app.post('/edit-account', loginRequired, function(req, res) {
     res.redirect(307, '/edit-account-backend');
 });
 
 app.get('/search-public-gallery', function(req, res) {
     res.redirect('/public-gallery');
 });
-app.get('/search-gallery', function(req, res) {
+app.get('/search-gallery', loginRequired, function(req, res) {
     res.redirect('/gallery');
 });
-app.get('/subscribe', function(req, res) {
+app.get('/subscribe', loginRequired, function(req, res) {
     res.redirect('/profile');
 });
-app.get('/unsubscribe', function(req, res) {
+app.get('/unsubscribe', loginRequired, function(req, res) {
     res.redirect('/subscriptions');
 });
-app.get('/send-message', function(req, res) {
+app.get('/send-message', loginRequired, function(req, res) {
     res.redirect('/home');
 });
 app.get('/playback-mode', function(req, res) {
