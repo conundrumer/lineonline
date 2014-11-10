@@ -87,7 +87,11 @@ knex.schema.dropTableIfExists('users').then(function() {
     });
 // create user with password
 }).then(function () {
-    return User.forge({username:'delu',password:'yourmother'}).save().then(function(){
+    return User.forge({
+        username:'delu',
+        password:'yourmother',
+        email:'delu@andrew.cmu.edu'
+    }).save().then(function(){
         console.log('created user "delu" with password "yourmother"');
     });
 // dummy authentication
@@ -159,6 +163,7 @@ var server = app.listen(3000, function() {
 function register(req, res){
     username = req.body.username
     password = req.body.password
+    email = req.body.email
     // log(JSON.stringify(req.body));
 
     if (req.body.username == ""){
@@ -175,7 +180,7 @@ function register(req, res){
     // Verify valid input
     User.where({username: username}).fetch().then(function(model){
         if (model === null) {
-            User.forge({username:username, password:password}).save().then(function(){
+            User.forge({username:username, password:password, email:email}).save().then(function(){
                 console.log(username, password);
                 res.send('<div style="color:red;">You registered for real!</div>');
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
@@ -210,6 +215,7 @@ function visitUserProfile(req, res, model) {
     res.render('profile', {
         title: 'Profile',
         username: model.get('username'),
+        email: model.get('email'),
         location: model.get('location'),
         description: model.get('description')
     });
