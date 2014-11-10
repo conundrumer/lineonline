@@ -1,0 +1,56 @@
+extend layout
+block content
+    section.panel.settings
+        .panel-padded
+            .section.group.row.profile-form
+                .col.span_2_of_12
+                .col.span_8_of_12
+                    h2.
+                        Profile Settings
+                    form.form-settings.form-settings-profile(method='get', action='/settings')
+                        .section.group.row
+                            .field.col.span_6_of_12
+                                label(for='firstname').
+                                    First Name:
+                                input(name='firstname', type='text', placeholder='Bob')
+                            .field.col.span_6_of_12
+                                label(for='lastname').
+                                    Last Name:
+                                input(name='lastname', type='text', placeholder='Blob')
+                        .section.group.row
+                            .field.col.span_12_of_12
+                                label(for='location').
+                                    Location:
+                                input(name='location', type='text', placeholder='Pittsburgh, PA')
+                        .section.group.row
+                            .field.col.span_12_of_12
+                                label(for='about').
+                                    About:
+                                textarea(name='about', placeholder='Type something about yourself...')
+                        button.btn.btn-submit(value='submit').
+                            Save Profile
+                .col.span_2_of_12
+            .section.group.row.account-form
+                .col.span_2_of_12
+                .col.span_8_of_12
+                    h2.
+                        Account Settings
+                    form.form-settings.form-settings-account(method='get', action='/settings')
+                        .section.group.row
+                            .field.col.span_12_of_12
+                                label(for='firstname').
+                                    Email:
+                                input(name='firstname', type='email', placeholder='bobblob@gmail.com')
+                        .section.group.row
+                            .field.col.span_12_of_12
+                                label(for='current-password').
+                                    Current Password:
+                                input(name='current-password', type='password', placeholder='••••••••••••')
+                        .section.group.row
+                            .field.col.span_12_of_12
+                                label(for='new-password').
+                                    New Password:
+                                input(name='new-password', type='password', placeholder='••••••••••••')
+                        button.btn.btn-submit(value='submit').
+                            Save Account
+                .col.span_2_of_12

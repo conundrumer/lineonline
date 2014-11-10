@@ -1,0 +1,31 @@
+%padded-width-content {
+    width: $content-width;
+    max-width: $content-max-width;
+    margin: 0 auto;
+}
+
+%col-first {
+    margin-left: 0 !important; //hack
+}
+
+%col {
+    width: calc(100% - 18px);
+    margin: 0 auto;
+
+    @media only screen and (max-width: 480px) {
+        margin-left: 0 !important; //hack
+        margin-right: 0 !important; //hack
+        //margin-right: 0;
+    }
+}
+
+%col-last {
+    margin-right: 0 !important; //hack
+}
+
+%uppercase-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+}

@@ -233,7 +233,7 @@ function editProfile(req, res){
     }
 
     model.save();
-    res.redirect('/profile/'+model.get('id'));
+    res.redirect('/profile-backend/'+model.get('id'));
 
 }
 
@@ -241,51 +241,121 @@ function editProfile(req, res){
 
 // These are the urls we route to
 // req = request, res = response
-app.get('/', function(req, res) {
+app.get('/-backend', function(req, res) {
     res.send('<div style="color:red;">Hello ' + (req.user ? req.user.get('username') : 'it') + '!</div>');
 });
-app.get('/login', function(req,res){
+app.get('/login-backend', function(req,res){
     res.sendFile(__dirname + '/auth.html');
 
 });
-app.get('/register', function(req,res){
+app.get('/register-backend', function(req,res){
     log("Get register.");
     res.sendFile(__dirname + '/register.html');
 
 });
-app.get('/edit-profile', loginRequired, function(req,res){
+app.get('/edit-profile-backend', loginRequired, function(req,res){
     log("Get edit-profile.");
     res.sendFile(__dirname + '/edit-profile.html');
 
 });
 
-app.get('/profile/:id', loginRequired, visitProfile);
-app.get('/faillogin', function(req,res){
+app.get('/profile-backend/:id', loginRequired, visitProfile);
+app.get('/faillogin-backend', function(req,res){
     res.sendFile(__dirname + '/nologin.html');
 });
 // app.post('/login', function(req, res){
 //     log("User is: " + req.body.username);
 // });
 
-app.post('/login',
-    passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/faillogin',
+app.post('/login-backend',
+    passport.authenticate('local', { successRedirect: '/-backend',
+                                   failureRedirect: '/faillogin-backend',
                                    failureFlash: false })
 );
-app.post('/register', register);
-app.post('/edit-profile', loginRequired, editProfile);
+app.post('/register-backend', register);
+app.post('/edit-profile-backend', loginRequired, editProfile);
 
-app.get('/logout', function(req, res){
+app.get('/logout-backend', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('/-backend');
 });
 
 function loginRequired(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/login-backend');
 }
 
 // example @login_required usage
-app.get('/isloggedin', loginRequired, function (req, res) {
+app.get('/isloggedin-backend', loginRequired, function (req, res) {
     res.send('<div style="color:red;font-size:100px">YES</div>');
+});
+
+
+
+
+
+
+//views
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
+//middleware
+// app.use(express.logger('dev')); //log incoming requests to console
+app.use(express.static(__dirname + '/public')); //serve static files
+
+//routes
+app.get('/', function(req, res) {
+    //res.send('<div style="color:red;">Hello World!</div>');
+    res.render('index', { title: 'LineOnline' });
+});
+app.get('/signup-login', function(req, res) {
+    res.render('signup-login', { title: 'Signup/Login', state: 'signedOut' });
+});
+app.get('/home', function(req, res) {
+    res.render('home', { title: 'Home' });
+});
+app.get('/gallery', function(req, res) {
+    res.render('gallery', { title: 'Gallery' });
+});
+app.get('/public-gallery', function(req, res) {
+    res.render('public-gallery', { title: 'Gallery', state: 'signedOut' });
+});
+app.get('/your-tracks', function(req, res) {
+    res.render('your-tracks', { title: 'Your Tracks' });
+});
+app.get('/profile', function(req, res) {
+    res.render('profile', { title: 'Profile' });
+});
+app.get('/favorites', function(req, res) {
+    res.render('favorites', { title: 'Favorites' });
+});
+app.get('/subscriptions', function(req, res) {
+    res.render('subscriptions', { title: 'Subscriptions' });
+});
+app.get('/settings', function(req, res) {
+    res.render('settings', { title: 'Settings' });
+});
+app.get('/logout', function(req, res) {
+    res.redirect('/signup-login');
+});
+app.get('/login', function(req, res) {
+    res.redirect('/');
+});
+app.get('/search-public-gallery', function(req, res) {
+    res.redirect('/public-gallery');
+});
+app.get('/search-gallery', function(req, res) {
+    res.redirect('/gallery');
+});
+app.get('/subscribe', function(req, res) {
+    res.redirect('/profile');
+});
+app.get('/unsubscribe', function(req, res) {
+    res.redirect('/subscriptions');
+});
+app.get('/send-message', function(req, res) {
+    res.redirect('/home');
+});
+app.get('/playback-mode', function(req, res) {
+    res.render('playback-mode', { title: 'Playback Mode' });
 });

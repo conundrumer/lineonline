@@ -1,0 +1,109 @@
+nav.navbar
+    ul.nav-list.section.group
+        li.nav-item.nav-item-logo.nav-item-active.col.span_1_of_7
+            if (state != 'signedOut')
+                a.navlink(href='/').
+                    LineOnline
+            else
+                a.navlink(href='/signup-login').
+                    LineOnline
+        if (state != 'signedOut')
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/home')
+                    span.navlink-icon.oi(data-glyph='home', title='home', aria-hidden='true')
+                    span.navlink-title.
+                        Home
+        if (state != 'signedOut')
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/gallery')
+                    span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
+                    span.navlink-title.
+                        Gallery
+        else
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/public-gallery')
+                    span.navlink-icon.oi(data-glyph='image', title='image', aria-hidden='true')
+                    span.navlink-title.
+                        Gallery
+        if (state != 'signedOut')
+            li.nav-item.col.span_1_of_7
+                a.navlink(href='/your-tracks')
+                    span.navlink-icon.oi(data-glyph='project', title='project', aria-hidden='true')
+                    span.navlink-title.
+                        Your Tracks
+        if (state != 'signedOut')
+            li.nav-item.col.span_2_of_7
+            li.nav-item.nav-item-profile.col.span_1_of_7
+                .navlink
+                    span.hidden.
+                        Profile
+                .dropdown.dropdown-settings.hidden
+                    ul
+                        li.dropdown-item.dropdown-profile
+                            a.dropdown-link(href='/profile')
+                                .name.
+                                    Bob Blob
+                                .description
+                                    span.dropdown-icon.oi(data-glyph='person', title='person', aria-hidden='true')
+                                    span.dropdown-title.
+                                        View Your Profile
+                        li.dropdown-item
+                            a.dropdown-link(href='/favorites')
+                                span.dropdown-icon.oi(data-glyph='heart', title='heart', aria-hidden='true')
+                                span.dropdown-title.
+                                    Favorites
+                        li.dropdown-item
+                            a.dropdown-link(href='/subscriptions')
+                                span.dropdown-icon.oi(data-glyph='people', title='people', aria-hidden='true')
+                                span.dropdown-title.
+                                    Subscriptions
+                        li.dropdown-item
+                            a.dropdown-link(href='/settings')
+                                span.dropdown-icon.oi(data-glyph='cog', title='cog', aria-hidden='true')
+                                span.dropdown-title.
+                                    Settings
+                        li.dropdown-item
+                            a.dropdown-link(href='/logout')
+                                span.dropdown-icon.oi(data-glyph='account-logout', title='account-logout', aria-hidden='true')
+                                span.dropdown-title.
+                                    Logout
+        else
+            li.nav-item.col.span_4_of_7
+            li.nav-item.nav-item-signup-login.col.span_1_of_7
+                a.navlink(href='/')
+                    span.navlink-icon.oi(data-glyph='account-login', title='account-login', aria-hidden='true')
+                    span.navlink-title.
+                        Sign Up/Log In
+                .dropdown.dropdown-signup-login.hidden
+                    div(id='form-signup')
+                        form.form-signup-login(method='get', action='/login')
+                            .field
+                                label(for='username').
+                                    Username:
+                                input(name='username', type='text', placeholder='username')
+                            .field
+                                label(for='email').
+                                    Email:
+                                input(name='username', type='email', placeholder='example@gmail.com')
+                            .field.field-last
+                                label(for='password').
+                                    Password:
+                                input(name='password', type='password', placeholder='••••••••••••')
+                            button.btn-submit(type='submit').
+                                Sign Up
+                        .footnote
+                            p
+                                | Or <span class='login-link'>log in</span> with an existing account
+                     div.hidden(id='form-login')
+                        form.form-signup-login(method='get', action='/login')
+                            .field
+                                label(for='username').
+                                    Username:
+                                input(name='username', type='text', placeholder='username')
+                            .field.field-last
+                                label(for='password').
+                                    Password:
+                                input(name='password', type='password', placeholder='••••••••••••')
+                            button.btn-submit(type='submit').
+                                Login
+

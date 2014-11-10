@@ -1,0 +1,90 @@
+section.panel.masthead(id='masthead-panel')
+.scroll-divider
+    a.scroll-link(href='#editor-panel')
+        span.scroll-icon.oi(data-glyph='chevron-bottom', title='chevron-bottom', aria-hidden='true')
+section.panel.editor(id='editor-panel')
+.scroll-divider
+    a.scroll-link(href='#gallery-panel')
+        span.scroll-icon.oi(data-glyph='chevron-bottom', title='chevron-bottom', aria-hidden='true')
+section.panel.gallery(id='gallery-panel')
+    .panel-padded
+        .section.group.row
+            .col.span_1_of_3
+                h2.header-col
+                    span.header-icon.oi(data-glyph='pulse', title='pulse', aria-hidden='true')
+                    span.header-title.
+                        Hot
+            .col.span_1_of_3
+                h2.header-col
+                    span.header-icon.oi(data-glyph='star', title='star', aria-hidden='true')
+                    span.header-title.
+                        Top
+            .col.span_1_of_3
+                h2.header-col
+                    span.header-icon.oi(data-glyph='clock', title='clock', aria-hidden='true')
+                    span.header-title.
+                        New
+        .section.group.row
+            .col.span_1_of_3
+                article.tile.tile-first
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Description of track something something blah blah hello world. More description and blah balh blahdsf stuff. Okay just typing random crap now blah goodbye world.
+            .col.span_1_of_3
+                article.tile
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Bleep bloop blkajsdf dlaksfj oiaysdf cool line rider is cool omgosh I love line rider. No I don't. Just kidding. Hello. Whatevererrerer hello again.
+            .col.span_1_of_3
+                article.tile.tile-last
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Rawr. This is a description. Okay now.
+        .section.group.row.row-last
+            .col.span_1_of_3
+                article.tile.tile-first
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Description of track something something blah blah hello world. More description and blah balh blahdsf stuff. Okay just typing random crap now blah goodbye world.
+            .col.span_1_of_3
+                article.tile
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Bleep bloop blkajsdf dlaksfj oiaysdf cool line rider is cool omgosh I love line rider. No I don't. Just kidding. Hello. Whatevererrerer hello again.
+            .col.span_1_of_3
+                article.tile.tile-last
+                    .preview
+                        span.preview-icon.oi(data-glyph='fullscreen-enter', title='fullscreen-enter', aria-hidden='true')
+                    .info
+                        h3.
+                            Track Title
+                        p.
+                            Rawr. This is a description. Okay now.
+        if (state != 'signedOut')
+            a(href='/gallery')
+                button.btn.btn-see-more.
+                    SEE MORE
+        else
+            a(href='/public-gallery')
+                button.btn.btn-see-more.
+                    SEE MORE

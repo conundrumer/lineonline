@@ -1,0 +1,77 @@
+* {
+    @include box-sizing(border-box);
+    -webkit-appearance: none;
+    // height: 100%;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    // margin: 0 auto;
+    // width: 100%;
+    // position: relative;
+    height: 100%;
+    font-family: 'Source Sans Pro', 'Pontano Sans', 'Roboto', 'Lato', 'Josefin Sans', sans-serif;
+    color: #000;
+    line-height: 1.2;
+    letter-spacing: 1px;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+form {
+    input {
+        border: 1px solid $border-col;
+    }
+
+    button {
+        background: #fff;
+        border: 1px solid $border-col;
+    }
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: '';
+    display: table;
+    height: 0;
+    overflow: hidden;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+:focus {
+    outline: none;
+}
+
+::selection {
+    background: $selection-col;
+}
+
+::-moz-selection {
+    background: $selection-col;
+}
+
+.hidden {
+    display: none;
+}
+
+.bold {
+    font-weight: bold;
+}
