@@ -213,23 +213,23 @@ function visitProfile(req, res){
 }
 
 function editProfile(req, res){
-    email = req.body.email
+    // email = req.body.email
     location = req.body.location
-    description = req.body.description
+    about = req.body.about
 
     model = req.user
     // log(JSON.stringify(req.body));
 
-    if (email != ""){
-        model.set({email: email});
-    }
+    // if (email != ""){
+    //     model.set({email: email});
+    // }
 
     if (location != ""){
         model.set({location: location});
     }
 
-    if (description != ""){
-        model.set({description: description});
+    if (about != ""){
+        model.set({description: about});
     }
 
     model.save();
@@ -347,6 +347,13 @@ app.post('/login', function(req, res) {
 app.post('/signup', function(req, res) {
     res.redirect(307, '/register-backend');
 });
+
+
+app.post('/edit-profile', function(req, res) {
+    res.redirect(307, '/edit-profile-backend');
+});
+
+
 app.get('/search-public-gallery', function(req, res) {
     res.redirect('/public-gallery');
 });
