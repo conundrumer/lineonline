@@ -80,6 +80,9 @@ knex.schema.dropTableIfExists('users').then(function() {
         t.increments('id').primary();
         t.string('username', 100);
         t.string('password', 100);
+        t.string('email', 100);
+        t.string('description', 300);
+        t.string('location', 100);
 
     });
 // create user with password
@@ -184,6 +187,57 @@ function register(req, res){
 }
 
 
+function visitProfile(req, res){
+    //login user with id = id
+    //The value of id = req.params.id
+
+
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.send(
+                '<h1>' + model.get('username') + '</h1>' +
+                '<p> Location: ' + model.get('location') + '</p>' +
+                '<p> Description: ' + model.get('description') + '</p>' +
+                '<p> Email: ' + model.get('email') + '</p>'
+
+                )
+        }
+    });
+
+
+
+}
+
+function editProfile(req, res){
+    email = req.body.email
+    location = req.body.location
+    description = req.body.description
+
+    model = req.user
+    // log(JSON.stringify(req.body));
+
+    if (email != ""){
+        model.set({email: email});
+    }
+
+    if (location != ""){
+        model.set({location: location});
+    }
+
+    if (description != ""){
+        model.set({description: description});
+    }
+
+    model.save();
+    res.redirect('/profile/'+model.get('id'));
+
+}
+
+
 
 // These are the urls we route to
 // req = request, res = response
@@ -191,16 +245,23 @@ app.get('/', function(req, res) {
     res.send('<div style="color:red;">Hello ' + (req.user ? req.user.get('username') : 'it') + '!</div>');
 });
 app.get('/login', function(req,res){
-   res.sendFile(__dirname + '/auth.html');
+    res.sendFile(__dirname + '/auth.html');
 
 });
 app.get('/register', function(req,res){
     log("Get register.");
-   res.sendFile(__dirname + '/register.html');
+    res.sendFile(__dirname + '/register.html');
 
 });
+app.get('/edit-profile', loginRequired, function(req,res){
+    log("Get edit-profile.");
+    res.sendFile(__dirname + '/edit-profile.html');
+
+});
+
+app.get('/profile/:id', loginRequired, visitProfile);
 app.get('/faillogin', function(req,res){
-   res.sendFile(__dirname + '/nologin.html');
+    res.sendFile(__dirname + '/nologin.html');
 });
 // app.post('/login', function(req, res){
 //     log("User is: " + req.body.username);
@@ -212,6 +273,7 @@ app.post('/login',
                                    failureFlash: false })
 );
 app.post('/register', register);
+app.post('/edit-profile', loginRequired, editProfile);
 
 app.get('/logout', function(req, res){
   req.logout();
