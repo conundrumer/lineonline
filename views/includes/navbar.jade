@@ -76,7 +76,7 @@ nav.navbar
                         Sign Up/Log In
                 .dropdown.dropdown-signup-login.hidden
                     div(id='form-signup')
-                        form.form-signup-login(method='get', action='/login')
+                        form.form-signup-login(method='post', action='/signup')
                             .field
                                 label(for='username').
                                     Username:
@@ -95,7 +95,7 @@ nav.navbar
                             p
                                 | Or <span class='login-link'>log in</span> with an existing account
                      div.hidden(id='form-login')
-                        form.form-signup-login(method='get', action='/login')
+                        form.form-signup-login(method='post', action='/login')
                             .field
                                 label(for='username').
                                     Username:
