@@ -198,18 +198,21 @@ function visitProfile(req, res){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.send(
-                '<h1>' + model.get('username') + '</h1>' +
-                '<p> Location: ' + model.get('location') + '</p>' +
-                '<p> Description: ' + model.get('description') + '</p>' +
-                '<p> Email: ' + model.get('email') + '</p>'
-
-                )
+            visitUserProfile(req, res, model);
         }
     });
 
 
 
+}
+
+function visitUserProfile(req, res, model) {
+    res.render('profile', {
+        title: 'Profile',
+        username: model.get('username'),
+        location: model.get('location'),
+        description: model.get('description')
+    });
 }
 
 function editProfile(req, res){
@@ -233,7 +236,7 @@ function editProfile(req, res){
     }
 
     model.save();
-    res.redirect('/profile-backend/'+model.get('id'));
+    res.redirect('/profile/'+model.get('id'));
 
 }
 
@@ -323,9 +326,10 @@ app.get('/public-gallery', function(req, res) {
 app.get('/your-tracks', loginRequired, function(req, res) {
     res.render('your-tracks', { title: 'Your Tracks' });
 });
-app.get('/profile', loginRequired, function(req, res) {
-    res.render('profile', { title: 'Profile' });
+app.get('/profile', loginRequired, function (req, res) {
+    visitUserProfile(req, res, req.user);
 });
+app.get('/profile/:id', loginRequired, visitProfile);
 app.get('/favorites', loginRequired, function(req, res) {
     res.render('favorites', { title: 'Favorites' });
 });

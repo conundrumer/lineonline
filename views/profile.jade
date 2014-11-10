@@ -9,11 +9,11 @@ block content
                         .info
                             .detail.contact
                                 h3.
-                                    Bob Blob
+                                    #{username}
                                 p
                                     span.profile-icon.oi(data-glyph='map-marker', title='map-marker', aria-hidden='true')
                                     span.profile-title.
-                                        Pittsburgh, PA
+                                        #{location}
                                 p
                                     span.profile-icon.oi(data-glyph='envelope-closed', title='envelope-closed', aria-hidden='true')
                                     span.profile-title.
@@ -22,7 +22,7 @@ block content
                                 h3.
                                     About
                                 p.
-                                    Hello my name is blah blah and blah listen to me okay more stuff my name is blah blah and blah listen to me okay more stuff.
+                                    #{description}
                             .detail.interact
                                 p
                                     a(href='/subscribe')
