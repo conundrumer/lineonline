@@ -35,22 +35,26 @@ block content
                 .col.span_8_of_12
                     h2.
                         Account Settings
-                    form.form-settings.form-settings-account(method='get', action='/settings')
+                    form.form-settings.form-settings-account(method='post', action='/edit-account')
                         .section.group.row
                             .field.col.span_12_of_12
-                                label(for='firstname').
-                                    Email:
-                                input(name='firstname', type='email', placeholder='bobblob@gmail.com')
+                                h3.
+                                    Change Email
+                                label(for='newEmail').
+                                    New Email:
+                                input(name='newEmail', type='email', placeholder='bobblob@gmail.com')
                         .section.group.row
                             .field.col.span_12_of_12
-                                label(for='current-password').
+                                h3.
+                                    Change Password
+                                label(for='currentPassword').
                                     Current Password:
-                                input(name='current-password', type='password', placeholder='••••••••••••')
+                                input(name='currentPassword', type='password', placeholder='••••••••••••')
                         .section.group.row
                             .field.col.span_12_of_12
-                                label(for='new-password').
+                                label(for='newPassword').
                                     New Password:
-                                input(name='new-password', type='password', placeholder='••••••••••••')
+                                input(name='newPassword', type='password', placeholder='••••••••••••')
                         button.btn.btn-submit(value='submit').
                             Save Account
                 .col.span_2_of_12

@@ -9,26 +9,26 @@ block content
                         .info
                             .detail.contact
                                 h3.
-                                    Bob Blob
+                                    #{username}
                                 p
                                     span.profile-icon.oi(data-glyph='map-marker', title='map-marker', aria-hidden='true')
                                     span.profile-title.
-                                        Pittsburgh, PA
+                                        #{location}
                                 p
                                     span.profile-icon.oi(data-glyph='envelope-closed', title='envelope-closed', aria-hidden='true')
                                     span.profile-title.
-                                        bobblob@gmail.com
+                                        #{email}
                             .detail.about
                                 h3.
                                     About
                                 p.
-                                    Hello my name is blah blah and blah listen to me okay more stuff my name is blah blah and blah listen to me okay more stuff.
+                                    #{description}
                             .detail.interact
                                 p
                                     a(href='/subscribe')
                                         span.profile-icon.oi(data-glyph='plus', title='plus', aria-hidden='true')
                                         span.profile-title
-                                            | <span class='subscribe-link'>Subscribe</span> to <span class='bold'>Bob Blob</span>
+                                            | <span class='subscribe-link'>Subscribe</span> to <span class='bold'>#{username}</span>
                 .col.span_3_of_4
                     section.profile-main
                         article.track-featured
@@ -46,7 +46,7 @@ block content
                                 h3.
                                     Owner
                                 p.
-                                    Bob Blob
+                                    #{username}
                                 h3.
                                     Collaborators
                                 ul

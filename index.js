@@ -87,7 +87,11 @@ knex.schema.dropTableIfExists('users').then(function() {
     });
 // create user with password
 }).then(function () {
-    return User.forge({username:'delu',password:'yourmother'}).save().then(function(){
+    return User.forge({
+        username:'delu',
+        password:'yourmother',
+        email:'delu@andrew.cmu.edu'
+    }).save().then(function(){
         console.log('created user "delu" with password "yourmother"');
     });
 // dummy authentication
@@ -159,6 +163,7 @@ var server = app.listen(3000, function() {
 function register(req, res){
     username = req.body.username
     password = req.body.password
+    email = req.body.email
     // log(JSON.stringify(req.body));
 
     if (req.body.username == ""){
@@ -175,7 +180,7 @@ function register(req, res){
     // Verify valid input
     User.where({username: username}).fetch().then(function(model){
         if (model === null) {
-            User.forge({username:username, password:password}).save().then(function(){
+            User.forge({username:username, password:password, email:email}).save().then(function(){
                 console.log(username, password);
                 res.send('<div style="color:red;">You registered for real!</div>');
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
@@ -198,18 +203,20 @@ function visitProfile(req, res){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.send(
-                '<h1>' + model.get('username') + '</h1>' +
-                '<p> Location: ' + model.get('location') + '</p>' +
-                '<p> Description: ' + model.get('description') + '</p>' +
-                '<p> Email: ' + model.get('email') + '</p>'
-
-                )
+            visitUserProfile(req, res, model);
         }
     });
 
+}
 
-
+function visitUserProfile(req, res, model) {
+    res.render('profile', {
+        title: 'Profile',
+        username: model.get('username'),
+        email: model.get('email'),
+        location: model.get('location'),
+        description: model.get('description')
+    });
 }
 
 function editProfile(req, res){
@@ -233,10 +240,39 @@ function editProfile(req, res){
     }
 
     model.save();
-    res.redirect('/profile-backend/'+model.get('id'));
+    res.redirect('/profile/'+model.get('id'));
 
 }
 
+function editAccount(req, res) {
+    model = req.user;
+
+    newEmail = req.body.newEmail;
+    currentPassword = req.body.currentPassword;
+    newPassword = req.body.newPassword;
+
+    if (newEmail) {
+        log('email changed');
+        model.set({email: newEmail});
+    }
+
+    // this is ugly
+    if (currentPassword) {
+        if (currentPassword === model.get('password')) {
+            // if (currentPassword === newPassword) {
+                log('password changed');
+                model.set({password: newPassword});
+            // } else {
+            //     log('passwords did not match');
+            // }
+        } else {
+            log('current password is incorrect');
+        }
+    }
+
+    model.save();
+    res.redirect('/settings');
+}
 
 
 // These are the urls we route to
@@ -274,6 +310,7 @@ app.post('/login-backend',
 );
 app.post('/register-backend', register);
 app.post('/edit-profile-backend', loginRequired, editProfile);
+app.post('/edit-account-backend', loginRequired, editAccount);
 
 app.get('/logout-backend', function(req, res){
   req.logout();
@@ -323,9 +360,10 @@ app.get('/public-gallery', function(req, res) {
 app.get('/your-tracks', loginRequired, function(req, res) {
     res.render('your-tracks', { title: 'Your Tracks' });
 });
-app.get('/profile', loginRequired, function(req, res) {
-    res.render('profile', { title: 'Profile' });
+app.get('/profile', loginRequired, function (req, res) {
+    visitUserProfile(req, res, req.user);
 });
+app.get('/profile/:id', loginRequired, visitProfile);
 app.get('/favorites', loginRequired, function(req, res) {
     res.render('favorites', { title: 'Favorites' });
 });
@@ -338,7 +376,7 @@ app.get('/settings', loginRequired, function(req, res) {
 
 
 //actions
-app.get('/logout', function(req, res) {
+app.get('/logout', loginRequired, function(req, res) {
     res.redirect('/logout-backend');
 });
 app.post('/login', function(req, res) {
@@ -349,24 +387,27 @@ app.post('/signup', function(req, res) {
 });
 
 
-app.post('/edit-profile', function(req, res) {
+app.post('/edit-profile', loginRequired, function(req, res) {
     res.redirect(307, '/edit-profile-backend');
 });
 
+app.post('/edit-account', loginRequired, function(req, res) {
+    res.redirect(307, '/edit-account-backend');
+});
 
 app.get('/search-public-gallery', function(req, res) {
     res.redirect('/public-gallery');
 });
-app.get('/search-gallery', function(req, res) {
+app.get('/search-gallery', loginRequired, function(req, res) {
     res.redirect('/gallery');
 });
-app.get('/subscribe', function(req, res) {
+app.get('/subscribe', loginRequired, function(req, res) {
     res.redirect('/profile');
 });
-app.get('/unsubscribe', function(req, res) {
+app.get('/unsubscribe', loginRequired, function(req, res) {
     res.redirect('/subscriptions');
 });
-app.get('/send-message', function(req, res) {
+app.get('/send-message', loginRequired, function(req, res) {
     res.redirect('/home');
 });
 app.get('/playback-mode', function(req, res) {
