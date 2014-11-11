@@ -1,5 +1,5 @@
-#Sprint 1 Recap:
-    ##Completed:
+# Sprint 1 Recap:
+    ## Completed:
         * Setup / connect postgres
         * HTML / CSS mockups
         * Registration
@@ -7,8 +7,8 @@
         * Edit profile description
         * Change password
         * Change email
-
-    ##Not completed:
+        
+    ## Not completed:
         * Upload picture:     Need to find out how to upload files
         * Subscriptions:      Need to find out how to do relations
 
