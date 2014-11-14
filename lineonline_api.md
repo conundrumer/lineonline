@@ -1,5 +1,5 @@
 # LineOnline API
-LineOnline API is an internal API for LineOnline. It serves the majority of content and functionalities on the LineOnline website. All content types are application/json unless otherwise specified.
+LineOnline API is an internal API for LineOnline. It serves the majority of content and functionalities on the LineOnline website. All content types are application/json unless otherwise specified. All URL roots are from `/api`
 
 # Group Auth
 Resources for registration, authentication, and sessions.
@@ -65,20 +65,20 @@ Attributes:
 + Model
 
     + Body
-
-        {
-            "_links": {
-                "self": { "href": "/users/42" },
-                "profile": { "href": "/users/42/profile" },
-                "favorites": { "href": "/users/42/favorites" },
-                "subscriptions": { "href": "/users/42/subscriptions" },
-                "collections": { "href": "/users/42/collections"},
-                "tracks": { "href": "/tracks?user=42"},
-            },
-            "id": 42,
-            "name": "delu",
-            "avatar_url": "http://www.example.com/avatar.png"
-        }
+    
+            {
+                "_links": {
+                    "self": { "href": "/users/42" },
+                    "profile": { "href": "/users/42/profile" },
+                    "favorites": { "href": "/users/42/favorites" },
+                    "subscriptions": { "href": "/users/42/subscriptions" },
+                    "collections": { "href": "/users/42/collections"},
+                    "tracks": { "href": "/tracks?user=42"},
+                },
+                "id": 42,
+                "name": "delu",
+                "avatar_url": "http://www.example.com/avatar.png"
+            }
 
 ### GET
 Retrieves the user with this id.
