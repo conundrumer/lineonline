@@ -6,6 +6,7 @@ var sass = require('gulp-ruby-sass');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
+var reactify = require('reactify');
 
 // Compass & Compile our Sass
 gulp.task('sass', function() {
@@ -48,6 +49,7 @@ gulp.task('browserify', function() {
     };
 
     bundler = watchify(bundler);
+    bundler.transform(reactify);
     bundler.on('update', bundle);
 
     return bundle();

@@ -413,3 +413,8 @@ app.get('/send-message', loginRequired, function(req, res) {
 app.get('/playback-mode', function(req, res) {
     res.render('playback-mode', { title: 'Playback Mode' });
 });
+
+app.get('/hello', function(req, res) {
+    res.render('react-index');
+    // res.send('<html><body><script src="/js/build/bundle.js"></script></body></html>');
+});

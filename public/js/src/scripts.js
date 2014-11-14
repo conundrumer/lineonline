@@ -1,11 +1,16 @@
 $ = jQuery = require('jquery');
 require('jquery-smooth-scroll');
+var App = require('./App.jsx');
+var React = require('react');
+React.render(React.createElement(App, null), document.body);
 
 var LINEONLINE = {
     init: function() {
         this.initVars();
         this.initPlugins();
         this.bindEventHandlers();
+
+        console.log('helllooo world');
     },
 
     initVars: function() {
