@@ -92,11 +92,13 @@ what should tihs return?
 
 ### Update Settings [PUT]
 + Request
-    {
-        current_password: "mymother",
-        new_password: "yourmother",
-        new_password_confirm: "yourmother"
-    }
++ 
+        {
+            current_password: "mymother",
+            new_password: "yourmother",
+            new_password_confirm: "yourmother"
+        }
+
 + Response 205
 
 ## User Collection [/users{?q}]
@@ -108,6 +110,7 @@ The User Collection embeds users.
 + Model
 
     + Body
+    
             {
                 "_links": {
                     "self": { "href": "/users" }
@@ -156,15 +159,15 @@ Attributes:
 
     + Body
 
-        {
-            "_links": {
-                "self": { "href": "/users/42/profile" },
-                "user": { "href": "/users/42" }
-            },
-            "location": "NYC",
-            "about": "i am delu",
-            "avatar_url": "http://www.example.com/avatar.png"
-        }
+            {
+                "_links": {
+                    "self": { "href": "/users/42/profile" },
+                    "user": { "href": "/users/42" }
+                },
+                "location": "NYC",
+                "about": "i am delu",
+                "avatar_url": "http://www.example.com/avatar.png"
+            }
 
 ### GET
 + Response 200
