@@ -1,4 +1,19 @@
 var React = require('react/addons');
+var Router = require('react-router');
+var Route = Router.Route;
+var Routes = Router.Routes;
+var NotFoundRoute = Router.NotFoundRoute;
+var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
+// var Routes = require('react-router/modules/components/Routes');
+
+// React.render((
+//     <Routes location='history'>
+//         <Route name='app' path='/' handler={App}>
+//             <Route name='home' handler={Inbox} />
+//         </Route>
+//     </Routes>
+// ), document.body, LINEONLINE.init.bind(LINEONLINE));
 
 // var names = ['delu', 'jing', 'what'];
 
@@ -14,13 +29,13 @@ var App = React.createClass({
         return (
             <div className='container'>
                 <Navbar />
-                <Content />
+                <this.props.activeRouteHandler />
             </div>
         );
     }
 });
 
-var Content = React.createClass({
+var Index = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
@@ -32,6 +47,47 @@ var Content = React.createClass({
                     <GalleryPreview />
                 </Panel>
                 <Footer />
+            </div>
+        );
+    }
+});
+
+var Profile = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var Home = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Panel isEditor={true} id='editor-panel' />
+                <Footer />
+            </div>
+        );
+    }
+});
+
+
+var Gallery = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var YourTracks = React.createClass({
+    render: function() {
+        return (
+            <div>
             </div>
         );
     }
@@ -56,11 +112,11 @@ var GalleryPreview = React.createClass({
                 <GalleryCol headerTitle='Hot' headerIcon='pulse' />
                 <GalleryCol headerTitle='Top' headerIcon='star' />
                 <GalleryCol headerTitle='New' headerIcon='clock' />
-                <a href='/gallery'>
+                <Link to='gallery'>
                     <button className='btn btn-see-more'>
                         See More
                     </button>
-                </a>
+                </Link>
             </div>
         );
     }
@@ -160,13 +216,13 @@ var Navbar = React.createClass({
             <nav className='navbar'>
                 <ul className='nav-list section group'>
                     <li className='nav-item nav-item-logo nav-item-active col span_1_of_7'>
-                        <a href='/' className='navlink'>
+                       <Link to='app' className='navlink'>
                             LineOnline
-                        </a>
+                        </Link>
                     </li>
-                    <Navlink title='Home' link='/home' icon='home' />
-                    <Navlink title='Gallery' link='/gallery' icon='image' />
-                    <Navlink title='Your Tracks' link='/your-tracks' icon='project' />
+                    <Navlink title='Home' link='home' icon='home' />
+                    <Navlink title='Gallery' link='gallery' icon='image' />
+                    <Navlink title='Your Tracks' link='your-tracks' icon='project' />
                     <li className='nav-item col span_2_of_7'></li>
                     <li className='nav-item nav-item-profile col span_1_of_7'>
                         <div className='navlink'>
@@ -196,7 +252,7 @@ var Dropdown = React.createClass({
             <div className='dropdown dropdown-settings hidden'>
                 <ul>
                     <li className='dropdown-item dropdown-profile'>
-                        <a href='/profile' className='dropdown-link'>
+                        <Link to='profile' className='dropdown-link'>
                             <div className='name'>
                                 Bob Blob
                             </div>
@@ -206,12 +262,12 @@ var Dropdown = React.createClass({
                                     View Your Profile
                                 </span>
                             </div>
-                        </a>
+                        </Link>
                     </li>
-                    <DropdownItem title='Favorites' link='/favorites' icon='heart' />
-                    <DropdownItem title='Subscriptions' link='/subscriptions' icon='people' />
-                    <DropdownItem title='Settings' link='/settings' icon='cog' />
-                    <DropdownItem title='Logout' link='/logout' icon='account-logout' />
+                    <DropdownItem title='Favorites' link='favorites' icon='heart' />
+                    <DropdownItem title='Subscriptions' link='subscriptions' icon='people' />
+                    <DropdownItem title='Settings' link='settings' icon='cog' />
+                    <DropdownItem title='Logout' link='logout' icon='account-logout' />
                 </ul>
             </div>
         );
@@ -222,12 +278,12 @@ var DropdownItem = React.createClass({
     render: function() {
         return (
             <li className='dropdown-item'>
-                <a href={this.props.link} className='dropdown-link'>
+                <Link to={this.props.link} className='dropdown-link'>
                     <Icon class='dropdown-icon' icon={this.props.icon} />
                     <span className='dropdown-title'>
                         {this.props.title}
                     </span>
-                </a>
+                </Link>
             </li>
         );
     }
@@ -238,12 +294,12 @@ var Navlink = React.createClass({
         return (
             // var isLogo = this.props.logo ?
             <li className='nav-item col span_1_of_7'>
-                <a href={this.props.link} className='navlink'>
+                <Link to={this.props.link} className='navlink'>
                     <Icon class='navlink-icon' icon={this.props.icon} />
                     <span className='navlink-title'>
                         { this.props.title }
                     </span>
-                </a>
+                </Link>
             </li>
         );
     }
@@ -258,4 +314,20 @@ var Hello = React.createClass({
     }
 });
 
-module.exports = App;
+module.exports = function doRender(target, callback) {
+    React.render((
+        <Routes location='history'>
+            <Route name='app' path='/' handler={App}>
+                <DefaultRoute name='index' handler={Index} />
+                <Route name='home' handler={Home} />
+                <Route name='gallery' handler={Gallery} />
+                <Route name='your-tracks' handler={YourTracks} />
+                <Route name='profile' handler={Profile} />
+                <Route name='favorites' handler={Profile} />
+                <Route name='subscriptions' handler={Profile} />
+                <Route name='settings' handler={Profile} />
+                <Route name='logout' handler={Profile} />
+            </Route>
+        </Routes>
+    ), target, callback);
+};

@@ -341,80 +341,80 @@ app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/public')); //serve static files
 
 //routes
-app.get('/', loginRequired, function(req, res) {
-    //res.send('<div style="color:red;">Hello World!</div>');
-    res.render('index', { title: 'LineOnline' });
-});
-app.get('/signup-login', function(req, res) {
-    res.render('signup-login', { title: 'Signup/Login', state: 'signedOut' });
-});
-app.get('/home', loginRequired, function(req, res) {
-    res.render('home', { title: 'Home' });
-});
-app.get('/gallery', loginRequired, function(req, res) {
-    res.render('gallery', { title: 'Gallery' });
-});
-app.get('/public-gallery', function(req, res) {
-    res.render('public-gallery', { title: 'Gallery', state: 'signedOut' });
-});
-app.get('/your-tracks', loginRequired, function(req, res) {
-    res.render('your-tracks', { title: 'Your Tracks' });
-});
-app.get('/profile', loginRequired, function (req, res) {
-    visitUserProfile(req, res, req.user);
-});
-app.get('/profile/:id', loginRequired, visitProfile);
-app.get('/favorites', loginRequired, function(req, res) {
-    res.render('favorites', { title: 'Favorites' });
-});
-app.get('/subscriptions', loginRequired, function(req, res) {
-    res.render('subscriptions', { title: 'Subscriptions' });
-});
-app.get('/settings', loginRequired, function(req, res) {
-    res.render('settings', { title: 'Settings' });
-});
+// app.get('/', loginRequired, function(req, res) {
+//     //res.send('<div style="color:red;">Hello World!</div>');
+//     res.render('index', { title: 'LineOnline' });
+// });
+// app.get('/signup-login', function(req, res) {
+//     res.render('signup-login', { title: 'Signup/Login', state: 'signedOut' });
+// });
+// app.get('/home', loginRequired, function(req, res) {
+//     res.render('home', { title: 'Home' });
+// });
+// app.get('/gallery', loginRequired, function(req, res) {
+//     res.render('gallery', { title: 'Gallery' });
+// });
+// app.get('/public-gallery', function(req, res) {
+//     res.render('public-gallery', { title: 'Gallery', state: 'signedOut' });
+// });
+// app.get('/your-tracks', loginRequired, function(req, res) {
+//     res.render('your-tracks', { title: 'Your Tracks' });
+// });
+// app.get('/profile', loginRequired, function (req, res) {
+//     visitUserProfile(req, res, req.user);
+// });
+// app.get('/profile/:id', loginRequired, visitProfile);
+// app.get('/favorites', loginRequired, function(req, res) {
+//     res.render('favorites', { title: 'Favorites' });
+// });
+// app.get('/subscriptions', loginRequired, function(req, res) {
+//     res.render('subscriptions', { title: 'Subscriptions' });
+// });
+// app.get('/settings', loginRequired, function(req, res) {
+//     res.render('settings', { title: 'Settings' });
+// });
 
 
-//actions
-app.get('/logout', loginRequired, function(req, res) {
-    res.redirect('/logout-backend');
-});
-app.post('/login', function(req, res) {
-    res.redirect(307, '/login-backend');
-});
-app.post('/signup', function(req, res) {
-    res.redirect(307, '/register-backend');
-});
+// //actions
+// app.get('/logout', loginRequired, function(req, res) {
+//     res.redirect('/logout-backend');
+// });
+// app.post('/login', function(req, res) {
+//     res.redirect(307, '/login-backend');
+// });
+// app.post('/signup', function(req, res) {
+//     res.redirect(307, '/register-backend');
+// });
 
 
-app.post('/edit-profile', loginRequired, function(req, res) {
-    res.redirect(307, '/edit-profile-backend');
-});
+// app.post('/edit-profile', loginRequired, function(req, res) {
+//     res.redirect(307, '/edit-profile-backend');
+// });
 
-app.post('/edit-account', loginRequired, function(req, res) {
-    res.redirect(307, '/edit-account-backend');
-});
+// app.post('/edit-account', loginRequired, function(req, res) {
+//     res.redirect(307, '/edit-account-backend');
+// });
 
-app.get('/search-public-gallery', function(req, res) {
-    res.redirect('/public-gallery');
-});
-app.get('/search-gallery', loginRequired, function(req, res) {
-    res.redirect('/gallery');
-});
-app.get('/subscribe', loginRequired, function(req, res) {
-    res.redirect('/profile');
-});
-app.get('/unsubscribe', loginRequired, function(req, res) {
-    res.redirect('/subscriptions');
-});
-app.get('/send-message', loginRequired, function(req, res) {
-    res.redirect('/home');
-});
-app.get('/playback-mode', function(req, res) {
-    res.render('playback-mode', { title: 'Playback Mode' });
-});
+// app.get('/search-public-gallery', function(req, res) {
+//     res.redirect('/public-gallery');
+// });
+// app.get('/search-gallery', loginRequired, function(req, res) {
+//     res.redirect('/gallery');
+// });
+// app.get('/subscribe', loginRequired, function(req, res) {
+//     res.redirect('/profile');
+// });
+// app.get('/unsubscribe', loginRequired, function(req, res) {
+//     res.redirect('/subscriptions');
+// });
+// app.get('/send-message', loginRequired, function(req, res) {
+//     res.redirect('/home');
+// });
+// app.get('/playback-mode', function(req, res) {
+//     res.render('playback-mode', { title: 'Playback Mode' });
+// });
 
-app.get('/hello', function(req, res) {
+app.get('*', function(req, res) {
     res.render('react-index');
     // res.send('<html><body><script src="/js/build/bundle.js"></script></body></html>');
 });

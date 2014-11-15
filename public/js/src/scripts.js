@@ -1,14 +1,20 @@
 $ = jQuery = require('jquery');
 require('jquery-smooth-scroll');
-var App = require('./App.jsx');
-var React = require('react/addons');
+// var App = require('./App.jsx');
+// var React = require('react/addons');
+// var Router = require('react-router');
+// var Link = Router.Link;
+// var Link = require('react-router/modules/components/Link');
+var Router = require('react-router');
+var Routes = Router.Routes;
+var Route = Router.Route;
 
 var LINEONLINE = {
     init: function() {
         this.initVars();
         this.initPlugins();
         this.bindEventHandlers();
-        console.log('helllooo world');
+        // console.log('blaasdfjsdafjldksajfjksdf');
     },
 
     initVars: function() {
@@ -26,7 +32,6 @@ var LINEONLINE = {
     },
 
     initPlugins: function() {
-        console.log(this.$scrollLink);
         this.$scrollLink.smoothScroll({
             offset: this.navbarOffset,
             speed: 600
@@ -79,4 +84,13 @@ var LINEONLINE = {
     }
 }
 
-React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
+require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+
+// React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
+// React.render((
+//     <Routes location='history'>
+//         <Route name='app' path='/' handler={App}>
+//             <Route name='home' handler={Inbox} />
+//         </Route>
+//     </Routes>
+// ), document.body, LINEONLINE.init.bind(LINEONLINE));
