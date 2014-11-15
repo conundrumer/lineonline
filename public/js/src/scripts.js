@@ -1,15 +1,13 @@
 $ = jQuery = require('jquery');
 require('jquery-smooth-scroll');
 var App = require('./App.jsx');
-var React = require('react');
-React.render(React.createElement(App, null), document.body);
+var React = require('react/addons');
 
 var LINEONLINE = {
     init: function() {
         this.initVars();
         this.initPlugins();
         this.bindEventHandlers();
-
         console.log('helllooo world');
     },
 
@@ -28,6 +26,7 @@ var LINEONLINE = {
     },
 
     initPlugins: function() {
+        console.log(this.$scrollLink);
         this.$scrollLink.smoothScroll({
             offset: this.navbarOffset,
             speed: 600
@@ -80,4 +79,4 @@ var LINEONLINE = {
     }
 }
 
-LINEONLINE.init();
+React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));

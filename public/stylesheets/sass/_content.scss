@@ -748,13 +748,17 @@
 .favorites,
 .subscriptions {
     // padding: 35px 0 55px;
-    .row {
-        margin-bottom: 15px;
-    }
-
-    .row-last {
+    .gallery-col {
         margin-bottom: 25px;
     }
+
+    .gallery-row {
+        margin-bottom: 30px;
+    }
+
+    // .row-last {
+    //     margin-bottom: 25px;
+    // }
     // background: yellow
     // .header {
     //     margin-bottom: 10px;

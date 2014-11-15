@@ -17,12 +17,15 @@ gulp.task('sass', function() {
     ]
     return gulp.src(files)
         .pipe(sass({
-        compass: true,
-        // bundleExec: true,
-        // sourcemap: true,
-        sourcemapPath: '../sass',
-        style: 'compressed'
-    }))
+            compass: true,
+            // bundleExec: true,
+            // sourcemap: true,
+            sourcemapPath: '../sass',
+            style: 'compressed'
+        }))
+        .on('error', function(err) {
+            console.log(err.message);
+        })
         .pipe(gulp.dest('./public/stylesheets/css/'));
 });
 
@@ -42,6 +45,10 @@ gulp.task('browserify', function() {
 
     var bundle = function() {
         return bundler.bundle()
+            .on('error', function(err) {
+                console.log(err.message);
+                this.end();
+            })
             //Pass desired output filename to vinyl-source-stream
             .pipe(source('bundle.js'))
             //Start piping stream to tasks
