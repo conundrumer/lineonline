@@ -1,5 +1,5 @@
 # LineOnline API
-LineOnline API is an internal API for LineOnline. It serves the majority of content and functionalities on the LineOnline website. All content types are application/json unless otherwise specified.
+LineOnline API is an internal API for LineOnline. It serves the majority of content and functionalities on the LineOnline website. All content types are application/json unless otherwise specified. All URL roots are from `/api`
 
 # Group Auth
 Resources for registration, authentication, and sessions.
