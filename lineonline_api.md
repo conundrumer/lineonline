@@ -50,7 +50,6 @@ Returns the newly created User, going by the above design decision. Since this m
 Resources based around users.
 
 ## User [/users/{id}]
-
 Attributes:
 - id
 - name
@@ -66,34 +65,129 @@ Attributes:
 
     + Body
 
-        {
-            "_links": {
-                "self": { "href": "/users/42" },
-                "profile": { "href": "/users/42/profile" },
-                "favorites": { "href": "/users/42/favorites" },
-                "subscriptions": { "href": "/users/42/subscriptions" },
-                "collections": { "href": "/users/42/collections"},
-                "tracks": { "href": "/tracks?user=42"},
-            },
-            "id": 42,
-            "name": "delu",
-            "avatar_url": "http://www.example.com/avatar.png"
-        }
+            {
+                "_links": {
+                    "self": { "href": "/users/42" },
+                    "profile": { "href": "/users/42/profile" },
+                    "favorites": { "href": "/users/42/favorites" },
+                    "subscriptions": { "href": "/users/42/subscriptions" },
+                    "collections": { "href": "/users/42/collections"},
+                    "tracks": { "href": "/tracks?user=42"},
+                },
+                "id": 42,
+                "name": "delu",
+                "avatar_url": "http://www.example.com/avatar.png"
+            }
 
 ### GET
-Retrieves the user with this id.
-
 + Response 200
 
     [User][]
 
-## Profile [/users/{id}/profile]
+## Account Settings [/settings]
+Only available for logged in users
+
 ### GET
+what should tihs return?
+
+### Update Settings [PUT]
++ Request
+    {
+        current_password: "mymother",
+        new_password: "yourmother",
+        new_password_confirm: "yourmother"
+    }
++ Response 205
+
+## User Collection [/users{?q}]
+The User Collection embeds users.
+
++ Attributes
+- total
+
++ Model
+
+    + Body
+            {
+                "_links": {
+                    "self": { "href": "/users" }
+                },
+                "_embedded": {
+                    "users": [
+                        {
+                            "_links": {
+                                "self": { "href": "/users/42" },
+                                "profile": { "href": "/users/42/profile" },
+                                "favorites": { "href": "/users/42/favorites" },
+                                "subscriptions": { "href": "/users/42/subscriptions" },
+                                "collections": { "href": "/users/42/collections"},
+                                "tracks": { "href": "/tracks?user=42"},
+                            },
+                            "id": 42,
+                            "name": "delu",
+                            "avatar_url": "http://www.example.com/avatar.png"
+                        }
+                    ]
+                },
+                "total": 1
+            }
+
+### GET
++ Parameters
+    + q (string) ... not sure
+
++ Response 200
+
+    [User Collection]
+
+## Profile [/users/{id}/profile]
+A user profile contains more information about this particular user.
+
+Attributes:
+- location
+- about
+- avatar_url
+
++ Parameters
+
+    + id (number) ... ID of the User
+
++ Model
+
+    + Body
+
+        {
+            "_links": {
+                "self": { "href": "/users/42/profile" },
+                "user": { "href": "/users/42" }
+            },
+            "location": "NYC",
+            "about": "i am delu",
+            "avatar_url": "http://www.example.com/avatar.png"
+        }
+
+### GET
++ Response 200
+
+    [Profile][]
+
 ### Update Profile [PUT]
-Only current user can update her own profile. Also involves reordering collections
+Only current user can update her own profile.
+
++ Request
+
+        {
+            "location": "notNYC",
+            "about": "i am not delu",
+            "avatar_url": "http://www.example.com/notavatar.png"
+        }
+
++ Response 200
+
+    [Profile][]
 
 ## Favorites [/users/{id}/favorites]
-Track collections.
+User favorited tracks are track collections.
 
 ### GET
 + Response 200
@@ -101,26 +195,73 @@ Track collections.
     [Track Collection][]
 
 ## Favorited Track [/users/{id}/favorites/{trackid}]
-Only corresponding user can add/remove favorites.
+A track that this user favorited. Only corresponding user can add/remove favorites.
+
++ Parameters
+
+    + trackid (number) ... ID of the favorited track
+
 ### GET
++ Response 200
+
+    [Track][]
+
 ### Add to favorites [PUT]
++ Response 204
+
 ### Remove from favorites [DELETE]
++ Response 204
 
 ## Subscriptions [/users/{id}/subscriptions]
-User collections.
+A collection of users that this user is subscribed to.
+
 ### GET
++ Response 200
+
+    [User Collection][]
 
 ## Subscribee [/users/{id}/subscriptions/{subid}]
-Only corresponding user can add/remove subscriptions.
-### GET
-### Subscribe [PUT]
-### Unsubscribe [DELETE]
+A user that this user is subscribed to. Only corresponding user can add/remove subscriptions.
 
-## User Collections [/users/{id}/collections]
 ### GET
++ Response 200
+
+    [User][]
+
+### Subscribe [PUT]
++ Response 205
+
+### Unsubscribe [DELETE]
++ Response 205
+
+## User Track Collections [/users/{id}/collections]
+A collection of track collections
+
++ Model
+
+    + Body
+
+            {
+                "_links": {
+                    "self": { "href": "/users/42/collections" },
+                    "user": { "href": "/users/42" }
+                },
+                "_embedded": {
+                    "collections": [
+                        {
+                            stuffcolelciotns
+                        }
+                    ]
+                },
+                "total": 1
+            }
+
+### GET
++ Response 200
+
 ### Make New Collection [POST]
 
-## User Collection [/users/{id}/collections/{colid}]
+## User Track Collection [/users/{id}/collections/{colid}]
 ### GET
 ### Update Collection [PUT]
 Also involves reordering tracks
@@ -131,11 +272,6 @@ Only corresponding user can add/remove subscriptions.
 ### GET
 ### Add to Collection [PUT]
 ### Remove from Collection [DELETE]
-
-## Account Settings [/settings]
-Only available for logged in users
-### GET
-### Update Settings [PUT]
 
 # Group Tracks
 Resources based around tracks
