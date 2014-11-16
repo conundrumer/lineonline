@@ -34,11 +34,9 @@ var Index = React.createClass({
                 <ScrollDivider link='#editor-panel' />
                 <Panel isEditor={true} id='editor-panel' />
                 <ScrollDivider link='#gallery-panel' />
-                <Panel isGallery={true} id='gallery-panel'>
-                    <div className='panel-padded'>
-                        <GalleryPreview />
-                    </div>
-                </Panel>
+                <PanelPadded isGallery={true} id='gallery-panel'>
+                    <GalleryPreview />
+                </PanelPadded>
                 <Footer />
             </div>
         );
@@ -109,14 +107,12 @@ var Gallery = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
-                <Panel isGallery={true} id='gallery-panel'>
-                    <div className='panel-padded'>
-                        <SearchBar />
-                        <div className='section group'>
-                            <GalleryPreview />
-                        </div>
+                <PanelPadded isGallery={true} id='gallery-panel'>
+                    <SearchBar />
+                    <div className='section group'>
+                        <GalleryPreview />
                     </div>
-                </Panel>
+                </PanelPadded>
                 <Footer />
             </div>
         );
@@ -168,11 +164,148 @@ var Profile = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
+                <PanelPadded isProfile={true}>
+                    <div className='section group'>
+                        <div className='col span_1_of_4'>
+                            <ProfileSidebar username='Bob Blob' location='Pittsburgh, PA' email='bobblob@gmail.com' description='Blah blah blah' />
+                        </div>
+                        <div className='col span_3_of_4'>
+                            <ProfileMain username='Bob Blob' featuredTrackTitle='Track Title' featuredTrackDescription='Ajksldfjkdsl sajfk jdsakl jdsf' featuredTrackOwner='Bob Blob' featuredTrackCollaborators='Bloop' />
+                        </div>
+                    </div>
+                </PanelPadded>
                 <Footer />
             </div>
         );
     }
 });
+
+var ProfileMain = React.createClass({
+    render: function() {
+        return (
+            <section className='profile-main'>
+                <ProfileFeaturedTrack title={this.props.featuredTrackTitle} description={this.props.featuredTrackDescription} owner={this.props.featuredTrackOwner} collaborators={this.props.featuredTrackCollaborators} />
+                <ProfileTracks />
+            </section>
+        );
+    }
+});
+
+var ProfileFeaturedTrack = React.createClass({
+    render: function() {
+        return (
+            <article className='track-featured'>
+                <Icon class='preview-icon' icon='fullscreen-enter' />
+                <MediaIcons />
+                <aside className='info'>
+                    <h3>{this.props.title}</h3>
+                    <p>
+                        {this.props.description}
+                    </p>
+                    <h3>Owner</h3>
+                    <p>{this.props.owner}</p>
+                    <h3>Collaborators</h3>
+                    <ul>
+                        <li>{this.props.collaborators}</li>
+                    </ul>
+                </aside>
+            </article>
+        );
+    }
+});
+
+var ProfileTracks = React.createClass({
+    render: function() {
+        return (
+            <article className='track-collection'>
+                <TracksPreview />
+            </article>
+        );
+    }
+});
+
+var MediaIcons = React.createClass({
+    render: function() {
+        return (
+            <div className='media-icons'>
+                <Icon class='media-icon' icon='media-skip-backward' />
+                <Icon class='media-icon' icon='media-play' />
+                <Icon class='media-icon' icon='media-pause' />
+                <Icon class='media-icon' icon='media-skip-forward' />
+            </div>
+        );
+    }
+});
+
+var ProfileSidebar = React.createClass({
+    render: function() {
+        return (
+            <section className='profile-sidebar'>
+                <div className='picture'>
+                </div>
+                <div className='info'>
+                    <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
+                    <ProfileAboutDetail description={this.props.description} />
+                    <ProfileInteractDetail username={this.props.username} />
+                </div>
+            </section>
+        );
+    }
+});
+
+var ProfileContactDetail = React.createClass({
+    render: function() {
+        return (
+            <div className='detail contact'>
+                <h3>{this.props.username}</h3>
+                <p>
+                    <Icon class='profile-icon' icon='map-marker' />
+                    <span className='profile-title'>
+                        {this.props.location}
+                    </span>
+                </p>
+                <p>
+                    <Icon class='profile-icon' icon='envelope-closed' />
+                    <span className='profile-title'>
+                        {this.props.email}
+                    </span>
+                </p>
+            </div>
+        );
+    }
+});
+
+var ProfileAboutDetail = React.createClass({
+    render: function() {
+        return (
+            <div className='detail about'>
+                <h3>About</h3>
+                <p>
+                    {this.props.description}
+                </p>
+            </div>
+        );
+    }
+});
+
+var ProfileInteractDetail = React.createClass({
+    render: function() {
+        return (
+            <div className='detail interact'>
+                <p>
+                    <Link to='subscribe'>
+                        <Icon class='profile-icon' icon='plus' />
+                        <span className='profile-title'>
+                            <span className='subscribe-link'>Subscribe</span> to <span className='bold'>{this.props.username}</span>
+                        </span>
+                    </Link>
+                </p>
+            </div>
+        );
+    }
+});
+
+
 
 var Favorites = React.createClass({
     render: function() {
@@ -248,8 +381,8 @@ var TracksPreview = React.createClass({
         return (
             <div className='section group'>
                 <TracksCol col='col-first' />
-                <TracksCol col='col-first' />
-                <TracksCol col='col-first' />
+                <TracksCol col='col-mid' />
+                <TracksCol col='col-last' />
             </div>
         );
     }
@@ -356,11 +489,34 @@ var Panel = React.createClass({
             'editor': this.props.isEditor,
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
-            'your-tracks': this.props.isYourTracks
+            'your-tracks': this.props.isYourTracks,
+            'profile': this.props.isProfile
         });
         return (
             <section className={classes} id={this.props.id}>
                 {this.props.children}
+            </section>
+        );
+    }
+});
+
+var PanelPadded = React.createClass({
+    render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'panel': true,
+            'masthead': this.props.isMasthead,
+            'editor': this.props.isEditor,
+            'gallery': this.props.isGallery,
+            'favorites': this.props.isFavorites,
+            'your-tracks': this.props.isYourTracks,
+            'profile': this.props.isProfile
+        });
+        return (
+            <section className={classes} id={this.props.id}>
+                <div className='panel-padded'>
+                    {this.props.children}
+                </div>
             </section>
         );
     }
@@ -472,6 +628,7 @@ var routes = (
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />
             <Route name='logout' handler={Logout} />
+            <Route name='subscribe' handler={Profile} />
         </Route>
     </Routes>
 );

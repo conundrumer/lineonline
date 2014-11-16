@@ -34877,10 +34877,8 @@ var Index = React.createClass({displayName: 'Index',
                 React.createElement(ScrollDivider, {link: "#editor-panel"}), 
                 React.createElement(Panel, {isEditor: true, id: "editor-panel"}), 
                 React.createElement(ScrollDivider, {link: "#gallery-panel"}), 
-                React.createElement(Panel, {isGallery: true, id: "gallery-panel"}, 
-                    React.createElement("div", {className: "panel-padded"}, 
-                        React.createElement(GalleryPreview, null)
-                    )
+                React.createElement(PanelPadded, {isGallery: true, id: "gallery-panel"}, 
+                    React.createElement(GalleryPreview, null)
                 ), 
                 React.createElement(Footer, null)
             )
@@ -34952,12 +34950,10 @@ var Gallery = React.createClass({displayName: 'Gallery',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
-                React.createElement(Panel, {isGallery: true, id: "gallery-panel"}, 
-                    React.createElement("div", {className: "panel-padded"}, 
-                        React.createElement(SearchBar, null), 
-                        React.createElement("div", {className: "section group"}, 
-                            React.createElement(GalleryPreview, null)
-                        )
+                React.createElement(PanelPadded, {isGallery: true, id: "gallery-panel"}, 
+                    React.createElement(SearchBar, null), 
+                    React.createElement("div", {className: "section group"}, 
+                        React.createElement(GalleryPreview, null)
                     )
                 ), 
                 React.createElement(Footer, null)
@@ -35011,11 +35007,148 @@ var Profile = React.createClass({displayName: 'Profile',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
+                React.createElement(PanelPadded, {isProfile: true}, 
+                    React.createElement("div", {className: "section group"}, 
+                        React.createElement("div", {className: "col span_1_of_4"}, 
+                            React.createElement(ProfileSidebar, {username: "Bob Blob", location: "Pittsburgh, PA", email: "bobblob@gmail.com", description: "Blah blah blah"})
+                        ), 
+                        React.createElement("div", {className: "col span_3_of_4"}, 
+                            React.createElement(ProfileMain, {username: "Bob Blob", featuredTrackTitle: "Track Title", featuredTrackDescription: "Ajksldfjkdsl sajfk jdsakl jdsf", featuredTrackOwner: "Bob Blob", featuredTrackCollaborators: "Bloop"})
+                        )
+                    )
+                ), 
                 React.createElement(Footer, null)
             )
         );
     }
 });
+
+var ProfileMain = React.createClass({displayName: 'ProfileMain',
+    render: function() {
+        return (
+            React.createElement("section", {className: "profile-main"}, 
+                React.createElement(ProfileFeaturedTrack, {title: this.props.featuredTrackTitle, description: this.props.featuredTrackDescription, owner: this.props.featuredTrackOwner, collaborators: this.props.featuredTrackCollaborators}), 
+                React.createElement(ProfileTracks, null)
+            )
+        );
+    }
+});
+
+var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
+    render: function() {
+        return (
+            React.createElement("article", {className: "track-featured"}, 
+                React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
+                React.createElement(MediaIcons, null), 
+                React.createElement("aside", {className: "info"}, 
+                    React.createElement("h3", null, this.props.title), 
+                    React.createElement("p", null, 
+                        this.props.description
+                    ), 
+                    React.createElement("h3", null, "Owner"), 
+                    React.createElement("p", null, this.props.owner), 
+                    React.createElement("h3", null, "Collaborators"), 
+                    React.createElement("ul", null, 
+                        React.createElement("li", null, this.props.collaborators)
+                    )
+                )
+            )
+        );
+    }
+});
+
+var ProfileTracks = React.createClass({displayName: 'ProfileTracks',
+    render: function() {
+        return (
+            React.createElement("article", {className: "track-collection"}, 
+                React.createElement(TracksPreview, null)
+            )
+        );
+    }
+});
+
+var MediaIcons = React.createClass({displayName: 'MediaIcons',
+    render: function() {
+        return (
+            React.createElement("div", {className: "media-icons"}, 
+                React.createElement(Icon, {class: "media-icon", icon: "media-skip-backward"}), 
+                React.createElement(Icon, {class: "media-icon", icon: "media-play"}), 
+                React.createElement(Icon, {class: "media-icon", icon: "media-pause"}), 
+                React.createElement(Icon, {class: "media-icon", icon: "media-skip-forward"})
+            )
+        );
+    }
+});
+
+var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
+    render: function() {
+        return (
+            React.createElement("section", {className: "profile-sidebar"}, 
+                React.createElement("div", {className: "picture"}
+                ), 
+                React.createElement("div", {className: "info"}, 
+                    React.createElement(ProfileContactDetail, {username: this.props.username, location: this.props.location, email: this.props.email}), 
+                    React.createElement(ProfileAboutDetail, {description: this.props.description}), 
+                    React.createElement(ProfileInteractDetail, {username: this.props.username})
+                )
+            )
+        );
+    }
+});
+
+var ProfileContactDetail = React.createClass({displayName: 'ProfileContactDetail',
+    render: function() {
+        return (
+            React.createElement("div", {className: "detail contact"}, 
+                React.createElement("h3", null, this.props.username), 
+                React.createElement("p", null, 
+                    React.createElement(Icon, {class: "profile-icon", icon: "map-marker"}), 
+                    React.createElement("span", {className: "profile-title"}, 
+                        this.props.location
+                    )
+                ), 
+                React.createElement("p", null, 
+                    React.createElement(Icon, {class: "profile-icon", icon: "envelope-closed"}), 
+                    React.createElement("span", {className: "profile-title"}, 
+                        this.props.email
+                    )
+                )
+            )
+        );
+    }
+});
+
+var ProfileAboutDetail = React.createClass({displayName: 'ProfileAboutDetail',
+    render: function() {
+        return (
+            React.createElement("div", {className: "detail about"}, 
+                React.createElement("h3", null, "About"), 
+                React.createElement("p", null, 
+                    this.props.description
+                )
+            )
+        );
+    }
+});
+
+var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDetail',
+    render: function() {
+        return (
+            React.createElement("div", {className: "detail interact"}, 
+                React.createElement("p", null, 
+                    React.createElement(Link, {to: "subscribe"}, 
+                        React.createElement(Icon, {class: "profile-icon", icon: "plus"}), 
+                        React.createElement("span", {className: "profile-title"}, 
+                            React.createElement("span", {className: "subscribe-link"}, "Subscribe"), " to ", React.createElement("span", {className: "bold"}, this.props.username)
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+
 
 var Favorites = React.createClass({displayName: 'Favorites',
     render: function() {
@@ -35091,8 +35224,8 @@ var TracksPreview = React.createClass({displayName: 'TracksPreview',
         return (
             React.createElement("div", {className: "section group"}, 
                 React.createElement(TracksCol, {col: "col-first"}), 
-                React.createElement(TracksCol, {col: "col-first"}), 
-                React.createElement(TracksCol, {col: "col-first"})
+                React.createElement(TracksCol, {col: "col-mid"}), 
+                React.createElement(TracksCol, {col: "col-last"})
             )
         );
     }
@@ -35199,11 +35332,34 @@ var Panel = React.createClass({displayName: 'Panel',
             'editor': this.props.isEditor,
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
-            'your-tracks': this.props.isYourTracks
+            'your-tracks': this.props.isYourTracks,
+            'profile': this.props.isProfile
         });
         return (
             React.createElement("section", {className: classes, id: this.props.id}, 
                 this.props.children
+            )
+        );
+    }
+});
+
+var PanelPadded = React.createClass({displayName: 'PanelPadded',
+    render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'panel': true,
+            'masthead': this.props.isMasthead,
+            'editor': this.props.isEditor,
+            'gallery': this.props.isGallery,
+            'favorites': this.props.isFavorites,
+            'your-tracks': this.props.isYourTracks,
+            'profile': this.props.isProfile
+        });
+        return (
+            React.createElement("section", {className: classes, id: this.props.id}, 
+                React.createElement("div", {className: "panel-padded"}, 
+                    this.props.children
+                )
             )
         );
     }
@@ -35314,7 +35470,8 @@ var routes = (
             React.createElement(Route, {name: "favorites", handler: Favorites}), 
             React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
             React.createElement(Route, {name: "settings", handler: Settings}), 
-            React.createElement(Route, {name: "logout", handler: Logout})
+            React.createElement(Route, {name: "logout", handler: Logout}), 
+            React.createElement(Route, {name: "subscribe", handler: Profile})
         )
     )
 );
