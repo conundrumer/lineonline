@@ -1,9 +1,156 @@
+// ??? Find a way to get User without writing this code in every file!
+var knex = require('knex')({
+    client: 'pg',
+    connection: {
+        host: 'localhost',
+        user: 'webapps',
+        password: 'fun',
+        database: 'lineonline',
+        charset: 'utf8'
+    }
+});
 
+var bookshelf = require('bookshelf')(knex);
+var User = bookshelf.Model.extend({
+    tableName: 'users'
+});
+
+
+function getProfileJson(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json({
+                title: 'Profile',
+                username: model.get('username'),
+                email: model.get('email'),
+                location: model.get('location'),
+                about: model.get('about')
+            });
+        }
+    });
+}
+
+function updateProfileJson(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            // Update the profile and then return it
+            console.log("DOES REQ.BODY WORK LIKE THIS?");
+            console.log(req.body); // does this work?
+
+            // Assuming you can query body like this
+            if (req.body.get("location") != ""){
+                model.set({location: req.body.get("location")});
+            }
+
+            if (req.body.get("about") != ""){
+                model.set({about: req.body.get("about") });
+            }
+
+            if (req.body.get("avatar_url") != ""){
+                model.set({avatar_url: req.body.get("avatar_url")});
+            }
+            model.save();
+
+            res.json({
+                title: 'Profile',
+                username: model.get('username'),
+                email: model.get('email'),
+                location: model.get('location'),
+                about: model.get('about')
+            });
+        }
+    });
+}
+
+
+function editProfile(req, res){
+    // email = req.body.email
+    location = req.body.location
+    about = req.body.about
+
+    model = req.user
+    // console.log(JSON.stringify(req.body));
+
+    // if (email != ""){
+    //     model.set({email: email});
+    // }
+
+    if (location != ""){
+        model.set({location: location});
+    }
+
+    if (about != ""){
+        model.set({about: about});
+    }
+
+    model.save();
+    res.redirect('/profile/'+model.get('id'));
+
+}
+
+
+
+function getUserJson(req, res){
+    console.log("User id is: " + req.params.id);
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json({
+                "_links": {
+                    "self": { "href": "/users/" + req.params.id + "/profile" },
+                    "user": { "href": "/users/" + req.params.id}
+                },
+                "location": model.get("location"),
+                "about": model.get("about"),
+                "avatar_url": "http://www.example.com/avatar.png" // model.get("avatar_url")
+            });
+        }
+    });
+}
+
+
+function getCollectionsJson(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json({
+                "_links": {
+                    "self": { "href": "/users/" + req.params.id + "/profile" },
+                    "user": { "href": "/users/" + req.params.id}
+                },
+                 "_embedded": {
+                    "collections": [
+                        {
+                            "track1": "track1_id",
+                            "track2": "track2_id"
+                        }
+                    ]
+                },
+                "total" : 42, // model.get("collections").size
+            });
+
+        }
+    });
+}
 
 function register(req, res){
-    username = req.body.username
-    password = req.body.password
-    email = req.body.email
+    username = req.body.username;
+    password = req.body.password;
+    email = req.body.email;
     // console.log(JSON.stringify(req.body));
 
     if (req.body.username == ""){
@@ -56,34 +203,10 @@ function visitUserProfile(req, res, model) {
         username: model.get('username'),
         email: model.get('email'),
         location: model.get('location'),
-        description: model.get('description')
+        about: model.get('about')
     });
 }
 
-function editProfile(req, res){
-    // email = req.body.email
-    location = req.body.location
-    about = req.body.about
-
-    model = req.user
-    // console.log(JSON.stringify(req.body));
-
-    // if (email != ""){
-    //     model.set({email: email});
-    // }
-
-    if (location != ""){
-        model.set({location: location});
-    }
-
-    if (about != ""){
-        model.set({description: about});
-    }
-
-    model.save();
-    res.redirect('/profile/'+model.get('id'));
-
-}
 
 function editAccount(req, res) {
     model = req.user;
@@ -145,14 +268,11 @@ module.exports = function (app, passport) {
     app.get('/faillogin-backend', function(req,res){
         res.sendFile(__dirname + '/nologin.html');
     });
-    // app.post('/login', function(req, res){
-    //     console.log("User is: " + req.body.username);
-    // });
 
-    app.post('/login-backend',
-        passport.authenticate('local', { successRedirect: '/home',
+    app.post('/login-backend', passport.authenticate('local', { successRedirect: '/home',
                                        failureRedirect: '/signup-login',
                                        failureFlash: false })
+
     );
     app.post('/register-backend', register);
     app.post('/edit-profile-backend', loginRequired, editProfile);
@@ -172,8 +292,6 @@ module.exports = function (app, passport) {
     app.get('/isloggedin-backend', loginRequired, function (req, res) {
         res.send('<div style="color:red;font-size:100px">YES</div>');
     });
-
-
 
     //views
     app.set('views', __dirname + '/../views');
@@ -222,7 +340,6 @@ module.exports = function (app, passport) {
 
     //routes
     app.get('/', loginRequired, function(req, res) {
-        //res.send('<div style="color:red;">Hello World!</div>');
         res.render('index', { title: 'LineOnline' });
     });
     app.get('/signup-login', function(req, res) {
@@ -253,4 +370,44 @@ module.exports = function (app, passport) {
     app.get('/settings', loginRequired, function(req, res) {
         res.render('settings', { title: 'Settings' });
     });
+
+
+
+    // Begin Rest API Routes
+    app.get('/api/users/:id', getUserJson);
+    app.get('/api/users/:id/profile', getProfileJson);
+    app.get('/api/users/:id/collections', getCollectionsJson);
+
+    app.get('/api/users/:id/favorites', function(req, res){
+        res.json({
+            "favorites": {
+                "track1" : {
+                    "id": "track_id",
+                    "name": "track_name",
+                    "thumbnail" : "track_thumbnail"
+                }
+            }
+        });
+    });
+
+    app.get('/api/users/:id/subscriptions', function(req, res){
+        res.json({
+            "subscriptions": {
+                "subscription1" : "subscriptionid1",
+                "subscription2" : "subscriptionid2",
+                "subscription3" : "subscriptionid3",
+            }
+        });
+    });
+
+    // Update profile page
+    app.post('/api/users/:id/profile', updateProfileJson);
+
+
+
+
+
+
 }
+
+
