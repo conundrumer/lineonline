@@ -13,29 +13,9 @@ var knex = require('knex')({
     }
 });
 
-var Bookshelf = require('bookshelf');
-require('./util/bookshelf.dev')(Bookshelf);
-
-var bookshelf = Bookshelf(knex);
-
-var User = bookshelf.Model.extend({
-    tableName: 'users',
-
-    subscriptions: function(){
-        return this.hasMany(User, 'subscriptions');
-    },
-    subscribers: function(){
-        return this.hasMany(User, 'subscribers');
-    }
-
-});
-
-
-
+var User = require('./models/user');
 
 /* Track Model */
-
-
 // testing what we can do with knex and bookshelf
 knex.schema.dropTableIfExists('users').then(function() {
     return knex.schema.createTable('users', function(t) {

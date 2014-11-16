@@ -1,6 +1,4 @@
-var bookshelf = require('bookshelf').pgAuth;
-
-var User = bookshelf.Model.extend({
+var User = require('../db/create-model')({
     tableName: 'users',
     build: function (table) {
         table.increments('id').primary();
