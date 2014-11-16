@@ -14,7 +14,7 @@ var knex = require('knex')({
 });
 
 var Bookshelf = require('bookshelf');
-require('./util/bookshelf')(Bookshelf);
+require('./util/bookshelf.dev')(Bookshelf);
 
 var bookshelf = Bookshelf(knex);
 
