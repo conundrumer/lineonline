@@ -9,10 +9,10 @@ var User = require('../db/create-model')({
         table.string('location', 100);
     },
     subscriptions: function(){
-        return this.hasMany(User, 'subscriptions');
+        return this.belongsToMany(User, 'subscriptions', 'subscriber', 'subscribee');
     },
     subscribers: function(){
-        return this.hasMany(User, 'subscribers');
+        return this.belongsToMany(User, 'subscriptions', 'subscribee', 'subscriber');
     }
 
 });
