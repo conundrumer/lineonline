@@ -13,7 +13,11 @@ var knex = require('knex')({
     }
 });
 
-var bookshelf = require('bookshelf')(knex);
+var Bookshelf = require('bookshelf');
+require('./util/bookshelf')(Bookshelf);
+
+var bookshelf = Bookshelf(knex);
+
 var User = bookshelf.Model.extend({
     tableName: 'users',
 
