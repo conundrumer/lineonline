@@ -1,25 +1,6 @@
-
-// ??? REPLACEMENTS FOR THESE ARE?
-// var mongoose = require('mongoose');
-// var User = mongoose.model('User');
-
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-// Need to set up knex and bookshelf elsewhere...do this better!
-var knex = require('knex')({
-    client: 'pg',
-    connection: {
-        host: 'localhost',
-        user: 'webapps',
-        password: 'fun',
-        database: 'lineonline',
-        charset: 'utf8'
-    }
-});
-var bookshelf = require('bookshelf')(knex);
-var User = bookshelf.Model.extend({
-    tableName: 'users'
-});
+var User = require('../models/user');
 
 module.exports = function (passport, config) {
 
