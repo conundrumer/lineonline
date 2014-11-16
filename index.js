@@ -15,8 +15,21 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 var User = bookshelf.Model.extend({
-    tableName: 'users'
+    tableName: 'users',
+
+    subscriptions: function(){
+        return this.hasMany(User, 'subscriptions');
+    },
+    subscribers: function(){
+        return this.hasMany(User, 'subscribers');
+    }
+
 });
+
+
+
+
+/* Track Model */
 
 
 // testing what we can do with knex and bookshelf
@@ -26,8 +39,10 @@ knex.schema.dropTableIfExists('users').then(function() {
         t.string('username', 100);
         t.string('password', 100);
         t.string('email', 100);
-        t.string('description', 300);
+        t.string('about', 300);
         t.string('location', 100);
+
+
 
     });
 // create user with password
@@ -39,6 +54,16 @@ knex.schema.dropTableIfExists('users').then(function() {
     }).save().then(function(){
         console.log('created user "delu" with password "yourmother"');
     });
+// create second user
+}).then(function () {
+    return User.forge({
+        username:'snig',
+        password:'a',
+        email:'snig@sniggy.antarctica'
+    }).save().then(function(){
+
+        console.log('created user "snig" with password "a"');
+    });
 // dummy authentication
 }).then(function () {
 // change user password
@@ -46,12 +71,26 @@ knex.schema.dropTableIfExists('users').then(function() {
     return User.where({username:'delu',password:'yourmother'}).fetch().then(function(model){
         console.log('before password: '+ model.get('password'));
         model.set({password: 'mymother'});
+        // now add delu as his own subscriber
+        // model.set(subscriptions)
         return model.save(); // save/return async promises
     });
 // password changed
 }).then(function() {
     return User.where({username:'delu'}).fetch().then(function(model){
         console.log('after password: '+ model.get('password'));
+
+        subscriptions = model.related('subscriptions');
+        subscriptions.add(model);
+
+
+        subscriptions.forEach(function(s){
+             console.log("The name of the subscribed is: " + s.get("username"));
+             console.log(s);
+        });
+
+        console.log('user\'s subscriptions include:' + subscriptions);
+        model.save();
     });
 // delete users
 }).then(function() {
