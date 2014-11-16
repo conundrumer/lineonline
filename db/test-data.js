@@ -1,6 +1,6 @@
 var User = require('../models/user');
-
-var users = [{
+User.populate = [
+{
     username: 'delu',
     password: 'yourmother',
     email: 'delu@andrew.cmu.edu'
@@ -8,12 +8,25 @@ var users = [{
     username: 'foo',
     password: 'bar',
     email: 'bar@bar.bar'
-}];
-User.populate = users;
-User.relations = [{
-    name: 'subscriptions',
-    from: users[0],
-    to: users[1]
-}];
+}, {
+    username: 'asdf',
+    password: 'asdf',
+    email: 'asdf@asdf.asdf'
+}
+];
 
-module.exports = [User];
+var Subscriptions = require('../models/subscription');
+Subscriptions.populate = [
+{
+    subscriber: 1,
+    subscribee: 2
+}, {
+    subscriber: 3,
+    subscribee: 2
+}, {
+    subscriber: 2,
+    subscribee: 3
+}
+];
+
+module.exports = [User, Subscriptions];
