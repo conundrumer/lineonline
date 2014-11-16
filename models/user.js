@@ -13,8 +13,10 @@ var User = require('../db/create-model')({
     },
     subscribers: function(){
         return this.belongsToMany(User, 'subscriptions', 'subscribee', 'subscriber');
+    },
+    tracks: function(){
+        return this.hasMany(Track, 'tracks', 'track_owner', 'owned_tracks');
     }
-
 });
 
 module.exports = User;
