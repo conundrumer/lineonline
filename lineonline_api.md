@@ -285,7 +285,33 @@ Resources based around tracks
 Need to be logged in
 
 ## Track [/tracks/{id}]
+
 ### GET
+
+
+### Create track [POST]
+Need to be logged in
++ Request
+
+        {
+            "owner": "my_id",
+            "title": "Track Title",
+            "description": "This is a really cool description"
+        }
+
++ Response 200
+
+        {
+            "owner": "my_id",
+            "title": "Track Title",
+            "description": "This is a really cool description",
+            "collaborators": [],
+            "invites": [],
+            "tags": []
+        }
+    
+[Track][]
+        
 ### Update Track [PUT]
 Need to own this track
 ### Remove Track from Server [DELETE]
