@@ -34878,7 +34878,9 @@ var Index = React.createClass({displayName: 'Index',
                 React.createElement(Panel, {isEditor: true, id: "editor-panel"}), 
                 React.createElement(ScrollDivider, {link: "#gallery-panel"}), 
                 React.createElement(Panel, {isGallery: true, id: "gallery-panel"}, 
-                    React.createElement(GalleryPreview, null)
+                    React.createElement("div", {className: "panel-padded"}, 
+                        React.createElement(GalleryPreview, null)
+                    )
                 ), 
                 React.createElement(Footer, null)
             )
@@ -34908,14 +34910,21 @@ var Conversation = React.createClass({displayName: 'Conversation',
                     "Conversation"
                 ), 
                 React.createElement("article", {className: "messages"}, 
-                    React.createElement(Message, {messageBody: "Hello this is a simple message."}), 
-                    React.createElement(Message, {messageBody: "Hello this is another simple message."}), 
-                    React.createElement(Message, {messageBody: "Hello this is yet anooother simple message."}), 
-                    React.createElement("form", {className: "form-message", method: "post", action: "/send-message"}, 
-                        React.createElement("input", {name: "message-text", type: "text", placeholder: "Type message..."}), 
-                        React.createElement("button", {className: "btn-submit", type: "submit"}, 
-                            "Send"
-                        )
+                    React.createElement(Message, {messageBody: "1 Hello this is the first a simple message."}), 
+                    React.createElement(Message, {messageBody: "2 Hello this is another simple message."}), 
+                    React.createElement(Message, {messageBody: "3 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "4 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "5 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "6 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "7 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "8 Hello this is yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "9 Hello this is the last yet anooother simple message."}), 
+                    React.createElement(Message, {messageBody: "10 Hello this is the last yet anooother simple message."})
+                ), 
+                React.createElement("form", {className: "form-message", method: "post", action: "/send-message"}, 
+                    React.createElement("input", {name: "message-text", type: "text", placeholder: "Type message..."}), 
+                    React.createElement("button", {className: "btn-submit", type: "submit"}, 
+                        "Send"
                     )
                 )
             )
@@ -34943,16 +34952,56 @@ var Gallery = React.createClass({displayName: 'Gallery',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
+                React.createElement(Panel, {isGallery: true, id: "gallery-panel"}, 
+                    React.createElement("div", {className: "panel-padded"}, 
+                        React.createElement(SearchBar, null), 
+                        React.createElement("div", {className: "section group"}, 
+                            React.createElement(GalleryPreview, null)
+                        )
+                    )
+                ), 
                 React.createElement(Footer, null)
             )
         );
     }
 });
 
+var SearchBar = React.createClass({displayName: 'SearchBar',
+    render: function() {
+        return (
+            React.createElement("div", {className: "section group"}, 
+                React.createElement("form", {className: "form-search-gallery", method: "get", action: "/search-gallery"}, 
+                    React.createElement("div", {className: "section group"}, 
+                        React.createElement("div", {className: "col span_10_of_12 search-bar"}, 
+                            React.createElement("input", {className: "input-search", name: "search-keyword", type: "text", placeholder: "Search for tracks..."}), 
+                            React.createElement(Icon, {class: "search-icon", icon: "magnifying-glass"})
+                        ), 
+                        React.createElement("div", {className: "col span_2_of_12"}, 
+                            React.createElement("button", {className: "btn-search", type: "submit"}, 
+                                "Search"
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+
+
 var YourTracks = React.createClass({displayName: 'YourTracks',
     render: function() {
         return (
-            React.createElement("div", null
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Panel, {isYourTracks: true}, 
+                    React.createElement("div", {className: "panel-padded"}, 
+                        React.createElement("div", {className: "section group"}, 
+                            React.createElement(TracksPreview, null)
+                        )
+                    )
+                ), 
+                React.createElement(Footer, null)
             )
         );
     }
@@ -35023,10 +35072,10 @@ var Footer = React.createClass({displayName: 'Footer',
 var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
     render: function() {
         return (
-            React.createElement("div", {className: "panel-padded"}, 
-                React.createElement(GalleryCol, {headerTitle: "Hot", headerIcon: "pulse"}), 
-                React.createElement(GalleryCol, {headerTitle: "Top", headerIcon: "star"}), 
-                React.createElement(GalleryCol, {headerTitle: "New", headerIcon: "clock"}), 
+            React.createElement("div", {className: "section group"}, 
+                React.createElement(GalleryCol, {headerTitle: "Hot", headerIcon: "pulse", col: "col-first"}), 
+                React.createElement(GalleryCol, {headerTitle: "Top", headerIcon: "star", col: "col-mid"}), 
+                React.createElement(GalleryCol, {headerTitle: "New", headerIcon: "clock", col: "col-last"}), 
                 React.createElement(Link, {to: "gallery"}, 
                     React.createElement("button", {className: "btn btn-see-more"}, 
                         "See More"
@@ -35037,11 +35086,23 @@ var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
     }
 });
 
+var TracksPreview = React.createClass({displayName: 'TracksPreview',
+    render: function() {
+        return (
+            React.createElement("div", {className: "section group"}, 
+                React.createElement(TracksCol, {col: "col-first"}), 
+                React.createElement(TracksCol, {col: "col-first"}), 
+                React.createElement(TracksCol, {col: "col-first"})
+            )
+        );
+    }
+});
+
 var GalleryTile = React.createClass({displayName: 'GalleryTile',
     render: function() {
         return (
             React.createElement(GalleryRow, null, 
-                React.createElement("article", {className: "tile"}, 
+                React.createElement("article", {className: 'tile ' + this.props.col}, 
                     React.createElement("div", {className: "preview"}, 
                         React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
                     ), 
@@ -35076,11 +35137,32 @@ var GalleryHeader = React.createClass({displayName: 'GalleryHeader',
 
 var GalleryCol = React.createClass({displayName: 'GalleryCol',
     render: function() {
+        // var cx = React.addons.classSet;
+        // var classes = cx({
+        //     'gallery-col': true,
+        //     'col': true,
+        //     'span_1_of_3': true,
+        //     'col-first': this.props.isFirst,
+        //     'col-mid': this.props.isMid,
+        //     'col-last': this.props.isLast
+        // });
         return (
             React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
                 React.createElement(GalleryHeader, {title: this.props.headerTitle, icon: this.props.headerIcon}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah"}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 2 description blah blah blah"})
+                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
+                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 2 description blah blah blah", col: this.props.col})
+            )
+        );
+    }
+});
+
+var TracksCol = React.createClass({displayName: 'TracksCol',
+    render: function() {
+        return (
+            React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
+                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
+                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
+                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 2 description blah blah blah", col: this.props.col})
             )
         );
     }
@@ -35089,7 +35171,7 @@ var GalleryCol = React.createClass({displayName: 'GalleryCol',
 var GalleryRow = React.createClass({displayName: 'GalleryRow',
     render: function() {
         return (
-            React.createElement("div", {className: "gallery-row section group row"}, 
+            React.createElement("div", {className: "gallery-row section group"}, 
                 this.props.children
             )
         );
@@ -35115,7 +35197,9 @@ var Panel = React.createClass({displayName: 'Panel',
             'panel': true,
             'masthead': this.props.isMasthead,
             'editor': this.props.isEditor,
-            'gallery': this.props.isGallery
+            'gallery': this.props.isGallery,
+            'favorites': this.props.isFavorites,
+            'your-tracks': this.props.isYourTracks
         });
         return (
             React.createElement("section", {className: classes, id: this.props.id}, 

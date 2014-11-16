@@ -2,6 +2,7 @@
     width: 100%;
     height: 100%;
     padding: 0;
+    // overflow-x: hidden;
 }
 
 .main-content {
@@ -293,14 +294,16 @@
     // &.footerbar {
     //     min-height: $footer-height;
     // }
+    // position: relative;
+    overflow-x: hidden;
 }
 
 .side-panel {
-
 }
 
 .side-panel-conversation {
     @include transition(all 0.4s ease-in-out 0);
+    @include transform(translateX(0px));
     &.minimized {
         @include transform(translateX(300px));
     }
@@ -329,16 +332,33 @@
         }
     }
 
+    // overflow-y: hidden;
+
+
     .messages {
-        border-top: 1px solid $border-col;
+        padding-top: 50px;
+        // position: absolute;
+        // right: 0;
+        overflow-y: scroll;
+        // margin-right: -0px;
+        // padding-right: -50px;
+        // margin-left: 0;
+        // padding-left: 0;
+        // border-top: 1px solid $border-col;
+        // overflow: scroll;
+        height: 100%;
+        width: 100%;
+        // background: green;
 
         .message {
             border-bottom: 1px solid $border-col;
-            height: 100%;
+            // height: 100%;
+            // background: aqua;
             position: relative;
-            // &:last-child {
-            //     border: none;
-            // }
+            &:last-child {
+                // border-bottom: none;
+                margin-bottom: 44px;
+            }
         }
 
         .message-image {
@@ -366,11 +386,14 @@
         bottom: 0;
         left: 0;
         position: absolute;
+        // position: fixed;
+        background: yellow;
         // z-index: 1;
         border-top: 1px solid $border-col;
         height: 45px;
         width: 100%;
         input {
+            // background: green;
             border: none;
             // border-top: 1px solid $border-col;
             border-right: 1px solid $border-col;
@@ -397,9 +420,18 @@
 
     h2 {
         // position: fixed;
+        background: #fff;
+        z-index: 1;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
         padding: 15px;
         font-size: 16px;
         font-weight: bold;
+        border-bottom: 1px solid $border-col;
+        display: block;
+        height: 50px;
     }
 }
 
@@ -664,6 +696,18 @@
     }
 }
 
+.col-first {
+    @extend %col-first;
+}
+
+.col-mid {
+    @extend %col;
+}
+
+.col-last {
+    @extend %col-last;
+}
+
 .tile-first {
     @extend %col-first;
 }
@@ -712,7 +756,7 @@
     }
 }
 
-.tile-last {
+.tile-last, {
     @extend %col-last;
 }
 
@@ -746,7 +790,8 @@
 
 .gallery,
 .favorites,
-.subscriptions {
+.subscriptions,
+.your-tracks {
     // padding: 35px 0 55px;
     .gallery-col {
         margin-bottom: 25px;

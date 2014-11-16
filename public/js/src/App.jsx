@@ -35,7 +35,9 @@ var Index = React.createClass({
                 <Panel isEditor={true} id='editor-panel' />
                 <ScrollDivider link='#gallery-panel' />
                 <Panel isGallery={true} id='gallery-panel'>
-                    <GalleryPreview />
+                    <div className='panel-padded'>
+                        <GalleryPreview />
+                    </div>
                 </Panel>
                 <Footer />
             </div>
@@ -65,16 +67,23 @@ var Conversation = React.createClass({
                     Conversation
                 </h2>
                 <article className='messages'>
-                    <Message messageBody='Hello this is a simple message.' />
-                    <Message messageBody='Hello this is another simple message.' />
-                    <Message messageBody='Hello this is yet anooother simple message.' />
-                    <form className='form-message' method='post' action='/send-message'>
-                        <input name='message-text' type='text' placeholder='Type message...' />
-                        <button className='btn-submit' type='submit'>
-                            Send
-                        </button>
-                    </form>
+                    <Message messageBody='1 Hello this is the first a simple message.' />
+                    <Message messageBody='2 Hello this is another simple message.' />
+                    <Message messageBody='3 Hello this is yet anooother simple message.' />
+                    <Message messageBody='4 Hello this is yet anooother simple message.' />
+                    <Message messageBody='5 Hello this is yet anooother simple message.' />
+                    <Message messageBody='6 Hello this is yet anooother simple message.' />
+                    <Message messageBody='7 Hello this is yet anooother simple message.' />
+                    <Message messageBody='8 Hello this is yet anooother simple message.' />
+                    <Message messageBody='9 Hello this is the last yet anooother simple message.' />
+                    <Message messageBody='10 Hello this is the last yet anooother simple message.' />
                 </article>
+                <form className='form-message' method='post' action='/send-message'>
+                    <input name='message-text' type='text' placeholder='Type message...' />
+                    <button className='btn-submit' type='submit'>
+                        Send
+                    </button>
+                </form>
             </section>
         );
     }
@@ -100,16 +109,56 @@ var Gallery = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
+                <Panel isGallery={true} id='gallery-panel'>
+                    <div className='panel-padded'>
+                        <SearchBar />
+                        <div className='section group'>
+                            <GalleryPreview />
+                        </div>
+                    </div>
+                </Panel>
                 <Footer />
             </div>
         );
     }
 });
 
+var SearchBar = React.createClass({
+    render: function() {
+        return (
+            <div className='section group'>
+                <form className='form-search-gallery' method='get' action='/search-gallery'>
+                    <div className='section group'>
+                        <div className='col span_10_of_12 search-bar'>
+                            <input className='input-search' name='search-keyword' type='text' placeholder='Search for tracks...' />
+                            <Icon class='search-icon' icon='magnifying-glass' />
+                        </div>
+                        <div className='col span_2_of_12'>
+                            <button className='btn-search' type='submit'>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+});
+
+
+
 var YourTracks = React.createClass({
     render: function() {
         return (
-            <div>
+            <div className='main-content'>
+                <Panel isYourTracks={true}>
+                    <div className='panel-padded'>
+                        <div className='section group'>
+                            <TracksPreview />
+                        </div>
+                    </div>
+                </Panel>
+                <Footer />
             </div>
         );
     }
@@ -180,10 +229,10 @@ var Footer = React.createClass({
 var GalleryPreview = React.createClass({
     render: function() {
         return (
-            <div className='panel-padded'>
-                <GalleryCol headerTitle='Hot' headerIcon='pulse' />
-                <GalleryCol headerTitle='Top' headerIcon='star' />
-                <GalleryCol headerTitle='New' headerIcon='clock' />
+            <div className='section group'>
+                <GalleryCol headerTitle='Hot' headerIcon='pulse' col='col-first' />
+                <GalleryCol headerTitle='Top' headerIcon='star' col='col-mid' />
+                <GalleryCol headerTitle='New' headerIcon='clock' col='col-last' />
                 <Link to='gallery'>
                     <button className='btn btn-see-more'>
                         See More
@@ -194,11 +243,23 @@ var GalleryPreview = React.createClass({
     }
 });
 
+var TracksPreview = React.createClass({
+    render: function() {
+        return (
+            <div className='section group'>
+                <TracksCol col='col-first' />
+                <TracksCol col='col-first' />
+                <TracksCol col='col-first' />
+            </div>
+        );
+    }
+});
+
 var GalleryTile = React.createClass({
     render: function() {
         return (
             <GalleryRow>
-                <article className='tile'>
+                <article className={'tile ' + this.props.col}>
                     <div className='preview'>
                         <Icon class='preview-icon' icon='fullscreen-enter' />
                     </div>
@@ -233,11 +294,32 @@ var GalleryHeader = React.createClass({
 
 var GalleryCol = React.createClass({
     render: function() {
+        // var cx = React.addons.classSet;
+        // var classes = cx({
+        //     'gallery-col': true,
+        //     'col': true,
+        //     'span_1_of_3': true,
+        //     'col-first': this.props.isFirst,
+        //     'col-mid': this.props.isMid,
+        //     'col-last': this.props.isLast
+        // });
         return (
             <div className='gallery-col col span_1_of_3'>
                 <GalleryHeader title={this.props.headerTitle} icon={this.props.headerIcon} />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 2 description blah blah blah' />
+                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
+                <GalleryTile trackTitle='Track Title' trackDescription='Description 2 description blah blah blah' col={this.props.col} />
+            </div>
+        );
+    }
+});
+
+var TracksCol = React.createClass({
+    render: function() {
+        return (
+            <div className='gallery-col col span_1_of_3'>
+                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
+                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
+                <GalleryTile trackTitle='Track Title' trackDescription='Description 2 description blah blah blah' col={this.props.col} />
             </div>
         );
     }
@@ -246,7 +328,7 @@ var GalleryCol = React.createClass({
 var GalleryRow = React.createClass({
     render: function() {
         return (
-            <div className='gallery-row section group row'>
+            <div className='gallery-row section group'>
                 {this.props.children}
             </div>
         );
@@ -272,7 +354,9 @@ var Panel = React.createClass({
             'panel': true,
             'masthead': this.props.isMasthead,
             'editor': this.props.isEditor,
-            'gallery': this.props.isGallery
+            'gallery': this.props.isGallery,
+            'favorites': this.props.isFavorites,
+            'your-tracks': this.props.isYourTracks
         });
         return (
             <section className={classes} id={this.props.id}>
