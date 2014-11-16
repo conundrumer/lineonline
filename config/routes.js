@@ -96,7 +96,77 @@ function editProfile(req, res){
 
 }
 
+function getSubscriptions(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
+        }
+        else {
+            subscriptions = model.related('subscriptions');
 
+            array = []
+            console.log(subscriptions);
+            console.log("subscriptions are..." + subscriptions);
+            // subscriptions.forEach(function(s){
+            //     // ??? usernames or ids?
+            //     // should probably send the id so it can be used to
+            //     // go to other people's profiles
+            //     array.append({s.get('username'), s.get('id')});
+            // });
+            res.json({
+                'subscriptions': array
+            })
+
+        }
+    });
+}
+
+function subscribeTo(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
+        }
+        else {
+            User.where({id: req.params.targetId}).fetch().then(function(targetModel){
+                if (targetModel == null){
+                    res.send('<div style="color:red;">Couldn\'t find target model!</div>');
+                }
+                else{
+                    model.related('subscriptions').add(targetModel);
+                    // should send back json that indicates you are now
+                    // subscribed to this person...
+                    res.send('<div style="color:red;">Added to subscriptions!</div>');
+                }
+
+            });
+        }
+    });
+}
+
+function unsubscribeFrom(req, res){
+    User.where({id: req.params.id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
+        }
+        else {
+            User.where({id: req.params.targetId}).fetch().then(function(targetModel){
+                if (targetModel == null){
+                    res.send('<div style="color:red;">Couldn\'t find target model!</div>');
+                }
+                else{
+                    model.related('subscriptions').remove(targetModel);
+                    // should send back json that indicates you are now
+                    // subscribed to this person...
+                    res.send('<div style="color:red;">Removed from subscriptions!</div>');
+                }
+
+            });
+        }
+    });
+}
 
 function getUserJson(req, res){
     console.log("User id is: " + req.params.id);
@@ -390,15 +460,7 @@ module.exports = function (app, passport) {
         });
     });
 
-    app.get('/api/users/:id/subscriptions', function(req, res){
-        res.json({
-            "subscriptions": {
-                "subscription1" : "subscriptionid1",
-                "subscription2" : "subscriptionid2",
-                "subscription3" : "subscriptionid3",
-            }
-        });
-    });
+    app.get('/api/users/:id/subscriptions', getSubscriptions);
 
     // Update profile page
     app.post('/api/users/:id/profile', updateProfileJson);
