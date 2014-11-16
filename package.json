@@ -2,7 +2,7 @@
   "name": "LineOnline",
   "version": "0.0.0",
   "description": "Web Apps Final Project",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha test"
   },
