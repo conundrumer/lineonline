@@ -1,14 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./public/js/src/scripts.js":[function(require,module,exports){
 $ = jQuery = require('jquery');
 require('jquery-smooth-scroll');
-// var App = require('./App.jsx');
-// var React = require('react/addons');
-// var Router = require('react-router');
-// var Link = Router.Link;
-// var Link = require('react-router/modules/components/Link');
-var Router = require('react-router');
-var Routes = Router.Routes;
-var Route = Router.Route;
 
 var LINEONLINE = {
     init: function() {
@@ -96,7 +88,7 @@ require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
 //     </Routes>
 // ), document.body, LINEONLINE.init.bind(LINEONLINE));
 
-},{"./App.jsx":"/Users/jingxiao/437/Team77/public/js/src/App.jsx","jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js"}],"./public/js/src/util.js":[function(require,module,exports){
+},{"./App.jsx":"/Users/jingxiao/437/Team77/public/js/src/App.jsx","jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
 //bind polyfill from MDN
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (oThis) {
@@ -34856,15 +34848,6 @@ var Routes = Router.Routes;
 var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
-// var Routes = require('react-router/modules/components/Routes');
-
-// React.render((
-//     <Routes location='history'>
-//         <Route name='app' path='/' handler={App}>
-//             <Route name='home' handler={Inbox} />
-//         </Route>
-//     </Routes>
-// ), document.body, LINEONLINE.init.bind(LINEONLINE));
 
 // var names = ['delu', 'jing', 'what'];
 
@@ -34903,22 +34886,53 @@ var Index = React.createClass({displayName: 'Index',
     }
 });
 
-var Profile = React.createClass({displayName: 'Profile',
+var Home = React.createClass({displayName: 'Home',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
+                React.createElement(Panel, {isEditor: true, id: "editor-panel"}, 
+                    React.createElement(Conversation, null)
+                ), 
                 React.createElement(Footer, null)
             )
         );
     }
 });
 
-var Home = React.createClass({displayName: 'Home',
+var Conversation = React.createClass({displayName: 'Conversation',
     render: function() {
         return (
-            React.createElement("div", {className: "main-content"}, 
-                React.createElement(Panel, {isEditor: true, id: "editor-panel"}), 
-                React.createElement(Footer, null)
+            React.createElement("section", {className: "side-panel side-panel-conversation minimized"}, 
+                React.createElement(Icon, {class: "conversation-icon", icon: "chevron-left"}), 
+                React.createElement("h2", null, 
+                    "Conversation"
+                ), 
+                React.createElement("article", {className: "messages"}, 
+                    React.createElement(Message, {messageBody: "Hello this is a simple message."}), 
+                    React.createElement(Message, {messageBody: "Hello this is another simple message."}), 
+                    React.createElement(Message, {messageBody: "Hello this is yet anooother simple message."}), 
+                    React.createElement("form", {className: "form-message", method: "post", action: "/send-message"}, 
+                        React.createElement("input", {name: "message-text", type: "text", placeholder: "Type message..."}), 
+                        React.createElement("button", {className: "btn-submit", type: "submit"}, 
+                            "Send"
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+var Message = React.createClass({displayName: 'Message',
+    render: function() {
+        return (
+            React.createElement("div", {className: "message"}, 
+                React.createElement("div", {className: "message-image"}), 
+                React.createElement("div", {className: "message-body"}, 
+                    React.createElement("p", null, 
+                        this.props.messageBody
+                    )
+                )
             )
         );
     }
@@ -34939,6 +34953,56 @@ var YourTracks = React.createClass({displayName: 'YourTracks',
     render: function() {
         return (
             React.createElement("div", null
+            )
+        );
+    }
+});
+
+var Profile = React.createClass({displayName: 'Profile',
+    render: function() {
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Footer, null)
+            )
+        );
+    }
+});
+
+var Favorites = React.createClass({displayName: 'Favorites',
+    render: function() {
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Footer, null)
+            )
+        );
+    }
+});
+
+var Subscriptions = React.createClass({displayName: 'Subscriptions',
+    render: function() {
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Footer, null)
+            )
+        );
+    }
+});
+
+var Settings = React.createClass({displayName: 'Settings',
+    render: function() {
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Footer, null)
+            )
+        );
+    }
+});
+
+var Logout = React.createClass({displayName: 'Logout',
+    render: function() {
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(Footer, null)
             )
         );
     }
@@ -35143,7 +35207,6 @@ var DropdownItem = React.createClass({displayName: 'DropdownItem',
 var Navlink = React.createClass({displayName: 'Navlink',
     render: function() {
         return (
-            // var isLogo = this.props.logo ?
             React.createElement("li", {className: "nav-item col span_1_of_7"}, 
                 React.createElement(Link, {to: this.props.link, className: "navlink"}, 
                     React.createElement(Icon, {class: "navlink-icon", icon: this.props.icon}), 
@@ -35156,31 +35219,24 @@ var Navlink = React.createClass({displayName: 'Navlink',
     }
 });
 
-
-var Hello = React.createClass({displayName: 'Hello',
-    render: function() {
-        return (
-            React.createElement("div", null, "HELEO ",  this.props.name)
-        );
-    }
-});
+var routes = (
+    React.createElement(Routes, {location: "history"}, 
+        React.createElement(Route, {name: "app", path: "/", handler: App}, 
+            React.createElement(DefaultRoute, {name: "index", handler: Index}), 
+            React.createElement(Route, {name: "home", handler: Home}), 
+            React.createElement(Route, {name: "gallery", handler: Gallery}), 
+            React.createElement(Route, {name: "your-tracks", handler: YourTracks}), 
+            React.createElement(Route, {name: "profile", handler: Profile}), 
+            React.createElement(Route, {name: "favorites", handler: Favorites}), 
+            React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
+            React.createElement(Route, {name: "settings", handler: Settings}), 
+            React.createElement(Route, {name: "logout", handler: Logout})
+        )
+    )
+);
 
 module.exports = function doRender(target, callback) {
-    React.render((
-        React.createElement(Routes, {location: "history"}, 
-            React.createElement(Route, {name: "app", path: "/", handler: App}, 
-                React.createElement(DefaultRoute, {name: "index", handler: Index}), 
-                React.createElement(Route, {name: "home", handler: Home}), 
-                React.createElement(Route, {name: "gallery", handler: Gallery}), 
-                React.createElement(Route, {name: "your-tracks", handler: YourTracks}), 
-                React.createElement(Route, {name: "profile", handler: Profile}), 
-                React.createElement(Route, {name: "favorites", handler: Profile}), 
-                React.createElement(Route, {name: "subscriptions", handler: Profile}), 
-                React.createElement(Route, {name: "settings", handler: Profile}), 
-                React.createElement(Route, {name: "logout", handler: Profile})
-            )
-        )
-    ), target, callback);
+    React.render(routes, target, callback);
 };
 
 },{"react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}]},{},["./public/js/src/util.js","./public/js/src/scripts.js"]);

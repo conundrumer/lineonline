@@ -5,15 +5,6 @@ var Routes = Router.Routes;
 var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
-// var Routes = require('react-router/modules/components/Routes');
-
-// React.render((
-//     <Routes location='history'>
-//         <Route name='app' path='/' handler={App}>
-//             <Route name='home' handler={Inbox} />
-//         </Route>
-//     </Routes>
-// ), document.body, LINEONLINE.init.bind(LINEONLINE));
 
 // var names = ['delu', 'jing', 'what'];
 
@@ -52,22 +43,53 @@ var Index = React.createClass({
     }
 });
 
-var Profile = React.createClass({
+var Home = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
+                <Panel isEditor={true} id='editor-panel'>
+                    <Conversation />
+                </Panel>
                 <Footer />
             </div>
         );
     }
 });
 
-var Home = React.createClass({
+var Conversation = React.createClass({
     render: function() {
         return (
-            <div className='main-content'>
-                <Panel isEditor={true} id='editor-panel' />
-                <Footer />
+            <section className='side-panel side-panel-conversation minimized'>
+                <Icon class='conversation-icon' icon='chevron-left' />
+                <h2>
+                    Conversation
+                </h2>
+                <article className='messages'>
+                    <Message messageBody='Hello this is a simple message.' />
+                    <Message messageBody='Hello this is another simple message.' />
+                    <Message messageBody='Hello this is yet anooother simple message.' />
+                    <form className='form-message' method='post' action='/send-message'>
+                        <input name='message-text' type='text' placeholder='Type message...' />
+                        <button className='btn-submit' type='submit'>
+                            Send
+                        </button>
+                    </form>
+                </article>
+            </section>
+        );
+    }
+});
+
+var Message = React.createClass({
+    render: function() {
+        return (
+            <div className='message'>
+                <div className='message-image' />
+                <div className='message-body'>
+                    <p>
+                        {this.props.messageBody}
+                    </p>
+                </div>
             </div>
         );
     }
@@ -88,6 +110,56 @@ var YourTracks = React.createClass({
     render: function() {
         return (
             <div>
+            </div>
+        );
+    }
+});
+
+var Profile = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var Favorites = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var Subscriptions = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var Settings = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
+            </div>
+        );
+    }
+});
+
+var Logout = React.createClass({
+    render: function() {
+        return (
+            <div className='main-content'>
+                <Footer />
             </div>
         );
     }
@@ -292,7 +364,6 @@ var DropdownItem = React.createClass({
 var Navlink = React.createClass({
     render: function() {
         return (
-            // var isLogo = this.props.logo ?
             <li className='nav-item col span_1_of_7'>
                 <Link to={this.props.link} className='navlink'>
                     <Icon class='navlink-icon' icon={this.props.icon} />
@@ -305,29 +376,22 @@ var Navlink = React.createClass({
     }
 });
 
-
-var Hello = React.createClass({
-    render: function() {
-        return (
-            <div>HELEO { this.props.name }</div>
-        );
-    }
-});
+var routes = (
+    <Routes location='history'>
+        <Route name='app' path='/' handler={App}>
+            <DefaultRoute name='index' handler={Index} />
+            <Route name='home' handler={Home} />
+            <Route name='gallery' handler={Gallery} />
+            <Route name='your-tracks' handler={YourTracks} />
+            <Route name='profile' handler={Profile} />
+            <Route name='favorites' handler={Favorites} />
+            <Route name='subscriptions' handler={Subscriptions} />
+            <Route name='settings' handler={Settings} />
+            <Route name='logout' handler={Logout} />
+        </Route>
+    </Routes>
+);
 
 module.exports = function doRender(target, callback) {
-    React.render((
-        <Routes location='history'>
-            <Route name='app' path='/' handler={App}>
-                <DefaultRoute name='index' handler={Index} />
-                <Route name='home' handler={Home} />
-                <Route name='gallery' handler={Gallery} />
-                <Route name='your-tracks' handler={YourTracks} />
-                <Route name='profile' handler={Profile} />
-                <Route name='favorites' handler={Profile} />
-                <Route name='subscriptions' handler={Profile} />
-                <Route name='settings' handler={Profile} />
-                <Route name='logout' handler={Profile} />
-            </Route>
-        </Routes>
-    ), target, callback);
+    React.render(routes, target, callback);
 };

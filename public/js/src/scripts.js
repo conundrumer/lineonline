@@ -1,13 +1,5 @@
 $ = jQuery = require('jquery');
 require('jquery-smooth-scroll');
-// var App = require('./App.jsx');
-// var React = require('react/addons');
-// var Router = require('react-router');
-// var Link = Router.Link;
-// var Link = require('react-router/modules/components/Link');
-var Router = require('react-router');
-var Routes = Router.Routes;
-var Route = Router.Route;
 
 var LINEONLINE = {
     init: function() {
