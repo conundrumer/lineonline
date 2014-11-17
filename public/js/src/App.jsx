@@ -93,9 +93,9 @@ var SampleCollection2 = {
     ]
 }
 
-
 var Data = {
-    currentUser: SampleUser1,
+    // currentUser: SampleUser1,
+    currentUser: null,
     indexData: {
 
     },
@@ -857,33 +857,147 @@ var Navbar = React.createClass({
                             LineOnline
                         </Link>
                     </li>
-                    <Navlink title='Home' link='home' icon='home' />
+                    {this.props.currentUser ?
+                        <Navlink title='Home' link='home' icon='home' />
+                        : null
+                    }
                     <Navlink title='Gallery' link='gallery' icon='image' />
-                    <Navlink title='Your Tracks' link='your-tracks' icon='project' />
-                    <li className='nav-item col span_2_of_7'></li>
-                    <li className='nav-item nav-item-profile col span_1_of_7'>
-                        <div className='navlink' onClick={this.handleDropdownClick}>
-                            <img src={this.props.currentUser.avatar_url} />
-                            <span className='hidden'>
-                                Profile
-                            </span>
-                        </div>
+                    {this.props.currentUser ?
+                        <Navlink title='Your Tracks' link='your-tracks' icon='project' />
+                        : null
+                    }
+                    {this.props.currentUser ?
+                        <li className='nav-item col span_2_of_7'></li>
+                        : <li className='nav-item col span_4_of_7'></li>
+                    }
+                    {this.props.currentUser ?
+                        <li className='nav-item nav-item-profile col span_1_of_7'>
+                            <div className='navlink' onClick={this.handleDropdownClick}>
+                                <img src={this.props.currentUser.avatar_url} />
+                                <span className='hidden'>
+                                    Profile
+                                </span>
+                            </div>
                             <Dropdown
                                 username={this.props.currentUser.username}
                                 id={this.props.currentUser.id}
                                 isHidden={this.state.hidden}
                             />
-                    </li>
+                        </li>
+
+                        :
+
+                        <li className='nav-item nav-item-signup-login col span_1_of_7'>
+                            <div className='navlink' onClick={this.handleDropdownClick}>
+                                <Icon class='navlink-icon' icon='account-login' />
+                                <span className='navlink-title'>
+                                    Sign Up/Log In
+                                </span>
+                            </div>
+                            <DropdownLogin isHidden={this.state.hidden} />
+                        </li>
+                    }
+
                 </ul>
             </nav>
         );
     }
 });
 
+
 var Icon = React.createClass({
     render: function() {
         return (
             <span className={this.props.class + ' oi'} data-glyph={this.props.icon} title={this.props.icon} aria-hidden='true'></span>
+        );
+    }
+});
+
+var DropdownLogin = React.createClass({
+    getInitialState: function() {
+        return {
+            signup: true
+        };
+    },
+    handleContainerClick: function (event) {
+        event.stopPropagation();
+    },
+    handleLoginClick: function() {
+        this.setState({
+            signup: !this.state.signup
+        });
+    },
+    handleTransitionEnd: function(event) {
+        this.setState({
+            signup: true
+        });
+        this.refs.dropdown.getDOMNode().removeEventListener('transitionend', this.handleTransitionEnd);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        // from visible to hidden
+        if (!this.props.isHidden && nextProps.isHidden) {
+            this.refs.dropdown.getDOMNode().addEventListener('transitionend', this.handleTransitionEnd);
+        }
+    },
+    render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'dropdown': true,
+            'dropdown-signup-login': true,
+            'hidden': this.props.isHidden
+        });
+        return (
+            <div ref='dropdown' onClick={this.handleContainerClick} className={classes}>
+                <div id='form-signup' className={this.state.signup ? '' : 'hidden'}>
+                    <form className='form-signup-login'>
+                        <div className='field'>
+                            <label for='username'>
+                                Username:
+                            </label>
+                            <input name='username' type='text' placeholder='username' />
+                        </div>
+                        <div className='field'>
+                            <label for='email'>
+                                Email:
+                            </label>
+                            <input name='email' type='email' placeholder='email' />
+                        </div>
+                        <div className='field field-last'>
+                            <label for='password'>
+                                Password:
+                            </label>
+                            <input name='password' type='password' placeholder='••••••••••••' />
+                        </div>
+                        <button className='btn-submit' type='submit'>
+                            Sign Up
+                        </button>
+                    </form>
+                    <div className='footnote'>
+                        <p>
+                            Or <span className='login-link' onClick={this.handleLoginClick}>log in</span> with an existing account
+                        </p>
+                    </div>
+                </div>
+                <div id='form-login' className={this.state.signup ? 'hidden' : ''}>
+                    <form className='form-signup-login'>
+                        <div className='field'>
+                            <label for='username'>
+                                Username:
+                            </label>
+                            <input name='username' type='text' placeholder='username' />
+                        </div>
+                        <div className='field field-last'>
+                            <label for='password'>
+                                Password:
+                            </label>
+                            <input name='password' type='password' placeholder='••••••••••••' />
+                        </div>
+                        <button className='btn-submit' type='submit'>
+                            Log In
+                        </button>
+                    </form>
+                </div>
+            </div>
         );
     }
 });

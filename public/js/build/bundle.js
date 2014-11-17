@@ -33,7 +33,7 @@ var LINEONLINE = {
 
     bindEventHandlers: function() {
         // this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
-        this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
+        // this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
         this.$loginLink.on('click', this.toggleSignupLoginForm.bind(this));
         this.$conversationIcon.on('click', this.toggleConversation.bind(this));
     },
@@ -34936,9 +34936,9 @@ var SampleCollection2 = {
     ]
 }
 
-
 var Data = {
-    currentUser: SampleUser1,
+    // currentUser: SampleUser1,
+    currentUser: null,
     indexData: {
 
     },
@@ -35700,33 +35700,147 @@ var Navbar = React.createClass({displayName: 'Navbar',
                             "LineOnline"
                         )
                     ), 
-                    React.createElement(Navlink, {title: "Home", link: "home", icon: "home"}), 
+                    this.props.currentUser ?
+                        React.createElement(Navlink, {title: "Home", link: "home", icon: "home"})
+                        : null, 
+                    
                     React.createElement(Navlink, {title: "Gallery", link: "gallery", icon: "image"}), 
-                    React.createElement(Navlink, {title: "Your Tracks", link: "your-tracks", icon: "project"}), 
-                    React.createElement("li", {className: "nav-item col span_2_of_7"}), 
-                    React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
-                        React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
-                            React.createElement("img", {src: this.props.currentUser.avatar_url}), 
-                            React.createElement("span", {className: "hidden"}, 
-                                "Profile"
-                            )
-                        ), 
+                    this.props.currentUser ?
+                        React.createElement(Navlink, {title: "Your Tracks", link: "your-tracks", icon: "project"})
+                        : null, 
+                    
+                    this.props.currentUser ?
+                        React.createElement("li", {className: "nav-item col span_2_of_7"})
+                        : React.createElement("li", {className: "nav-item col span_4_of_7"}), 
+                    
+                    this.props.currentUser ?
+                        React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
+                            React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
+                                React.createElement("img", {src: this.props.currentUser.avatar_url}), 
+                                React.createElement("span", {className: "hidden"}, 
+                                    "Profile"
+                                )
+                            ), 
                             React.createElement(Dropdown, {
                                 username: this.props.currentUser.username, 
                                 id: this.props.currentUser.id, 
                                 isHidden: this.state.hidden}
                             )
-                    )
+                        )
+
+                        :
+
+                        React.createElement("li", {className: "nav-item nav-item-signup-login col span_1_of_7"}, 
+                            React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
+                                React.createElement(Icon, {class: "navlink-icon", icon: "account-login"}), 
+                                React.createElement("span", {className: "navlink-title"}, 
+                                    "Sign Up/Log In"
+                                )
+                            ), 
+                            React.createElement(DropdownLogin, {isHidden: this.state.hidden})
+                        )
+                    
+
                 )
             )
         );
     }
 });
 
+
 var Icon = React.createClass({displayName: 'Icon',
     render: function() {
         return (
             React.createElement("span", {className: this.props.class + ' oi', 'data-glyph': this.props.icon, title: this.props.icon, 'aria-hidden': "true"})
+        );
+    }
+});
+
+var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
+    getInitialState: function() {
+        return {
+            signup: true
+        };
+    },
+    handleContainerClick: function (event) {
+        event.stopPropagation();
+    },
+    handleLoginClick: function() {
+        this.setState({
+            signup: !this.state.signup
+        });
+    },
+    handleTransitionEnd: function(event) {
+        this.setState({
+            signup: true
+        });
+        this.refs.dropdown.getDOMNode().removeEventListener('transitionend', this.handleTransitionEnd);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        // from visible to hidden
+        if (!this.props.isHidden && nextProps.isHidden) {
+            this.refs.dropdown.getDOMNode().addEventListener('transitionend', this.handleTransitionEnd);
+        }
+    },
+    render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'dropdown': true,
+            'dropdown-signup-login': true,
+            'hidden': this.props.isHidden
+        });
+        return (
+            React.createElement("div", {ref: "dropdown", onClick: this.handleContainerClick, className: classes}, 
+                React.createElement("div", {id: "form-signup", className: this.state.signup ? '' : 'hidden'}, 
+                    React.createElement("form", {className: "form-signup-login"}, 
+                        React.createElement("div", {className: "field"}, 
+                            React.createElement("label", {for: "username"}, 
+                                "Username:"
+                            ), 
+                            React.createElement("input", {name: "username", type: "text", placeholder: "username"})
+                        ), 
+                        React.createElement("div", {className: "field"}, 
+                            React.createElement("label", {for: "email"}, 
+                                "Email:"
+                            ), 
+                            React.createElement("input", {name: "email", type: "email", placeholder: "email"})
+                        ), 
+                        React.createElement("div", {className: "field field-last"}, 
+                            React.createElement("label", {for: "password"}, 
+                                "Password:"
+                            ), 
+                            React.createElement("input", {name: "password", type: "password", placeholder: "••••••••••••"})
+                        ), 
+                        React.createElement("button", {className: "btn-submit", type: "submit"}, 
+                            "Sign Up"
+                        )
+                    ), 
+                    React.createElement("div", {className: "footnote"}, 
+                        React.createElement("p", null, 
+                            "Or ", React.createElement("span", {className: "login-link", onClick: this.handleLoginClick}, "log in"), " with an existing account"
+                        )
+                    )
+                ), 
+                React.createElement("div", {id: "form-login", className: this.state.signup ? 'hidden' : ''}, 
+                    React.createElement("form", {className: "form-signup-login"}, 
+                        React.createElement("div", {className: "field"}, 
+                            React.createElement("label", {for: "username"}, 
+                                "Username:"
+                            ), 
+                            React.createElement("input", {name: "username", type: "text", placeholder: "username"})
+                        ), 
+                        React.createElement("div", {className: "field field-last"}, 
+                            React.createElement("label", {for: "password"}, 
+                                "Password:"
+                            ), 
+                            React.createElement("input", {name: "password", type: "password", placeholder: "••••••••••••"})
+                        ), 
+                        React.createElement("button", {className: "btn-submit", type: "submit"}, 
+                            "Log In"
+                        )
+                    )
+                )
+            )
         );
     }
 });

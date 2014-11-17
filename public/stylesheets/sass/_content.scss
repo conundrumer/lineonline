@@ -103,6 +103,13 @@
     top: calc(100% + 23px);
 }
 
+#form-login,
+#form-signup {
+    &.hidden {
+        display: none;
+    }
+}
+
 .form-signup-login {
 
     // background: blue;
