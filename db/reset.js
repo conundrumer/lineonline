@@ -22,12 +22,23 @@ function dropTables(models) {
     if (models.length === 0) return next;
     var model = models.pop();
 
+    function dropCascadeIfExists(tableName){
+        return function (exists) {
+            if (!exists) {
+                return next;
+            }
+            return knex.raw('DROP TABLE '+tableName+' CASCADE');
+        };
+    }
+
     return knex.schema
-        .dropTableIfExists(model.tableName)
+        .hasTable(model.tableName)
+        .then(dropCascadeIfExists(model.tableName))
         .then(dropTables.bind(null, models))
         .catch(function(err) {
-            models.unshift(model);
-            return dropTables(models);
+            console.error(err);
+            // models.unshift(model);
+            // return dropTables(models);
         });
 }
 
