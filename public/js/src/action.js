@@ -49,7 +49,7 @@ var Action = {
             .end(function(err, res) {
                 if (err) {
                 }
-                if (res.status === 205) {
+                if (res.status === 204) {
                     Data.currentUser = null;
                     Data.onUpdate();
                     return;
