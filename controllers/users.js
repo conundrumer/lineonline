@@ -3,8 +3,9 @@ var Track = require('../models/track');
 var passport = require('passport');
 
 exports.logout = function(req, res) {
+    console.log("logout")
     req.logout();
-    res.status(205).send();
+    res.status(204).send();
 }
 
 exports.getCurrentUser = function(req, res) {
@@ -21,13 +22,13 @@ exports.doRegister = function(req, res){
     console.log(JSON.stringify(req.body));
 
     if (req.params.username == ""){
-        res.send('<div style="color:red;">This username! Who ARE you???</div>');
+        res.status(202).send({message:'No username'});
         return;
     }
 
     // Password non-empty
     if (req.params.password == ""){
-        res.send('<div style="color:red;">This password! Where is this password???</div>');
+        res.status(202).send({message:'No password given'});
         return;
     }
 
@@ -38,15 +39,17 @@ exports.doRegister = function(req, res){
             console.log(username, password)
             User.forge({username:username, password:password, email:email}).save().then(function(){
                 console.log('new user', username, password);
-                exports.login(req, res, console.error);
+                statuslogin(201, req, res, console.error);
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
         } else { // If someone else already has that username
-            res.send('<div style="color:red;">This username already exists!</div>');
+            res.status(202).send({message:'This username has already been taken'});
         }
     }); // PUT A CATCH HERE
 
 }
-exports.login = function(req, res, next) {
+
+function statuslogin (status, req, res, next) {
+    console.log('inlogin')
     passport.authenticate('local', function(err, user, info) {
         if (err) { return next(err); }
         console.log("WHAT IS USER")
@@ -56,11 +59,13 @@ exports.login = function(req, res, next) {
         console.log("ATTEMPTIPNG LOGIN TI")
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            req.user = user;
-            exports.getCurrentUser(req, res);
+            req.params.id = user.get('id');
+            exports.getUserJson(req, res, status);
         });
     })(req, res, next);
 }
+
+exports.login = statuslogin.bind(null, null);
 
 exports.getProfileJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
@@ -214,7 +219,8 @@ exports.unsubscribeFrom = function(req, res){
     });
 }
 
-exports.getUserJson = function(req, res){
+exports.getUserJson = function(req, res, status){
+    status = (typeof status === 'number' && status) || 200;
     var id = req.params.id;
     console.log("User id is: " + req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
@@ -223,7 +229,7 @@ exports.getUserJson = function(req, res){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.json({
+            res.status(status).json({
                 "_links": {
                     'self': { 'href': '/users/' + id },
                     'profile': { 'href': '/users/' + id + '/profile' },
@@ -446,7 +452,7 @@ exports.createTrack = function(req, res){
             //track.related('owner_id').set(owner_id);
             track.save();
         });
-        res.json(track.toJSON());
+        res.status(201).json(track.toJSON());
 
     });
 }

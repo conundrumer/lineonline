@@ -49,45 +49,45 @@ describe('The First User', function () {
         agent
             .post('/auth/register')
             .send(register_data)
-            .expect(user_data, done);
+            .expect(201, user_data, done);
     });
 
-    it('should be logged in right after registration (post: /auth)', function (done) {
+    it('should be logged in right after registration (get: /auth)', function (done) {
         agent
-            .post('/auth')
+            .get('/auth')
             .send(login_data)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be able to get her id, username and null avatar_url (get: /users/:id)', function (done) {
         agent
             .get('/users/' + id)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be able to make a track (post: /tracks/)', function (done) {
         agent
             .post('/tracks/')
             .send(send_track_data)
-            .expect(track_data, done);
+            .expect(201, track_data, done);
     });
 
     it('should be able to get id, owner, title and description of her first track (get: /tracks/:track_id)', function(done) {
         agent
             .get('/tracks/'+track_id)
-            .expect(track_data, done);
+            .expect(200, track_data, done);
     });
 
     it('should be able to get id, owner, title and description on a certain track of hers (get: /users/:id/tracks/:track_id)', function(done) {
         agent
             .get('/users/' + id + '/tracks/'+track_id)
-            .expect(track_data, done);
+            .expect(200, track_data, done);
     });
 
     it('should be able to log out (delete: /auth)', function(done) {
         agent
             .delete('/auth')
-            .expect(205,done);
+            .expect(204,done);
     });
 
     it('should not have a session while logged out (get: /auth)', function(done) {
@@ -100,13 +100,13 @@ describe('The First User', function () {
         agent
             .post('/auth')
             .send(login_data)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be logged in after logging back in (get: /auth)', function(done) {
         agent
             .get('/auth')
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 });
 
