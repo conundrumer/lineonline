@@ -17,8 +17,11 @@ var User = require('../db/create-model')({
         return this.belongsToMany(User, 'subscriptions', 'subscribee', 'subscriber');
     },
     tracks: function(){
-        return this.hasMany(Track, 'track_id');
+        return this.hasMany(Track, 'track');
     },
+    // // collaborations: function(){
+    // //     return this.belongsToMany(User, '')
+    // }
     favorites: function(){
         return this.hasMany(Track, 'favorites');
     }

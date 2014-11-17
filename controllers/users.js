@@ -358,3 +358,30 @@ exports.addToFavorites = function(req, res){
     });
 }
 
+exports.createTrack = function(req, res){
+    console.log("Got here 1!");
+    // I have the title, description and owner_id for the track
+    var title = req.param('title');
+    var description = req.param('description');
+    var owner = req.param('owner');
+
+
+    console.log("Got here 2!");
+
+    Track.forge({
+        title: title,
+        description: description
+        //owner: owner_id
+    }).save().then(function(track){
+        console.log("Got here 3!");
+        //get a user to attach this to
+        User.where({owner: owner}).fetch().then(function(trackUser){
+            track.set(owner, owner);
+            //track.related('owner_id').set(owner_id);
+            track.save();
+        });
+        res.json(track.toJSON());
+
+    });
+}
+

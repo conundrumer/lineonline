@@ -17,30 +17,30 @@ describe('The First User', function () {
     var id = 2;
     var track_id = 1;
     var user_data = {
-        "_links": {
-            "self": { "href": "/users/" + id },
-            "profile": { "href": "/users/" + id + "/profile" },
-            "favorites": { "href": "/users/" + id + "/favorites" },
-            "subscriptions": { "href": "/users/" + id + "/subscriptions" },
-            "collections": { "href": "/users/" + id + "/collections"},
-            "tracks": { "href": "/users/" + id + "/tracks"}
+        '_links': {
+            'self': { 'href': '/users/' + id },
+            'profile': { 'href': '/users/' + id + '/profile' },
+            'favorites': { 'href': '/users/' + id + '/favorites' },
+            'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
+            'collections': { 'href': '/users/' + id + '/collections'},
+            'tracks': { 'href': '/users/' + id + '/tracks'}
         },
         id: id,
         username: 'DaSnig',
         avatar_url: null
     };
     var send_track_data = {
-        "title": "Track Title",
-        "description": "This is a really cool description",
+        'title': 'Track Title',
+        'description': 'This is a really cool description',
     };
     var track_data = {
-        "id": track_id,
-        "owner": id,
-        "title": "Track Title",
-        "description": "This is a really cool description",
-        "collaborators": [],
-        "invites": [],
-        "tags": []
+        'id': track_id,
+        'owner': id,
+        'title': 'Track Title',
+        'description': 'This is a really cool description',
+        'collaborators': [],
+        'invites': [],
+        'tags': []
     };
 
 
@@ -106,5 +106,30 @@ describe('The First User', function () {
         agent
             .get('/auth')
             .expect(user_data, done);
+    });
+});
+
+
+
+
+describe('When creating a new track,', function(){
+    var agent = request.agent(url);
+    var submit_data = {
+        title: 'myTitle',
+        description: 'myDescription',
+        user_id: '2'
+    };
+    var returned_data = {
+        title: 'myTitle',
+        description: 'myDescription',
+        // owner_id: '2',
+
+    }
+
+   it('should return (post: /api/users/:user_id/tracks/)', function(done) {
+        agent
+            .post('/users/:user_id/tracks/')
+            .send(submit_data)
+            .expect(returned_data, done);
     });
 });

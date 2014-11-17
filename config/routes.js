@@ -148,7 +148,8 @@ module.exports = function (app, passport) {
     app.get('/api/users/:id/subscriptions', users.getSubscriptions);
 
     // Update profile page
-    app.post('/api/users/:id/profile', users.updateProfileJson);
+    app.put('/api/users/:id/profile', users.updateProfileJson);
+    app.post('/api/users/:user_id/tracks/', users.createTrack);
 
 
 

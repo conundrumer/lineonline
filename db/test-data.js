@@ -35,15 +35,15 @@ Tracks.populate = [
 {
     title: "title 1",
     description: "description 1",
-    // owner: User.where({username: 'delu'}).fetch()
+    owner: 1
 }, {
     title: "title 2",
     description: "description 2",
-    // owner: User.where({username: 'foo'}).fetch()
+    owner: 2
 }, {
     title: "title 3",
     description: "description 3",
-    // owner: User.where({username: 'delu'}).fetch()
+    owner: 1
 }
 ];
 
