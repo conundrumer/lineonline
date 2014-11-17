@@ -56,15 +56,8 @@ exports.login = function(req, res, next) {
         console.log("ATTEMPTIPNG LOGIN TI")
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            res.json({
-                "_links": {
-                    "self": { "href": "/users/" + user.get('id') + "/profile" },
-                    "user": { "href": "/users/" + user.get('id')}
-                },
-                "location": user.get("location"),
-                "about": user.get("about"),
-                "avatar_url": "http://www.example.com/avatar.png" // model.get("avatar_url")
-            });
+            req.user = user;
+            exports.getCurrentUser(req, res);
         });
     })(req, res, next);
 }
@@ -222,6 +215,7 @@ exports.unsubscribeFrom = function(req, res){
 }
 
 exports.getUserJson = function(req, res){
+    var id = req.params.id;
     console.log("User id is: " + req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
@@ -231,12 +225,16 @@ exports.getUserJson = function(req, res){
         else {
             res.json({
                 "_links": {
-                    "self": { "href": "/users/" + req.params.id + "/profile" },
-                    "user": { "href": "/users/" + req.params.id}
+                    'self': { 'href': '/users/' + id },
+                    'profile': { 'href': '/users/' + id + '/profile' },
+                    'favorites': { 'href': '/users/' + id + '/favorites' },
+                    'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
+                    'collections': { 'href': '/users/' + id + '/collections'},
+                    'tracks': { 'href': '/users/' + id + '/tracks'}
                 },
-                "location": model.get("location"),
-                "about": model.get("about"),
-                "avatar_url": "http://www.example.com/avatar.png" // model.get("avatar_url")
+                id: id,
+                username: model.get('username'),
+                avatar_url: null // model.get("avatar_url")
             });
         }
     });
