@@ -32,7 +32,7 @@ var LINEONLINE = {
     },
 
     bindEventHandlers: function() {
-        this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
+        // this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
         this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
         this.$loginLink.on('click', this.toggleSignupLoginForm.bind(this));
         this.$conversationIcon.on('click', this.toggleConversation.bind(this));
@@ -35669,6 +35669,28 @@ var PanelPadded = React.createClass({displayName: 'PanelPadded',
 });
 
 var Navbar = React.createClass({displayName: 'Navbar',
+    getInitialState: function() {
+        return {
+            hidden: true
+        };
+    },
+    handleAnyClick: function(event) {
+        if (!this.state.hidden) {
+            this.setState({
+                hidden: true
+            });
+        }
+        window.removeEventListener('click', this.handleAnyClick);
+    },
+    handleDropdownClick: function(event) {
+        if (this.state.hidden) {
+            this.setState({
+                hidden: false
+            });
+            event.stopPropagation();
+            window.addEventListener('click', this.handleAnyClick);
+        }
+    },
     render: function() {
         return (
             React.createElement("nav", {className: "navbar"}, 
@@ -35683,13 +35705,17 @@ var Navbar = React.createClass({displayName: 'Navbar',
                     React.createElement(Navlink, {title: "Your Tracks", link: "your-tracks", icon: "project"}), 
                     React.createElement("li", {className: "nav-item col span_2_of_7"}), 
                     React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
-                        React.createElement("div", {className: "navlink"}, 
+                        React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
                             React.createElement("img", {src: this.props.currentUser.avatar_url}), 
                             React.createElement("span", {className: "hidden"}, 
                                 "Profile"
                             )
                         ), 
-                        React.createElement(Dropdown, {username: this.props.currentUser.username, id: this.props.currentUser.id})
+                            React.createElement(Dropdown, {
+                                username: this.props.currentUser.username, 
+                                id: this.props.currentUser.id, 
+                                isHidden: this.state.hidden}
+                            )
                     )
                 )
             )
@@ -35707,8 +35733,14 @@ var Icon = React.createClass({displayName: 'Icon',
 
 var Dropdown = React.createClass({displayName: 'Dropdown',
     render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'dropdown': true,
+            'dropdown-settings': true,
+            'hidden': this.props.isHidden
+        });
         return (
-            React.createElement("div", {className: "dropdown dropdown-settings hidden"}, 
+            React.createElement("div", {className: classes}, 
                 React.createElement("ul", null, 
                     React.createElement("li", {className: "dropdown-item dropdown-profile"}, 
                         React.createElement(Link, {to: '/profile/' + this.props.id, className: "dropdown-link"}, 

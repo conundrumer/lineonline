@@ -31,7 +31,7 @@ var LINEONLINE = {
     },
 
     bindEventHandlers: function() {
-        this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
+        // this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
         this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
         this.$loginLink.on('click', this.toggleSignupLoginForm.bind(this));
         this.$conversationIcon.on('click', this.toggleConversation.bind(this));

@@ -826,6 +826,28 @@ var PanelPadded = React.createClass({
 });
 
 var Navbar = React.createClass({
+    getInitialState: function() {
+        return {
+            hidden: true
+        };
+    },
+    handleAnyClick: function(event) {
+        if (!this.state.hidden) {
+            this.setState({
+                hidden: true
+            });
+        }
+        window.removeEventListener('click', this.handleAnyClick);
+    },
+    handleDropdownClick: function(event) {
+        if (this.state.hidden) {
+            this.setState({
+                hidden: false
+            });
+            event.stopPropagation();
+            window.addEventListener('click', this.handleAnyClick);
+        }
+    },
     render: function() {
         return (
             <nav className='navbar'>
@@ -840,13 +862,17 @@ var Navbar = React.createClass({
                     <Navlink title='Your Tracks' link='your-tracks' icon='project' />
                     <li className='nav-item col span_2_of_7'></li>
                     <li className='nav-item nav-item-profile col span_1_of_7'>
-                        <div className='navlink'>
+                        <div className='navlink' onClick={this.handleDropdownClick}>
                             <img src={this.props.currentUser.avatar_url} />
                             <span className='hidden'>
                                 Profile
                             </span>
                         </div>
-                        <Dropdown username={this.props.currentUser.username} id={this.props.currentUser.id} />
+                            <Dropdown
+                                username={this.props.currentUser.username}
+                                id={this.props.currentUser.id}
+                                isHidden={this.state.hidden}
+                            />
                     </li>
                 </ul>
             </nav>
@@ -864,8 +890,14 @@ var Icon = React.createClass({
 
 var Dropdown = React.createClass({
     render: function() {
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'dropdown': true,
+            'dropdown-settings': true,
+            'hidden': this.props.isHidden
+        });
         return (
-            <div className='dropdown dropdown-settings hidden'>
+            <div className={classes}>
                 <ul>
                     <li className='dropdown-item dropdown-profile'>
                         <Link to={'/profile/' + this.props.id} className='dropdown-link'>

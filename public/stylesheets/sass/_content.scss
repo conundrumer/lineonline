@@ -22,12 +22,15 @@
 }
 
 .dropdown {
+    @include transition(all 0.2s ease-in-out 0);
+    opacity: 1;
     z-index: 1;
     border: 1px solid $border-col;
     position: absolute;
     font-size: 13px;
     line-height: 1.5;
     background: #fff;
+    visibility: visible;
 
     .footnote {
         text-align: center;
@@ -35,6 +38,11 @@
         font-style: italic;
         padding: 10px;
         border-top: 1px solid $border-col;
+    }
+
+    &.hidden {
+        opacity: 0;
+        visibility: hidden;
     }
 }
 
