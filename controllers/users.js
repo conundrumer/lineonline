@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Track = require('../models/track');
 
 exports.getProfileJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
@@ -291,3 +292,69 @@ exports.editAccount = function(req, res) {
     model.save();
     res.redirect('/settings');
 }
+
+exports.getSingleTrackJson =  function(req, res){
+    // Gets a particular track
+    Track.where({id: req.params.track_id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json(model.toJSON());
+        }
+    });
+}
+exports.getAllTracksJson = function(req, res){
+    // requires both the user id and the track id
+    User.where({id: req.params.user_id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            var tracks = user.related('tracks');
+            res.json(tracks.toJSON());
+
+
+        }
+    });
+}
+
+exports.getFavoritesJson = function(req, res){
+    User.where({id: req.params.id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json( (user.related('favorites')).toJSON() );
+        }
+    });
+}
+
+exports.addToFavorites = function(req, res){
+    // requires both the user id and the track id
+    User.where({id: req.params.user_id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+
+            Track.where({id: req.params.track_id}).fetch().then(function(track){
+                // If id doesn't exist, send 404 page
+                if (track == null){
+                    res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+                }
+                else {
+                    var favorites = track.related('favorites');
+                    favorites.add(track);
+                    res.json( favorites.toJSON() );
+                }
+            });
+
+        }
+    });
+}
+

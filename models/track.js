@@ -1,7 +1,6 @@
-var bookshelf = require('bookshelf').pgAuth;
 var User = require('./user').model;
 
-var Track = bookshelf.Model.extend({
+var Track = require('../db/create-model')({
     tableName: 'tracks',
     build: function (table) {
         table.increments('id').primary();
@@ -23,7 +22,7 @@ var Track = bookshelf.Model.extend({
 
 });
 
-exports.model = Track;
+module.exports = Track;
 
 
 

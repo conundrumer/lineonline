@@ -1,3 +1,5 @@
+var Track = require('./track').model;
+
 var User = require('../db/create-model')({
     tableName: 'users',
     build: function (table) {
@@ -15,7 +17,10 @@ var User = require('../db/create-model')({
         return this.belongsToMany(User, 'subscriptions', 'subscribee', 'subscriber');
     },
     tracks: function(){
-        return this.hasMany(Track, 'tracks', 'track_owner', 'owned_tracks');
+        return this.hasMany(Track, 'track_id');
+    },
+    favorites: function(){
+        return this.hasMany(Track, 'favorites');
     }
 });
 

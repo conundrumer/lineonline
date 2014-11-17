@@ -29,4 +29,23 @@ Subscriptions.populate = [
 }
 ];
 
-module.exports = [User, Subscriptions];
+
+var Tracks = require('../models/track');
+Tracks.populate = [
+{
+    title: "title 1",
+    description: "description 1",
+    // owner: User.where({username: 'delu'}).fetch()
+}, {
+    title: "title 2",
+    description: "description 2",
+    // owner: User.where({username: 'foo'}).fetch()
+}, {
+    title: "title 3",
+    description: "description 3",
+    // owner: User.where({username: 'delu'}).fetch()
+}
+];
+
+module.exports = [User, Subscriptions, Tracks];
+
