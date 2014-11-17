@@ -716,7 +716,7 @@ var Navbar = React.createClass({
                         <li className='nav-item nav-item-profile col span_1_of_7'>
                             <div className='navlink' onClick={this.handleDropdownClick}>
                                 <img src={this.props.currentUser.avatar_url} />
-                                <span className='hidden'>
+                                <span className='hide'>
                                     Profile
                                 </span>
                             </div>
@@ -799,7 +799,7 @@ var DropdownLogin = React.createClass({
         var username = this.refs.signupUsername.getDOMNode().value.trim();
         var email = this.refs.signupEmail.getDOMNode().value.trim();
         var password = this.refs.signupPassword.getDOMNode().value.trim();
-        console.log(password);
+        Action.signup(username, email, password);
     },
     handleLoginSubmit: function(event) {
         event.preventDefault();
@@ -873,6 +873,10 @@ var DropdownLogin = React.createClass({
 });
 
 var Dropdown = React.createClass({
+    handleLogout: function(event) {
+        event.preventDefault();
+        Action.logout();
+    },
     render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
@@ -899,7 +903,7 @@ var Dropdown = React.createClass({
                     <DropdownItem title='Favorites' link='favorites' icon='heart' />
                     <DropdownItem title='Subscriptions' link='subscriptions' icon='people' />
                     <DropdownItem title='Settings' link='settings' icon='cog' />
-                    <DropdownItem title='Logout' link='logout' icon='account-logout' />
+                    <DropdownItem title='Logout' link='logout' icon='account-logout' onClick={this.handleLogout} />
                 </ul>
             </div>
         );
@@ -909,7 +913,7 @@ var Dropdown = React.createClass({
 var DropdownItem = React.createClass({
     render: function() {
         return (
-            <li className='dropdown-item'>
+            <li className='dropdown-item' onClick={this.props.onClick}>
                 <Link to={this.props.link} className='dropdown-link'>
                     <Icon class='dropdown-icon' icon={this.props.icon} />
                     <span className='dropdown-title'>
@@ -954,6 +958,10 @@ var routes = (
     </Routes>
 );
 
-module.exports = function doRender(target, callback) {
+function doRender(target, callback) {
     React.render(routes, target, callback);
 };
+
+Data.onUpdate = doRender.bind(null, document.body, function(){});
+
+module.exports = doRender;

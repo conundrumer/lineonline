@@ -75,8 +75,11 @@ var LINEONLINE = {
         e.preventDefault();
     }
 }
+var Action = require('./action');
 
-require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+Action.getCurrentUser(function() {
+    require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+});
 
 // React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
 // React.render((

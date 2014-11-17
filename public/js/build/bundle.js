@@ -76,8 +76,11 @@ var LINEONLINE = {
         e.preventDefault();
     }
 }
+var Action = require('./action');
 
-require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+Action.getCurrentUser(function() {
+    require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+});
 
 // React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
 // React.render((
@@ -88,7 +91,7 @@ require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
 //     </Routes>
 // ), document.body, LINEONLINE.init.bind(LINEONLINE));
 
-},{"./App.jsx":"/Users/jingxiao/437/Team77/public/js/src/App.jsx","jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
+},{"./App.jsx":"/Users/jingxiao/437/Team77/public/js/src/App.jsx","./action":"/Users/jingxiao/437/Team77/public/js/src/action.js","jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
 //bind polyfill from MDN
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (oThis) {
@@ -36833,7 +36836,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
                             React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
                                 React.createElement("img", {src: this.props.currentUser.avatar_url}), 
-                                React.createElement("span", {className: "hidden"}, 
+                                React.createElement("span", {className: "hide"}, 
                                     "Profile"
                                 )
                             ), 
@@ -36916,7 +36919,7 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
         var username = this.refs.signupUsername.getDOMNode().value.trim();
         var email = this.refs.signupEmail.getDOMNode().value.trim();
         var password = this.refs.signupPassword.getDOMNode().value.trim();
-        console.log(password);
+        Action.signup(username, email, password);
     },
     handleLoginSubmit: function(event) {
         event.preventDefault();
@@ -36990,6 +36993,10 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
 });
 
 var Dropdown = React.createClass({displayName: 'Dropdown',
+    handleLogout: function(event) {
+        event.preventDefault();
+        Action.logout();
+    },
     render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
@@ -37016,7 +37023,7 @@ var Dropdown = React.createClass({displayName: 'Dropdown',
                     React.createElement(DropdownItem, {title: "Favorites", link: "favorites", icon: "heart"}), 
                     React.createElement(DropdownItem, {title: "Subscriptions", link: "subscriptions", icon: "people"}), 
                     React.createElement(DropdownItem, {title: "Settings", link: "settings", icon: "cog"}), 
-                    React.createElement(DropdownItem, {title: "Logout", link: "logout", icon: "account-logout"})
+                    React.createElement(DropdownItem, {title: "Logout", link: "logout", icon: "account-logout", onClick: this.handleLogout})
                 )
             )
         );
@@ -37026,7 +37033,7 @@ var Dropdown = React.createClass({displayName: 'Dropdown',
 var DropdownItem = React.createClass({displayName: 'DropdownItem',
     render: function() {
         return (
-            React.createElement("li", {className: "dropdown-item"}, 
+            React.createElement("li", {className: "dropdown-item", onClick: this.props.onClick}, 
                 React.createElement(Link, {to: this.props.link, className: "dropdown-link"}, 
                     React.createElement(Icon, {class: "dropdown-icon", icon: this.props.icon}), 
                     React.createElement("span", {className: "dropdown-title"}, 
@@ -37071,16 +37078,37 @@ var routes = (
     )
 );
 
-module.exports = function doRender(target, callback) {
+function doRender(target, callback) {
     React.render(routes, target, callback);
 };
+
+Data.onUpdate = doRender.bind(null, document.body, function(){});
+
+module.exports = doRender;
 
 },{"./action":"/Users/jingxiao/437/Team77/public/js/src/action.js","./store":"/Users/jingxiao/437/Team77/public/js/src/store.js","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/action.js":[function(require,module,exports){
 var request = require('superagent');
 var Data = require('./store');
 
 var Action = {
-    login: function (username, password) {
+    getCurrentUser: function(cb) {
+        request
+            .get('/api/auth')
+            .end(function(err, res) {
+                if (err) {
+                }
+                if (res.status === 401) {
+                    console.log(res.body);
+                    Data.currentUser = null;
+                }
+                if (res.status === 200) {
+                    console.log(res.body);
+                    Data.currentUser = res.body;
+                }
+                cb();
+            });
+    },
+    login: function(username, password) {
         request
             .post('/api/auth')
             .send({
@@ -37097,10 +37125,50 @@ var Action = {
                 }
                 if (res.status === 200) {
                     console.log(res.body);
-                    Data.currentUser = res.body
+                    Data.currentUser = res.body;
+                    Data.onUpdate();
                     return;
                 }
-                console.log('unknonw status: ', res.status);
+                console.log('unknown status: ', res.status);
+            });
+    },
+    logout: function() {
+        request
+            .del('/api/auth')
+            .end(function(err, res) {
+                if (err) {
+                }
+                if (res.status === 205) {
+                    Data.currentUser = null;
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            });
+    },
+    signup: function(username, email, password) {
+        request
+            .post('/api/auth/register')
+            .send({
+                username: username,
+                email: email,
+                password: password
+            })
+            .end(function(err, res) {
+                if (err) {
+                    return;// idk
+                }
+                if (res.status === 401) {
+                    console.log(res.body.message);
+                    return;
+                }
+                if (res.status === 200) {
+                    console.log(res.body);
+                    Data.currentUser = res.body;
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
             });
     }
 }
@@ -37326,6 +37394,10 @@ var Data = {
         }
     }
 };
+
+Data.onUpdate = function() {
+    console.log('Data.unUpdate not set');
+}
 
 module.exports = Data;
 
