@@ -2,9 +2,12 @@
   "name": "LineOnline",
   "version": "0.0.0",
   "description": "Web Apps Final Project",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test",
+    "db-reset": "node db/reset",
+    "db-pop": "node db/populate",
+    "db-repop": "node db/reset && node db/populate"
   },
   "repository": {
     "type": "git",
@@ -38,8 +41,11 @@
     "browserify": "^6.2.0",
     "gulp": "^3.8.9",
     "gulp-ruby-sass": "^0.7.1",
+    "mocha": "^2.0.1",
+    "must": "^0.12.0",
     "nodemon": "^1.2.1",
     "reactify": "^0.16.0",
+    "supertest": "^0.15.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.1.1"
   }
