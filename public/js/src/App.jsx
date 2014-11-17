@@ -916,7 +916,12 @@ var Icon = React.createClass({
 var DropdownLogin = React.createClass({
     getInitialState: function() {
         return {
-            signup: true
+            signup: true,
+            signup_form_username: '',
+            signup_form_password: '',
+            signup_form_email: '',
+            login_form_username: '',
+            login_form_password: ''
         };
     },
     handleContainerClick: function (event) {
@@ -939,6 +944,27 @@ var DropdownLogin = React.createClass({
             this.refs.dropdown.getDOMNode().addEventListener('transitionend', this.handleTransitionEnd);
         }
     },
+    handleChange: function(inputName) {
+        return function (event, value) {
+            // console.log(event.target.value);
+            var state = {}
+            state[inputName] = event.target.value;
+            this.setState(state);
+        }.bind(this);
+    },
+    handleSignupSubmit: function(event) {
+        event.preventDefault();
+        var username = this.refs.signupUsername.getDOMNode().value.trim();
+        var email = this.refs.signupEmail.getDOMNode().value.trim();
+        var password = this.refs.signupPassword.getDOMNode().value.trim();
+        console.log(password);
+    },
+    handleLoginSubmit: function(event) {
+        event.preventDefault();
+        var username = this.refs.loginUsername.getDOMNode().value.trim();
+        var password = this.refs.loginPassword.getDOMNode().value.trim();
+        console.log(password);
+    },
     render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
@@ -949,24 +975,24 @@ var DropdownLogin = React.createClass({
         return (
             <div ref='dropdown' onClick={this.handleContainerClick} className={classes}>
                 <div id='form-signup' className={this.state.signup ? '' : 'hidden'}>
-                    <form className='form-signup-login'>
+                    <form className='form-signup-login' onSubmit={this.handleSignupSubmit}>
                         <div className='field'>
                             <label for='username'>
                                 Username:
                             </label>
-                            <input name='username' type='text' placeholder='username' />
+                            <input ref='signupUsername' name='username' type='text' placeholder='username' onChange={this.handleChange('signup_form_username')} />
                         </div>
                         <div className='field'>
                             <label for='email'>
                                 Email:
                             </label>
-                            <input name='email' type='email' placeholder='email' />
+                            <input ref='signupEmail' name='email' type='email' placeholder='email' onChange={this.handleChange('signup_form_email')} />
                         </div>
                         <div className='field field-last'>
                             <label for='password'>
                                 Password:
                             </label>
-                            <input name='password' type='password' placeholder='••••••••••••' />
+                            <input ref='signupPassword' name='password' type='password' placeholder='••••••••••••' onChange={this.handleChange('signup_form_password')} />
                         </div>
                         <button className='btn-submit' type='submit'>
                             Sign Up
@@ -979,18 +1005,18 @@ var DropdownLogin = React.createClass({
                     </div>
                 </div>
                 <div id='form-login' className={this.state.signup ? 'hidden' : ''}>
-                    <form className='form-signup-login'>
+                    <form className='form-signup-login' onSubmit={this.handleLoginSubmit}>
                         <div className='field'>
                             <label for='username'>
                                 Username:
                             </label>
-                            <input name='username' type='text' placeholder='username' />
+                            <input ref='loginUsername'  name='username' type='text' placeholder='username' onChange={this.handleChange('login_form_username')} />
                         </div>
                         <div className='field field-last'>
                             <label for='password'>
                                 Password:
                             </label>
-                            <input name='password' type='password' placeholder='••••••••••••' />
+                            <input ref='loginPassword' name='password' type='password' placeholder='••••••••••••' onChange={this.handleChange('login_form_password')} />
                         </div>
                         <button className='btn-submit' type='submit'>
                             Log In
