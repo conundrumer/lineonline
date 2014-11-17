@@ -34851,6 +34851,178 @@ var Link = Router.Link;
 
 // var names = ['delu', 'jing', 'what'];
 
+//data={this.props.data.index} currentUser={this.props.data.currentUser}
+
+
+//Sample Users
+var SampleUser1 = {
+    id: 1,
+    username: 'delu',
+    avatar_url: '/images/delu.jpg'
+};
+var SampleUser2 = {
+    id: 2,
+    username: 'snigdhar',
+    avatar_url: '/images/snigdhar.jpg'
+};
+var SampleUser3 = {
+    id: 3,
+    username: 'jingxiao',
+    avatar_url: '/images/sample_profile.png'
+};
+
+//Sample Tracks
+var SampleTrack1 = {
+    title: 'Sample Track 1',
+    description: 'Description of sample track 1.',
+    owner: SampleUser1,
+    collaborators: [
+        SampleUser2,
+        SampleUser3
+    ],
+    blob: 'Blob string of featured track',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack2 = {
+    title: 'Sample Track 2',
+    description: 'Description of sample track 2.',
+    owner: SampleUser2,
+    collaborators: [
+        SampleUser1
+    ],
+    blob: 'Blob string of sample track 2',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack3 = {
+    title: 'Sample Track 3',
+    description: 'Description of sample track 3.',
+    owner: SampleUser3,
+    collaborators: [
+        SampleUser1,
+        SampleUser2
+    ],
+    blob: 'Blob string of sample track 3',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack4 = {
+    title: 'Sample Track 4',
+    description: 'Description of sample track 4.',
+    owner: SampleUser1,
+    collaborators: [
+        SampleUser3
+    ],
+    blob: 'Blob string of sample track 4',
+    thumbUrl: '/images/sample_masthead.png'
+};
+
+
+//Sample Collections
+var SampleCollection1 = {
+    title: 'Sample Collection Title 1',
+    description: 'Description of Sample Collection 1',
+    tracks: [
+        SampleTrack1,
+        SampleTrack3,
+        SampleTrack2,
+        SampleTrack4
+    ]
+}
+var SampleCollection2 = {
+    title: 'Sample Collection Title 2',
+    description: 'Description of Sample Collection 2',
+    tracks: [
+        SampleTrack2,
+        SampleTrack4
+    ]
+}
+
+
+var Data = {
+    currentUser: SampleUser1,
+    indexData: {
+
+    },
+    profileData: {
+        users: {
+            1: {
+                id: SampleUser1.id,
+                username: SampleUser1.username,
+                avatar_url: SampleUser1.avatar_url,
+
+                info: {
+                    email: 'delu@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack3,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            },
+
+            2: {
+                id: SampleUser2.id,
+                username: SampleUser2.username,
+                avatar_url: SampleUser2.avatar_url,
+
+                info: {
+                    email: 'snigdhar@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack4,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            },
+
+            3: {
+                id: SampleUser3.id,
+                username: SampleUser3.username,
+                avatar_url: SampleUser3.avatar_url,
+
+                info: {
+                    email: 'jingxiao@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack2,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            }
+        }
+    },
+    subscriptionsData: {
+        users: {
+            1: {
+                subscriptions: [
+                    SampleUser2,
+                    SampleUser3
+                ]
+            },
+            2: {
+                subscriptions: [
+                    SampleUser3,
+                    SampleUser1
+                ]
+            },
+            3: {
+                subscriptions: [
+                    SampleUser1,
+                    SampleUser2
+                ]
+            }
+        }
+    }
+};
+
 var App = React.createClass({displayName: 'App',
     render: function() {
         // return (
@@ -34860,16 +35032,20 @@ var App = React.createClass({displayName: 'App',
         //         })}
         //     </div>
         // );
+        // var { currentUser, index, profile, subscriptions, ...other } = Data;
         return (
             React.createElement("div", {className: "container"}, 
-                React.createElement(Navbar, null), 
-                React.createElement(this.props.activeRouteHandler, null)
+                React.createElement(Navbar, {currentUser: Data.currentUser}), 
+                React.createElement(this.props.activeRouteHandler, {data: Data})
             )
         );
     }
 });
 
+var NotFound = React
+
 var Index = React.createClass({displayName: 'Index',
+    // var { currentUser, index, ...other } = this.props.data;
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
@@ -34890,7 +35066,7 @@ var Home = React.createClass({displayName: 'Home',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
-                React.createElement(Panel, {isEditor: true, id: "editor-panel"}, 
+                React.createElement(Panel, {isEditor: true}, 
                     React.createElement(Conversation, null)
                 ), 
                 React.createElement(Footer, null)
@@ -34898,6 +35074,7 @@ var Home = React.createClass({displayName: 'Home',
         );
     }
 });
+
 
 var Conversation = React.createClass({displayName: 'Conversation',
     render: function() {
@@ -34945,12 +35122,13 @@ var Message = React.createClass({displayName: 'Message',
     }
 });
 
-
+//{this.props.data.gallery}
+//{this.props.data.currentUser}
 var Gallery = React.createClass({displayName: 'Gallery',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
-                React.createElement(PanelPadded, {isGallery: true, id: "gallery-panel"}, 
+                React.createElement(PanelPadded, {isGallery: true}, 
                     React.createElement(SearchBar, null), 
                     React.createElement("div", {className: "section group"}, 
                         React.createElement(GalleryPreview, null)
@@ -34985,7 +35163,8 @@ var SearchBar = React.createClass({displayName: 'SearchBar',
 });
 
 
-
+//{this.props.data.yourTracks}
+//{this.props.data.currentUser}
 var YourTracks = React.createClass({displayName: 'YourTracks',
     render: function() {
         return (
@@ -35003,17 +35182,23 @@ var YourTracks = React.createClass({displayName: 'YourTracks',
     }
 });
 
+//{this.props.data.profile}
+//{this.props.data.currentUser}
 var Profile = React.createClass({displayName: 'Profile',
     render: function() {
+        // var currentUser = this.props.data.currentUser;
+        var id = this.props.params.profileId;
+        var profileData = this.props.data.profileData.users[id];
+        console.log(profileData);
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isProfile: true}, 
                     React.createElement("div", {className: "section group"}, 
                         React.createElement("div", {className: "col span_1_of_4"}, 
-                            React.createElement(ProfileSidebar, {username: "Bob Blob", location: "Pittsburgh, PA", email: "bobblob@gmail.com", description: "Blah blah blah"})
+                            React.createElement(ProfileSidebar, {avatarUrl: profileData.avatar_url, username: profileData.username, location: profileData.info.location, email: profileData.info.email, description: profileData.info.description})
                         ), 
                         React.createElement("div", {className: "col span_3_of_4"}, 
-                            React.createElement(ProfileMain, {username: "Bob Blob", featuredTrackTitle: "Track Title", featuredTrackDescription: "Ajksldfjkdsl sajfk jdsakl jdsf", featuredTrackOwner: "Bob Blob", featuredTrackCollaborators: "Bloop"})
+                            React.createElement(ProfileMain, {username: profileData.username, featuredTrack: profileData.featured_track, collections: profileData.collections})
                         )
                     )
                 ), 
@@ -35027,8 +35212,8 @@ var ProfileMain = React.createClass({displayName: 'ProfileMain',
     render: function() {
         return (
             React.createElement("section", {className: "profile-main"}, 
-                React.createElement(ProfileFeaturedTrack, {title: this.props.featuredTrackTitle, description: this.props.featuredTrackDescription, owner: this.props.featuredTrackOwner, collaborators: this.props.featuredTrackCollaborators}), 
-                React.createElement(ProfileTracks, null)
+                React.createElement(ProfileFeaturedTrack, {featuredTrack: this.props.featuredTrack}), 
+                React.createElement(ProfileCollections, {collections: this.props.collections})
             )
         );
     }
@@ -35036,20 +35221,35 @@ var ProfileMain = React.createClass({displayName: 'ProfileMain',
 
 var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
     render: function() {
+        var featuredTrack = this.props.featuredTrack;
+        var collaboratorListItems = featuredTrack.collaborators.map(function(collaborator) {
+            return (
+                React.createElement("li", null, 
+                    React.createElement(Link, {to: '/profile/'+collaborator.id}, 
+                        collaborator.username
+                    )
+                )
+            );
+        });
         return (
-            React.createElement("article", {className: "track-featured"}, 
+            React.createElement("article", {className: "profile-featured-track"}, 
                 React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
                 React.createElement(MediaIcons, null), 
                 React.createElement("aside", {className: "info"}, 
-                    React.createElement("h3", null, this.props.title), 
+                    React.createElement("h3", null, featuredTrack.title), 
                     React.createElement("p", null, 
-                        this.props.description
+                        featuredTrack.description
                     ), 
                     React.createElement("h3", null, "Owner"), 
-                    React.createElement("p", null, this.props.owner), 
+                    React.createElement("p", null, 
+                        React.createElement(Link, {to: '/profile/'+featuredTrack.owner.id}, 
+                            featuredTrack.owner.username
+                        )
+
+                    ), 
                     React.createElement("h3", null, "Collaborators"), 
                     React.createElement("ul", null, 
-                        React.createElement("li", null, this.props.collaborators)
+                        collaboratorListItems
                     )
                 )
             )
@@ -35057,11 +35257,21 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
     }
 });
 
-var ProfileTracks = React.createClass({displayName: 'ProfileTracks',
+var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
     render: function() {
+        var trackCollections = this.props.collections.map(function(collection) {
+            return (
+                React.createElement("article", {className: "track-collection"}, 
+                    React.createElement("h3", {className: "collection-title"}, 
+                        collection.title
+                    ), 
+                    React.createElement(CollectionsPreview, {collectionTracks: collection.tracks})
+                )
+            );
+        });
         return (
-            React.createElement("article", {className: "track-collection"}, 
-                React.createElement(TracksPreview, null)
+            React.createElement("section", {className: "profile-collections"}, 
+                trackCollections
             )
         );
     }
@@ -35084,7 +35294,8 @@ var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
     render: function() {
         return (
             React.createElement("section", {className: "profile-sidebar"}, 
-                React.createElement("div", {className: "picture"}
+                React.createElement("div", {className: "picture"}, 
+                    React.createElement("img", {src: this.props.avatarUrl})
                 ), 
                 React.createElement("div", {className: "info"}, 
                     React.createElement(ProfileContactDetail, {username: this.props.username, location: this.props.location, email: this.props.email}), 
@@ -35165,23 +35376,31 @@ var Favorites = React.createClass({displayName: 'Favorites',
     }
 });
 
+// MAP OVER OBJECTS
+// var o = {foo: 'bar', de: 'lu'};
+// var blah = Object.keys(o).map(function(k) {return k + " has " + o[k]; });
+// Object.keys(o) = ['foo', 'de']
+// blah = ['foo has bar', 'de has lu']
 
 
 var Subscriptions = React.createClass({displayName: 'Subscriptions',
     render: function() {
-        // <div className='section group'>
-        //     <ProfilePicture />
-        //     <TracksSlider />
-        // </div>
+        var currentUser = this.props.data.currentUser;
+        var subscriptionsData = this.props.data.subscriptionsData;
+        var currentUserSubscriptions = subscriptionsData.users[currentUser.id].subscriptions;
+        console.log(currentUserSubscriptions);
+        var subscriptionRow = currentUserSubscriptions.map(function(sub) {
+            return (
+                React.createElement("div", {className: "section group"}, 
+                    React.createElement(SubscriptionPicture, {avatarUrl: sub.avatar_url, username: sub.username, id: sub.id}), 
+                    React.createElement(TracksSlider, {tracks: sub.tracks})
+                )
+            );
+        });
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isSubscriptions: true}, 
-                    React.createElement("div", {className: "section group"}, 
-                        React.createElement(SubscriptionPicture, null), 
-                        React.createElement(TracksSlider, null)
-                    )
-
-
+                    subscriptionRow
                 ), 
                 React.createElement(Footer, null)
             )
@@ -35193,10 +35412,13 @@ var Subscriptions = React.createClass({displayName: 'Subscriptions',
 
 var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
     render: function() {
-
         return (
             React.createElement("div", {className: "col span_1_of_4"}, 
-                React.createElement("div", {className: "picture picture-subscription"})
+                React.createElement(Link, {to: '/profile/' + this.props.id}, 
+                    React.createElement("div", {className: "picture picture-subscription"}, 
+                        React.createElement("img", {src: this.props.avatarUrl})
+                    )
+                )
             )
         );
     }
@@ -35204,16 +35426,17 @@ var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
 
 var TracksSlider = React.createClass({displayName: 'TracksSlider',
     render: function() {
+        //this.props.tracks
         return (
             React.createElement("div", {className: "col span_3_of_4"}, 
                 React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
-                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                    React.createElement(GalleryTile, {title: "Track Title", description: "Description 1 description blah blah blah", col: "col-first"})
                 ), 
                 React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
-                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                    React.createElement(GalleryTile, {title: "Track Title", description: "Description 1 description blah blah blah", col: "col-first"})
                 ), 
                 React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
-                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                    React.createElement(GalleryTile, {title: "Track Title", description: "Description 1 description blah blah blah", col: "col-first"})
                 )
             )
         );
@@ -35269,6 +35492,27 @@ var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
     }
 });
 
+var CollectionsPreview = React.createClass({displayName: 'CollectionsPreview',
+    render: function() {
+        var tracksCols = {
+            0: [],
+            1: [],
+            2: []
+        };
+        this.props.collectionTracks.forEach(function(track, idx) {
+            var colIdx = idx % 3;
+            tracksCols[colIdx].push(track);
+        });
+        return (
+            React.createElement("div", {className: "section group"}, 
+                React.createElement(TracksCol, {col: "col-first", tracks: tracksCols[0]}), 
+                React.createElement(TracksCol, {col: "col-mid", tracks: tracksCols[1]}), 
+                React.createElement(TracksCol, {col: "col-last", tracks: tracksCols[2]})
+            )
+        );
+    }
+});
+
 var TracksPreview = React.createClass({displayName: 'TracksPreview',
     render: function() {
         return (
@@ -35293,10 +35537,10 @@ var GalleryTile = React.createClass({displayName: 'GalleryTile',
                     ), 
                     React.createElement("div", {className: "info"}, 
                         React.createElement("h3", null, 
-                            this.props.trackTitle
+                            this.props.title
                         ), 
                         React.createElement("p", null, 
-                            this.props.trackDescription
+                            this.props.description
                         )
                     )
                 )
@@ -35334,8 +35578,8 @@ var GalleryCol = React.createClass({displayName: 'GalleryCol',
         return (
             React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
                 React.createElement(GalleryHeader, {title: this.props.headerTitle, icon: this.props.headerIcon}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 2 description blah blah blah", col: this.props.col})
+                React.createElement(GalleryTile, {title: "Track Title", description: "Description 1 description blah blah blah", col: this.props.col}), 
+                React.createElement(GalleryTile, {title: "Track Title", description: "Description 2 description blah blah blah", col: this.props.col})
             )
         );
     }
@@ -35343,11 +35587,16 @@ var GalleryCol = React.createClass({displayName: 'GalleryCol',
 
 var TracksCol = React.createClass({displayName: 'TracksCol',
     render: function() {
+        var tracks = this.props.tracks;
+        var galleryTiles = this.props.tracks.map(function(track) {
+            console.log(this.props);
+            return (
+                React.createElement(GalleryTile, {title: track.title, description: track.description, col: this.props.col})
+            );
+        }.bind(this));
         return (
             React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: this.props.col}), 
-                React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 2 description blah blah blah", col: this.props.col})
+               galleryTiles
             )
         );
     }
@@ -35435,11 +35684,12 @@ var Navbar = React.createClass({displayName: 'Navbar',
                     React.createElement("li", {className: "nav-item col span_2_of_7"}), 
                     React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
                         React.createElement("div", {className: "navlink"}, 
+                            React.createElement("img", {src: this.props.currentUser.avatar_url}), 
                             React.createElement("span", {className: "hidden"}, 
                                 "Profile"
                             )
                         ), 
-                        React.createElement(Dropdown, null)
+                        React.createElement(Dropdown, {username: this.props.currentUser.username, id: this.props.currentUser.id})
                     )
                 )
             )
@@ -35461,9 +35711,9 @@ var Dropdown = React.createClass({displayName: 'Dropdown',
             React.createElement("div", {className: "dropdown dropdown-settings hidden"}, 
                 React.createElement("ul", null, 
                     React.createElement("li", {className: "dropdown-item dropdown-profile"}, 
-                        React.createElement(Link, {to: "profile", className: "dropdown-link"}, 
+                        React.createElement(Link, {to: '/profile/' + this.props.id, className: "dropdown-link"}, 
                             React.createElement("div", {className: "name"}, 
-                                "Bob Blob"
+                                this.props.username
                             ), 
                             React.createElement("div", {className: "description"}, 
                                 React.createElement(Icon, {class: "dropdown-icon", icon: "person"}), 
@@ -35520,12 +35770,13 @@ var routes = (
             React.createElement(Route, {name: "home", handler: Home}), 
             React.createElement(Route, {name: "gallery", handler: Gallery}), 
             React.createElement(Route, {name: "your-tracks", handler: YourTracks}), 
-            React.createElement(Route, {name: "profile", handler: Profile}), 
+            React.createElement(Route, {name: "profile", path: "/profile/:profileId", handler: Profile}), 
             React.createElement(Route, {name: "favorites", handler: Favorites}), 
             React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
             React.createElement(Route, {name: "settings", handler: Settings}), 
             React.createElement(Route, {name: "logout", handler: Logout}), 
-            React.createElement(Route, {name: "subscribe", handler: Profile})
+            React.createElement(Route, {name: "subscribe", handler: Profile}), 
+            React.createElement(NotFoundRoute, {handler: NotFound})
         )
     )
 );

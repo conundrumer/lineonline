@@ -8,6 +8,178 @@ var Link = Router.Link;
 
 // var names = ['delu', 'jing', 'what'];
 
+//data={this.props.data.index} currentUser={this.props.data.currentUser}
+
+
+//Sample Users
+var SampleUser1 = {
+    id: 1,
+    username: 'delu',
+    avatar_url: '/images/delu.jpg'
+};
+var SampleUser2 = {
+    id: 2,
+    username: 'snigdhar',
+    avatar_url: '/images/snigdhar.jpg'
+};
+var SampleUser3 = {
+    id: 3,
+    username: 'jingxiao',
+    avatar_url: '/images/sample_profile.png'
+};
+
+//Sample Tracks
+var SampleTrack1 = {
+    title: 'Sample Track 1',
+    description: 'Description of sample track 1.',
+    owner: SampleUser1,
+    collaborators: [
+        SampleUser2,
+        SampleUser3
+    ],
+    blob: 'Blob string of featured track',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack2 = {
+    title: 'Sample Track 2',
+    description: 'Description of sample track 2.',
+    owner: SampleUser2,
+    collaborators: [
+        SampleUser1
+    ],
+    blob: 'Blob string of sample track 2',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack3 = {
+    title: 'Sample Track 3',
+    description: 'Description of sample track 3.',
+    owner: SampleUser3,
+    collaborators: [
+        SampleUser1,
+        SampleUser2
+    ],
+    blob: 'Blob string of sample track 3',
+    thumbUrl: '/images/sample_masthead.png'
+};
+var SampleTrack4 = {
+    title: 'Sample Track 4',
+    description: 'Description of sample track 4.',
+    owner: SampleUser1,
+    collaborators: [
+        SampleUser3
+    ],
+    blob: 'Blob string of sample track 4',
+    thumbUrl: '/images/sample_masthead.png'
+};
+
+
+//Sample Collections
+var SampleCollection1 = {
+    title: 'Sample Collection Title 1',
+    description: 'Description of Sample Collection 1',
+    tracks: [
+        SampleTrack1,
+        SampleTrack3,
+        SampleTrack2,
+        SampleTrack4
+    ]
+}
+var SampleCollection2 = {
+    title: 'Sample Collection Title 2',
+    description: 'Description of Sample Collection 2',
+    tracks: [
+        SampleTrack2,
+        SampleTrack4
+    ]
+}
+
+
+var Data = {
+    currentUser: SampleUser1,
+    indexData: {
+
+    },
+    profileData: {
+        users: {
+            1: {
+                id: SampleUser1.id,
+                username: SampleUser1.username,
+                avatar_url: SampleUser1.avatar_url,
+
+                info: {
+                    email: 'delu@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack3,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            },
+
+            2: {
+                id: SampleUser2.id,
+                username: SampleUser2.username,
+                avatar_url: SampleUser2.avatar_url,
+
+                info: {
+                    email: 'snigdhar@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack4,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            },
+
+            3: {
+                id: SampleUser3.id,
+                username: SampleUser3.username,
+                avatar_url: SampleUser3.avatar_url,
+
+                info: {
+                    email: 'jingxiao@andrew.cmu.edu',
+                    location: 'Pittsburgh, PA',
+                    description: 'Blah blah blah.',
+                },
+
+                featured_track: SampleTrack2,
+                collections: [
+                    SampleCollection1,
+                    SampleCollection2
+                ]
+            }
+        }
+    },
+    subscriptionsData: {
+        users: {
+            1: {
+                subscriptions: [
+                    SampleUser2,
+                    SampleUser3
+                ]
+            },
+            2: {
+                subscriptions: [
+                    SampleUser3,
+                    SampleUser1
+                ]
+            },
+            3: {
+                subscriptions: [
+                    SampleUser1,
+                    SampleUser2
+                ]
+            }
+        }
+    }
+};
+
 var App = React.createClass({
     render: function() {
         // return (
@@ -17,16 +189,20 @@ var App = React.createClass({
         //         })}
         //     </div>
         // );
+        // var { currentUser, index, profile, subscriptions, ...other } = Data;
         return (
             <div className='container'>
-                <Navbar />
-                <this.props.activeRouteHandler />
+                <Navbar currentUser={Data.currentUser} />
+                <this.props.activeRouteHandler data={Data} />
             </div>
         );
     }
 });
 
+var NotFound = React
+
 var Index = React.createClass({
+    // var { currentUser, index, ...other } = this.props.data;
     render: function() {
         return (
             <div className='main-content'>
@@ -47,7 +223,7 @@ var Home = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
-                <Panel isEditor={true} id='editor-panel'>
+                <Panel isEditor={true}>
                     <Conversation />
                 </Panel>
                 <Footer />
@@ -55,6 +231,7 @@ var Home = React.createClass({
         );
     }
 });
+
 
 var Conversation = React.createClass({
     render: function() {
@@ -102,12 +279,13 @@ var Message = React.createClass({
     }
 });
 
-
+//{this.props.data.gallery}
+//{this.props.data.currentUser}
 var Gallery = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
-                <PanelPadded isGallery={true} id='gallery-panel'>
+                <PanelPadded isGallery={true}>
                     <SearchBar />
                     <div className='section group'>
                         <GalleryPreview />
@@ -142,7 +320,8 @@ var SearchBar = React.createClass({
 });
 
 
-
+//{this.props.data.yourTracks}
+//{this.props.data.currentUser}
 var YourTracks = React.createClass({
     render: function() {
         return (
@@ -160,17 +339,23 @@ var YourTracks = React.createClass({
     }
 });
 
+//{this.props.data.profile}
+//{this.props.data.currentUser}
 var Profile = React.createClass({
     render: function() {
+        // var currentUser = this.props.data.currentUser;
+        var id = this.props.params.profileId;
+        var profileData = this.props.data.profileData.users[id];
+        console.log(profileData);
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
                     <div className='section group'>
                         <div className='col span_1_of_4'>
-                            <ProfileSidebar username='Bob Blob' location='Pittsburgh, PA' email='bobblob@gmail.com' description='Blah blah blah' />
+                            <ProfileSidebar avatarUrl={profileData.avatar_url} username={profileData.username} location={profileData.info.location} email={profileData.info.email} description={profileData.info.description} />
                         </div>
                         <div className='col span_3_of_4'>
-                            <ProfileMain username='Bob Blob' featuredTrackTitle='Track Title' featuredTrackDescription='Ajksldfjkdsl sajfk jdsakl jdsf' featuredTrackOwner='Bob Blob' featuredTrackCollaborators='Bloop' />
+                            <ProfileMain username={profileData.username} featuredTrack={profileData.featured_track} collections={profileData.collections} />
                         </div>
                     </div>
                 </PanelPadded>
@@ -184,8 +369,8 @@ var ProfileMain = React.createClass({
     render: function() {
         return (
             <section className='profile-main'>
-                <ProfileFeaturedTrack title={this.props.featuredTrackTitle} description={this.props.featuredTrackDescription} owner={this.props.featuredTrackOwner} collaborators={this.props.featuredTrackCollaborators} />
-                <ProfileTracks />
+                <ProfileFeaturedTrack featuredTrack={this.props.featuredTrack} />
+                <ProfileCollections collections={this.props.collections} />
             </section>
         );
     }
@@ -193,20 +378,35 @@ var ProfileMain = React.createClass({
 
 var ProfileFeaturedTrack = React.createClass({
     render: function() {
+        var featuredTrack = this.props.featuredTrack;
+        var collaboratorListItems = featuredTrack.collaborators.map(function(collaborator) {
+            return (
+                <li>
+                    <Link to={'/profile/'+collaborator.id}>
+                        {collaborator.username}
+                    </Link>
+                </li>
+            );
+        });
         return (
-            <article className='track-featured'>
+            <article className='profile-featured-track'>
                 <Icon class='preview-icon' icon='fullscreen-enter' />
                 <MediaIcons />
                 <aside className='info'>
-                    <h3>{this.props.title}</h3>
+                    <h3>{featuredTrack.title}</h3>
                     <p>
-                        {this.props.description}
+                        {featuredTrack.description}
                     </p>
                     <h3>Owner</h3>
-                    <p>{this.props.owner}</p>
+                    <p>
+                        <Link to={'/profile/'+featuredTrack.owner.id}>
+                            {featuredTrack.owner.username}
+                        </Link>
+
+                    </p>
                     <h3>Collaborators</h3>
                     <ul>
-                        <li>{this.props.collaborators}</li>
+                        {collaboratorListItems}
                     </ul>
                 </aside>
             </article>
@@ -214,12 +414,22 @@ var ProfileFeaturedTrack = React.createClass({
     }
 });
 
-var ProfileTracks = React.createClass({
+var ProfileCollections = React.createClass({
     render: function() {
+        var trackCollections = this.props.collections.map(function(collection) {
+            return (
+                <article className='track-collection'>
+                    <h3 className='collection-title'>
+                        {collection.title}
+                    </h3>
+                    <CollectionsPreview collectionTracks={collection.tracks} />
+                </article>
+            );
+        });
         return (
-            <article className='track-collection'>
-                <TracksPreview />
-            </article>
+            <section className='profile-collections'>
+                {trackCollections}
+            </section>
         );
     }
 });
@@ -242,6 +452,7 @@ var ProfileSidebar = React.createClass({
         return (
             <section className='profile-sidebar'>
                 <div className='picture'>
+                    <img src={this.props.avatarUrl} />
                 </div>
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
@@ -322,23 +533,31 @@ var Favorites = React.createClass({
     }
 });
 
+// MAP OVER OBJECTS
+// var o = {foo: 'bar', de: 'lu'};
+// var blah = Object.keys(o).map(function(k) {return k + " has " + o[k]; });
+// Object.keys(o) = ['foo', 'de']
+// blah = ['foo has bar', 'de has lu']
 
 
 var Subscriptions = React.createClass({
     render: function() {
-        // <div className='section group'>
-        //     <ProfilePicture />
-        //     <TracksSlider />
-        // </div>
+        var currentUser = this.props.data.currentUser;
+        var subscriptionsData = this.props.data.subscriptionsData;
+        var currentUserSubscriptions = subscriptionsData.users[currentUser.id].subscriptions;
+        console.log(currentUserSubscriptions);
+        var subscriptionRow = currentUserSubscriptions.map(function(sub) {
+            return (
+                <div className='section group'>
+                    <SubscriptionPicture avatarUrl={sub.avatar_url} username={sub.username} id={sub.id} />
+                    <TracksSlider tracks={sub.tracks} />
+                </div>
+            );
+        });
         return (
             <div className='main-content'>
                 <PanelPadded isSubscriptions={true}>
-                    <div className='section group'>
-                        <SubscriptionPicture />
-                        <TracksSlider />
-                    </div>
-
-
+                    {subscriptionRow}
                 </PanelPadded>
                 <Footer />
             </div>
@@ -350,10 +569,13 @@ var Subscriptions = React.createClass({
 
 var SubscriptionPicture = React.createClass({
     render: function() {
-
         return (
             <div className='col span_1_of_4'>
-                <div className='picture picture-subscription' />
+                <Link to={'/profile/' + this.props.id}>
+                    <div className='picture picture-subscription'>
+                        <img src={this.props.avatarUrl} />
+                    </div>
+                </Link>
             </div>
         );
     }
@@ -361,16 +583,17 @@ var SubscriptionPicture = React.createClass({
 
 var TracksSlider = React.createClass({
     render: function() {
+        //this.props.tracks
         return (
             <div className='col span_3_of_4'>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
                 </div>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
                 </div>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
                 </div>
             </div>
         );
@@ -426,6 +649,27 @@ var GalleryPreview = React.createClass({
     }
 });
 
+var CollectionsPreview = React.createClass({
+    render: function() {
+        var tracksCols = {
+            0: [],
+            1: [],
+            2: []
+        };
+        this.props.collectionTracks.forEach(function(track, idx) {
+            var colIdx = idx % 3;
+            tracksCols[colIdx].push(track);
+        });
+        return (
+            <div className='section group'>
+                <TracksCol col='col-first' tracks={tracksCols[0]} />
+                <TracksCol col='col-mid' tracks={tracksCols[1]} />
+                <TracksCol col='col-last' tracks={tracksCols[2]} />
+            </div>
+        );
+    }
+});
+
 var TracksPreview = React.createClass({
     render: function() {
         return (
@@ -450,10 +694,10 @@ var GalleryTile = React.createClass({
                     </div>
                     <div className='info'>
                         <h3>
-                            {this.props.trackTitle}
+                            {this.props.title}
                         </h3>
                         <p>
-                            {this.props.trackDescription}
+                            {this.props.description}
                         </p>
                     </div>
                 </article>
@@ -491,8 +735,8 @@ var GalleryCol = React.createClass({
         return (
             <div className='gallery-col col span_1_of_3'>
                 <GalleryHeader title={this.props.headerTitle} icon={this.props.headerIcon} />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 2 description blah blah blah' col={this.props.col} />
+                <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col={this.props.col} />
+                <GalleryTile title='Track Title' description='Description 2 description blah blah blah' col={this.props.col} />
             </div>
         );
     }
@@ -500,11 +744,16 @@ var GalleryCol = React.createClass({
 
 var TracksCol = React.createClass({
     render: function() {
+        var tracks = this.props.tracks;
+        var galleryTiles = this.props.tracks.map(function(track) {
+            console.log(this.props);
+            return (
+                <GalleryTile title={track.title} description={track.description} col={this.props.col} />
+            );
+        }.bind(this));
         return (
             <div className='gallery-col col span_1_of_3'>
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col={this.props.col} />
-                <GalleryTile trackTitle='Track Title' trackDescription='Description 2 description blah blah blah' col={this.props.col} />
+               {galleryTiles}
             </div>
         );
     }
@@ -592,11 +841,12 @@ var Navbar = React.createClass({
                     <li className='nav-item col span_2_of_7'></li>
                     <li className='nav-item nav-item-profile col span_1_of_7'>
                         <div className='navlink'>
+                            <img src={this.props.currentUser.avatar_url} />
                             <span className='hidden'>
                                 Profile
                             </span>
                         </div>
-                        <Dropdown />
+                        <Dropdown username={this.props.currentUser.username} id={this.props.currentUser.id} />
                     </li>
                 </ul>
             </nav>
@@ -618,9 +868,9 @@ var Dropdown = React.createClass({
             <div className='dropdown dropdown-settings hidden'>
                 <ul>
                     <li className='dropdown-item dropdown-profile'>
-                        <Link to='profile' className='dropdown-link'>
+                        <Link to={'/profile/' + this.props.id} className='dropdown-link'>
                             <div className='name'>
-                                Bob Blob
+                                {this.props.username}
                             </div>
                             <div className='description'>
                                 <Icon class='dropdown-icon' icon='person' />
@@ -677,12 +927,13 @@ var routes = (
             <Route name='home' handler={Home} />
             <Route name='gallery' handler={Gallery} />
             <Route name='your-tracks' handler={YourTracks} />
-            <Route name='profile' handler={Profile} />
+            <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />
             <Route name='logout' handler={Logout} />
             <Route name='subscribe' handler={Profile} />
+            <NotFoundRoute handler={NotFound} />
         </Route>
     </Routes>
 );

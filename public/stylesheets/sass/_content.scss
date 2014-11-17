@@ -222,6 +222,12 @@
                 display: block;
                 width: 40px;
                 height: 40px;
+                overflow: hidden;
+
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
 
                 &:hover {
                     opacity: 0.7;
@@ -387,7 +393,7 @@
         left: 0;
         position: absolute;
         // position: fixed;
-        background: yellow;
+        // background: yellow;
         // z-index: 1;
         border-top: 1px solid $border-col;
         height: 45px;
@@ -537,13 +543,23 @@
 .picture {
     border: 2px solid $border-col;
     // outline: 1px solid $border-col;
-    background: url('../../images/sample_profile.png') no-repeat center center;
-    background-size: cover;
+    // background: url('../../images/sample_profile.png') no-repeat center center;
+    // background-size: cover;
+    display: block;
     height: 175px;
     width: 175px;
     // min-width: 100%;
     margin: 20px auto 20px;
     border-radius: 100%;
+    overflow: hidden;
+
+    img {
+        height: auto;
+        max-width: 100%;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
 
     &.picture-subscription {
         @include transition(opacity 0.2s ease-in-out 0);
@@ -569,7 +585,7 @@
             width: 100%;
             display: block;
             height: 100%;
-            line-height: 7;
+            line-height: 8;
             opacity: 0;
         }
     }
@@ -649,7 +665,7 @@
         @extend %col-last;
 
 
-        .track-featured {
+        .profile-featured-track {
             height: 350px;
             margin-bottom: 20px;
             background: #fff url('../../images/sample_masthead.png') no-repeat center center;
@@ -685,45 +701,82 @@
 
             .info {
                 opacity: 0.8;
-                h3 {
-                    font-weight: bold;
-                    font-size: 16px;
-                    line-height: 2.5;
-                }
-
-                ul, p {
-                    font-size: 13px;
-                    line-height: 1.4;
-                    font-style: italic;
-                    margin-bottom: 5px;
-
-                    li {
-                        margin-bottom: 3px;
-                        &:before {
-                            content: '• ';
-                        }
-                    }
-                }
-
-
-
                 position: absolute;
                 right: 0;
                 top: 0;
                 background: #fff;
                 border-left: 1px solid $border-col;
                 height: 100%;
-                padding: 10px 20px;
+                padding: 20px 20px;
                 width: 200px;
+
+                a {
+                    @include transition(color 0.2s ease-in-out 0);
+                    color: $linerider-red;
+                    &:hover {
+                        color: $light-col;
+                    }
+                }
+
+                h3 {
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    // line-height: 2.5;
+                }
+
+                p {
+                    margin-bottom: 20px;
+                }
+
+                ul, p {
+                    font-size: 13px;
+                    line-height: 1.4;
+                    font-style: italic;
+                    padding-top: 5px;
+                    li {
+                        margin-bottom: 3px;
+                        &:before {
+                            content: '•';
+                            padding-right: 7px;
+                        }
+
+                    }
+                }
+
+
             }
         }
 
-        .track-collection {
-            .tile {
-                .preview {
-                    height: 175px;
+        .profile-collections {
+            // margin-top: 25px;
+            margin-top: 30px;
+
+           .track-collection {
+
+                // border: 1px solid $border-col;
+                // margin-bottom: 0;
+                // padding: 30px 30px 10px;
+
+                margin-bottom: 20px;
+
+                &:first-child {
+                    border-bottom: none;
                 }
-            }
+                .collection-title {
+                    // color: $linerider-red;
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                    text-transform: uppercase;
+                }
+               .tile {
+                   .preview {
+                       height: 175px;
+                   }
+                   padding-bottom: 15px;
+               }
+           }
         }
     }
 }
