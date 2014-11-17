@@ -94,8 +94,8 @@ var SampleCollection2 = {
 }
 
 var Data = {
-    // currentUser: SampleUser1,
-    currentUser: null,
+    currentUser: SampleUser1,
+    // currentUser: null,
     indexData: {
 
     },
@@ -174,6 +174,57 @@ var Data = {
                 subscriptions: [
                     SampleUser1,
                     SampleUser2
+                ]
+            }
+        }
+    },
+    favoritesData: {
+        users: {
+            1: {
+                favorites: [
+                    SampleTrack1,
+                    SampleTrack2,
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1,
+                    SampleTrack3
+                ]
+            },
+            2: {
+                favorites: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                favorites: [
+                    SampleTrack4
+                ]
+            }
+        }
+    },
+    yourTracksData: {
+        users: {
+            1: {
+                your_tracks: [
+                    SampleTrack1,
+                    SampleTrack2
+                ]
+            },
+            2: {
+                your_tracks: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                your_tracks: [
+                    SampleTrack4
                 ]
             }
         }
@@ -324,12 +375,15 @@ var SearchBar = React.createClass({
 //{this.props.data.currentUser}
 var YourTracks = React.createClass({
     render: function() {
+        var id = this.props.data.currentUser.id;
+        var yourTracksData = this.props.data.yourTracksData.users[id];
+        console.log(this.props.data.yourTracksData);
         return (
             <div className='main-content'>
                 <Panel isYourTracks={true}>
                     <div className='panel-padded'>
                         <div className='section group'>
-                            <TracksPreview />
+                            <TracksPreview tracks={yourTracksData.your_tracks} />
                         </div>
                     </div>
                 </Panel>
@@ -422,7 +476,7 @@ var ProfileCollections = React.createClass({
                     <h3 className='collection-title'>
                         {collection.title}
                     </h3>
-                    <CollectionsPreview collectionTracks={collection.tracks} />
+                    <TracksPreview tracks={collection.tracks} />
                 </article>
             );
         });
@@ -520,11 +574,13 @@ var ProfileInteractDetail = React.createClass({
 
 var Favorites = React.createClass({
     render: function() {
+        var id = this.props.data.currentUser.id;
+        var favoritesData = this.props.data.favoritesData.users[id];
         return (
             <div className='main-content'>
                 <PanelPadded isFavorites={true}>
                     <div className='section group'>
-                        <TracksPreview />
+                        <TracksPreview tracks={favoritesData.favorites} />
                     </div>
                 </PanelPadded>
                 <Footer />
@@ -649,14 +705,14 @@ var GalleryPreview = React.createClass({
     }
 });
 
-var CollectionsPreview = React.createClass({
+var TracksPreview = React.createClass({
     render: function() {
         var tracksCols = {
             0: [],
             1: [],
             2: []
         };
-        this.props.collectionTracks.forEach(function(track, idx) {
+        this.props.tracks.forEach(function(track, idx) {
             var colIdx = idx % 3;
             tracksCols[colIdx].push(track);
         });
@@ -670,17 +726,17 @@ var CollectionsPreview = React.createClass({
     }
 });
 
-var TracksPreview = React.createClass({
-    render: function() {
-        return (
-            <div className='section group'>
-                <TracksCol col='col-first' />
-                <TracksCol col='col-mid' />
-                <TracksCol col='col-last' />
-            </div>
-        );
-    }
-});
+// var TracksPreview = React.createClass({
+//     render: function() {
+//         return (
+//             <div className='section group'>
+//                 <TracksCol col='col-first' />
+//                 <TracksCol col='col-mid' />
+//                 <TracksCol col='col-last' />
+//             </div>
+//         );
+//     }
+// });
 
 
 

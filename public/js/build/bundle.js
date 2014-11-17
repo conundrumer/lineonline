@@ -34937,8 +34937,8 @@ var SampleCollection2 = {
 }
 
 var Data = {
-    // currentUser: SampleUser1,
-    currentUser: null,
+    currentUser: SampleUser1,
+    // currentUser: null,
     indexData: {
 
     },
@@ -35017,6 +35017,57 @@ var Data = {
                 subscriptions: [
                     SampleUser1,
                     SampleUser2
+                ]
+            }
+        }
+    },
+    favoritesData: {
+        users: {
+            1: {
+                favorites: [
+                    SampleTrack1,
+                    SampleTrack2,
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1,
+                    SampleTrack3
+                ]
+            },
+            2: {
+                favorites: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                favorites: [
+                    SampleTrack4
+                ]
+            }
+        }
+    },
+    yourTracksData: {
+        users: {
+            1: {
+                your_tracks: [
+                    SampleTrack1,
+                    SampleTrack2
+                ]
+            },
+            2: {
+                your_tracks: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                your_tracks: [
+                    SampleTrack4
                 ]
             }
         }
@@ -35167,12 +35218,15 @@ var SearchBar = React.createClass({displayName: 'SearchBar',
 //{this.props.data.currentUser}
 var YourTracks = React.createClass({displayName: 'YourTracks',
     render: function() {
+        var id = this.props.data.currentUser.id;
+        var yourTracksData = this.props.data.yourTracksData.users[id];
+        console.log(this.props.data.yourTracksData);
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(Panel, {isYourTracks: true}, 
                     React.createElement("div", {className: "panel-padded"}, 
                         React.createElement("div", {className: "section group"}, 
-                            React.createElement(TracksPreview, null)
+                            React.createElement(TracksPreview, {tracks: yourTracksData.your_tracks})
                         )
                     )
                 ), 
@@ -35265,7 +35319,7 @@ var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
                     React.createElement("h3", {className: "collection-title"}, 
                         collection.title
                     ), 
-                    React.createElement(CollectionsPreview, {collectionTracks: collection.tracks})
+                    React.createElement(TracksPreview, {tracks: collection.tracks})
                 )
             );
         });
@@ -35363,11 +35417,13 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 var Favorites = React.createClass({displayName: 'Favorites',
     render: function() {
+        var id = this.props.data.currentUser.id;
+        var favoritesData = this.props.data.favoritesData.users[id];
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isFavorites: true}, 
                     React.createElement("div", {className: "section group"}, 
-                        React.createElement(TracksPreview, null)
+                        React.createElement(TracksPreview, {tracks: favoritesData.favorites})
                     )
                 ), 
                 React.createElement(Footer, null)
@@ -35492,14 +35548,14 @@ var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
     }
 });
 
-var CollectionsPreview = React.createClass({displayName: 'CollectionsPreview',
+var TracksPreview = React.createClass({displayName: 'TracksPreview',
     render: function() {
         var tracksCols = {
             0: [],
             1: [],
             2: []
         };
-        this.props.collectionTracks.forEach(function(track, idx) {
+        this.props.tracks.forEach(function(track, idx) {
             var colIdx = idx % 3;
             tracksCols[colIdx].push(track);
         });
@@ -35513,17 +35569,17 @@ var CollectionsPreview = React.createClass({displayName: 'CollectionsPreview',
     }
 });
 
-var TracksPreview = React.createClass({displayName: 'TracksPreview',
-    render: function() {
-        return (
-            React.createElement("div", {className: "section group"}, 
-                React.createElement(TracksCol, {col: "col-first"}), 
-                React.createElement(TracksCol, {col: "col-mid"}), 
-                React.createElement(TracksCol, {col: "col-last"})
-            )
-        );
-    }
-});
+// var TracksPreview = React.createClass({
+//     render: function() {
+//         return (
+//             <div className='section group'>
+//                 <TracksCol col='col-first' />
+//                 <TracksCol col='col-mid' />
+//                 <TracksCol col='col-last' />
+//             </div>
+//         );
+//     }
+// });
 
 
 
