@@ -1,4 +1,71 @@
 var User = require('../models/user');
+var Track = require('../models/track');
+var passport = require('passport');
+
+exports.logout = function(req, res) {
+    console.log("logout")
+    req.logout();
+    res.status(204).send();
+}
+
+exports.getCurrentUser = function(req, res) {
+    var model = req.user;
+    if (!model) return res.status(401).send();
+    req.params.id = req.user.get('id');
+    exports.getUserJson(req, res);
+}
+
+exports.doRegister = function(req, res){
+    username = req.body.username;
+    password = req.body.password;
+    email = req.body.email;
+    console.log(JSON.stringify(req.body));
+
+    if (req.params.username == ""){
+        res.status(202).send({message:'No username'});
+        return;
+    }
+
+    // Password non-empty
+    if (req.params.password == ""){
+        res.status(202).send({message:'No password given'});
+        return;
+    }
+
+    // Verify valid input
+    User.where({username: username}).fetch().then(function(model){
+        if (model === null) {
+            console.log('making new user')
+            console.log(username, password)
+            User.forge({username:username, password:password, email:email}).save().then(function(){
+                console.log('new user', username, password);
+                statuslogin(201, req, res, console.error);
+            }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
+        } else { // If someone else already has that username
+            res.status(202).send({message:'This username has already been taken'});
+        }
+    }); // PUT A CATCH HERE
+
+}
+
+function statuslogin (status, req, res, next) {
+    console.log('inlogin')
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return next(err); }
+        console.log("WHAT IS USER")
+        console.log(user)
+        console.log(info)
+        if (!user) { return res.status(401).send(info); }
+        console.log("ATTEMPTIPNG LOGIN TI")
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            req.params.id = user.get('id');
+            exports.getUserJson(req, res, status);
+        });
+    })(req, res, next);
+}
+
+exports.login = statuslogin.bind(null, null);
 
 exports.getProfileJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
@@ -152,7 +219,9 @@ exports.unsubscribeFrom = function(req, res){
     });
 }
 
-exports.getUserJson = function(req, res){
+exports.getUserJson = function(req, res, status){
+    status = (typeof status === 'number' && status) || 200;
+    var id = req.params.id;
     console.log("User id is: " + req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
@@ -160,14 +229,18 @@ exports.getUserJson = function(req, res){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.json({
+            res.status(status).json({
                 "_links": {
-                    "self": { "href": "/users/" + req.params.id + "/profile" },
-                    "user": { "href": "/users/" + req.params.id}
+                    'self': { 'href': '/users/' + id },
+                    'profile': { 'href': '/users/' + id + '/profile' },
+                    'favorites': { 'href': '/users/' + id + '/favorites' },
+                    'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
+                    'collections': { 'href': '/users/' + id + '/collections'},
+                    'tracks': { 'href': '/users/' + id + '/tracks'}
                 },
-                "location": model.get("location"),
-                "about": model.get("about"),
-                "avatar_url": "http://www.example.com/avatar.png" // model.get("avatar_url")
+                id: id,
+                username: model.get('username'),
+                avatar_url: null // model.get("avatar_url")
             });
         }
     });
@@ -291,3 +364,96 @@ exports.editAccount = function(req, res) {
     model.save();
     res.redirect('/settings');
 }
+
+exports.getSingleTrackJson =  function(req, res){
+    // Gets a particular track
+    Track.where({id: req.params.track_id}).fetch().then(function(model){
+        // If id doesn't exist, send 404 page
+        if (model == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json(model.toJSON());
+        }
+    });
+}
+exports.getAllTracksJson = function(req, res){
+    // requires both the user id and the track id
+    User.where({id: req.params.user_id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            var tracks = user.related('tracks');
+            res.json(tracks.toJSON());
+
+
+        }
+    });
+}
+
+exports.getFavoritesJson = function(req, res){
+    User.where({id: req.params.id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+            res.json( (user.related('favorites')).toJSON() );
+        }
+    });
+}
+
+exports.addToFavorites = function(req, res){
+    // requires both the user id and the track id
+    User.where({id: req.params.user_id}).fetch().then(function(user){
+        // If id doesn't exist, send 404 page
+        if (user == null){
+            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        }
+        else {
+
+            Track.where({id: req.params.track_id}).fetch().then(function(track){
+                // If id doesn't exist, send 404 page
+                if (track == null){
+                    res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+                }
+                else {
+                    var favorites = track.related('favorites');
+                    favorites.add(track);
+                    res.json( favorites.toJSON() );
+                }
+            });
+
+        }
+    });
+}
+
+exports.createTrack = function(req, res){
+    console.log("Got here 1!");
+    // I have the title, description and owner_id for the track
+    var title = req.param('title');
+    var description = req.param('description');
+    var owner = req.param('owner');
+
+
+    console.log("Got here 2!");
+
+    Track.forge({
+        title: title,
+        description: description
+        //owner: owner_id
+    }).save().then(function(track){
+        console.log("Got here 3!");
+        //get a user to attach this to
+        User.where({owner: owner}).fetch().then(function(trackUser){
+            track.set(owner, owner);
+            //track.related('owner_id').set(owner_id);
+            track.save();
+        });
+        res.status(201).json(track.toJSON());
+
+    });
+}
+

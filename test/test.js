@@ -12,35 +12,36 @@ describe('The First User', function () {
         password:'a'
     };
     var login_data = {
-
+        username : 'DaSnig',
+        password:'a'
     }
-    var id = 2;
+    var id = 1;
     var track_id = 1;
     var user_data = {
-        "_links": {
-            "self": { "href": "/users/" + id },
-            "profile": { "href": "/users/" + id + "/profile" },
-            "favorites": { "href": "/users/" + id + "/favorites" },
-            "subscriptions": { "href": "/users/" + id + "/subscriptions" },
-            "collections": { "href": "/users/" + id + "/collections"},
-            "tracks": { "href": "/users/" + id + "/tracks"}
+        '_links': {
+            'self': { 'href': '/users/' + id },
+            'profile': { 'href': '/users/' + id + '/profile' },
+            'favorites': { 'href': '/users/' + id + '/favorites' },
+            'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
+            'collections': { 'href': '/users/' + id + '/collections'},
+            'tracks': { 'href': '/users/' + id + '/tracks'}
         },
         id: id,
         username: 'DaSnig',
         avatar_url: null
     };
     var send_track_data = {
-        "title": "Track Title",
-        "description": "This is a really cool description",
+        'title': 'Track Title',
+        'description': 'This is a really cool description',
     };
     var track_data = {
-        "id": track_id,
-        "owner": id,
-        "title": "Track Title",
-        "description": "This is a really cool description",
-        "collaborators": [],
-        "invites": [],
-        "tags": []
+        'id': track_id,
+        'owner': id,
+        'title': 'Track Title',
+        'description': 'This is a really cool description',
+        'collaborators': [],
+        'invites': [],
+        'tags': []
     };
 
 
@@ -48,45 +49,45 @@ describe('The First User', function () {
         agent
             .post('/auth/register')
             .send(register_data)
-            .expect(user_data, done);
+            .expect(201, user_data, done);
     });
 
-    it('should be logged in right after registration (post: /auth)', function (done) {
+    it('should be logged in right after registration (get: /auth)', function (done) {
         agent
-            .post('/auth')
+            .get('/auth')
             .send(login_data)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be able to get her id, username and null avatar_url (get: /users/:id)', function (done) {
         agent
             .get('/users/' + id)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be able to make a track (post: /tracks/)', function (done) {
         agent
             .post('/tracks/')
             .send(send_track_data)
-            .expect(track_data, done);
+            .expect(201, track_data, done);
     });
 
     it('should be able to get id, owner, title and description of her first track (get: /tracks/:track_id)', function(done) {
         agent
             .get('/tracks/'+track_id)
-            .expect(track_data, done);
+            .expect(200, track_data, done);
     });
 
     it('should be able to get id, owner, title and description on a certain track of hers (get: /users/:id/tracks/:track_id)', function(done) {
         agent
             .get('/users/' + id + '/tracks/'+track_id)
-            .expect(track_data, done);
+            .expect(200, track_data, done);
     });
 
     it('should be able to log out (delete: /auth)', function(done) {
         agent
             .delete('/auth')
-            .expect(205,done);
+            .expect(204,done);
     });
 
     it('should not have a session while logged out (get: /auth)', function(done) {
@@ -99,12 +100,37 @@ describe('The First User', function () {
         agent
             .post('/auth')
             .send(login_data)
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 
     it('should be logged in after logging back in (get: /auth)', function(done) {
         agent
             .get('/auth')
-            .expect(user_data, done);
+            .expect(200, user_data, done);
     });
 });
+
+
+
+
+// describe('When creating a new track,', function(){
+//     var agent = request.agent(url);
+//     var submit_data = {
+//         title: 'myTitle',
+//         description: 'myDescription',
+//         user_id: '2'
+//     };
+//     var returned_data = {
+//         title: 'myTitle',
+//         description: 'myDescription',
+//         // owner_id: '2',
+
+//     }
+
+//    it('should return (post: /api/users/:user_id/tracks/)', function(done) {
+//         agent
+//             .post('/users/:user_id/tracks/')
+//             .send(submit_data)
+//             .expect(returned_data, done);
+//     });
+// });

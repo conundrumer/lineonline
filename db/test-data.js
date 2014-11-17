@@ -29,4 +29,23 @@ Subscriptions.populate = [
 }
 ];
 
-module.exports = [User, Subscriptions];
+
+var Tracks = require('../models/track');
+Tracks.populate = [
+{
+    title: "title 1",
+    description: "description 1",
+    owner: 1
+}, {
+    title: "title 2",
+    description: "description 2",
+    owner: 2
+}, {
+    title: "title 3",
+    description: "description 3",
+    owner: 1
+}
+];
+
+module.exports = [User, Subscriptions, Tracks];
+
