@@ -311,17 +311,67 @@ var Favorites = React.createClass({
     render: function() {
         return (
             <div className='main-content'>
+                <PanelPadded isFavorites={true}>
+                    <div className='section group'>
+                        <TracksPreview />
+                    </div>
+                </PanelPadded>
                 <Footer />
             </div>
         );
     }
 });
 
+
+
 var Subscriptions = React.createClass({
     render: function() {
+        // <div className='section group'>
+        //     <ProfilePicture />
+        //     <TracksSlider />
+        // </div>
         return (
             <div className='main-content'>
+                <PanelPadded isSubscriptions={true}>
+                    <div className='section group'>
+                        <SubscriptionPicture />
+                        <TracksSlider />
+                    </div>
+
+
+                </PanelPadded>
                 <Footer />
+            </div>
+        );
+    }
+});
+
+
+
+var SubscriptionPicture = React.createClass({
+    render: function() {
+
+        return (
+            <div className='col span_1_of_4'>
+                <div className='picture picture-subscription' />
+            </div>
+        );
+    }
+});
+
+var TracksSlider = React.createClass({
+    render: function() {
+        return (
+            <div className='col span_3_of_4'>
+                <div className='gallery-col col span_1_of_3'>
+                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                </div>
+                <div className='gallery-col col span_1_of_3'>
+                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                </div>
+                <div className='gallery-col col span_1_of_3'>
+                    <GalleryTile trackTitle='Track Title' trackDescription='Description 1 description blah blah blah' col='col-first' />
+                </div>
             </div>
         );
     }
@@ -387,6 +437,8 @@ var TracksPreview = React.createClass({
         );
     }
 });
+
+
 
 var GalleryTile = React.createClass({
     render: function() {
@@ -490,7 +542,8 @@ var Panel = React.createClass({
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
-            'profile': this.props.isProfile
+            'profile': this.props.isProfile,
+            'subscriptions': this.props.isSubscriptions
         });
         return (
             <section className={classes} id={this.props.id}>
@@ -510,7 +563,8 @@ var PanelPadded = React.createClass({
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
-            'profile': this.props.isProfile
+            'profile': this.props.isProfile,
+            'subscriptions': this.props.isSubscriptions
         });
         return (
             <section className={classes} id={this.props.id}>

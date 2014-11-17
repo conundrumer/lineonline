@@ -544,9 +544,39 @@
     // min-width: 100%;
     margin: 20px auto 20px;
     border-radius: 100%;
+
+    &.picture-subscription {
+        @include transition(opacity 0.2s ease-in-out 0);
+        position: relative;
+        &:hover {
+            opacity: 0.7;
+            cursor: pointer;
+            &:after {
+                opacity: 1;
+            }
+        }
+
+        &:after {
+            @include transition(opacity 0.2s ease-in-out 0);
+            font-family: 'Icons';
+            content: '\e09d';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: $linerider-red;
+            font-size: 24px;
+            text-align: center;
+            width: 100%;
+            display: block;
+            height: 100%;
+            line-height: 7;
+            opacity: 0;
+        }
+    }
+
 }
 
-.profile {
+.profile, .subscriptions {
     .profile-section {
 
 

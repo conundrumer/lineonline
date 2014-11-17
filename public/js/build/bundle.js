@@ -35154,17 +35154,67 @@ var Favorites = React.createClass({displayName: 'Favorites',
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
+                React.createElement(PanelPadded, {isFavorites: true}, 
+                    React.createElement("div", {className: "section group"}, 
+                        React.createElement(TracksPreview, null)
+                    )
+                ), 
                 React.createElement(Footer, null)
             )
         );
     }
 });
 
+
+
 var Subscriptions = React.createClass({displayName: 'Subscriptions',
     render: function() {
+        // <div className='section group'>
+        //     <ProfilePicture />
+        //     <TracksSlider />
+        // </div>
         return (
             React.createElement("div", {className: "main-content"}, 
+                React.createElement(PanelPadded, {isSubscriptions: true}, 
+                    React.createElement("div", {className: "section group"}, 
+                        React.createElement(SubscriptionPicture, null), 
+                        React.createElement(TracksSlider, null)
+                    )
+
+
+                ), 
                 React.createElement(Footer, null)
+            )
+        );
+    }
+});
+
+
+
+var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
+    render: function() {
+
+        return (
+            React.createElement("div", {className: "col span_1_of_4"}, 
+                React.createElement("div", {className: "picture picture-subscription"})
+            )
+        );
+    }
+});
+
+var TracksSlider = React.createClass({displayName: 'TracksSlider',
+    render: function() {
+        return (
+            React.createElement("div", {className: "col span_3_of_4"}, 
+                React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
+                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                ), 
+                React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
+                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                ), 
+                React.createElement("div", {className: "gallery-col col span_1_of_3"}, 
+                    React.createElement(GalleryTile, {trackTitle: "Track Title", trackDescription: "Description 1 description blah blah blah", col: "col-first"})
+                )
             )
         );
     }
@@ -35230,6 +35280,8 @@ var TracksPreview = React.createClass({displayName: 'TracksPreview',
         );
     }
 });
+
+
 
 var GalleryTile = React.createClass({displayName: 'GalleryTile',
     render: function() {
@@ -35333,7 +35385,8 @@ var Panel = React.createClass({displayName: 'Panel',
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
-            'profile': this.props.isProfile
+            'profile': this.props.isProfile,
+            'subscriptions': this.props.isSubscriptions
         });
         return (
             React.createElement("section", {className: classes, id: this.props.id}, 
@@ -35353,7 +35406,8 @@ var PanelPadded = React.createClass({displayName: 'PanelPadded',
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
-            'profile': this.props.isProfile
+            'profile': this.props.isProfile,
+            'subscriptions': this.props.isSubscriptions
         });
         return (
             React.createElement("section", {className: classes, id: this.props.id}, 
