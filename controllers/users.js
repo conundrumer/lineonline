@@ -1,5 +1,73 @@
 var User = require('../models/user');
 var Track = require('../models/track');
+var passport = require('passport');
+
+exports.logout = function(req, res) {
+    req.logout();
+    res.status(205).send();
+}
+
+exports.getCurrentUser = function(req, res) {
+    var model = req.user;
+    if (!model) return res.status(401).send();
+    req.params.id = req.user.get('id');
+    exports.getUserJson(req, res);
+}
+
+exports.doRegister = function(req, res){
+    username = req.body.username;
+    password = req.body.password;
+    email = req.body.email;
+    console.log(JSON.stringify(req.body));
+
+    if (req.params.username == ""){
+        res.send('<div style="color:red;">This username! Who ARE you???</div>');
+        return;
+    }
+
+    // Password non-empty
+    if (req.params.password == ""){
+        res.send('<div style="color:red;">This password! Where is this password???</div>');
+        return;
+    }
+
+    // Verify valid input
+    User.where({username: username}).fetch().then(function(model){
+        if (model === null) {
+            console.log('making new user')
+            console.log(username, password)
+            User.forge({username:username, password:password, email:email}).save().then(function(){
+                console.log('new user', username, password);
+                exports.login(req, res, console.error);
+            }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
+        } else { // If someone else already has that username
+            res.send('<div style="color:red;">This username already exists!</div>');
+        }
+    }); // PUT A CATCH HERE
+
+}
+exports.login = function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return next(err); }
+        console.log("WHAT IS USER")
+        console.log(user)
+        console.log(info)
+        if (!user) { return res.status(401).send(info); }
+        console.log("ATTEMPTIPNG LOGIN TI")
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            res.json({
+                "_links": {
+                    "self": { "href": "/users/" + user.get('id') + "/profile" },
+                    "user": { "href": "/users/" + user.get('id')}
+                },
+                "location": user.get("location"),
+                "about": user.get("about"),
+                "avatar_url": "http://www.example.com/avatar.png" // model.get("avatar_url")
+            });
+        });
+    })(req, res, next);
+}
 
 exports.getProfileJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){

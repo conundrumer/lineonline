@@ -137,6 +137,11 @@ module.exports = function (app, passport) {
 
 
     // Begin Rest API Routes
+    app.get('/api/auth', users.getCurrentUser);
+    app.post('/api/auth', users.login);
+    app.delete('/api/auth', loginRequired, users.logout);
+    app.post('/api/auth/register', users.doRegister);
+
     app.get('/api/users/:id', users.getUserJson);
     app.get('/api/users/:id/profile', users.getProfileJson);
     app.get('/api/users/:id/collections', users.getCollectionsJson);

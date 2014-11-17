@@ -12,9 +12,10 @@ describe('The First User', function () {
         password:'a'
     };
     var login_data = {
-
+        username : 'DaSnig',
+        password:'a'
     }
-    var id = 2;
+    var id = 1;
     var track_id = 1;
     var user_data = {
         '_links': {
@@ -112,24 +113,24 @@ describe('The First User', function () {
 
 
 
-describe('When creating a new track,', function(){
-    var agent = request.agent(url);
-    var submit_data = {
-        title: 'myTitle',
-        description: 'myDescription',
-        user_id: '2'
-    };
-    var returned_data = {
-        title: 'myTitle',
-        description: 'myDescription',
-        // owner_id: '2',
+// describe('When creating a new track,', function(){
+//     var agent = request.agent(url);
+//     var submit_data = {
+//         title: 'myTitle',
+//         description: 'myDescription',
+//         user_id: '2'
+//     };
+//     var returned_data = {
+//         title: 'myTitle',
+//         description: 'myDescription',
+//         // owner_id: '2',
 
-    }
+//     }
 
-   it('should return (post: /api/users/:user_id/tracks/)', function(done) {
-        agent
-            .post('/users/:user_id/tracks/')
-            .send(submit_data)
-            .expect(returned_data, done);
-    });
-});
+//    it('should return (post: /api/users/:user_id/tracks/)', function(done) {
+//         agent
+//             .post('/users/:user_id/tracks/')
+//             .send(submit_data)
+//             .expect(returned_data, done);
+//     });
+// });
