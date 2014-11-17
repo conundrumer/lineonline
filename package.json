@@ -4,7 +4,7 @@
   "description": "Web Apps Final Project",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "node db/reset && mocha test",
     "db-reset": "node db/reset",
     "db-pop": "node db/populate",
     "db-repop": "node db/reset && node db/populate"

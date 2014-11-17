@@ -1,4 +1,5 @@
 var users = require('../controllers/users');
+var tracks = require('../controllers/tracks');
 
 /**
  * Expose routes
@@ -8,7 +9,7 @@ module.exports = function (app, passport) {
 
     function loginRequired(req, res, next) {
       if (req.isAuthenticated()) { return next(); }
-      res.redirect('/signup-login'); // send 401 status instead
+      res.status(401).send(); // send 401 status instead
     }
 
     // These are the urls we route to
@@ -139,7 +140,7 @@ module.exports = function (app, passport) {
 
 
     // Begin Rest API Routes
-    app.get('/api/auth', users.getCurrentUser);
+    app.get('/api/auth', loginRequired, users.getCurrentUser);
     app.post('/api/auth', users.login);
     app.delete('/api/auth', loginRequired, users.logout);
     app.post('/api/auth/register', users.doRegister);
@@ -147,7 +148,7 @@ module.exports = function (app, passport) {
     app.get('/api/users/:id', users.getUserJson);
     app.get('/api/users/:id/profile', users.getProfileJson);
     app.get('/api/users/:id/collections', users.getCollectionsJson);
-    app.get('/api/users/:user_id/tracks/:track_id', users.getSingleTrackJson);
+    app.get('/api/users/:id/tracks/:track_id', tracks.getTrack);
 
 
     app.get('/api/users/:id/favorites', users.getFavoritesJson);
@@ -155,10 +156,11 @@ module.exports = function (app, passport) {
     app.get('/api/users/:id/subscriptions', users.getSubscriptions);
 
     // Update profile page
-    app.put('/api/users/:id/profile', users.updateProfileJson);
-    app.post('/api/users/:user_id/tracks/', users.createTrack);
+    app.put('/api/users/:id/profile', loginRequired, users.updateProfileJson);
+    app.post('/api/users/:user_id/tracks/', loginRequired, users.createTrack);
 
-
+    app.post('/api/tracks', loginRequired, tracks.makeTrack);
+    app.get('/api/tracks/:track_id', tracks.getTrack);
 
     // default routes to single page app
     app.get('*', function(req, res) {
