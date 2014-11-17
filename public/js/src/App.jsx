@@ -7,6 +7,7 @@ var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 
 var Data = require('./store');
+var Action = require('./action');
 
 // var names = ['delu', 'jing', 'what'];
 
@@ -804,7 +805,9 @@ var DropdownLogin = React.createClass({
         event.preventDefault();
         var username = this.refs.loginUsername.getDOMNode().value.trim();
         var password = this.refs.loginPassword.getDOMNode().value.trim();
-        console.log(password);
+
+        console.log(Action);
+        Action.login(username, password);
     },
     render: function() {
         var cx = React.addons.classSet;

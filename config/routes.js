@@ -135,10 +135,7 @@ module.exports = function (app, passport) {
     // });
 
 
-    // default routes to single page app
-    app.get('*', function(req, res) {
-        res.render('react-index');
-    });
+
 
 
     // Begin Rest API Routes
@@ -163,7 +160,10 @@ module.exports = function (app, passport) {
 
 
 
-
+    // default routes to single page app
+    app.get('*', function(req, res) {
+        res.render('react-index');
+    });
 
 
 }
