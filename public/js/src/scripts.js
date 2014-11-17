@@ -6,6 +6,7 @@ var LINEONLINE = {
         this.initVars();
         this.initPlugins();
         this.bindEventHandlers();
+        // console.log('blaasdfjsdafjldksajfjksdf');
     },
 
     initVars: function() {
@@ -30,8 +31,8 @@ var LINEONLINE = {
     },
 
     bindEventHandlers: function() {
-        this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
-        this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
+        // this.$profileNavItem.on('click', this.toggleSettingsDropdown.bind(this));
+        // this.$signupLoginNavItem.on('click', this.toggleSignupLoginDropdown.bind(this));
         this.$loginLink.on('click', this.toggleSignupLoginForm.bind(this));
         this.$conversationIcon.on('click', this.toggleConversation.bind(this));
     },
@@ -74,5 +75,17 @@ var LINEONLINE = {
         e.preventDefault();
     }
 }
+var Action = require('./action');
 
-LINEONLINE.init();
+Action.getCurrentUser(function() {
+    require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
+});
+
+// React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
+// React.render((
+//     <Routes location='history'>
+//         <Route name='app' path='/' handler={App}>
+//             <Route name='home' handler={Inbox} />
+//         </Route>
+//     </Routes>
+// ), document.body, LINEONLINE.init.bind(LINEONLINE));
