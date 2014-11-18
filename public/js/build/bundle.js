@@ -36156,7 +36156,19 @@ var App = React.createClass({displayName: 'App',
     }
 });
 
-var NotFound = React
+var NotFound = React.createClass({displayName: 'NotFound',
+    render: function() {
+        console.log('NOT FOUND');
+        return (
+            React.createElement("div", {className: "main-content"}, 
+                React.createElement(PanelPadded, {isNotFound: true}, 
+                    React.createElement("p", null, "404 Not Found ")
+                ), 
+                React.createElement(Footer, null)
+            )
+        );
+    }
+});
 
 var Index = React.createClass({displayName: 'Index',
     // var { currentUser, index, ...other } = this.props.data;
@@ -36775,7 +36787,8 @@ var PanelPadded = React.createClass({displayName: 'PanelPadded',
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
             'profile': this.props.isProfile,
-            'subscriptions': this.props.isSubscriptions
+            'subscriptions': this.props.isSubscriptions,
+            'not-found': this.props.isNotFound
         });
         return (
             React.createElement("section", {className: classes, id: this.props.id}, 
@@ -36995,6 +37008,7 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
 var Dropdown = React.createClass({displayName: 'Dropdown',
     handleLogout: function(event) {
         event.preventDefault();
+        console.log('logging out');
         Action.logout();
     },
     render: function() {
@@ -37071,7 +37085,7 @@ var routes = (
             React.createElement(Route, {name: "favorites", handler: Favorites}), 
             React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
             React.createElement(Route, {name: "settings", handler: Settings}), 
-            React.createElement(Route, {name: "logout", handler: Logout}), 
+            React.createElement(Route, {name: "logout", handler: Index}), 
             React.createElement(Route, {name: "subscribe", handler: Profile}), 
             React.createElement(NotFoundRoute, {handler: NotFound})
         )
@@ -37138,7 +37152,7 @@ var Action = {
             .end(function(err, res) {
                 if (err) {
                 }
-                if (res.status === 205) {
+                if (res.status === 204) {
                     Data.currentUser = null;
                     Data.onUpdate();
                     return;

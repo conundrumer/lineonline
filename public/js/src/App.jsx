@@ -36,7 +36,19 @@ var App = React.createClass({
     }
 });
 
-var NotFound = React
+var NotFound = React.createClass({
+    render: function() {
+        console.log('NOT FOUND');
+        return (
+            <div className='main-content'>
+                <PanelPadded isNotFound={true}>
+                    <p>404 Not Found </p>
+                </PanelPadded>
+                <Footer />
+            </div>
+        );
+    }
+});
 
 var Index = React.createClass({
     // var { currentUser, index, ...other } = this.props.data;
@@ -655,7 +667,8 @@ var PanelPadded = React.createClass({
             'favorites': this.props.isFavorites,
             'your-tracks': this.props.isYourTracks,
             'profile': this.props.isProfile,
-            'subscriptions': this.props.isSubscriptions
+            'subscriptions': this.props.isSubscriptions,
+            'not-found': this.props.isNotFound
         });
         return (
             <section className={classes} id={this.props.id}>
@@ -875,6 +888,7 @@ var DropdownLogin = React.createClass({
 var Dropdown = React.createClass({
     handleLogout: function(event) {
         event.preventDefault();
+        console.log('logging out');
         Action.logout();
     },
     render: function() {
@@ -951,7 +965,7 @@ var routes = (
             <Route name='favorites' handler={Favorites} />
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />
-            <Route name='logout' handler={Logout} />
+            <Route name='logout' handler={Index} />
             <Route name='subscribe' handler={Profile} />
             <NotFoundRoute handler={NotFound} />
         </Route>

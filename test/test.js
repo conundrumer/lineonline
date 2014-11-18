@@ -3,7 +3,7 @@ var express = require('express');
 var url = 'http://localhost:3000/api';
 var request = require('supertest');
 
-// This is the bare minimum of what must work.
+// This is the bare minimum of what must work. needs a fresh database
 describe('The First User', function () {
     var agent = request.agent(url);
     var register_data = {
@@ -65,9 +65,9 @@ describe('The First User', function () {
             .expect(200, user_data, done);
     });
 
-    it('should be able to make a track (post: /tracks/)', function (done) {
+    it('should be able to make a track (post: /tracks)', function (done) {
         agent
-            .post('/tracks/')
+            .post('/tracks')
             .send(send_track_data)
             .expect(201, track_data, done);
     });
@@ -110,27 +110,4 @@ describe('The First User', function () {
     });
 });
 
-
-
-
-// describe('When creating a new track,', function(){
-//     var agent = request.agent(url);
-//     var submit_data = {
-//         title: 'myTitle',
-//         description: 'myDescription',
-//         user_id: '2'
-//     };
-//     var returned_data = {
-//         title: 'myTitle',
-//         description: 'myDescription',
-//         // owner_id: '2',
-
-//     }
-
-//    it('should return (post: /api/users/:user_id/tracks/)', function(done) {
-//         agent
-//             .post('/users/:user_id/tracks/')
-//             .send(submit_data)
-//             .expect(returned_data, done);
-//     });
-// });
+// TODO: test for edge cases like registering w/ username that already exists, getting a user/track that doesn't exist, loginrequired, etc

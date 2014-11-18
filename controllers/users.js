@@ -9,8 +9,6 @@ exports.logout = function(req, res) {
 }
 
 exports.getCurrentUser = function(req, res) {
-    var model = req.user;
-    if (!model) return res.status(401).send();
     req.params.id = req.user.get('id');
     exports.getUserJson(req, res);
 }
