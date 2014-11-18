@@ -1,4 +1,4 @@
-Sprint 3 Goals:
+###Sprint 3 Goals:
 
 We are making a pretty substantial pivot for LineOnLine per Salem and Shannon's advice. We will no longer be implementing realtime collaborative LineRider, shifting our focus instead on building a solid web application contingent upon shareable LineRider tracks. We will do the following:
 
