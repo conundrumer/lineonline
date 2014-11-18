@@ -1,4 +1,5 @@
-Sprint 2 Recap
+Sprint 2 Recap:
+[This file is now outdated as for our goals for the remainder of the application. See Sprint 3 Goals for more details.]
 
 
 Completed:
@@ -37,9 +38,5 @@ Issues Encountered:
 -- Massive overhead of all the new technologies
 -- Single-page application + Rest API
 -- Snigdha and Jing out of town 2/days per week for on site interviews
-
-
-
-
 
 
