@@ -2,10 +2,20 @@ var User = require('../models/user');
 var Track = require('../models/track');
 var passport = require('passport');
 
+var StatusTypes = {
+    accepted: 202,
+    noContent: 204,
+    badRequest: 400,
+    unauthorized: 401,
+    notAcceptable: 406,
+    notFound: 404
+};
+
 exports.logout = function(req, res) {
     console.log("logout")
     req.logout();
-    res.status(204).send();
+    console.log(res.noContent);
+    res.status(StatusTypes.noContent).send();
 }
 
 exports.getCurrentUser = function(req, res) {
@@ -19,11 +29,10 @@ exports.doRegister = function(req, res){
     email = req.body.email;
     console.log(JSON.stringify(req.body));
 
-
     if (req.body.username === ''
         || req.body.email === ''
         || req.body.password === '') {
-        res.status(406).send({message: 'Please enter all required fields'});
+        res.status(StatusTypes.notAcceptable).send({message: 'All fields are required'});
         return;
     }
 
@@ -34,10 +43,10 @@ exports.doRegister = function(req, res){
             console.log(username, password)
             User.forge({username:username, password:password, email:email}).save().then(function(){
                 console.log('new user', username, password);
-                statuslogin(202, req, res, console.error);
+                statuslogin(StatusTypes.accepted, req, res, console.error);
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
         } else { // If someone else already has that username
-            res.status(406).send({message:'This username has already been taken'});
+            res.status(StatusTypes.notAcceptable).send({message:'This username has already been taken'});
         }
     }); // PUT A CATCH HERE
 
@@ -50,7 +59,7 @@ function statuslogin (status, req, res, next) {
         console.log("WHAT IS USER")
         console.log(user)
         console.log(info)
-        if (!user) { return res.status(401).send(info); }
+        if (!user) { return res.status(StatusTypes.unauthorized).send(info); }
         console.log("ATTEMPTIPNG LOGIN TI")
         req.logIn(user, function(err) {
             if (err) { return next(err); }
@@ -215,7 +224,7 @@ exports.unsubscribeFrom = function(req, res){
 }
 
 exports.getUserJson = function(req, res, status){
-    status = (typeof status === 'number' && status) || 200;
+    status = (typeof status === 'number' && status) || StatusTypes.accepted;
     var id = req.params.id;
     console.log("User id is: " + req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
@@ -304,7 +313,8 @@ exports.visitProfile = function(req, res){
     //login user with id = id
     //The value of id = req.params.id
 
-
+    console.log(req);
+    console.log(req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
         if (model == null){
@@ -447,7 +457,7 @@ exports.createTrack = function(req, res){
             //track.related('owner_id').set(owner_id);
             track.save();
         });
-        res.status(202).json(track.toJSON());
+        res.status(StatusTypes.accepted).json(track.toJSON());
 
     });
 }
