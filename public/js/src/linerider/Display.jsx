@@ -9,16 +9,21 @@ var fullSize = {
 };
 
 var Line = React.createClass({
+    getDefaultProps: function() {
+        return {
+            color: 'black'
+        };
+    },
     render: function() {
         return (
             <line
-                x1={this.props.p1.x}
-                y1={this.props.p1.y}
-                x2={this.props.p2.x}
-                y2={this.props.p2.y}
-                stroke="black"
-                strokeWidth="4"
-                strokeLinecap="round"
+                x1={this.props.line.p1.x}
+                y1={this.props.line.p1.y}
+                x2={this.props.line.p2.x}
+                y2={this.props.line.p2.y}
+                stroke={this.props.color}
+                strokeWidth='4'
+                strokeLinecap='round'
             />
         );
     }
@@ -50,8 +55,12 @@ var Display = React.createClass({
             <div ref='container' style={fullSize}>
                 <svg width={this.state.width} height={this.state.height}>
                     {this.props.lines.map(function(line) {
-                        return <Line p1={line.p1} p2={line.p2} />;
+                        return <Line line={line} />;
                     })}
+                    { this.props.drawingLine ?
+                        <Line line={this.props.drawingLine} color='red' /> :
+                        null
+                    }
                 </svg>
             </div>
         );

@@ -73,13 +73,14 @@ var Index = React.createClass({
 
 var Home = React.createClass({
     render: function() {
+        var EMPTY_SCENE = {points:{},lines:{}};
+        var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             <div className='main-content'>
                 <Panel>
                     <Editor
-                        onSaveTrack={null}
-                        onAddLine={null}
-                        onRemoveLine={null}
+                        initScene={EMPTY_SCENE}
+                        onSave={DEFAULT_HANDLER}
                     />
                     <Conversation />
                 </Panel>

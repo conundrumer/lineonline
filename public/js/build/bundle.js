@@ -36193,13 +36193,14 @@ var Index = React.createClass({displayName: 'Index',
 
 var Home = React.createClass({displayName: 'Home',
     render: function() {
+        var EMPTY_SCENE = {points:{},lines:{}};
+        var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(Panel, null, 
                     React.createElement(Editor, {
-                        onSaveTrack: null, 
-                        onAddLine: null, 
-                        onRemoveLine: null}
+                        initScene: EMPTY_SCENE, 
+                        onSave: DEFAULT_HANDLER}
                     ), 
                     React.createElement(Conversation, null)
                 )
@@ -37204,14 +37205,19 @@ var fullSize = {
 };
 
 var Line = React.createClass({displayName: 'Line',
+    getDefaultProps: function() {
+        return {
+            color: 'black'
+        };
+    },
     render: function() {
         return (
             React.createElement("line", {
-                x1: this.props.p1.x, 
-                y1: this.props.p1.y, 
-                x2: this.props.p2.x, 
-                y2: this.props.p2.y, 
-                stroke: "black", 
+                x1: this.props.line.p1.x, 
+                y1: this.props.line.p1.y, 
+                x2: this.props.line.p2.x, 
+                y2: this.props.line.p2.y, 
+                stroke: this.props.color, 
                 strokeWidth: "4", 
                 strokeLinecap: "round"}
             )
@@ -37245,8 +37251,12 @@ var Display = React.createClass({displayName: 'Display',
             React.createElement("div", {ref: "container", style: fullSize}, 
                 React.createElement("svg", {width: this.state.width, height: this.state.height}, 
                     this.props.lines.map(function(line) {
-                        return React.createElement(Line, {p1: line.p1, p2: line.p2});
-                    })
+                        return React.createElement(Line, {line: line});
+                    }), 
+                     this.props.drawingLine ?
+                        React.createElement(Line, {line: this.props.drawingLine, color: "red"}) :
+                        null
+                    
                 )
             )
         );
@@ -37258,70 +37268,15 @@ module.exports = Display;
 },{"react/addons":"/Users/delu/class/Team77/node_modules/react/addons.js"}],"/Users/delu/class/Team77/public/js/src/linerider/Editor.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Display = require('./Display.jsx');
+
 var EDIT_STATE = {
-    DRAW: 1,
-    ERASE: 2
+    LINE: 1,
+    ERASE: 2,
+    PENCIL: 3
 };
 
-// var EMPTY_TRACK = {
-//     points: {},
-//     lines: {}
-// };
-
-var EMPTY_SCENE = {
-    points: {
-        0: {
-            x: 100,
-            y: 100
-        },
-        1: {
-            x: 100,
-            y: 250
-        },
-        2: {
-            x: 200,
-            y: 100
-        },
-        3: {
-            x: 200,
-            y: 250
-        },
-        4: {
-            x: 100,
-            y: 175
-        },
-        5: {
-            x: 200,
-            y: 175
-        },
-        6: {
-            x: 300,
-            y: 150
-        },
-        7: {
-            x: 300,
-            y: 250
-        }
-    },
-    lines: {
-        0: {
-            p1: 0,
-            p2: 1
-        },
-        1: {
-            p1: 2,
-            p2: 3
-        },
-        2: {
-            p1: 4,
-            p2: 5
-        },
-        3: {
-            p1: 6,
-            p2: 7
-        }
-    }
-};
+var MIN_LINE_LENGTH = 10;
+var ERASER_RADIUS = 5;
 
 function toLineSegments(scene) {
     return Object.keys(scene.lines).map(function(id) {
@@ -37332,30 +37287,228 @@ function toLineSegments(scene) {
     });
 }
 
-var DEFAULT_HANDLER = console.log;
+var toolbarStyle = {
+    position: 'absolute',
+
+};
+
+function getMaxKey(obj) {
+    return Object.keys(obj).reduce(function(a,b){return Math.max(a,b);},-1);
+}
+
+// ugh i neeed to make a vector class
+function distance(p1, p2) {
+    var dx = p1.x - p2.x;
+    var dy = p1.y - p2.y;
+    return Math.sqrt(dx*dx + dy*dy);
+}
+
+function length(v) {
+    return Math.sqrt(v.x * v.x + v.y * v.y);
+}
+
+function rotate(p, a) {
+    return {
+        x: Math.cos(a)*p.x - Math.sin(a)*p.y,
+        y: Math.sin(a)*p.x + Math.cos(a)*p.y
+    };
+}
+
+// gonna use trig functions because i do't want to deal w/ linear algebra
+function lineSegmentDistance(p, line) {
+    // make everything relative to p, ie move things so p is at (0,0)
+    var p1 = {
+        x: line.p1.x - p.x,
+        y: line.p1.y - p.y
+    };
+    var p2 = {
+        x: line.p2.x - p.x,
+        y: line.p2.y - p.y
+    };
+    // orient line to be perpedicular to x
+    var lineAngle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    p1 = rotate(p1, -lineAngle);
+    p2 = rotate(p2, -lineAngle);
+    if ((p1.x < 0 && 0 < p2.x) || (p2.x < 0 && 0 < p1.x)) {
+        return Math.abs(p1.y);
+    } else {
+        return Math.min(length(p1), length(p2));
+    }
+}
 
 var Editor = React.createClass({displayName: 'Editor',
-    getDefaultProps: function() {
+    getInitialState: function() {
+        // setting init state w/ props is generally an anti-pattern
+        // but there is no synchronization needed atm
+        var initScene = this.props.initScene;
         return {
-            initScene: EMPTY_SCENE,
-            onSaveTrack: DEFAULT_HANDLER,
-            onAddLine: DEFAULT_HANDLER,
-            onRemoveLine: DEFAULT_HANDLER
+            scene: initScene,
+            // i should probably put this in the scene object
+            nextPointID: getMaxKey(initScene.points)+1,
+            nextLineID: getMaxKey(initScene.lines)+1,
+            editState: EDIT_STATE.PENCIL,
+            startPos: null,
+            movePos: null
         };
     },
-    getInitialState: function() {
-        return {
-            // setting init state w/ props is generally an anti-pattern
-            // but there is no synchronization needed atm
-            scene: this.props.initScene,
-            editState: EDIT_STATE.DRAW
+    componentDidMount: function() {
+    },
+    componentWillUnmount: function() {
+        window.removeEventListener('mousemove', this.onMouseMove);
+        window.removeEventListener('mouseup', this.onMouseUp);
+    },
+    // mouse handlers
+    onToolClick: function(editState) {
+        return function onClick(e) {
+            e.preventDefault();
+            this.setState({
+                editState: editState
+            });
+        }.bind(this);
+    },
+    onClear: function(e) {
+        e.preventDefault();
+        this.setState({
+            scene: { lines: {}, points: {} }
+        });
+    },
+    onSave: function(e) {
+        e.preventDefault();
+        this.props.onSave(this.state.scene);
+    },
+    // not sure how reliable it is in getting the right position
+    // will refactor to use RxJS when editing gets more complex
+    onMouseDown: function(e) {
+        e.preventDefault();
+        window.addEventListener('mousemove', this.onMouseMove);
+        window.addEventListener('mouseup', this.onMouseUp);
+        var startPos = {
+            x: e.pageX,
+            y: e.pageY
         };
+        switch (this.state.editState) {
+            case EDIT_STATE.ERASE:
+                this.removeLines(startPos);
+                break;
+        }
+        this.setState({ startPos: startPos });
+    },
+    onMouseMove: function(e) {
+        e.preventDefault();
+        var startPos = this.state.startPos;
+        var movePos = {
+            x: e.pageX,
+            y: e.pageY
+        };
+        switch (this.state.editState) {
+            case EDIT_STATE.PENCIL:
+                if (distance(startPos, movePos) > MIN_LINE_LENGTH) {
+                    this.addLine(startPos, movePos);
+                    this.setState({ startPos: movePos });
+                }
+                break;
+            case EDIT_STATE.ERASE:
+                this.removeLines(movePos);
+                break;
+        }
+        this.setState({ movePos: movePos });
+    },
+    onMouseUp: function(e) {
+        e.preventDefault();
+        window.removeEventListener('mousemove', this.onMouseMove);
+        window.removeEventListener('mouseup', this.onMouseUp);
+        var startPos = this.state.startPos;
+        var endPos = {
+            x: e.pageX,
+            y: e.pageY
+        };
+        switch (this.state.editState) {
+            case EDIT_STATE.LINE:
+                if (distance(startPos, endPos) > MIN_LINE_LENGTH) {
+                    this.addLine(startPos, endPos);
+                }
+                break;
+        }
+        this.setState({ startPos: null, movePos: null });
+    },
+    onToolBarMouseDown: function(e) {
+        e.stopPropagation();
+    },
+    // editing functions
+    // no snapping but stuff will get more complicated when that's implemented
+    addLine: function (p1, p2) {
+        var pointID = this.state.nextPointID;
+        var lineID = this.state.nextLineID;
+        var scene = this.state.scene;
+        // no correction for pan/zoom
+        scene.points[pointID] = p1;
+        scene.points[pointID+1] = p2;
+        scene.lines[lineID] = { p1: pointID, p2: pointID+1 };
+        this.setState({
+            nextLineID: lineID+1,
+            nextPointID: pointID+2,
+            scene: scene
+        });
+        // this.props.onAddPoint({id: pointID, x: p1.x, y: p1.y});
+        // this.props.onAddPoint({id: pointID+1, x: p2.x, y: p2.y});
+        // this.props.onAddLine({id: lineID, p1: pointID, p2: pointID+1});
+    },
+    removeLines: function (pos) {
+        var scene = this.state.scene;
+        Object.keys(scene.lines).filter(function(id) {
+            var line = scene.lines[id];
+            var p1 = scene.points[line.p1];
+            var p2 = scene.points[line.p2];
+            // console.log(lineSegmentDistance(pos, {p1: p1, p2: p2}))
+            return lineSegmentDistance(pos, {p1: p1, p2: p2}) < ERASER_RADIUS;
+        }).forEach(function(id) {
+            var line = scene.lines[id];
+            delete scene.points[line.p1];
+            delete scene.points[line.p2];
+            delete scene.lines[id];
+            // this.props.onRemovePoint({id: parseInt(line.p1)});
+            // this.props.onRemovePoint({id: parseInt(line.p2)});
+            // this.props.onRemoveLine({id: parseInt(id)});
+        }.bind(this));
+        this.setState({ scene: scene });
     },
     render: function() {
+        var drawingLine;
+        var startPos = this.state.startPos;
+        var movePos = this.state.movePos;
+        switch (this.state.editState) {
+            case EDIT_STATE.LINE:
+            case EDIT_STATE.PENCIL:
+                if (startPos && movePos) {
+                    drawingLine = {
+                        p1: startPos,
+                        p2: movePos
+                    };
+                }
+                break;
+        }
         return (
-            React.createElement("div", null, 
+            React.createElement("div", {onMouseDown: this.onMouseDown}, 
                 React.createElement(Display, {
+                    drawingLine: drawingLine, 
                     lines: toLineSegments(this.state.scene)}
+                ), 
+                React.createElement("div", {onMouseDown: this.onToolBarMouseDown, style: toolbarStyle}, 
+                    React.createElement("button", {onClick: this.onToolClick(EDIT_STATE.PENCIL)}, 
+                        "Pencil"
+                    ), 
+                    React.createElement("button", {onClick: this.onToolClick(EDIT_STATE.LINE)}, 
+                        "Line"
+                    ), 
+                    React.createElement("button", {onClick: this.onToolClick(EDIT_STATE.ERASE)}, 
+                        "Erase"
+                    ), 
+                    React.createElement("button", {onClick: this.onSave}, 
+                        "Save"
+                    ), 
+                    React.createElement("button", {onClick: this.onClear}, 
+                        "Clear"
+                    )
                 )
             )
         );
