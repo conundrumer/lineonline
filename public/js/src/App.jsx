@@ -38,7 +38,6 @@ var App = React.createClass({
 
 var NotFound = React.createClass({
     render: function() {
-        console.log('NOT FOUND');
         return (
             <div className='main-content'>
                 <PanelPadded isNotFound={true}>
@@ -175,7 +174,6 @@ var YourTracks = React.createClass({
     render: function() {
         var id = this.props.data.currentUser.id;
         var yourTracksData = this.props.data.yourTracksData.users[id];
-        console.log(this.props.data.yourTracksData);
         return (
             <div className='main-content'>
                 <Panel isYourTracks={true}>
@@ -198,7 +196,6 @@ var Profile = React.createClass({
         // var currentUser = this.props.data.currentUser;
         var id = this.props.params.profileId;
         var profileData = this.props.data.profileData.users[id];
-        console.log(profileData);
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
@@ -399,7 +396,6 @@ var Subscriptions = React.createClass({
         var currentUser = this.props.data.currentUser;
         var subscriptionsData = this.props.data.subscriptionsData;
         var currentUserSubscriptions = subscriptionsData.users[currentUser.id].subscriptions;
-        console.log(currentUserSubscriptions);
         var subscriptionRow = currentUserSubscriptions.map(function(sub) {
             return (
                 <div className='section group'>
@@ -600,7 +596,6 @@ var TracksCol = React.createClass({
     render: function() {
         var tracks = this.props.tracks;
         var galleryTiles = this.props.tracks.map(function(track) {
-            console.log(this.props);
             return (
                 <GalleryTile title={track.title} description={track.description} col={this.props.col} />
             );
@@ -812,15 +807,21 @@ var DropdownLogin = React.createClass({
         var username = this.refs.signupUsername.getDOMNode().value.trim();
         var email = this.refs.signupEmail.getDOMNode().value.trim();
         var password = this.refs.signupPassword.getDOMNode().value.trim();
-        Action.signup(username, email, password);
+        Action.signup({
+            username: username,
+            email: email,
+            password: password
+        });
     },
     handleLoginSubmit: function(event) {
         event.preventDefault();
         var username = this.refs.loginUsername.getDOMNode().value.trim();
         var password = this.refs.loginPassword.getDOMNode().value.trim();
 
-        console.log(Action);
-        Action.login(username, password);
+        Action.login({
+            username: username,
+            password: password
+        });
     },
     render: function() {
         var cx = React.addons.classSet;
@@ -888,7 +889,6 @@ var DropdownLogin = React.createClass({
 var Dropdown = React.createClass({
     handleLogout: function(event) {
         event.preventDefault();
-        console.log('logging out');
         Action.logout();
     },
     render: function() {

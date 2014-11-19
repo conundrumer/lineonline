@@ -6,36 +6,36 @@ var Action = {
         request
             .get('/api/auth')
             .end(function(err, res) {
-                if (err) {
-                }
+                //user not logged in, set current user to null/redirect to index
                 if (res.status === 401) {
-                    console.log(res.body);
+                    console.log('user not logged in');
+                    // console.log(res.body);
                     Data.currentUser = null;
                 }
+                //user logged in, set current user to user
                 if (res.status === 200) {
-                    console.log(res.body);
+                    console.log('user is logged in');
+                    // console.log(res.body);
                     Data.currentUser = res.body;
                 }
                 cb();
             });
     },
-    login: function(username, password) {
+    login: function(login_data) {
         request
             .post('/api/auth')
-            .send({
-                username: username,
-                password: password
-            })
+            .send(login_data)
             .end(function(err, res) {
-                if (err) {
-                    return;// idk
-                }
+                //not logged in, show error message/update ui?
                 if (res.status === 401) {
-                    console.log(res.body.message);
+                    // console.log(res.body.message);
+                    console.log('user failed to log in');
                     return;
                 }
+                //logged in, set current user to user/update ui
                 if (res.status === 200) {
-                    console.log(res.body);
+                    // console.log(res.body)
+                    console.log('user logged in successfully');
                     Data.currentUser = res.body;
                     Data.onUpdate();
                     return;
@@ -47,9 +47,9 @@ var Action = {
         request
             .del('/api/auth')
             .end(function(err, res) {
-                if (err) {
-                }
+                //logged out, set current user to null/update ui/redirect to index
                 if (res.status === 204) {
+                    console.log('user logged out successfully');
                     Data.currentUser = null;
                     Data.onUpdate();
                     return;
@@ -57,24 +57,19 @@ var Action = {
                 console.log('unknown status: ', res.status);
             });
     },
-    signup: function(username, email, password) {
+    signup: function(register_data) {
         request
             .post('/api/auth/register')
-            .send({
-                username: username,
-                email: email,
-                password: password
-            })
+            .send(register_data)
             .end(function(err, res) {
-                if (err) {
-                    return;// idk
-                }
                 if (res.status === 401) {
-                    console.log(res.body.message);
+                    console.log('user failed to be registered');
+                    // console.log(res.body.message);
                     return;
                 }
-                if (res.status === 200) {
-                    console.log(res.body);
+                if (res.status === 201) {
+                    console.log('user registered/logged in successfully');
+                    // console.log(res.body);
                     Data.currentUser = res.body;
                     Data.onUpdate();
                     return;

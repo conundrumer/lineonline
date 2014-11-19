@@ -218,7 +218,7 @@ var Data = {
 };
 
 Data.onUpdate = function() {
-    console.log('Data.unUpdate not set');
+    console.log('Data.onUpdate not set');
 }
 
 module.exports = Data;

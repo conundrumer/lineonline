@@ -36158,7 +36158,6 @@ var App = React.createClass({displayName: 'App',
 
 var NotFound = React.createClass({displayName: 'NotFound',
     render: function() {
-        console.log('NOT FOUND');
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isNotFound: true}, 
@@ -36295,7 +36294,6 @@ var YourTracks = React.createClass({displayName: 'YourTracks',
     render: function() {
         var id = this.props.data.currentUser.id;
         var yourTracksData = this.props.data.yourTracksData.users[id];
-        console.log(this.props.data.yourTracksData);
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(Panel, {isYourTracks: true}, 
@@ -36318,7 +36316,6 @@ var Profile = React.createClass({displayName: 'Profile',
         // var currentUser = this.props.data.currentUser;
         var id = this.props.params.profileId;
         var profileData = this.props.data.profileData.users[id];
-        console.log(profileData);
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isProfile: true}, 
@@ -36519,7 +36516,6 @@ var Subscriptions = React.createClass({displayName: 'Subscriptions',
         var currentUser = this.props.data.currentUser;
         var subscriptionsData = this.props.data.subscriptionsData;
         var currentUserSubscriptions = subscriptionsData.users[currentUser.id].subscriptions;
-        console.log(currentUserSubscriptions);
         var subscriptionRow = currentUserSubscriptions.map(function(sub) {
             return (
                 React.createElement("div", {className: "section group"}, 
@@ -36720,7 +36716,6 @@ var TracksCol = React.createClass({displayName: 'TracksCol',
     render: function() {
         var tracks = this.props.tracks;
         var galleryTiles = this.props.tracks.map(function(track) {
-            console.log(this.props);
             return (
                 React.createElement(GalleryTile, {title: track.title, description: track.description, col: this.props.col})
             );
@@ -36932,15 +36927,21 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
         var username = this.refs.signupUsername.getDOMNode().value.trim();
         var email = this.refs.signupEmail.getDOMNode().value.trim();
         var password = this.refs.signupPassword.getDOMNode().value.trim();
-        Action.signup(username, email, password);
+        Action.signup({
+            username: username,
+            email: email,
+            password: password
+        });
     },
     handleLoginSubmit: function(event) {
         event.preventDefault();
         var username = this.refs.loginUsername.getDOMNode().value.trim();
         var password = this.refs.loginPassword.getDOMNode().value.trim();
 
-        console.log(Action);
-        Action.login(username, password);
+        Action.login({
+            username: username,
+            password: password
+        });
     },
     render: function() {
         var cx = React.addons.classSet;
@@ -37008,7 +37009,6 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
 var Dropdown = React.createClass({displayName: 'Dropdown',
     handleLogout: function(event) {
         event.preventDefault();
-        console.log('logging out');
         Action.logout();
     },
     render: function() {
@@ -37109,36 +37109,36 @@ var Action = {
         request
             .get('/api/auth')
             .end(function(err, res) {
-                if (err) {
-                }
+                //user not logged in, set current user to null/redirect to index
                 if (res.status === 401) {
-                    console.log(res.body);
+                    console.log('user not logged in');
+                    // console.log(res.body);
                     Data.currentUser = null;
                 }
+                //user logged in, set current user to user
                 if (res.status === 200) {
-                    console.log(res.body);
+                    console.log('user is logged in');
+                    // console.log(res.body);
                     Data.currentUser = res.body;
                 }
                 cb();
             });
     },
-    login: function(username, password) {
+    login: function(login_data) {
         request
             .post('/api/auth')
-            .send({
-                username: username,
-                password: password
-            })
+            .send(login_data)
             .end(function(err, res) {
-                if (err) {
-                    return;// idk
-                }
+                //not logged in, show error message/update ui?
                 if (res.status === 401) {
-                    console.log(res.body.message);
+                    // console.log(res.body.message);
+                    console.log('user failed to log in');
                     return;
                 }
+                //logged in, set current user to user/update ui
                 if (res.status === 200) {
-                    console.log(res.body);
+                    // console.log(res.body)
+                    console.log('user logged in successfully');
                     Data.currentUser = res.body;
                     Data.onUpdate();
                     return;
@@ -37150,9 +37150,9 @@ var Action = {
         request
             .del('/api/auth')
             .end(function(err, res) {
-                if (err) {
-                }
+                //logged out, set current user to null/update ui/redirect to index
                 if (res.status === 204) {
+                    console.log('user logged out successfully');
                     Data.currentUser = null;
                     Data.onUpdate();
                     return;
@@ -37160,24 +37160,19 @@ var Action = {
                 console.log('unknown status: ', res.status);
             });
     },
-    signup: function(username, email, password) {
+    signup: function(register_data) {
         request
             .post('/api/auth/register')
-            .send({
-                username: username,
-                email: email,
-                password: password
-            })
+            .send(register_data)
             .end(function(err, res) {
-                if (err) {
-                    return;// idk
-                }
                 if (res.status === 401) {
-                    console.log(res.body.message);
+                    console.log('user failed to be registered');
+                    // console.log(res.body.message);
                     return;
                 }
-                if (res.status === 200) {
-                    console.log(res.body);
+                if (res.status === 201) {
+                    console.log('user registered/logged in successfully');
+                    // console.log(res.body);
                     Data.currentUser = res.body;
                     Data.onUpdate();
                     return;
@@ -37410,7 +37405,7 @@ var Data = {
 };
 
 Data.onUpdate = function() {
-    console.log('Data.unUpdate not set');
+    console.log('Data.onUpdate not set');
 }
 
 module.exports = Data;
