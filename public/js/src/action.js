@@ -30,6 +30,8 @@ var Action = {
                 if (res.status === 401) {
                     // console.log(res.body.message);
                     console.log('user failed to log in');
+                    Data.errorMessages.login = res.body.message;
+                    Data.onUpdate();
                     return;
                 }
                 //logged in, set current user to user/update ui
@@ -37,6 +39,7 @@ var Action = {
                     // console.log(res.body)
                     console.log('user logged in successfully');
                     Data.currentUser = res.body;
+                    Data.errorMessages.login = null;
                     Data.onUpdate();
                     return;
                 }
@@ -62,15 +65,18 @@ var Action = {
             .post('/api/auth/register')
             .send(register_data)
             .end(function(err, res) {
-                if (res.status === 401) {
-                    console.log('user failed to be registered');
-                    // console.log(res.body.message);
-                    return;
-                }
-                if (res.status === 201) {
+                if (res.status === 202) {
                     console.log('user registered/logged in successfully');
                     // console.log(res.body);
                     Data.currentUser = res.body;
+                    Data.errorMessages.signup = null;
+                    Data.onUpdate();
+                    return;
+                }
+                if (res.status === 406) {
+                    console.log('user failed to be registered');
+                    console.log(res.body.message);
+                    Data.errorMessages.signup = res.body.message;
                     Data.onUpdate();
                     return;
                 }

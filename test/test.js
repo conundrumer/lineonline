@@ -49,7 +49,7 @@ describe('The First User', function () {
         agent
             .post('/auth/register')
             .send(register_data)
-            .expect(201, user_data, done);
+            .expect(202, user_data, done);
     });
 
     it('should be logged in right after registration (get: /auth)', function (done) {
@@ -69,7 +69,7 @@ describe('The First User', function () {
         agent
             .post('/tracks')
             .send(send_track_data)
-            .expect(201, track_data, done);
+            .expect(202, track_data, done);
     });
 
     it('should be able to get id, owner, title and description of her first track (get: /tracks/:track_id)', function(done) {

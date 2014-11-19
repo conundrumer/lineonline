@@ -29,7 +29,7 @@ var App = React.createClass({
         // var { currentUser, index, profile, subscriptions, ...other } = Data;
         return (
             <div className='container'>
-                <Navbar currentUser={Data.currentUser} />
+                <Navbar currentUser={Data.currentUser} errorMessages={Data.errorMessages} />
                 <this.props.activeRouteHandler data={Data} />
             </div>
         );
@@ -744,7 +744,7 @@ var Navbar = React.createClass({
                                     Sign Up/Log In
                                 </span>
                             </div>
-                            <DropdownLogin isHidden={this.state.hidden} />
+                            <DropdownLogin isHidden={this.state.hidden} signupErrorMessage={this.props.errorMessages.signup} loginErrorMessage={this.props.errorMessages.login} />
                         </li>
                     }
 
@@ -856,6 +856,14 @@ var DropdownLogin = React.createClass({
                             Sign Up
                         </button>
                     </form>
+                    {this.props.signupErrorMessage ?
+                        <div className='footnote error-message'>
+                            <p>
+                                {this.props.signupErrorMessage}
+                            </p>
+                        </div>
+                        : null
+                    }
                     <div className='footnote'>
                         <p>
                             Or <span className='login-link' onClick={this.handleLoginClick}>log in</span> with an existing account
@@ -880,6 +888,14 @@ var DropdownLogin = React.createClass({
                             Log In
                         </button>
                     </form>
+                    {this.props.loginErrorMessage ?
+                        <div className='footnote error-message'>
+                            <p>
+                                {this.props.loginErrorMessage}
+                            </p>
+                        </div>
+                        : null
+                    }
                 </div>
             </div>
         );

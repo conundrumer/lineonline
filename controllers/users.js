@@ -19,14 +19,11 @@ exports.doRegister = function(req, res){
     email = req.body.email;
     console.log(JSON.stringify(req.body));
 
-    if (req.params.username == ""){
-        res.status(202).send({message:'No username'});
-        return;
-    }
 
-    // Password non-empty
-    if (req.params.password == ""){
-        res.status(202).send({message:'No password given'});
+    if (req.body.username === ''
+        || req.body.email === ''
+        || req.body.password === '') {
+        res.status(406).send({message: 'Please enter all required fields'});
         return;
     }
 
@@ -37,10 +34,10 @@ exports.doRegister = function(req, res){
             console.log(username, password)
             User.forge({username:username, password:password, email:email}).save().then(function(){
                 console.log('new user', username, password);
-                statuslogin(201, req, res, console.error);
+                statuslogin(202, req, res, console.error);
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
         } else { // If someone else already has that username
-            res.status(202).send({message:'This username has already been taken'});
+            res.status(406).send({message:'This username has already been taken'});
         }
     }); // PUT A CATCH HERE
 
@@ -450,7 +447,7 @@ exports.createTrack = function(req, res){
             //track.related('owner_id').set(owner_id);
             track.save();
         });
-        res.status(201).json(track.toJSON());
+        res.status(202).json(track.toJSON());
 
     });
 }

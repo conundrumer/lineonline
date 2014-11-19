@@ -82,6 +82,10 @@ var SampleCollection2 = {
 var Data = {
     // currentUser: SampleUser1,
     currentUser: null,
+    errorMessages: {
+        login: null,
+        signup: null
+    },
     indexData: {
 
     },

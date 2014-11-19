@@ -36149,7 +36149,7 @@ var App = React.createClass({displayName: 'App',
         // var { currentUser, index, profile, subscriptions, ...other } = Data;
         return (
             React.createElement("div", {className: "container"}, 
-                React.createElement(Navbar, {currentUser: Data.currentUser}), 
+                React.createElement(Navbar, {currentUser: Data.currentUser, errorMessages: Data.errorMessages}), 
                 React.createElement(this.props.activeRouteHandler, {data: Data})
             )
         );
@@ -36864,7 +36864,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
                                     "Sign Up/Log In"
                                 )
                             ), 
-                            React.createElement(DropdownLogin, {isHidden: this.state.hidden})
+                            React.createElement(DropdownLogin, {isHidden: this.state.hidden, signupErrorMessage: this.props.errorMessages.signup, loginErrorMessage: this.props.errorMessages.login})
                         )
                     
 
@@ -36976,6 +36976,14 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
                             "Sign Up"
                         )
                     ), 
+                    this.props.signupErrorMessage ?
+                        React.createElement("div", {className: "footnote error-message"}, 
+                            React.createElement("p", null, 
+                                this.props.signupErrorMessage
+                            )
+                        )
+                        : null, 
+                    
                     React.createElement("div", {className: "footnote"}, 
                         React.createElement("p", null, 
                             "Or ", React.createElement("span", {className: "login-link", onClick: this.handleLoginClick}, "log in"), " with an existing account"
@@ -36999,7 +37007,15 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
                         React.createElement("button", {className: "btn-submit", type: "submit"}, 
                             "Log In"
                         )
-                    )
+                    ), 
+                    this.props.loginErrorMessage ?
+                        React.createElement("div", {className: "footnote error-message"}, 
+                            React.createElement("p", null, 
+                                this.props.loginErrorMessage
+                            )
+                        )
+                        : null
+                    
                 )
             )
         );
@@ -37133,6 +37149,8 @@ var Action = {
                 if (res.status === 401) {
                     // console.log(res.body.message);
                     console.log('user failed to log in');
+                    Data.errorMessages.login = res.body.message;
+                    Data.onUpdate();
                     return;
                 }
                 //logged in, set current user to user/update ui
@@ -37140,6 +37158,7 @@ var Action = {
                     // console.log(res.body)
                     console.log('user logged in successfully');
                     Data.currentUser = res.body;
+                    Data.errorMessages.login = null;
                     Data.onUpdate();
                     return;
                 }
@@ -37165,15 +37184,18 @@ var Action = {
             .post('/api/auth/register')
             .send(register_data)
             .end(function(err, res) {
-                if (res.status === 401) {
-                    console.log('user failed to be registered');
-                    // console.log(res.body.message);
-                    return;
-                }
-                if (res.status === 201) {
+                if (res.status === 202) {
                     console.log('user registered/logged in successfully');
                     // console.log(res.body);
                     Data.currentUser = res.body;
+                    Data.errorMessages.signup = null;
+                    Data.onUpdate();
+                    return;
+                }
+                if (res.status === 406) {
+                    console.log('user failed to be registered');
+                    console.log(res.body.message);
+                    Data.errorMessages.signup = res.body.message;
                     Data.onUpdate();
                     return;
                 }
@@ -37269,6 +37291,10 @@ var SampleCollection2 = {
 var Data = {
     // currentUser: SampleUser1,
     currentUser: null,
+    errorMessages: {
+        login: null,
+        signup: null
+    },
     indexData: {
 
     },
