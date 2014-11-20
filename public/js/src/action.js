@@ -40,6 +40,9 @@ var Action = {
                     // console.log(res.body);
                     Data.currentUser = res.body;
                 }
+                if (res.notFound) {
+
+                }
                 cb();
             });
     },
@@ -62,6 +65,7 @@ var Action = {
                     // console.log(res.body)
                     console.log('user logged in successfully');
                     Data.currentUser = res.body;
+                    // Data.profileData.users[Data.currentUser.id] = Data.currentUser;
                     Data.errorMessages.login = null;
                     Data.onUpdate();
                     return;
@@ -90,7 +94,6 @@ var Action = {
             .end(function(err, res) {
                 if (res.accepted) {
                     console.log('user registered/logged in successfully');
-                    // console.log(res.body);
                     Data.currentUser = res.body;
                     Data.errorMessages.signup = null;
                     Data.onUpdate();
@@ -100,6 +103,34 @@ var Action = {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
                     Data.errorMessages.signup = res.body.message;
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            });
+    },
+
+    getProfile: function(id) {
+        var context = this;
+        request
+            .get('/api/users/' + id + '/profile')
+            .end(function(err, res) {
+                if (res.accepted) {
+                    Data.profileData = res.body;
+                    console.log(Data.profileData.featured_track);
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            });
+    },
+
+    getCollections: function(id) {
+        request
+            .get('/api/users/' + id + '/collections')
+            .end(function(err, res) {
+                if (res.accepted) {
+                    Data.collections = res.body;
                     Data.onUpdate();
                     return;
                 }

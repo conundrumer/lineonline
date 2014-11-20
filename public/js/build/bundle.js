@@ -36312,23 +36312,40 @@ var YourTracks = React.createClass({displayName: 'YourTracks',
 //{this.props.data.profile}
 //{this.props.data.currentUser}
 var Profile = React.createClass({displayName: 'Profile',
+    componentWillMount: function() {
+        Action.getProfile(this.props.params.profileId);
+        Action.getCollections(this.props.params.profileId);
+    },
     render: function() {
-        // var currentUser = this.props.data.currentUser;
         var id = this.props.params.profileId;
-        var profileData = this.props.data.profileData.users[id];
         return (
             React.createElement("div", {className: "main-content"}, 
-                React.createElement(PanelPadded, {isProfile: true}, 
-                    React.createElement("div", {className: "section group"}, 
-                        React.createElement("div", {className: "col span_1_of_4"}, 
-                            React.createElement(ProfileSidebar, {avatarUrl: profileData.avatar_url, username: profileData.username, location: profileData.info.location, email: profileData.info.email, description: profileData.info.description})
-                        ), 
-                        React.createElement("div", {className: "col span_3_of_4"}, 
-                            React.createElement(ProfileMain, {username: profileData.username, featuredTrack: profileData.featured_track, collections: profileData.collections})
+             (this.props.data.profileData && this.props.data.collections) ?
+                React.createElement("div", null, 
+                    React.createElement(PanelPadded, {isProfile: true}, 
+                        React.createElement("div", {className: "section group"}, 
+                            React.createElement("div", {className: "col span_1_of_4"}, 
+                                React.createElement(ProfileSidebar, {
+                                    avatarUrl: this.props.data.profileData.avatar_url, 
+                                    username: this.props.data.profileData.username, 
+                                    location: this.props.data.profileData.location, 
+                                    email: this.props.data.profileData.email, 
+                                    about: this.props.data.profileData.about}
+                                )
+                            ), 
+                            React.createElement("div", {className: "col span_3_of_4"}, 
+                                React.createElement(ProfileMain, {
+                                    username: this.props.data.profileData.username, 
+                                    featuredTrack: this.props.data.profileData.featured_track, 
+                                    collections: this.props.data.collections}
+                                )
+                            )
                         )
-                    )
-                ), 
-                React.createElement(Footer, null)
+                    ), 
+                    React.createElement(Footer, null)
+                )
+                : null
+            
             )
         );
     }
@@ -36347,8 +36364,7 @@ var ProfileMain = React.createClass({displayName: 'ProfileMain',
 
 var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
     render: function() {
-        var featuredTrack = this.props.featuredTrack;
-        var collaboratorListItems = featuredTrack.collaborators.map(function(collaborator) {
+        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 React.createElement("li", null, 
                     React.createElement(Link, {to: '/profile/'+collaborator.id}, 
@@ -36362,21 +36378,27 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
                 React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
                 React.createElement(MediaIcons, null), 
                 React.createElement("aside", {className: "info"}, 
-                    React.createElement("h3", null, featuredTrack.title), 
-                    React.createElement("p", null, 
-                        featuredTrack.description
-                    ), 
-                    React.createElement("h3", null, "Owner"), 
-                    React.createElement("p", null, 
-                        React.createElement(Link, {to: '/profile/'+featuredTrack.owner.id}, 
-                            featuredTrack.owner.username
-                        )
+                    this.props.featuredTrack ?
+                        React.createElement("div", null, 
+                            React.createElement("h3", null, this.props.featuredTrack.title), 
+                            React.createElement("p", null, 
+                                this.props.featuredTrack.description
+                            ), 
+                            React.createElement("h3", null, "Owner"), 
+                            React.createElement("p", null, 
+                                React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.id}, 
+                                    this.props.featuredTrack.owner.username
+                                )
 
-                    ), 
-                    React.createElement("h3", null, "Collaborators"), 
-                    React.createElement("ul", null, 
-                        collaboratorListItems
-                    )
+                            ), 
+                            React.createElement("h3", null, "Collaborators"), 
+                            React.createElement("ul", null, 
+                                collaboratorListItems
+                            )
+                        )
+                        : null
+                    
+
                 )
             )
         );
@@ -36425,7 +36447,7 @@ var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
                 ), 
                 React.createElement("div", {className: "info"}, 
                     React.createElement(ProfileContactDetail, {username: this.props.username, location: this.props.location, email: this.props.email}), 
-                    React.createElement(ProfileAboutDetail, {description: this.props.description}), 
+                    React.createElement(ProfileAboutDetail, {about: this.props.about}), 
                     React.createElement(ProfileInteractDetail, {username: this.props.username})
                 )
             )
@@ -36461,7 +36483,7 @@ var ProfileAboutDetail = React.createClass({displayName: 'ProfileAboutDetail',
             React.createElement("div", {className: "detail about"}, 
                 React.createElement("h3", null, "About"), 
                 React.createElement("p", null, 
-                    this.props.description
+                    this.props.about
                 )
             )
         );
@@ -37097,13 +37119,13 @@ var routes = (
             React.createElement(Route, {name: "home", handler: Home}), 
             React.createElement(Route, {name: "gallery", handler: Gallery}), 
             React.createElement(Route, {name: "your-tracks", handler: YourTracks}), 
-            React.createElement(Route, {name: "profile", path: "/profile/:profileId", handler: Profile}), 
+            React.createElement(Route, {name: "profile", path: "/profile/:profileId", handler: Profile, addHandlerKey: true}), 
             React.createElement(Route, {name: "favorites", handler: Favorites}), 
             React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
             React.createElement(Route, {name: "settings", handler: Settings}), 
             React.createElement(Route, {name: "logout", handler: Index}), 
             React.createElement(Route, {name: "subscribe", handler: Profile}), 
-            React.createElement(NotFoundRoute, {handler: NotFound})
+            React.createElement(NotFoundRoute, {name: "404", handler: NotFound})
         )
     )
 );
@@ -37159,6 +37181,9 @@ var Action = {
                     // console.log(res.body);
                     Data.currentUser = res.body;
                 }
+                if (res.notFound) {
+
+                }
                 cb();
             });
     },
@@ -37181,6 +37206,7 @@ var Action = {
                     // console.log(res.body)
                     console.log('user logged in successfully');
                     Data.currentUser = res.body;
+                    // Data.profileData.users[Data.currentUser.id] = Data.currentUser;
                     Data.errorMessages.login = null;
                     Data.onUpdate();
                     return;
@@ -37209,7 +37235,6 @@ var Action = {
             .end(function(err, res) {
                 if (res.accepted) {
                     console.log('user registered/logged in successfully');
-                    // console.log(res.body);
                     Data.currentUser = res.body;
                     Data.errorMessages.signup = null;
                     Data.onUpdate();
@@ -37219,6 +37244,34 @@ var Action = {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
                     Data.errorMessages.signup = res.body.message;
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            });
+    },
+
+    getProfile: function(id) {
+        var context = this;
+        request
+            .get('/api/users/' + id + '/profile')
+            .end(function(err, res) {
+                if (res.accepted) {
+                    Data.profileData = res.body;
+                    console.log(Data.profileData.featured_track);
+                    Data.onUpdate();
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            });
+    },
+
+    getCollections: function(id) {
+        request
+            .get('/api/users/' + id + '/collections')
+            .end(function(err, res) {
+                if (res.accepted) {
+                    Data.collections = res.body;
                     Data.onUpdate();
                     return;
                 }
@@ -37312,6 +37365,93 @@ var SampleCollection2 = {
 }
 
 var Data = {
+    // currentUser: SampleUser1,
+    currentUser: null,
+    errorMessages: {
+        login: null,
+        signup: null
+    },
+    indexData: {
+
+    },
+    profileData: null,
+    collections: null,
+    subscriptionsData: {
+        users: {
+            1: {
+                subscriptions: [
+                    SampleUser2,
+                    SampleUser3
+                ]
+            },
+            2: {
+                subscriptions: [
+                    SampleUser3,
+                    SampleUser1
+                ]
+            },
+            3: {
+                subscriptions: [
+                    SampleUser1,
+                    SampleUser2
+                ]
+            }
+        }
+    },
+    favoritesData: {
+        users: {
+            1: {
+                favorites: [
+                    SampleTrack1,
+                    SampleTrack2,
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1,
+                    SampleTrack3
+                ]
+            },
+            2: {
+                favorites: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                favorites: [
+                    SampleTrack4
+                ]
+            }
+        }
+    },
+    yourTracksData: {
+        users: {
+            1: {
+                your_tracks: [
+                    SampleTrack1,
+                    SampleTrack2
+                ]
+            },
+            2: {
+                your_tracks: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                your_tracks: [
+                    SampleTrack4
+                ]
+            }
+        }
+    }
+};
+
+var Data2 = {
     // currentUser: SampleUser1,
     currentUser: null,
     errorMessages: {

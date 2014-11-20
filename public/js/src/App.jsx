@@ -192,23 +192,40 @@ var YourTracks = React.createClass({
 //{this.props.data.profile}
 //{this.props.data.currentUser}
 var Profile = React.createClass({
+    componentWillMount: function() {
+        Action.getProfile(this.props.params.profileId);
+        Action.getCollections(this.props.params.profileId);
+    },
     render: function() {
-        // var currentUser = this.props.data.currentUser;
         var id = this.props.params.profileId;
-        var profileData = this.props.data.profileData.users[id];
         return (
             <div className='main-content'>
-                <PanelPadded isProfile={true}>
-                    <div className='section group'>
-                        <div className='col span_1_of_4'>
-                            <ProfileSidebar avatarUrl={profileData.avatar_url} username={profileData.username} location={profileData.info.location} email={profileData.info.email} description={profileData.info.description} />
+            { (this.props.data.profileData && this.props.data.collections) ?
+                <div>
+                    <PanelPadded isProfile={true}>
+                        <div className='section group'>
+                            <div className='col span_1_of_4'>
+                                <ProfileSidebar
+                                    avatarUrl={this.props.data.profileData.avatar_url}
+                                    username={this.props.data.profileData.username}
+                                    location={this.props.data.profileData.location}
+                                    email={this.props.data.profileData.email}
+                                    about={this.props.data.profileData.about}
+                                />
+                            </div>
+                            <div className='col span_3_of_4'>
+                                <ProfileMain
+                                    username={this.props.data.profileData.username}
+                                    featuredTrack={this.props.data.profileData.featured_track}
+                                    collections={this.props.data.collections}
+                                />
+                            </div>
                         </div>
-                        <div className='col span_3_of_4'>
-                            <ProfileMain username={profileData.username} featuredTrack={profileData.featured_track} collections={profileData.collections} />
-                        </div>
-                    </div>
-                </PanelPadded>
-                <Footer />
+                    </PanelPadded>
+                    <Footer />
+                </div>
+                : null
+            }
             </div>
         );
     }
@@ -227,8 +244,7 @@ var ProfileMain = React.createClass({
 
 var ProfileFeaturedTrack = React.createClass({
     render: function() {
-        var featuredTrack = this.props.featuredTrack;
-        var collaboratorListItems = featuredTrack.collaborators.map(function(collaborator) {
+        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 <li>
                     <Link to={'/profile/'+collaborator.id}>
@@ -242,21 +258,27 @@ var ProfileFeaturedTrack = React.createClass({
                 <Icon class='preview-icon' icon='fullscreen-enter' />
                 <MediaIcons />
                 <aside className='info'>
-                    <h3>{featuredTrack.title}</h3>
-                    <p>
-                        {featuredTrack.description}
-                    </p>
-                    <h3>Owner</h3>
-                    <p>
-                        <Link to={'/profile/'+featuredTrack.owner.id}>
-                            {featuredTrack.owner.username}
-                        </Link>
+                    {this.props.featuredTrack ?
+                        <div>
+                            <h3>{this.props.featuredTrack.title}</h3>
+                            <p>
+                                {this.props.featuredTrack.description}
+                            </p>
+                            <h3>Owner</h3>
+                            <p>
+                                <Link to={'/profile/' + this.props.featuredTrack.owner.id}>
+                                    {this.props.featuredTrack.owner.username}
+                                </Link>
 
-                    </p>
-                    <h3>Collaborators</h3>
-                    <ul>
-                        {collaboratorListItems}
-                    </ul>
+                            </p>
+                            <h3>Collaborators</h3>
+                            <ul>
+                                {collaboratorListItems}
+                            </ul>
+                        </div>
+                        : null
+                    }
+
                 </aside>
             </article>
         );
@@ -305,7 +327,7 @@ var ProfileSidebar = React.createClass({
                 </div>
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
-                    <ProfileAboutDetail description={this.props.description} />
+                    <ProfileAboutDetail about={this.props.about} />
                     <ProfileInteractDetail username={this.props.username} />
                 </div>
             </section>
@@ -341,7 +363,7 @@ var ProfileAboutDetail = React.createClass({
             <div className='detail about'>
                 <h3>About</h3>
                 <p>
-                    {this.props.description}
+                    {this.props.about}
                 </p>
             </div>
         );
@@ -977,13 +999,13 @@ var routes = (
             <Route name='home' handler={Home} />
             <Route name='gallery' handler={Gallery} />
             <Route name='your-tracks' handler={YourTracks} />
-            <Route name='profile' path='/profile/:profileId' handler={Profile} />
+            <Route name='profile' path='/profile/:profileId' handler={Profile} addHandlerKey={true} />
             <Route name='favorites' handler={Favorites} />
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />
             <Route name='logout' handler={Index} />
             <Route name='subscribe' handler={Profile} />
-            <NotFoundRoute handler={NotFound} />
+            <NotFoundRoute name='404' handler={NotFound} />
         </Route>
     </Routes>
 );

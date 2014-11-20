@@ -8,8 +8,8 @@ var tracks = require('../controllers/tracks');
 module.exports = function (app, passport) {
 
     function loginRequired(req, res, next) {
-      if (req.isAuthenticated()) { return next(); }
-      res.status(401).send(); // send 401 status instead
+        if (req.isAuthenticated()) { return next(); }
+        res.status(401).send(); // send 401 status instead
     }
 
     // These are the urls we route to
@@ -149,7 +149,6 @@ module.exports = function (app, passport) {
     app.get('/api/users/:id/profile', users.getProfileJson);
     app.get('/api/users/:id/collections', users.getCollectionsJson);
     app.get('/api/users/:id/tracks/:track_id', tracks.getTrack);
-
 
     app.get('/api/users/:id/favorites', users.getFavoritesJson);
 

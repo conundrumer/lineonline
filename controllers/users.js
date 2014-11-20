@@ -72,19 +72,49 @@ function statuslogin (status, req, res, next) {
 exports.login = statuslogin.bind(null, null);
 
 exports.getProfileJson = function(req, res){
+    console.log('iDDDDDD ', req.params.id);
+    var id = req.params.id;
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
-            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+        if (model === null){
+            // res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
+            res.status(StatusTypes.notFound);
         }
         else {
-            res.json({
+            var old = {
                 title: 'Profile',
                 username: model.get('username'),
                 email: model.get('email'),
                 location: model.get('location'),
                 about: model.get('about')
-            });
+            };
+
+            var SampleUser1 = {
+                id: 1,
+                username: 'delu',
+                avatar_url: '/images/delu.jpg'
+            };
+            var SampleTrack1 = {
+                title: 'Sample Track 1',
+                description: 'Description of sample track 1.',
+                owner: SampleUser1,
+                collaborators: [
+                ],
+                blob: 'Blob string of featured track',
+                thumbUrl: '/images/sample_masthead.png'
+            };
+
+            var data = {
+                id: id,
+                featured_track: SampleTrack1,
+                username: model.get('username'),
+                avatar_url: model.get('avatar_url') || '/images/default.png',
+                email: model.get('email') || 'N/A',
+                location: model.get('location') || 'N/A',
+                about: model.get('about') || 'N/A',
+            };
+
+            res.status(StatusTypes.accepted).json(data);
         }
     });
 }
@@ -92,7 +122,7 @@ exports.getProfileJson = function(req, res){
 exports.updateProfileJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
@@ -154,7 +184,7 @@ exports.editProfile = function(req, res){
 exports.getSubscriptions = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
         }
         else {
@@ -180,12 +210,12 @@ exports.getSubscriptions = function(req, res){
 exports.subscribeTo = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
         }
         else {
             User.where({id: req.params.targetId}).fetch().then(function(targetModel){
-                if (targetModel == null){
+                if (targetModel === null){
                     res.send('<div style="color:red;">Couldn\'t find target model!</div>');
                 }
                 else{
@@ -203,12 +233,12 @@ exports.subscribeTo = function(req, res){
 exports.unsubscribeFrom = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Couldn\'t find my own model!</div>');
         }
         else {
             User.where({id: req.params.targetId}).fetch().then(function(targetModel){
-                if (targetModel == null){
+                if (targetModel === null){
                     res.send('<div style="color:red;">Couldn\'t find target model!</div>');
                 }
                 else{
@@ -229,11 +259,11 @@ exports.getUserJson = function(req, res, status){
     console.log("User id is: " + req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.status(status).json({
+            var d1 = {
                 "_links": {
                     'self': { 'href': '/users/' + id },
                     'profile': { 'href': '/users/' + id + '/profile' },
@@ -245,7 +275,21 @@ exports.getUserJson = function(req, res, status){
                 id: id,
                 username: model.get('username'),
                 avatar_url: null // model.get("avatar_url")
-            });
+            };
+            var data = {
+                id: id,
+                username: model.get('username'),
+                avatar_url: model.get('avatar_url') || '/images/default.png',
+            };
+            // info: {
+            //     email: model.get('email'),
+            //     location: model.get('location') || 'N/A',
+            //     description: model.get('about') || 'N/A',
+            // },
+
+            // featured_track: null,
+            // collections: []
+            res.status(status).json(data);
         }
     });
 }
@@ -254,11 +298,11 @@ exports.getUserJson = function(req, res, status){
 exports.getCollectionsJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
-            res.json({
+            var d = {
                 "_links": {
                     "self": { "href": "/users/" + req.params.id + "/profile" },
                     "user": { "href": "/users/" + req.params.id}
@@ -272,7 +316,61 @@ exports.getCollectionsJson = function(req, res){
                     ]
                 },
                 "total" : 42, // model.get("collections").size
-            });
+            };
+            var SampleUser1 = {
+                id: 1,
+                username: 'delu',
+                avatar_url: '/images/delu.jpg'
+            };
+            var SampleUser2 = {
+                id: 2,
+                username: 'snigdhar',
+                avatar_url: '/images/snigdhar.jpg'
+            };
+            var SampleUser3 = {
+                id: 3,
+                username: 'jingxiao',
+                avatar_url: '/images/sample_profile.png'
+            };
+            var SampleTrack1 = {
+                title: 'Sample Track 1',
+                description: 'Description of sample track 1.',
+                owner: SampleUser1,
+                collaborators: [
+                ],
+                blob: 'Blob string of featured track',
+                thumbUrl: '/images/sample_masthead.png'
+            };
+            var SampleTrack2 = {
+                title: 'Sample Track 2',
+                description: 'Description of sample track 2.',
+                owner: SampleUser2,
+                collaborators: [
+                ],
+                blob: 'Blob string of sample track 2',
+                thumbUrl: '/images/sample_masthead.png'
+            };
+            var SampleCollection1 = {
+                title: 'Sample Collection Title 1',
+                description: 'Description of Sample Collection 1',
+                tracks: [
+                    SampleTrack1,
+                    SampleTrack2,
+                ]
+            }
+            var SampleCollection2 = {
+                title: 'Sample Collection Title 2',
+                description: 'Description of Sample Collection 2',
+                tracks: [
+                    SampleTrack2
+                ]
+            }
+            var data = [
+                SampleCollection1,
+                SampleCollection2
+            ];
+            console.log('collections json!');
+            res.status(StatusTypes.accepted).json(data);
 
         }
     });
@@ -284,13 +382,13 @@ exports.register = function(req, res){
     email = req.body.email;
     // console.log(JSON.stringify(req.body));
 
-    if (req.body.username == ""){
+    if (req.body.username === ""){
         res.send('<div style="color:red;">This username! Who ARE you???</div>');
         return;
     }
 
     // Password non-empty
-    if (req.body.password == ""){
+    if (req.body.password === ""){
         res.send('<div style="color:red;">This password! Where is this password???</div>');
         return;
     }
@@ -317,7 +415,7 @@ exports.visitProfile = function(req, res){
     console.log(req.params.id);
     User.where({id: req.params.id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
@@ -374,7 +472,7 @@ exports.getSingleTrackJson =  function(req, res){
     // Gets a particular track
     Track.where({id: req.params.track_id}).fetch().then(function(model){
         // If id doesn't exist, send 404 page
-        if (model == null){
+        if (model === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
@@ -386,7 +484,7 @@ exports.getAllTracksJson = function(req, res){
     // requires both the user id and the track id
     User.where({id: req.params.user_id}).fetch().then(function(user){
         // If id doesn't exist, send 404 page
-        if (user == null){
+        if (user === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
@@ -401,7 +499,7 @@ exports.getAllTracksJson = function(req, res){
 exports.getFavoritesJson = function(req, res){
     User.where({id: req.params.id}).fetch().then(function(user){
         // If id doesn't exist, send 404 page
-        if (user == null){
+        if (user === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
@@ -414,14 +512,14 @@ exports.addToFavorites = function(req, res){
     // requires both the user id and the track id
     User.where({id: req.params.user_id}).fetch().then(function(user){
         // If id doesn't exist, send 404 page
-        if (user == null){
+        if (user === null){
             res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
         }
         else {
 
             Track.where({id: req.params.track_id}).fetch().then(function(track){
                 // If id doesn't exist, send 404 page
-                if (track == null){
+                if (track === null){
                     res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
                 }
                 else {
