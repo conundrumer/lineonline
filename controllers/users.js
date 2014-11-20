@@ -3,6 +3,7 @@ var Track = require('../models/track');
 var passport = require('passport');
 
 var StatusTypes = {
+    created: 201,
     accepted: 202,
     noContent: 204,
     badRequest: 400,
@@ -89,15 +90,15 @@ exports.getProfileJson = function(req, res){
                 about: model.get('about')
             };
 
-            var SampleUser1 = {
-                id: 1,
-                username: 'delu',
-                avatar_url: '/images/delu.jpg'
+            var SampleUser2 = {
+                id: 2,
+                username: 'snigdhar',
+                avatar_url: '/images/snigdhar.jpg'
             };
             var SampleTrack1 = {
                 title: 'Sample Track 1',
                 description: 'Description of sample track 1.',
-                owner: SampleUser1,
+                owner: SampleUser2,
                 collaborators: [
                 ],
                 blob: 'Blob string of featured track',

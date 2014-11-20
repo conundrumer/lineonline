@@ -196,6 +196,12 @@ var Profile = React.createClass({
         Action.getProfile(this.props.params.profileId);
         Action.getCollections(this.props.params.profileId);
     },
+    componentWillReceiveProps: function(nextProps) {
+        if (this.props.params.profileId !== nextProps.params.profileId) {
+            Action.getProfile(nextProps.params.profileId);
+            Action.getCollections(nextProps.params.profileId);
+        }
+    },
     render: function() {
         var id = this.props.params.profileId;
         return (
@@ -999,7 +1005,7 @@ var routes = (
             <Route name='home' handler={Home} />
             <Route name='gallery' handler={Gallery} />
             <Route name='your-tracks' handler={YourTracks} />
-            <Route name='profile' path='/profile/:profileId' handler={Profile} addHandlerKey={true} />
+            <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />

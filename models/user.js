@@ -9,7 +9,6 @@ var User = require('../db/create-model')({
         table.string('email', 100);
         table.string('about', 300);
         table.string('location', 100);
-        table.string('avatar_url', 100);
     },
     subscriptions: function(){
         return this.belongsToMany(User, 'subscriptions', 'subscriber', 'subscribee');

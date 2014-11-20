@@ -121,6 +121,9 @@ var Action = {
                     Data.onUpdate();
                     return;
                 }
+                // if (res.notFound) {
+                //     Data.profileData.notFound = true
+                // }
                 console.log('unknown status: ', res.status);
             });
     },

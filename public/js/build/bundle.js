@@ -36316,6 +36316,12 @@ var Profile = React.createClass({displayName: 'Profile',
         Action.getProfile(this.props.params.profileId);
         Action.getCollections(this.props.params.profileId);
     },
+    componentWillReceiveProps: function(nextProps) {
+        if (this.props.params.profileId !== nextProps.params.profileId) {
+            Action.getProfile(nextProps.params.profileId);
+            Action.getCollections(nextProps.params.profileId);
+        }
+    },
     render: function() {
         var id = this.props.params.profileId;
         return (
@@ -37119,7 +37125,7 @@ var routes = (
             React.createElement(Route, {name: "home", handler: Home}), 
             React.createElement(Route, {name: "gallery", handler: Gallery}), 
             React.createElement(Route, {name: "your-tracks", handler: YourTracks}), 
-            React.createElement(Route, {name: "profile", path: "/profile/:profileId", handler: Profile, addHandlerKey: true}), 
+            React.createElement(Route, {name: "profile", path: "/profile/:profileId", handler: Profile}), 
             React.createElement(Route, {name: "favorites", handler: Favorites}), 
             React.createElement(Route, {name: "subscriptions", handler: Subscriptions}), 
             React.createElement(Route, {name: "settings", handler: Settings}), 
@@ -37262,6 +37268,9 @@ var Action = {
                     Data.onUpdate();
                     return;
                 }
+                // if (res.notFound) {
+                //     Data.profileData.notFound = true
+                // }
                 console.log('unknown status: ', res.status);
             });
     },
