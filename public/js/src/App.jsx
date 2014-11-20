@@ -6,6 +6,8 @@ var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 
+// when you refactor this file, relative paths are gonna get messed up
+var Editor = require('./linerider/Editor.jsx');
 var Data = require('./store');
 var Action = require('./action');
 
@@ -56,7 +58,9 @@ var Index = React.createClass({
             <div className='main-content'>
                 <Panel isMasthead={true} id='masthead-panel' />
                 <ScrollDivider link='#editor-panel' />
-                <Panel isEditor={true} id='editor-panel' />
+                <Link to={'/home'}>
+                    <Panel isEditor={true} id='editor-panel' />
+                </Link>
                 <ScrollDivider link='#gallery-panel' />
                 <PanelPadded isGallery={true} id='gallery-panel'>
                     <GalleryPreview />
@@ -69,12 +73,17 @@ var Index = React.createClass({
 
 var Home = React.createClass({
     render: function() {
+        var EMPTY_SCENE = {points:{},lines:{}};
+        var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             <div className='main-content'>
-                <Panel isEditor={true}>
+                <Panel>
+                    <Editor
+                        initScene={EMPTY_SCENE}
+                        onSave={DEFAULT_HANDLER}
+                    />
                     <Conversation />
                 </Panel>
-                <Footer />
             </div>
         );
     }
