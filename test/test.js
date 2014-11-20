@@ -3,11 +3,32 @@ var express = require('express');
 var url = 'http://localhost:3000/api';
 var request = require('supertest');
 
-//dolan is 1, bob is 2, alice is 3, eve is 4
+// dolan is user_id: 1 / track_ids: [1] / collection_ids: [] /
+// bob is user_id: 2 /
+// alice is user_id: 3 /
+// eve is user_id: 4 /
+
+var user_ids = {
+    dolan: 1,
+    bob: 2,
+    eve: 3
+};
+
+var track_ids = {
+    dolan: [1],
+    bob: [2, 3],
+    eve: [4, 5, 6]
+};
+
+var collection_ids = {
+    dolan: [],
+    bob: [1],
+    eve: [2, 3]
+};
 
 // models for dolan
 var dolan = {
-    user_id: 1,
+    user_id: user_ids.dolan,
     username: 'dolan',
     avatar_url: '/images/default.png',
     password: 'gooby',
@@ -16,7 +37,7 @@ var dolan = {
     about: '',
 };
 dolan.tracks = [{
-    track_id: 1,
+    track_id: track_ids.dolan[0],
     scene: {
         next_point_id: 0,
         next_line_id: 0,
@@ -38,10 +59,10 @@ dolan.tracks = [{
         right: 480
     },
     conversation: {
-        conversation_id: 1,
         messages: []
     }
 }];
+
 // representations for dolan
 dolan.user = {
     user_id: dolan.user_id,
@@ -92,6 +113,147 @@ dolan.unsaved_tracks = [{
     invitees: dolan.tracks[0].invitees,
     tags: dolan.tracks[0].tags
 }];
+dolan.unsaved_collections = [];
+
+// models for bob
+var bob = {
+    user_id: user_ids.bob,
+    username: 'bob',
+    avatar_url: '/images/default.png',
+    password: 'blob',
+    email: 'blob@pls.com',
+    location: '',
+    about: '',
+};
+bob.tracks = [{
+    track_id: track_ids.bob[0],
+    scene: {
+        next_point_id: 0,
+        next_line_id: 0,
+        points: {},
+        lines: {}
+    },
+    title: 'bob\'s track 1',
+    description: '',
+    owner: bob.user,
+    collaborators: [],
+    invitees: [],
+    time_created: '',
+    time_modified: '',
+    tags: [],
+    preview: {
+        top: 0,
+        left: 0,
+        bottom: 360,
+        right: 480
+    },
+    conversation: {
+        messages: []
+    }
+}, {
+    track_id: track_ids.bob[1],
+    scene: {
+        next_point_id: 2,
+        next_line_id: 1,
+        points: {
+            0: {
+                x: 0,
+                y: 0
+            },
+            1: {
+                x: 480,
+                y: 360
+            }
+        },
+        lines: {
+            0: {
+                p1: 0,
+                p2: 1
+            }
+        }
+    },
+    title: 'bob\'s track TWOOOO',
+    description: '',
+    owner: bob.user,
+    collaborators: [],
+    invitees: [],
+    time_created: '',
+    time_modified: '',
+    tags: [],
+    preview: {
+        top: 0,
+        left: 0,
+        bottom: 360,
+        right: 480
+    },
+    conversation: {
+        messages: []
+    }
+}];
+// representations for bob
+bob.user = {
+    user_id: bob.user_id,
+    username: bob.username,
+    avatar_url: bob.avatar_url
+};
+bob.profile = {
+    user_id: bob.user_id,
+    username: bob.username,
+    avatar_url: bob.avatar_url,
+    email: bob.email,
+    location: bob.location,
+    about: bob.about
+}
+bob.track_snippets = [{
+    track_id: bob.tracks[0].track_id,
+    scene: bob.tracks[0].scene,
+    title: bob.tracks[0].title,
+    title: bob.tracks[0].description,
+    owner: bob.user
+}, {
+    track_id: bob.tracks[1].track_id,
+    scene: bob.tracks[1].scene,
+    title: bob.tracks[1].title,
+    title: bob.tracks[1].description,
+    owner: bob.user
+}];
+bob.subscriptions = [];
+bob.favorites = [];
+bob.collections = [];
+
+// post bodies for bob
+bob.registration = {
+    username: bob.username,
+    email: bob.email,
+    password: bob.password
+};
+bob.login = {
+    username: bob.username,
+    password: bob.password
+};
+bob.unsaved_profile = {
+    username: bob.username,
+    avatar_url: bob.avatar_url,
+    email: bob.email,
+    location: bob.location,
+    about: bob.about
+}
+bob.unsaved_tracks = [{
+    scene: bob.tracks[0].scene,
+    title: bob.tracks[0].title,
+    description: bob.tracks[0].description,
+    collaborators: bob.tracks[0].collaborators,
+    invitees: bob.tracks[0].invitees,
+    tags: bob.tracks[0].tags
+}, {
+    scene: bob.tracks[1].scene,
+    title: bob.tracks[1].title,
+    description: bob.tracks[1].description,
+    collaborators: bob.tracks[1].collaborators,
+    invitees: bob.tracks[1].invitees,
+    tags: bob.tracks[1].tags
+}];
+bob.unsaved_collections = [];
 
 // This is the bare minimum of what must work. needs a fresh database
 describe('What a Single User Can Do', function () {
@@ -151,7 +313,6 @@ describe('What a Single User Can Do', function () {
     };
 
     var conversation = {
-        conversation_id: conversation_id,
         messages: [message, message],
     };
     // participants: {
@@ -198,6 +359,7 @@ describe('What a Single User Can Do', function () {
     };
 
     var collection = {
+        id: collection_id,
         owner: user,
         title: collection_title,
         description: collection_description,
