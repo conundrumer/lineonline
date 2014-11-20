@@ -10,6 +10,13 @@ var EDIT_STATE = {
 var MIN_LINE_LENGTH = 10;
 var ERASER_RADIUS = 5;
 
+var EMPTY_SCENE = {
+    next_point_id: 0,
+    next_line_id: 0,
+    points:{},
+    lines:{}
+};
+
 function toLineSegments(scene) {
     return Object.keys(scene.lines).map(function(id) {
         return {
@@ -23,10 +30,6 @@ var toolbarStyle = {
     position: 'absolute',
 
 };
-
-function getMaxKey(obj) {
-    return Object.keys(obj).reduce(function(a,b){return Math.max(a,b);},-1);
-}
 
 // ugh i neeed to make a vector class
 function distance(p1, p2) {
@@ -75,9 +78,6 @@ var Editor = React.createClass({
         var initScene = this.props.initScene;
         return {
             scene: initScene,
-            // i should probably put this in the scene object
-            nextPointID: getMaxKey(initScene.points)+1,
-            nextLineID: getMaxKey(initScene.lines)+1,
             editState: EDIT_STATE.PENCIL,
             startPos: null,
             movePos: null
@@ -101,7 +101,12 @@ var Editor = React.createClass({
     onClear: function(e) {
         e.preventDefault();
         this.setState({
-            scene: { lines: {}, points: {} }
+            scene: {
+                next_point_id: 0,
+                next_line_id: 0,
+                points:{},
+                lines:{}
+            }
         });
     },
     onSave: function(e) {
@@ -169,16 +174,16 @@ var Editor = React.createClass({
     // editing functions
     // no snapping but stuff will get more complicated when that's implemented
     addLine: function (p1, p2) {
-        var pointID = this.state.nextPointID;
-        var lineID = this.state.nextLineID;
         var scene = this.state.scene;
+        var pointID = scene.next_point_id;
+        var lineID = scene.next_line_id;
         // no correction for pan/zoom
         scene.points[pointID] = p1;
         scene.points[pointID+1] = p2;
         scene.lines[lineID] = { p1: pointID, p2: pointID+1 };
+        scene.next_point_id = pointID + 2;
+        scene.next_line_id = lineID + 1;
         this.setState({
-            nextLineID: lineID+1,
-            nextPointID: pointID+2,
             scene: scene
         });
         // this.props.onAddPoint({id: pointID, x: p1.x, y: p1.y});
