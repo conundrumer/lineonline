@@ -3,8 +3,98 @@ var express = require('express');
 var url = 'http://localhost:3000/api';
 var request = require('supertest');
 
+//dolan is 1, bob is 2, alice is 3, eve is 4
+
+// models for dolan
+var dolan = {
+    user_id: 1,
+    username: 'dolan',
+    avatar_url: '/images/default.png',
+    password: 'gooby',
+    email: 'gooby@pls.com',
+    location: '',
+    about: '',
+};
+dolan.tracks = [{
+    track_id: 1,
+    scene: {
+        next_point_id: 0,
+        next_line_id: 0,
+        points: {},
+        lines: {}
+    },
+    title: 'dolan\'s track 1',
+    description: '',
+    owner: dolan.user,
+    collaborators: [],
+    invitees: [],
+    time_created: '',
+    time_modified: '',
+    tags: [],
+    preview: {
+        top: 0,
+        left: 0,
+        bottom: 360,
+        right: 480
+    },
+    conversation: {
+        conversation_id: 1,
+        messages: []
+    }
+}];
+// representations for dolan
+dolan.user = {
+    user_id: dolan.user_id,
+    username: dolan.username,
+    avatar_url: dolan.avatar_url
+};
+dolan.profile = {
+    user_id: dolan.user_id,
+    username: dolan.username,
+    avatar_url: dolan.avatar_url,
+    email: dolan.email,
+    location: dolan.location,
+    about: dolan.about
+}
+dolan.track_snippets = [{
+    track_id: dolan.tracks[0].track_id,
+    scene: dolan.tracks[0].scene,
+    title: dolan.tracks[0].title,
+    title: dolan.tracks[0].description,
+    owner: dolan.user
+}];
+dolan.subscriptions = [];
+dolan.favorites = [];
+dolan.collections = [];
+
+// post bodies for dolan
+dolan.registration = {
+    username: dolan.username,
+    email: dolan.email,
+    password: dolan.password
+};
+dolan.login = {
+    username: dolan.username,
+    password: dolan.password
+};
+dolan.unsaved_profile = {
+    username: dolan.username,
+    avatar_url: dolan.avatar_url,
+    email: dolan.email,
+    location: dolan.location,
+    about: dolan.about
+}
+dolan.unsaved_tracks = [{
+    scene: dolan.tracks[0].scene,
+    title: dolan.tracks[0].title,
+    description: dolan.tracks[0].description,
+    collaborators: dolan.tracks[0].collaborators,
+    invitees: dolan.tracks[0].invitees,
+    tags: dolan.tracks[0].tags
+}];
+
 // This is the bare minimum of what must work. needs a fresh database
-describe('The First User', function () {
+describe('What a Single User Can Do', function () {
     var user_id = 1;
     var username = 'bob';
     var avatar_url = '/images/default.png';
@@ -191,7 +281,7 @@ describe('The First User', function () {
     var invitations_data = [track_snippet, track_snippet];
     var collections_data = collections;
     var featured_track_data = full_track;
-    var tracks_data = [track_snippet];
+    var track_snippets_data = [track_snippet];
 
     //profile
     var profile_data = profile;
@@ -249,7 +339,7 @@ describe('The First User', function () {
     it('should be able to get her own track snippets (get: /users/:user_id/tracks)', function(done) {
         agent
             .get('/users/' + user_id + '/tracks')
-            .expect(200, tracks_data, done);
+            .expect(200, track_snippets_data, done);
     });
 
     //GET TRACK DATA
