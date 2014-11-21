@@ -2,10 +2,25 @@ var User = require('../models/user');
 var Track = require('../models/track');
 var passport = require('passport');
 
+var StatusTypes = {
+    info: 100,
+    ok: 200,
+    clientError: 400,
+    serverError: 500,
+    content: 201,
+    accepted: 202,
+    noContent: 204,
+    badRequest: 400,
+    unauthorized: 401,
+    notAcceptable: 406,
+    notFound: 404
+};
+
+
 exports.logout = function(req, res) {
-    console.log("logout")
+    console.log('logout')
     req.logout();
-    res.status(204).send();
+    res.status(StatusTypes.noContent).send();
 }
 
 exports.getCurrentUser = function(req, res) {

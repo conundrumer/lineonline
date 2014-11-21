@@ -82,6 +82,97 @@ var SampleCollection2 = {
 var Data = {
     // currentUser: SampleUser1,
     currentUser: null,
+    errorMessages: {
+        login: null,
+        signup: null
+    },
+    indexData: {
+
+    },
+    profileData: null,
+    collections: null,
+    subscriptionsData: {
+        users: {
+            1: {
+                subscriptions: [
+                    SampleUser2,
+                    SampleUser3
+                ]
+            },
+            2: {
+                subscriptions: [
+                    SampleUser3,
+                    SampleUser1
+                ]
+            },
+            3: {
+                subscriptions: [
+                    SampleUser1,
+                    SampleUser2
+                ]
+            }
+        }
+    },
+    favoritesData: {
+        users: {
+            1: {
+                favorites: [
+                    SampleTrack1,
+                    SampleTrack2,
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1,
+                    SampleTrack3
+                ]
+            },
+            2: {
+                favorites: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                favorites: [
+                    SampleTrack4
+                ]
+            }
+        }
+    },
+    yourTracksData: {
+        users: {
+            1: {
+                your_tracks: [
+                    SampleTrack1,
+                    SampleTrack2
+                ]
+            },
+            2: {
+                your_tracks: [
+                    SampleTrack3,
+                    SampleTrack4,
+                    SampleTrack2,
+                    SampleTrack1
+                ]
+            },
+            3: {
+                your_tracks: [
+                    SampleTrack4
+                ]
+            }
+        }
+    }
+};
+
+var Data2 = {
+    // currentUser: SampleUser1,
+    currentUser: null,
+    errorMessages: {
+        login: null,
+        signup: null
+    },
     indexData: {
 
     },
