@@ -253,18 +253,15 @@ exports.getUserJson = function(req, res, status){
     status = (typeof status === 'number' && status) || 200;
     var id = req.params.id;
     console.log("User id is: " + req.params.id);
-    User.where({id: req.params.id}).fetch().then(function(model){
-        // If id doesn't exist, send 404 page
-        if (model == null){
-            res.send('<div style="color:red;">Are you hallucinating again? GO TO SLEEP!</div>');
-        }
-        else {
-            res.status(status).json({
-                user_id: id,
-                username: model.get('username'),
-                avatar_url: model.get('avatar_url')
-            });
-        }
+    User.where({id: req.params.id}).fetch({require: true})
+    .then(function(model){
+        res.status(status).json({
+            user_id: id,
+            username: model.get('username'),
+            avatar_url: model.get('avatar_url')
+        });
+    }).catch(User.NotFoundError, function() {
+        res.status(404).json({message: 'This user does not exist'});
     });
 }
 

@@ -5,7 +5,7 @@ var Track = require('../models/track');
 
 // TODO: don't repeat yourself
 function getUser(user_id) {
-    return User.where({id: user_id}).fetch();
+    return User.where({id: user_id}).fetch({require: true});
 }
 function getUserSnippetJSON(user_id) {
     return getUser(user_id)
@@ -93,10 +93,12 @@ exports.makeTrack = function(req, res) {
 };
 
 exports.getTrack = function(req, res) {
-    Track.where({id: req.params.track_id}).fetch()
+    Track.where({id: req.params.track_id}).fetch({require: true})
     .then(getFullTrackJSON)
     .then(function(track) {
         res.status(200).json(track);
+    }).catch(Track.NotFoundError, function() {
+        res.status(404).json({message: 'Track does not exist'});
     });
 };
 
@@ -114,5 +116,7 @@ exports.getUserTracks = function(req, res) {
             res.status(200).json(tracks);
         });
 
+    }).catch(User.NotFoundError, function() {
+        res.status(404).json({message: 'This user does not exist'});
     });
 };

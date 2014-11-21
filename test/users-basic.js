@@ -38,6 +38,12 @@ describe('Basic user snippets: A user', function () {
             .get('/users/' + bob.id)
             .expect(StatusTypes.ok, bob.user(), done);
     });
+
+    it('should not be able to get a non-existent user snippet (get: /users/:id)', function (done) {
+        agent.dolan
+            .get('/users/' + 0)
+            .expect(StatusTypes.notFound, done);
+    });
     after(function () {
         return auth.logout(agent.bob);
     });
