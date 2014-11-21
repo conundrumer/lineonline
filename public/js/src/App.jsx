@@ -73,7 +73,12 @@ var Index = React.createClass({
 
 var Home = React.createClass({
     render: function() {
-        var EMPTY_SCENE = {points:{},lines:{}};
+        var EMPTY_SCENE = {
+            next_point_id: 0,
+            next_line_id: 0,
+            points:{},
+            lines:{}
+        };
         var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             <div className='main-content'>
