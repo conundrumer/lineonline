@@ -1,7 +1,6 @@
 var User = require('../models/user');
 var Track = require('../models/track');
 var passport = require('passport');
-
 var StatusTypes = {
     info: 100,
     ok: 200,
@@ -28,6 +27,7 @@ exports.getCurrentUser = function(req, res) {
     exports.getUserJson(req, res);
 }
 
+var DEFAULT_AVATAR_URL = '/images/default.png';
 exports.doRegister = function(req, res){
     username = req.body.username;
     password = req.body.password;
@@ -50,7 +50,12 @@ exports.doRegister = function(req, res){
         if (model === null) {
             console.log('making new user')
             console.log(username, password)
-            User.forge({username:username, password:password, email:email}).save().then(function(){
+            User.forge({
+                username:username,
+                password:password,
+                email:email,
+                avatar_url: DEFAULT_AVATAR_URL
+            }).save().then(function(){
                 console.log('new user', username, password);
                 statuslogin(201, req, res, console.error);
             }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
@@ -243,17 +248,9 @@ exports.getUserJson = function(req, res, status){
         }
         else {
             res.status(status).json({
-                "_links": {
-                    'self': { 'href': '/users/' + id },
-                    'profile': { 'href': '/users/' + id + '/profile' },
-                    'favorites': { 'href': '/users/' + id + '/favorites' },
-                    'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
-                    'collections': { 'href': '/users/' + id + '/collections'},
-                    'tracks': { 'href': '/users/' + id + '/tracks'}
-                },
-                id: id,
+                user_id: id,
                 username: model.get('username'),
-                avatar_url: null // model.get("avatar_url")
+                avatar_url: model.get('avatar_url')
             });
         }
     });
