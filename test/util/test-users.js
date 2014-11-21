@@ -1,5 +1,5 @@
 // test users
-var User = require('./mongo_user');
+var User = require('./mongo-user');
 
 var user_ids = {
     dolan: 1,
