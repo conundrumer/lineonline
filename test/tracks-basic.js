@@ -106,6 +106,12 @@ describe('Basic track making, full tracks, and track snippets: A user', function
     //         .expect(200, bob.full_tracks()[1], done);
     // });
 
+    it('should not be able to make a track without logging in', function (done) {
+        agent.cow
+            .post('/tracks')
+            .send(dolan.unsaved_tracks()[0])
+            .expect(401, done);
+    });
     after(function() {
         return new Promise.all([
             auth.logout(agent.dolan),
