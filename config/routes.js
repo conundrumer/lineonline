@@ -156,7 +156,7 @@ module.exports = function (app, passport) {
 
     // Update profile page
     app.put('/api/users/:id/profile', loginRequired, users.updateProfileJson);
-    app.post('/api/users/:user_id/tracks/', loginRequired, users.createTrack);
+    app.get('/api/users/:id/tracks', loginRequired, tracks.getUserTracks);
 
     app.post('/api/tracks', loginRequired, tracks.makeTrack);
     app.get('/api/tracks/:track_id', tracks.getTrack);

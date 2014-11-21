@@ -132,7 +132,7 @@ var bob = new User({
         invitees: [],
         time_created: '',
         time_modified: '',
-        tags: ['mildly interesting'],
+        tags: [],
         preview: {
             top: 0,
             left: 0,

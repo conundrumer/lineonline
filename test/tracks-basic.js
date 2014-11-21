@@ -44,7 +44,7 @@ describe('Basic track making, full tracks, and track snippets: A user', function
             .expect(StatusTypes.content, bob.full_tracks()[0], done);
     });
 
-    it('should be able to make tracks that have content (post: /tracks)', function (done) {
+    it('should be able to make tracks that have scene content (post: /tracks)', function (done) {
         agent.bob
             .post('/tracks')
             .send(bob.unsaved_tracks()[1])
@@ -113,6 +113,7 @@ describe('Basic track making, full tracks, and track snippets: A user', function
             .send(dolan.unsaved_tracks()[0])
             .expect(StatusTypes.unauthorized, done);
     });
+    //TODO validate legal tracks
     after(function() {
         return new Promise.all([
             auth.logout(agent.dolan),
