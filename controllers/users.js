@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Track = require('../models/track');
 var passport = require('passport');
+var Promise = require('bluebird');
 var StatusTypes = {
     info: 100,
     ok: 200,
@@ -32,39 +33,50 @@ exports.doRegister = function(req, res){
     username = req.body.username;
     password = req.body.password;
     email = req.body.email;
-    console.log(JSON.stringify(req.body));
 
-    if (req.params.username == ""){
-        res.status(202).send({message:'No username'});
+    if (username === ''){
+        res.status(StatusTypes.badRequest)
+            .send({message:'Username required'});
+        return;
+    }
+    if (password === ''){
+        res.status(StatusTypes.badRequest)
+            .send({message:'Password required'});
+        return;
+    }
+    if (email === ''){
+        res.status(StatusTypes.badRequest)
+            .send({message:'Email required'});
         return;
     }
 
-    // Password non-empty
-    if (req.params.password == ""){
-        res.status(202).send({message:'No password given'});
-        return;
-    }
-
-    // Verify valid input
-    User.where({username: username}).fetch().then(function(model){
-        if (model === null) {
-            console.log('making new user')
-            console.log(username, password)
-            User.forge({
-                username:username,
-                password:password,
-                email:email,
-                avatar_url: DEFAULT_AVATAR_URL
-            }).save().then(function(){
-                console.log('new user', username, password);
-                statuslogin(201, req, res, console.error);
-            }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
-        } else { // If someone else already has that username
-            res.status(202).send({message:'This username has already been taken'});
+    new Promise.all([
+        User.where({username: username}).fetch(),
+        User.where({email: email}).fetch(),
+    ]).then(function(models) {
+        var usernameExists = models[0];
+        var emailExists = models[1];
+        if (usernameExists) {
+            res.status(StatusTypes.badRequest)
+                .send({message:'This username has already been taken'});
+            return;
         }
-    }); // PUT A CATCH HERE
-
-}
+        if (emailExists) {
+            res.status(StatusTypes.badRequest)
+                .send({message:'This email has already been taken'});
+            return;
+        }
+        return User.forge({
+            username:username,
+            password:password,
+            email:email,
+            avatar_url: DEFAULT_AVATAR_URL
+        }).save().then(function(){
+            console.log('new user', username, password);
+            statuslogin(201, req, res, console.error);
+        });
+    }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
+};
 
 function statuslogin (status, req, res, next) {
     console.log('inlogin')

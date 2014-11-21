@@ -4,7 +4,7 @@
 
 require('./auth'); // registers dolan
 require('./auth-errors');
-require('./users-basic'); // registers bob
+// require('./users-basic'); // registers bob
 // require('./tracks-basic'); // makes dolan's and bob's tracks
 
 // TODO: track editing
