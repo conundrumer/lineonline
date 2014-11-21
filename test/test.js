@@ -1,113 +1,108 @@
+// tests will only pass for an initially empty database
+
 var demand = require('must');
 var express = require('express');
-var url = 'http://localhost:3000/api';
 var request = require('supertest');
 
-// This is the bare minimum of what must work. needs a fresh database
-describe('The First User', function () {
-    var agent = request.agent(url);
-    var register_data = {
-        username : 'DaSnig',
-        email:'a@a.a',
-        password:'a'
-    };
-    var login_data = {
-        username : 'DaSnig',
-        password:'a'
-    }
-    var id = 1;
-    var track_id = 1;
-    var user_data = {
-        '_links': {
-            'self': { 'href': '/users/' + id },
-            'profile': { 'href': '/users/' + id + '/profile' },
-            'favorites': { 'href': '/users/' + id + '/favorites' },
-            'subscriptions': { 'href': '/users/' + id + '/subscriptions' },
-            'collections': { 'href': '/users/' + id + '/collections'},
-            'tracks': { 'href': '/users/' + id + '/tracks'}
-        },
-        id: id,
-        username: 'DaSnig',
-        avatar_url: null
-    };
-    var send_track_data = {
-        'title': 'Track Title',
-        'description': 'This is a really cool description',
-    };
-    var track_data = {
-        'id': track_id,
-        'owner': id,
-        'title': 'Track Title',
-        'description': 'This is a really cool description',
-        'collaborators': [],
-        'invites': [],
-        'tags': []
-    };
+var url = 'http://localhost:3000/api';
 
+var users = require('./test_users');
+var track_ids = users.track_ids;
+var collection_ids = users.collection_ids;
 
+var agent = {
+    dolan: request.agent(url),
+    bob: request.agent(url),
+    cow: request.agent(url),
+    eve: request.agent(url)
+};
+
+describe('What a Single User Can Do', function () {
+    var dolan = users.dolan;
+
+    //REGISTER
     it('should be able to register (post: /auth/register)', function (done) {
-        agent
+        agent.dolan
             .post('/auth/register')
-            .send(register_data)
-            .expect(201, user_data, done);
+            .send(dolan.registration())
+            .expect(201, dolan.user(), done);
     });
 
+    //CHECK THAT IS LOGGED IN
     it('should be logged in right after registration (get: /auth)', function (done) {
-        agent
+        agent.dolan
             .get('/auth')
-            .send(login_data)
-            .expect(200, user_data, done);
+            .send(dolan.login())
+            .expect(200, dolan.user(), done);
     });
 
+    //GET USER DATA
     it('should be able to get her id, username and null avatar_url (get: /users/:id)', function (done) {
-        agent
-            .get('/users/' + id)
-            .expect(200, user_data, done);
+        agent.dolan
+            .get('/users/' + dolan.id)
+            .expect(200, dolan.user(), done);
     });
 
+    //POST TRACK DATA
     it('should be able to make a track (post: /tracks)', function (done) {
-        agent
+        agent.dolan
             .post('/tracks')
-            .send(send_track_data)
-            .expect(201, track_data, done);
+            .send(dolan.unsaved_tracks()[0])
+            .expect(201, dolan.full_tracks()[0], done);
     });
 
-    it('should be able to get id, owner, title and description of her first track (get: /tracks/:track_id)', function(done) {
-        agent
-            .get('/tracks/'+track_id)
-            .expect(200, track_data, done);
+    //GET ALL TRACK SNIPPET DATA
+    it('should be able to get her own track snippets (get: /users/:user_id/tracks)', function(done) {
+        agent.dolan
+            .get('/users/' + dolan.id + '/tracks')
+            .expect(200, dolan.track_snippets(), done);
     });
 
-    it('should be able to get id, owner, title and description on a certain track of hers (get: /users/:id/tracks/:track_id)', function(done) {
-        agent
-            .get('/users/' + id + '/tracks/'+track_id)
-            .expect(200, track_data, done);
+    //GET ONE FULL TRACK DATA
+    it('should be able to get all the data of her first track (get: /tracks/:track_id)', function(done) {
+        agent.dolan
+            .get('/tracks/' + track_ids.dolan[0])
+            .expect(200, dolan.full_tracks()[0], done);
     });
 
+    //LOG OUT
     it('should be able to log out (delete: /auth)', function(done) {
-        agent
+        agent.dolan
             .delete('/auth')
-            .expect(204,done);
+            .expect(204, done);
     });
 
+    //CHECK THAT NOT LOGGED IN
     it('should not have a session while logged out (get: /auth)', function(done) {
-        agent
+        agent.dolan
             .get('/auth')
             .expect(401, done);
-    })
-
-    it('should be able to log back in (post: /auth)', function(done) {
-        agent
-            .post('/auth')
-            .send(login_data)
-            .expect(200, user_data, done);
     });
 
+    // CAN'T REGISTER SAME NAME
+    it('should not be able to register the same name (post: /auth/register)', function (done) {
+        agent.dolan
+            .post('/auth/register')
+            .send(dolan.registration())
+            .expect(400, done);
+    });
+
+    //LOG IN
+    it('should be able to log back in (post: /auth)', function(done) {
+        agent.dolan
+            .post('/auth')
+            .send(dolan.login())
+            .expect(200, dolan.user(), done);
+    });
+
+    //CHECK THAT IS LOGGED IN (AGAIN)
     it('should be logged in after logging back in (get: /auth)', function(done) {
-        agent
+        agent.dolan
             .get('/auth')
-            .expect(200, user_data, done);
+            .expect(200, dolan.user(), done);
     });
 });
+
+// TODO: test subscriptions, favorites, empty collection
 
 // TODO: test for edge cases like registering w/ username that already exists, getting a user/track that doesn't exist, loginrequired, etc
