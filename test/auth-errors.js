@@ -1,6 +1,7 @@
 var demand = require('must');
 var request = require('supertest-as-promised');
 var Promise = require('bluebird');
+var StatusTypes = require('status-types');
 
 var users = require('./util/test_users');
 var dolan = users.dolan;
@@ -44,7 +45,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth/register')
             .send(reg)
-            .expect(400, errors.some_fields_empty, done);
+            .expect(StatusTypes.badRequest, errors.some_fields_empty, done);
     });
 
     it('should not be able to register with a username that already exists (post: /auth/register)', function (done) {
@@ -56,7 +57,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth/register')
             .send(reg)
-            .expect(400, errors.username_already_exists, done);
+            .expect(StatusTypes.badRequest, errors.username_already_exists, done);
     });
 
     it('should not be able to register with an email that already exists (post: /auth/register)', function (done) {
@@ -68,7 +69,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth/register')
             .send(dolan.registration())
-            .expect(400, errors.email_already_exists,done);
+            .expect(StatusTypes.badRequest, errors.email_already_exists,done);
     });
 
     it('should not be able to log in with a non-existent username (post: /auth/register)', function (done) {
@@ -79,7 +80,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth')
             .send(login)
-            .expect(401, errors.invalid_username, done);
+            .expect(StatusTypes.unauthorized, errors.invalid_username, done);
     });
 
     it('should not be able to log in with the wrong password (post: /auth/register)', function (done) {
@@ -90,7 +91,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth')
             .send(login)
-            .expect(401, errors.invalid_password, done);
+            .expect(StatusTypes.unauthorized, errors.invalid_password, done);
     });
 
     // can a logged-in user do any of the following: login, register?

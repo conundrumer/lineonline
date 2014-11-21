@@ -1,6 +1,7 @@
 var demand = require('must');
 var request = require('supertest-as-promised');
 var Promise = require('bluebird');
+var StatusTypes = require('status-types');
 
 var users = require('./util/test_users');
 var dolan = users.dolan;
@@ -26,7 +27,7 @@ describe('Basic registration, authentication, and sessions: A user', function ()
         agent.dolan
             .post('/auth/register')
             .send(dolan.registration())
-            .expect(201, dolan.user(), done);
+            .expect(StatusTypes.content, dolan.user(), done);
     });
 
     //CHECK THAT IS LOGGED IN
@@ -34,21 +35,21 @@ describe('Basic registration, authentication, and sessions: A user', function ()
         agent.dolan
             .get('/auth')
             .send(dolan.login())
-            .expect(200, dolan.user(), done);
+            .expect(StatusTypes.ok, dolan.user(), done);
     });
 
     //LOG OUT
     it('should be able to log out (delete: /auth)', function(done) {
         agent.dolan
             .delete('/auth')
-            .expect(204, done);
+            .expect(StatusTypes.noContent, done);
     });
 
     //CHECK THAT NOT LOGGED IN
     it('should not have a session while logged out (get: /auth)', function(done) {
         agent.dolan
             .get('/auth')
-            .expect(401, done);
+            .expect(StatusTypes.unauthorized, done);
     });
 
     //LOG IN
@@ -56,14 +57,14 @@ describe('Basic registration, authentication, and sessions: A user', function ()
         agent.dolan
             .post('/auth')
             .send(dolan.login())
-            .expect(200, dolan.user(), done);
+            .expect(StatusTypes.ok, dolan.user(), done);
     });
 
     //CHECK THAT IS LOGGED IN (AGAIN)
     it('should be logged in after logging back in (get: /auth)', function(done) {
         agent.dolan
             .get('/auth')
-            .expect(200, dolan.user(), done);
+            .expect(StatusTypes.ok, dolan.user(), done);
     });
 
     // log out after testing
