@@ -4,7 +4,7 @@
   "description": "Web Apps Final Project",
   "main": "server.js",
   "scripts": {
-    "test": "node db/reset && mocha test",
+    "test": "node db/reset && mocha test/test.js --require mocha-clean",
     "db-reset": "node db/reset",
     "db-pop": "node db/populate",
     "db-repop": "node db/reset && node db/populate"
@@ -44,6 +44,7 @@
     "gulp": "^3.8.9",
     "gulp-ruby-sass": "^0.7.1",
     "mocha": "^2.0.1",
+    "mocha-clean": "^0.4.0",
     "must": "^0.12.0",
     "nodemon": "^1.2.1",
     "reactify": "^0.16.0",
