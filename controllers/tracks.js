@@ -47,20 +47,3 @@ exports.getTrack = function(req, res) {
         })
         .catch(console.error);
 };
-
-exports.getUserTracks = function(req, res) {
-    var user_id = req.params.id;
-
-    User
-        .getByID(user_id)
-        .then(function (user) {
-            return user.getTrackSnippets();
-        })
-        .then(function (trackSnippets) {
-            res.status(200).json(trackSnippets);
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(404).json(ERRORS.USER_NOT_FOUND);
-        })
-        .catch(console.error);
-};

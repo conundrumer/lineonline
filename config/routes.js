@@ -146,17 +146,16 @@ module.exports = function (app, passport) {
     app.post('/api/auth/register', users.doRegister);
 
     app.get('/api/users/:id', users.getUserJson);
-    app.get('/api/users/:id/profile', users.getProfileJson);
-    app.get('/api/users/:id/collections', users.getCollectionsJson);
-    app.get('/api/users/:id/tracks/:track_id', tracks.getTrack);
+    // app.get('/api/users/:id/profile', users.getProfileJson);
+    // app.get('/api/users/:id/collections', users.getCollectionsJson);
 
-    app.get('/api/users/:id/favorites', users.getFavoritesJson);
+    // app.get('/api/users/:id/favorites', users.getFavoritesJson);
 
-    app.get('/api/users/:id/subscriptions', users.getSubscriptions);
+    // app.get('/api/users/:id/subscriptions', users.getSubscriptions);
 
     // Update profile page
-    app.put('/api/users/:id/profile', loginRequired, users.updateProfileJson);
-    app.get('/api/users/:id/tracks', loginRequired, tracks.getUserTracks);
+    // app.put('/api/users/:id/profile', loginRequired, users.updateProfileJson);
+    app.get('/api/users/:id/tracks', loginRequired, users.getTracks);
 
     app.post('/api/tracks', loginRequired, tracks.makeTrack);
     app.get('/api/tracks/:track_id', tracks.getTrack);
