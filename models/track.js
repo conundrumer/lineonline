@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var _ = require('underscore');
 var User = require('./user');
 
+var USE_JSONB = false;
 function buildTrackTable(table) {
     table.increments('id').primary();
     table.string('title', 100);
@@ -59,7 +60,6 @@ function toFullTrack(model) {
 }
 
 
-var USE_JSONB = false;
 var Track = bookshelf.Model.extend({
     tableName: 'tracks',
     // relation queries

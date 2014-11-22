@@ -14,9 +14,9 @@ exports.getCurrentUser = function(req, res) {
 };
 
 exports.doRegister = function(req, res){
-    username = req.body.username;
-    password = req.body.password;
-    email = req.body.email;
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
 
     if (username === ''){
         res.status(StatusTypes.badRequest)

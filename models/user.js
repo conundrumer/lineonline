@@ -1,7 +1,36 @@
 var bookshelf = require('../db/bookshelf.dev');
 var Track = require('./track');
 
+function buildUserTable(table) {
+    table.increments('id').primary();
+    table.string('username', 100);
+    table.string('password', 100);
+    table.string('email', 100);
+    table.string('avatar_url', 100);
+    table.string('about', 300);
+    table.string('location', 100);
+}
+
+// post body -> model
 var DEFAULT_AVATAR_URL = '/images/default.png';
+function toUserModel(body) {
+    return {
+        username: body.username,
+        password: body.password,
+        email: body.email,
+        avatar_url: DEFAULT_AVATAR_URL
+    };
+}
+
+// model -> representations without related
+function toUserSnippet(model) {
+    return {
+        user_id: model.get('id'),
+        username: model.get('username'),
+        avatar_url: model.get('avatar_url')
+    };
+}
+
 var User = bookshelf.Model.extend({
     tableName: 'users',
     tracks: function(){
@@ -20,11 +49,7 @@ var User = bookshelf.Model.extend({
     //     return this.hasMany('Track', 'favorites');
     // },
     asUserSnippet: function() {
-        return {
-            user_id: this.get('id'),
-            username: this.get('username'),
-            avatar_url: this.get('avatar_url')
-        };
+        return toUserSnippet(this);
     },
     getTrackSnippets: function () {
         var userSnippet = this.asUserSnippet();
@@ -38,22 +63,9 @@ var User = bookshelf.Model.extend({
     }
 }, {
     tableName: 'users',
-    build: function (table) {
-        table.increments('id').primary();
-        table.string('username', 100);
-        table.string('password', 100);
-        table.string('email', 100);
-        table.string('avatar_url', 100);
-        table.string('about', 300);
-        table.string('location', 100);
-    },
+    build: buildUserTable,
     create: function(body) {
-        return User.forge({
-            username:username,
-            password:password,
-            email:email,
-            avatar_url: DEFAULT_AVATAR_URL
-        }).save();
+        return User.forge(toUserModel(body)).save();
     },
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
