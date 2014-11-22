@@ -56,7 +56,7 @@ var User = bookshelf.Model.extend({
         }).save();
     },
     getByID: function (id) {
-    return User.forge({id: id}).fetch({require: true});
+        return User.forge({id: id}).fetch({require: true});
     }
 });
 

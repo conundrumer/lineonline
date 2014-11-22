@@ -1,3 +1,4 @@
+var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 
@@ -140,10 +141,10 @@ module.exports = function (app, passport) {
 
 
     // Begin Rest API Routes
-    app.get('/api/auth', loginRequired, users.getCurrentUser);
-    app.post('/api/auth', users.login);
-    app.delete('/api/auth', loginRequired, users.logout);
-    app.post('/api/auth/register', users.doRegister);
+    app.get('/api/auth', loginRequired, auth.getCurrentUser);
+    app.post('/api/auth', auth.login);
+    app.delete('/api/auth', loginRequired, auth.logout);
+    app.post('/api/auth/register', auth.doRegister);
 
     app.get('/api/users/:id', users.getUserSnippet);
     // app.get('/api/users/:id/profile', users.getProfileJson);

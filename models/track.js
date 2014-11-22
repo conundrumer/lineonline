@@ -16,7 +16,7 @@ var Track = bookshelf.Model.extend({
             scene: this.get('scene'),
             title: this.get('title'),
             description: this.get('description'),
-            owner: this.get('owner'),
+            owner: null,
             preview: {
                 top: this.get('preview_top'),
                 left: this.get('preview_left'),

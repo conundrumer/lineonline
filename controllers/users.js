@@ -1,4 +1,3 @@
-var passport = require('passport');
 var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 
@@ -30,84 +29,7 @@ exports.getTracks = function(req, res) {
         .catch(console.error);
 };
 
-
-exports.logout = function(req, res) {
-    console.log('logout')
-    req.logout();
-    res.status(StatusTypes.noContent).send();
-}
-
-exports.getCurrentUser = function(req, res) {
-    req.params.id = req.user.get('id');
-    exports.getUserSnippet(req, res);
-}
-
-exports.doRegister = function(req, res){
-    username = req.body.username;
-    password = req.body.password;
-    email = req.body.email;
-
-    if (username === ''){
-        res.status(StatusTypes.badRequest)
-            .send({message:'Username required'});
-        return;
-    }
-    if (password === ''){
-        res.status(StatusTypes.badRequest)
-            .send({message:'Password required'});
-        return;
-    }
-    if (email === ''){
-        res.status(StatusTypes.badRequest)
-            .send({message:'Email required'});
-        return;
-    }
-
-    new Promise.all([
-        User.where({username: username}).fetch(),
-        User.where({email: email}).fetch(),
-    ]).then(function(models) {
-        var usernameExists = models[0];
-        var emailExists = models[1];
-        if (usernameExists) {
-            res.status(StatusTypes.badRequest)
-                .send({message:'This username has already been taken'});
-            return;
-        }
-        if (emailExists) {
-            res.status(StatusTypes.badRequest)
-                .send({message:'This email has already been taken'});
-            return;
-        }
-        return User
-            .create(req.body)
-            .then(function(){
-                statuslogin(201, req, res, console.error);
-            });
-    }).catch(console.error);
-};
-
-function statuslogin (status, req, res, next) {
-    console.log('inlogin')
-    passport.authenticate('local', function(err, user, info) {
-        if (err) { return next(err); }
-        console.log("WHAT IS USER")
-        console.log(user)
-        console.log(info)
-        if (!user) { return res.status(401).send(info); }
-        console.log("ATTEMPTIPNG LOGIN TI")
-        req.logIn(user, function(err) {
-            if (err) { return next(err); }
-            req.params.id = user.get('id');
-            exports.getUserSnippet(req, res, status);
-        });
-    })(req, res, next);
-}
-
-exports.login = statuslogin.bind(null, null);
-
-exports.getUserSnippet = function(req, res, status){
-    status = (typeof status === 'number' && status) || 200;
+exports.getUserSnippet = function(req, res){
     var id = req.params.id;
     User
         .getByID(id)
@@ -115,7 +37,7 @@ exports.getUserSnippet = function(req, res, status){
             return user.asUserSnippet();
         })
         .then(function(userSnippet) {
-            res.status(status).json(userSnippet);
+            res.status(200).json(userSnippet);
         })
         .catch(User.NotFoundError, function() {
             res.status(404).json({message: 'This user does not exist'});
