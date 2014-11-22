@@ -3,120 +3,74 @@ var Promise = require('bluebird');
 var User = require('../models/user');
 var Track = require('../models/track');
 
-// TODO: don't repeat yourself
-function getUser(user_id) {
-    return User.where({id: user_id}).fetch({require: true});
-}
-function getUserSnippetJSON(user_id) {
-    return getUser(user_id)
-        .then(function (model) {
-            return {
-                user_id: model.get('id'),
-                username: model.get('username'),
-                avatar_url: model.get('avatar_url')
-            };
-        });
-}
-
-function getFullTrackJSON(model, ownerSnippet){
-    var track = {
-        track_id: model.get('id'),
-        scene: model.get('scene'),
-        title: model.get('title'),
-        description: model.get('description'),
-        owner: ownerSnippet,
-        preview: {
-            top: model.get('preview_top'),
-            left: model.get('preview_left'),
-            bottom: model.get('preview_bottom'),
-            right: model.get('preview_right'),
-        },
-        collaborators: [],
-        invitees: [],
-        time_created: '',
-        time_modified: '',
-        tags: [],
-        conversation: {
-            messages: []
-        }
-    };
-    if (ownerSnippet) {
-        return new Promise.resolve(track);
+var ERRORS = {
+    TRACK_NOT_FOUND: {
+        message: 'No track exists with the given ID'
+    },
+    USER_NOT_FOUND: {
+        message: 'No use exists with the given ID'
     }
-    return getUserSnippetJSON(model.get('owner'))
-        .then(function(ownerSnippet) {
-            track.owner = ownerSnippet;
-            return track;
-        });
-}
-
-function getTrackSnippetJSON(model, ownerSnippet) {
-    var trackSnippet = {
-        track_id: model.get('id'),
-        scene: model.get('scene'),
-        title: model.get('title'),
-        description: model.get('description'),
-        owner: ownerSnippet,
-        preview: {
-            top: model.get('preview_top'),
-            left: model.get('preview_left'),
-            bottom: model.get('preview_bottom'),
-            right: model.get('preview_right'),
-        }
-    };
-    if (ownerSnippet) {
-        return new Promise.resolve(trackSnippet);
-    }
-    return getUserSnippetJSON(model.get('owner'))
-        .then(function(ownerSnippet) {
-            track.owner = ownerSnippet;
-            return track;
-        });
-}
+};
 
 exports.makeTrack = function(req, res) {
+    var owner = req.user;
     var track = req.body;
-    Track.forge({
-        scene: track.scene,
-        title: track.title,
-        description: track.description,
-        owner: req.user.get('id'),
-        preview_top: track.preview.top,
-        preview_left: track.preview.left,
-        preview_bottom: track.preview.bottom,
-        preview_right: track.preview.right
-    }).save()
-    .then(getFullTrackJSON)
-    .then(function(track) {
-        res.status(201).json(track);
-    }).catch(console.error);
+
+    Track
+        .forge({
+            scene: track.scene,
+            title: track.title,
+            description: track.description,
+            owner: owner.get('id'),
+            preview_top: track.preview.top,
+            preview_left: track.preview.left,
+            preview_bottom: track.preview.bottom,
+            preview_right: track.preview.right
+        })
+        .save()
+        .then(function (track) {
+            return track
+                .asFullTrack()
+                .addOwnerSnippet(owner.asUserSnippet());
+        })
+        .then(function(fullTrack) {
+            res.status(201).json(fullTrack);
+        })
+        .catch(console.error);
 };
 
 exports.getTrack = function(req, res) {
-    Track.where({id: req.params.track_id}).fetch({require: true})
-    .then(getFullTrackJSON)
-    .then(function(track) {
-        res.status(200).json(track);
-    }).catch(Track.NotFoundError, function() {
-        res.status(404).json({message: 'Track does not exist'});
-    });
+    var track_id = req.params.track_id;
+
+    Track
+        .getByID(track_id)
+        .then(function (track) {
+            return track
+                .asFullTrack()
+                .makeOwnerSnippet();
+        })
+        .then(function(fullTrack) {
+            res.status(200).json(fullTrack);
+        })
+        .catch(Track.NotFoundError, function() {
+            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
+        })
+        .catch(console.error);
 };
 
 exports.getUserTracks = function(req, res) {
     var user_id = req.params.id;
-    new Promise.all([
-        getUserSnippetJSON(user_id),
-        Track.where({owner: user_id}).fetchAll()
-    ]).then(function(values) {
-        var userSnippet = values[0];
-        var trackModels = values[1];
-        new Promise.all(trackModels.map(function(model) {
-            return getTrackSnippetJSON(model, userSnippet);
-        })).then(function(tracks) {
-            res.status(200).json(tracks);
-        });
 
-    }).catch(User.NotFoundError, function() {
-        res.status(404).json({message: 'This user does not exist'});
-    });
+    User
+        .getByID(user_id)
+        .then(function (user) {
+            return user.getTrackSnippets();
+        })
+        .then(function (trackSnippets) {
+            res.status(200).json(trackSnippets);
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(404).json(ERRORS.USER_NOT_FOUND);
+        })
+        .catch(console.error);
 };
