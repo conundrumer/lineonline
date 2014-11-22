@@ -42,7 +42,6 @@ exports.getCurrentUser = function(req, res) {
     exports.getUserJson(req, res);
 }
 
-var DEFAULT_AVATAR_URL = '/images/default.png';
 exports.doRegister = function(req, res){
     username = req.body.username;
     password = req.body.password;
@@ -80,16 +79,12 @@ exports.doRegister = function(req, res){
                 .send({message:'This email has already been taken'});
             return;
         }
-        return User.forge({
-            username:username,
-            password:password,
-            email:email,
-            avatar_url: DEFAULT_AVATAR_URL
-        }).save().then(function(){
-            console.log('new user', username, password);
-            statuslogin(201, req, res, console.error);
-        });
-    }).catch(console.error); // CREATE OWN ERROR FN TO TELL USERS SOMEONE DUN GOOFED
+        return User
+            .create(req.body)
+            .then(function(){
+                statuslogin(201, req, res, console.error);
+            });
+    }).catch(console.error);
 };
 
 function statuslogin (status, req, res, next) {

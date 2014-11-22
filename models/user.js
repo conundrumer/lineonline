@@ -1,6 +1,7 @@
 var bookshelf = require('../db/bookshelf.dev');
 var Track = require('./track');
 
+var DEFAULT_AVATAR_URL = '/images/default.png';
 var User = bookshelf.Model.extend({
     tableName: 'users',
     tracks: function(){
@@ -45,6 +46,14 @@ var User = bookshelf.Model.extend({
         table.string('avatar_url', 100);
         table.string('about', 300);
         table.string('location', 100);
+    },
+    create: function(body) {
+        return User.forge({
+            username:username,
+            password:password,
+            email:email,
+            avatar_url: DEFAULT_AVATAR_URL
+        }).save();
     },
     getByID: function (id) {
     return User.forge({id: id}).fetch({require: true});
