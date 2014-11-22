@@ -1,6 +1,63 @@
 var bookshelf = require('../db/bookshelf.dev');
 var Promise = require('bluebird');
+var _ = require('underscore');
 var User = require('./user');
+
+function buildTrackTable(table) {
+    table.increments('id').primary();
+    table.string('title', 100);
+    table.string('description', 100);
+    table.integer('owner').references('users.id');
+    table.json('scene', USE_JSONB);
+    table.float('preview_top');
+    table.float('preview_left');
+    table.float('preview_bottom');
+    table.float('preview_right');
+}
+
+// post body -> model
+function toTrackModel(body, owner_id) {
+    return {
+        scene: body.scene,
+        title: body.title,
+        description: body.description,
+        owner: owner_id,
+        preview_top: body.preview.top,
+        preview_left: body.preview.left,
+        preview_bottom: body.preview.bottom,
+        preview_right: body.preview.right
+    };
+}
+
+// model -> representations without related fields
+function toTrackSnippet(model) {
+    return {
+        track_id: model.get('id'),
+        scene: model.get('scene'),
+        title: model.get('title'),
+        description: model.get('description'),
+        owner: null,
+        preview: {
+            top: model.get('preview_top'),
+            left: model.get('preview_left'),
+            bottom: model.get('preview_bottom'),
+            right: model.get('preview_right'),
+        }
+    };
+}
+function toFullTrack(model) {
+    return _.extend(toTrackSnippet(model), {
+        collaborators: [],
+        invitees: [],
+        time_created: '',
+        time_modified: '',
+        tags: [],
+        conversation: {
+            messages: []
+        }
+    });
+}
+
 
 var USE_JSONB = false;
 var Track = bookshelf.Model.extend({
@@ -11,52 +68,20 @@ var Track = bookshelf.Model.extend({
     },
     // representations
     asFullTrack: function() {
-        var fullTrack = {
-            track_id: this.get('id'),
-            scene: this.get('scene'),
-            title: this.get('title'),
-            description: this.get('description'),
-            owner: null,
-            preview: {
-                top: this.get('preview_top'),
-                left: this.get('preview_left'),
-                bottom: this.get('preview_bottom'),
-                right: this.get('preview_right'),
-            },
-            collaborators: [],
-            invitees: [],
-            time_created: '',
-            time_modified: '',
-            tags: [],
-            conversation: {
-                messages: []
-            }
-        };
-        return this.handleOwnerSnippet(fullTrack);
+        return this.handleOwnerSnippet(toFullTrack(this));
     },
     asTrackSnippet: function() {
-        var trackSnippet = {
-            track_id: this.get('id'),
-            scene: this.get('scene'),
-            title: this.get('title'),
-            description: this.get('description'),
-            owner: null,
-            preview: {
-                top: this.get('preview_top'),
-                left: this.get('preview_left'),
-                bottom: this.get('preview_bottom'),
-                right: this.get('preview_right'),
-            }
-        };
-        return this.handleOwnerSnippet(trackSnippet);
+        return this.handleOwnerSnippet(toTrackSnippet(this));
     },
     // helper
     handleOwnerSnippet: function (trackRep) {
         return {
+            // sync
             addOwnerSnippet: function(ownerSnippet) {
                 trackRep.owner = ownerSnippet;
                 return trackRep;
             },
+            // async promise
             makeOwnerSnippet: function() {
                 return this.owner().fetch({ require: true })
                     .then(function (user) {
@@ -71,29 +96,9 @@ var Track = bookshelf.Model.extend({
     }
 }, {
     tableName: 'tracks',
-    build: function (table) {
-        table.increments('id').primary();
-        table.string('title', 100);
-        table.string('description', 100);
-        table.integer('owner').references('users.id');
-        table.json('scene', USE_JSONB);
-        table.float('preview_top');
-        table.float('preview_left');
-        table.float('preview_bottom');
-        table.float('preview_right');
-    },
-    // TODO: validation
+    build: buildTrackTable,
     create: function (body, owner_id) {
-        return Track.forge ({
-            scene: body.scene,
-            title: body.title,
-            description: body.description,
-            owner: owner_id,
-            preview_top: body.preview.top,
-            preview_left: body.preview.left,
-            preview_bottom: body.preview.bottom,
-            preview_right: body.preview.right
-        }).save();
+        return Track.forge(toTrackModel(body, owner_id)).save();
     },
     // self queries
     getByID: function (id) {
