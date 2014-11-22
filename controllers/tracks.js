@@ -17,17 +17,7 @@ exports.makeTrack = function(req, res) {
     var track = req.body;
 
     Track
-        .forge({
-            scene: track.scene,
-            title: track.title,
-            description: track.description,
-            owner: owner.get('id'),
-            preview_top: track.preview.top,
-            preview_left: track.preview.left,
-            preview_bottom: track.preview.bottom,
-            preview_right: track.preview.right
-        })
-        .save()
+        .create(req.body, owner.get('id'))
         .then(function (track) {
             return track
                 .asFullTrack()
