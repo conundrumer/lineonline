@@ -39,7 +39,7 @@ exports.logout = function(req, res) {
 
 exports.getCurrentUser = function(req, res) {
     req.params.id = req.user.get('id');
-    exports.getUserJson(req, res);
+    exports.getUserSnippet(req, res);
 }
 
 exports.doRegister = function(req, res){
@@ -99,25 +99,25 @@ function statuslogin (status, req, res, next) {
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             req.params.id = user.get('id');
-            exports.getUserJson(req, res, status);
+            exports.getUserSnippet(req, res, status);
         });
     })(req, res, next);
 }
 
 exports.login = statuslogin.bind(null, null);
 
-exports.getUserJson = function(req, res, status){
+exports.getUserSnippet = function(req, res, status){
     status = (typeof status === 'number' && status) || 200;
     var id = req.params.id;
-    console.log("User id is: " + req.params.id);
-    User.where({id: req.params.id}).fetch({require: true})
-    .then(function(model){
-        res.status(status).json({
-            user_id: id,
-            username: model.get('username'),
-            avatar_url: model.get('avatar_url')
+    User
+        .getByID(id)
+        .then(function(user){
+            return user.asUserSnippet();
+        })
+        .then(function(userSnippet) {
+            res.status(status).json(userSnippet);
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(404).json({message: 'This user does not exist'});
         });
-    }).catch(User.NotFoundError, function() {
-        res.status(404).json({message: 'This user does not exist'});
-    });
-}
+};
