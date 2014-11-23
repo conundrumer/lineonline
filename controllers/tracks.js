@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-
+var StatusTypes = require('status-types');
 var User = require('../models/user');
 var Track = require('../models/track');
 
@@ -46,4 +46,25 @@ exports.getTrack = function(req, res) {
             res.status(404).json(ERRORS.TRACK_NOT_FOUND);
         })
         .catch(console.error);
+};
+
+
+exports.editTrack = function(req, res) {
+    var track_id = req.params.track_id;
+    var owner = req.user;
+    var track = req.body; // ???
+
+    Track
+        .update(req.body, track_id, owner.get('id'))
+        .then(function (trackModel){
+            return trackModel
+                .asFullTrack()
+                .addOwnerSnippet(owner.asUserSnippet());
+        })
+        .then(function(fullTrack){
+
+            res.status(StatusTypes.ok).json(fullTrack);
+        })
+        .catch(console.error);
+
 };

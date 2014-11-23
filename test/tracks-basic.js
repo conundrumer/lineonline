@@ -118,7 +118,7 @@ describe('Basic track making, full tracks, and track snippets: A user', function
             .get('/tracks/' + 0)
             .expect(StatusTypes.notFound, done);
     });
-    it('should not be able to get track snippers from non-existent user', function (done) {
+    it('should not be able to get track snippets from non-existent user', function (done) {
         agent.dolan
             .get('/users/' + 0 + '/tracks')
             .expect(StatusTypes.notFound, done);

@@ -59,7 +59,6 @@ function toFullTrack(model) {
     });
 }
 
-
 var Track = bookshelf.Model.extend({
     tableName: 'tracks',
     // relation queries
@@ -99,6 +98,11 @@ var Track = bookshelf.Model.extend({
     build: buildTrackTable,
     create: function (body, owner_id) {
         return Track.forge(toTrackModel(body, owner_id)).save();
+    },
+    update: function (body, track_id, owner_id) {
+        var track = toTrackModel(body, owner_id);
+        track.id = track_id;
+        return Track.forge(track).save();
     },
     // self queries
     getByID: function (id) {
