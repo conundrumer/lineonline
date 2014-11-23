@@ -29,6 +29,18 @@ exports.makeTrack = function(req, res) {
         .catch(console.error);
 };
 
+exports.deleteTrack = function(req, res){
+    var track_id = req.params.track_id;
+
+    Track
+        .getByID(track_id)
+        .then(function (model){
+            model.destroy();
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(console.error);
+}
+
 exports.getTrack = function(req, res) {
     var track_id = req.params.track_id;
 

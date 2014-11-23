@@ -31,7 +31,8 @@ api.route('/tracks')
 
 api.route('/tracks/:track_id')
     .get(tracks.getTrack)
-    .put(tracks.editTrack);
+    .put(tracks.editTrack)
+    .delete(tracks.deleteTrack);
 
 
 
