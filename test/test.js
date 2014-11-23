@@ -11,6 +11,7 @@ require('./tracks-basic'); // makes dolan's and bob's tracks
 // TODO: profile
 // TODO: gallery
 // TODO: subscriptions
+require('./subscriptions');
 // TODO: favorites
 // TODO: collections
 
