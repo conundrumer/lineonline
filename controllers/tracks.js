@@ -60,14 +60,26 @@ exports.getTrack = function(req, res) {
         .catch(console.error);
 };
 
+function Unauthorized(message) {
+    this.name = 'Unauthorized';
+    this.message = message || 'You are not authorized to do this.';
+}
+Unauthorized.prototype = new Error();
+Unauthorized.prototype.constructor = Unauthorized;
 
 exports.editTrack = function(req, res) {
     var track_id = req.params.track_id;
     var owner = req.user;
-    var track = req.body; // ???
+    var track = Track.get
 
     Track
-        .update(req.body, track_id, owner.get('id'))
+        .getByID(track_id)
+        .then(function(trackModel){
+            if (owner.get('id') != trackModel.get('owner')){
+                throw new Unauthorized('You do not have permission to edit this track.');
+            }
+            return Track.update(req.body, track_id, owner.get('id'));
+        })
         .then(function (trackModel){
             return trackModel
                 .asFullTrack()
@@ -76,6 +88,9 @@ exports.editTrack = function(req, res) {
         .then(function(fullTrack){
 
             res.status(StatusTypes.ok).json(fullTrack);
+        })
+        .catch(Unauthorized, function(err) {
+            res.status(StatusTypes.unauthorized).json(err);
         })
         .catch(console.error);
 
