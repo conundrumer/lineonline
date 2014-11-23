@@ -31,12 +31,22 @@ exports.makeTrack = function(req, res) {
 
 exports.deleteTrack = function(req, res){
     var track_id = req.params.track_id;
+    var owner = req.user;
 
     Track
         .getByID(track_id)
-        .then(function (model){
-            model.destroy();
-            res.status(StatusTypes.noContent).send();
+        .then(function(trackModel){
+            if (owner.get('id') != trackModel.get('owner')){
+                throw new Unauthorized('You do not have permission to delete this track.');
+            }
+            trackModel.destroy();
+            return res.status(StatusTypes.noContent).send();
+        })
+        .catch(Unauthorized, function(err) {
+            res.status(StatusTypes.unauthorized).json(err);
+        })
+        .catch(Track.NotFoundError, function() {
+            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
         })
         .catch(console.error);
 }
@@ -91,6 +101,9 @@ exports.editTrack = function(req, res) {
         })
         .catch(Unauthorized, function(err) {
             res.status(StatusTypes.unauthorized).json(err);
+        })
+        .catch(Track.NotFoundError, function() {
+            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
         })
         .catch(console.error);
 
