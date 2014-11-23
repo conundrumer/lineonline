@@ -32,6 +32,11 @@ api.route('/tracks')
 api.route('/tracks/:track_id')
     .get(tracks.getTrack);
 
+// profile
+api.route('/users/:id/profile')
+    .get(users.getProfile)
+    .put(users.editProfile);
+
 module.exports = function (app, passport) {
     app.use('/api', api);
 
