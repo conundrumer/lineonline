@@ -8,4 +8,4 @@ module.exports = require('bookshelf')(require('knex')({
         database: 'lineonline',
         charset: 'utf8'
     }
-}));
+})).plugin('registry');
