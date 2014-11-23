@@ -44,7 +44,7 @@ describe('Basic track making, full tracks, and track snippets: A user', function
             .expect(StatusTypes.content, bob.full_tracks()[0], done);
     });
 
-    it('should be able to make tracks that have content (post: /tracks)', function (done) {
+    it('should be able to make tracks that have scene content (post: /tracks)', function (done) {
         agent.bob
             .post('/tracks')
             .send(bob.unsaved_tracks()[1])
@@ -112,6 +112,16 @@ describe('Basic track making, full tracks, and track snippets: A user', function
             .post('/tracks')
             .send(dolan.unsaved_tracks()[0])
             .expect(StatusTypes.unauthorized, done);
+    });
+    it('should not be able to get a track that doesn\'t exist', function (done) {
+        agent.dolan
+            .get('/tracks/' + 0)
+            .expect(StatusTypes.notFound, done);
+    });
+    it('should not be able to get track snippers from non-existent user', function (done) {
+        agent.dolan
+            .get('/users/' + 0 + '/tracks')
+            .expect(StatusTypes.notFound, done);
     });
     after(function() {
         return new Promise.all([
