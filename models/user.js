@@ -3,31 +3,30 @@ var Track = require('./track');
 
 function buildUserTable(table) {
     table.increments('id').primary();
-    table.string('username', 100);
-    table.string('password', 100);
-    table.string('email', 100);
+    table.string('username', 100).unique().notNullable();
+    table.string('password', 100).notNullable();
+    table.string('email', 100).unique().notNullable();
     table.string('avatar_url', 100);
     table.string('about', 300);
     table.string('location', 100);
 }
 
 // post body -> model
-var DEFAULT_AVATAR_URL = '/images/default.png';
 function toUserModel(body) {
     return {
         username: body.username,
         password: body.password,
-        email: body.email,
-        avatar_url: DEFAULT_AVATAR_URL
+        email: body.email
     };
 }
 
 // model -> representations without related
+var DEFAULT_AVATAR_URL = '/images/default.png';
 function toUserSnippet(model) {
     return {
         user_id: model.get('id'),
         username: model.get('username'),
-        avatar_url: model.get('avatar_url')
+        avatar_url: model.get('avatar_url') || DEFAULT_AVATAR_URL
     };
 }
 
