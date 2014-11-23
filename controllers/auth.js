@@ -4,6 +4,13 @@ var passport = require('passport');
 
 var User = require('../models/user');
 
+exports.loginRequired = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ message: 'Not logged in'});
+};
+
 exports.logout = function(req, res) {
     req.logout();
     res.status(StatusTypes.noContent).send();
@@ -13,7 +20,7 @@ exports.getCurrentUser = function(req, res) {
     res.status(200).json(req.user.asUserSnippet());
 };
 
-exports.doRegister = function(req, res){
+exports.register = function(req, res){
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
