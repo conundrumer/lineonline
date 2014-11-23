@@ -6,9 +6,9 @@ var User = require('./user');
 var USE_JSONB = false;
 function buildTrackTable(table) {
     table.increments('id').primary();
-    table.string('title', 100);
+    table.string('title', 100).notNullable();
     table.string('description', 100);
-    table.integer('owner').references('users.id');
+    table.integer('owner').references('users.id').notNullable();
     table.json('scene', USE_JSONB);
     table.float('preview_top');
     table.float('preview_left');
