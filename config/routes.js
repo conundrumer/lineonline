@@ -30,7 +30,12 @@ api.route('/tracks')
     .post(auth.loginRequired, tracks.makeTrack);
 
 api.route('/tracks/:track_id')
-    .get(tracks.getTrack);
+    .get(tracks.getTrack)
+    .put(tracks.editTrack)
+    .delete(tracks.deleteTrack);
+
+
+
 
 module.exports = function (app, passport) {
     app.use('/api', api);

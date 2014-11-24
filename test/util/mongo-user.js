@@ -21,7 +21,7 @@ function toUserRep(user_id) {
     return Users[user_id].user();
 }
 function toUserReps(user_ids) {
-    return user_ids.map(toUserReps);
+    return user_ids.map(toUserRep);
 }
 function toUserTrackSnippets(user_id) {
     return Users[user_id].track_snippets();
