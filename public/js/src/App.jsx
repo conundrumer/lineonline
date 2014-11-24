@@ -9,8 +9,12 @@ var Reflux = require('reflux');
 
 // when you refactor this file, relative paths are gonna get messed up
 var Editor = require('./linerider/Editor.jsx');
-var Data = require('./store');
-var Action = require('./action');
+// var Data = require('./store');
+var Actions = require('./actions');
+
+//stores
+var AuthStore = require('./stores/auth');
+var ProfileStore = require('./stores/profile');
 
 // var names = ['delu', 'jing', 'what'];
 
@@ -22,11 +26,8 @@ var Action = require('./action');
 
 var App = React.createClass({
     mixins: [
-        Reflux.listenTo(Data, 'onDataChanged')
+        Reflux.listenTo(AuthStore, 'onDataChanged')
     ],
-    componentWillMount: function() {
-        Action.getCurrentUser();
-    },
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -56,15 +57,10 @@ var App = React.createClass({
             }
         }
     },
+    componentWillMount: function() {
+        Actions.getCurrentUser();
+    },
     render: function() {
-        // return (
-        //     <div className='login-link'>
-        //         {names.map(function(n) {
-        //             return <Hello name={n} />
-        //         })}
-        //     </div>
-        // );
-        // var { currentUser, index, profile, subscriptions, ...other } = Data;
         var data = this.state.data;
         return (
             <div className='container'>
@@ -243,38 +239,71 @@ var YourTracks = React.createClass({
 //{this.props.data.profile}
 //{this.props.data.currentUser}
 var Profile = React.createClass({
+    mixins: [
+        Reflux.listenTo(ProfileStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: {
+                // currentUser: SampleUser1,
+                currentUser: null,
+                errorMessages: {
+                    login: null,
+                    signup: null
+                },
+                indexData: {},
+                profileData: null,
+                collections: null,
+                subscriptionsData: {
+                    users: {}
+                },
+                favoritesData: {
+                    users: {}
+                },
+                yourTracksData: {
+                    users: {}
+                }
+            }
+        }
+    },
     componentWillMount: function() {
-        Action.getProfile(this.props.params.profileId);
-        Action.getCollections(this.props.params.profileId);
+        Actions.getProfile(this.props.params.profileId);
+        Actions.getCollections(this.props.params.profileId);
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.props.params.profileId !== nextProps.params.profileId) {
-            Action.getProfile(nextProps.params.profileId);
-            Action.getCollections(nextProps.params.profileId);
+            Actions.getProfile(nextProps.params.profileId);
+            Actions.getCollections(nextProps.params.profileId);
         }
     },
     render: function() {
         var id = this.props.params.profileId;
+        var data = this.state.data;
         return (
             <div className='main-content'>
-            { (this.props.data.profileData && this.props.data.collections) ?
+            { (data.profileData && data.collections) ?
                 <div>
                     <PanelPadded isProfile={true}>
                         <div className='section group'>
                             <div className='col span_1_of_4'>
                                 <ProfileSidebar
-                                    avatarUrl={this.props.data.profileData.avatar_url}
-                                    username={this.props.data.profileData.username}
-                                    location={this.props.data.profileData.location}
-                                    email={this.props.data.profileData.email}
-                                    about={this.props.data.profileData.about}
+                                    avatarUrl={data.profileData.avatar_url}
+                                    username={data.profileData.username}
+                                    location={data.profileData.location}
+                                    email={data.profileData.email}
+                                    about={data.profileData.about}
                                 />
                             </div>
                             <div className='col span_3_of_4'>
                                 <ProfileMain
-                                    username={this.props.data.profileData.username}
-                                    featuredTrack={this.props.data.profileData.featured_track}
-                                    collections={this.props.data.collections}
+                                    username={data.profileData.username}
+                                    featuredTrack={data.profileData.featured_track}
+                                    collections={data.collections}
                                 />
                             </div>
                         </div>
@@ -886,7 +915,7 @@ var DropdownLogin = React.createClass({
         var username = this.refs.signupUsername.getDOMNode().value.trim();
         var email = this.refs.signupEmail.getDOMNode().value.trim();
         var password = this.refs.signupPassword.getDOMNode().value.trim();
-        Action.signup({
+        Actions.signup({
             username: username,
             email: email,
             password: password
@@ -897,7 +926,7 @@ var DropdownLogin = React.createClass({
         var username = this.refs.loginUsername.getDOMNode().value.trim();
         var password = this.refs.loginPassword.getDOMNode().value.trim();
 
-        Action.login({
+        Actions.login({
             username: username,
             password: password
         });
@@ -984,7 +1013,7 @@ var DropdownLogin = React.createClass({
 var Dropdown = React.createClass({
     handleLogout: function(event) {
         event.preventDefault();
-        Action.logout();
+        Actions.logout();
     },
     render: function() {
         var cx = React.addons.classSet;
