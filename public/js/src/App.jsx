@@ -9,20 +9,13 @@ var Reflux = require('reflux');
 
 // when you refactor this file, relative paths are gonna get messed up
 var Editor = require('./linerider/Editor.jsx');
-// var Data = require('./store');
+
+//Actions
 var Actions = require('./actions');
 
-//stores
+//Data Stores
 var AuthStore = require('./stores/auth');
 var ProfileStore = require('./stores/profile');
-
-// var names = ['delu', 'jing', 'what'];
-
-//data={this.props.data.index} currentUser={this.props.data.currentUser}
-
-
-//Sample Users
-
 
 var App = React.createClass({
     mixins: [
@@ -35,26 +28,7 @@ var App = React.createClass({
     },
     getInitialState: function() {
         return {
-            data: {
-                // currentUser: SampleUser1,
-                currentUser: null,
-                errorMessages: {
-                    login: null,
-                    signup: null
-                },
-                indexData: {},
-                profileData: null,
-                collections: null,
-                subscriptionsData: {
-                    users: {}
-                },
-                favoritesData: {
-                    users: {}
-                },
-                yourTracksData: {
-                    users: {}
-                }
-            }
+            data: AuthStore.getDefaultData()
         }
     },
     componentWillMount: function() {
@@ -62,6 +36,7 @@ var App = React.createClass({
     },
     render: function() {
         var data = this.state.data;
+        console.log('HELLOOO', data);
         return (
             <div className='container'>
                 <Navbar currentUser={data.currentUser} errorMessages={data.errorMessages} />
@@ -249,26 +224,7 @@ var Profile = React.createClass({
     },
     getInitialState: function() {
         return {
-            data: {
-                // currentUser: SampleUser1,
-                currentUser: null,
-                errorMessages: {
-                    login: null,
-                    signup: null
-                },
-                indexData: {},
-                profileData: null,
-                collections: null,
-                subscriptionsData: {
-                    users: {}
-                },
-                favoritesData: {
-                    users: {}
-                },
-                yourTracksData: {
-                    users: {}
-                }
-            }
+            data: ProfileStore.getDefaultData()
         }
     },
     componentWillMount: function() {
@@ -284,34 +240,36 @@ var Profile = React.createClass({
     render: function() {
         var id = this.props.params.profileId;
         var data = this.state.data;
+        console.log(data);
         return (
             <div className='main-content'>
-            { (data.profileData && data.collections) ?
-                <div>
-                    <PanelPadded isProfile={true}>
-                        <div className='section group'>
-                            <div className='col span_1_of_4'>
+                <PanelPadded isProfile={true}>
+                    <div className='section group'>
+                        <div className='col span_1_of_4'>
+                            { data.profile ?
                                 <ProfileSidebar
-                                    avatarUrl={data.profileData.avatar_url}
-                                    username={data.profileData.username}
-                                    location={data.profileData.location}
-                                    email={data.profileData.email}
-                                    about={data.profileData.about}
+                                    avatarUrl={data.profile.avatar_url}
+                                    username={data.profile.username}
+                                    location={data.profile.location}
+                                    email={data.profile.email}
+                                    about={data.profile.about}
                                 />
-                            </div>
-                            <div className='col span_3_of_4'>
+                                : null
+                            }
+                        </div>
+                        <div className='col span_3_of_4'>
+                            { data.collections ?
                                 <ProfileMain
-                                    username={data.profileData.username}
-                                    featuredTrack={data.profileData.featured_track}
+                                    username={data.profile.username}
+                                    featuredTrack={data.profile.featured_track}
                                     collections={data.collections}
                                 />
-                            </div>
+                                : null
+                            }
                         </div>
-                    </PanelPadded>
-                    <Footer />
-                </div>
-                : null
-            }
+                    </div>
+                </PanelPadded>
+                <Footer />
             </div>
         );
     }
@@ -838,7 +796,7 @@ var Navbar = React.createClass({
                             </div>
                             <Dropdown
                                 username={this.props.currentUser.username}
-                                id={this.props.currentUser.id}
+                                id={this.props.currentUser.user_id}
                                 isHidden={this.state.hidden}
                             />
                         </li>
@@ -1022,6 +980,7 @@ var Dropdown = React.createClass({
             'dropdown-settings': true,
             'hidden': this.props.isHidden
         });
+        console.log('ajkldfdajklfa ', this.props);
         return (
             <div className={classes}>
                 <ul>
