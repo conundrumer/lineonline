@@ -13,7 +13,7 @@ require('./users-profile');
 // TODO: favorites
 // TODO: collections
 
-// TODO: invitations
+require('./invitations');
 // TODO: collaboration (non-realtime)
 // TODO: privacy
 // TODO: conversations (non-realtime)

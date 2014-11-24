@@ -97,7 +97,7 @@ var bob = new User({
         title: 'bob\'s track 1',
         description: '',
         collaborators: [],
-        invitees: [],
+        invitees: [user_ids.dolan],
         time_created: '',
         time_modified: '',
         tags: [],
