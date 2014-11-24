@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var _ = require('underscore');
 
 var fullSize = {
     position: 'absolute',
@@ -17,10 +18,10 @@ var Line = React.createClass({
     render: function() {
         return (
             <line
-                x1={this.props.line.p1.x}
-                y1={this.props.line.p1.y}
-                x2={this.props.line.p2.x}
-                y2={this.props.line.p2.y}
+                x1={this.props.p1.x}
+                y1={this.props.p1.y}
+                x2={this.props.p2.x}
+                y2={this.props.p2.y}
                 stroke={this.props.color}
                 strokeWidth='4'
                 strokeLinecap='round'
@@ -51,15 +52,23 @@ var Display = React.createClass({
         window.removeEventListener('resize', this.onResize);
     },
     render: function() {
+        var scene = this.props.scene;
         return (
             <div ref='container' style={fullSize}>
                 <svg width={this.state.width} height={this.state.height}>
-                    {this.props.lines.map(function(line) {
-                        return <Line line={line} />;
-                    })}
+                    { _.pairs(scene.lines).map(function(pair) {
+                        var key = pair[0];
+                        var points = pair[1];
+                        var p1 = scene.points[points.p1];
+                        var p2 = scene.points[points.p2];
+                        return <Line key={key} p1={p1} p2={p2} />;
+                    }.bind(this)) }
                     { this.props.drawingLine ?
-                        <Line line={this.props.drawingLine} color='red' /> :
-                        null
+                        <Line key={-1}
+                            p1={this.props.drawingLine.p1}
+                            p2={this.props.drawingLine.p2}
+                            color='red'
+                        /> : null
                     }
                 </svg>
             </div>
