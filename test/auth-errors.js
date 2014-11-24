@@ -45,7 +45,7 @@ describe('Registration and authentication error cases: A user', function () {
         agent.dolan
             .post('/auth/register')
             .send(reg)
-            .expect(StatusTypes.badRequest, errors.some_fields_empty, done);
+            .expect(StatusTypes.badRequest, done);
     });
 
     it('should not be able to register with a username that already exists (post: /auth/register)', function (done) {
@@ -68,7 +68,7 @@ describe('Registration and authentication error cases: A user', function () {
         };
         agent.dolan
             .post('/auth/register')
-            .send(dolan.registration())
+            .send(reg)
             .expect(StatusTypes.badRequest, errors.email_already_exists,done);
     });
 

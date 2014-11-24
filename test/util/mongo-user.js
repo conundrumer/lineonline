@@ -159,7 +159,8 @@ User.prototype = {
                 description: track.description,
                 collaborators: track.collaborators,
                 invitees: track.invitees,
-                tags: track.tags
+                tags: track.tags,
+                preview: track.preview
             };
         });
     },
