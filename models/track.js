@@ -6,9 +6,9 @@ var User = require('./user');
 var USE_JSONB = false;
 function buildTrackTable(table) {
     table.increments('id').primary();
-    table.string('title', 100);
+    table.string('title', 100).notNullable();
     table.string('description', 100);
-    table.integer('owner').references('users.id');
+    table.integer('owner').references('users.id').notNullable();
     table.json('scene', USE_JSONB);
     table.float('preview_top');
     table.float('preview_left');
@@ -59,7 +59,6 @@ function toFullTrack(model) {
     });
 }
 
-
 var Track = bookshelf.Model.extend({
     tableName: 'tracks',
     // relation queries
@@ -99,6 +98,11 @@ var Track = bookshelf.Model.extend({
     build: buildTrackTable,
     create: function (body, owner_id) {
         return Track.forge(toTrackModel(body, owner_id)).save();
+    },
+    update: function (body, track_id, owner_id) {
+        var track = toTrackModel(body, owner_id);
+        track.id = track_id;
+        return Track.forge(track).save();
     },
     // self queries
     getByID: function (id) {
