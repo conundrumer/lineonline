@@ -31,11 +31,10 @@ describe('Favorites: A user', function () {
     });
 
     //bob adding dolan's track to his favorites
-    //return noContent?
     it('should be able to favorite a track (put: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
             .put('/users/' + bob.id + '/favorites/' + track_ids.dolan[0])
-            .expect(StatusTypes.ok, bob.favorites(), done);
+            .expect(StatusTypes.noContent, done);
     });
 
     //bob getting his own favorites
@@ -46,7 +45,6 @@ describe('Favorites: A user', function () {
     });
 
     //bob removing dolan's track from his own favorites
-    //return noContent?
     it('should be able to unfavorite a track (delete: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
             .delete('/users/' + bob.id + '/favorites/' + track_ids.dolan[0])
