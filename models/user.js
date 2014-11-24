@@ -1,5 +1,6 @@
 var bookshelf = require('../db/bookshelf.dev');
 var Track = require('./track');
+var _ = require('underscore');
 
 function buildUserTable(table) {
     table.increments('id').primary();
@@ -13,10 +14,20 @@ function buildUserTable(table) {
 
 // post body -> model
 function toUserModel(body) {
+    location = '';
+    if (body.location != null && body.location != undefined){
+        location = body.location;
+    }
+    if (body.about == null || body.about == undefined){
+        body.about = '';
+    }
     return {
         username: body.username,
         password: body.password,
-        email: body.email
+        email: body.email,
+        avatar_url: DEFAULT_AVATAR_URL,
+        about: body.about,
+        location: location
     };
 }
 
@@ -30,10 +41,22 @@ function toUserSnippet(model) {
     };
 }
 
+function toUserProfile(model) {
+    return _.extend(toUserSnippet(model), {
+        email: model.get('email'),
+        location: model.get('location'),
+        about: model.get('about'),
+        user_id: model.get('id')
+    });
+}
+
 var User = bookshelf.Model.extend({
     tableName: 'users',
     tracks: function(){
         return this.hasMany('Track', 'owner');
+    },
+    asUserProfile: function() {
+        return toUserProfile(this);
     },
     // subscriptions: function(){
     //     return this.belongsToMany('User', 'subscriptions', 'subscriber', 'subscribee');
@@ -66,9 +89,21 @@ var User = bookshelf.Model.extend({
     create: function(body) {
         return User.forge(toUserModel(body)).save();
     },
+    update: function(body, user_id){
+        var userModel = User.forge(toUserModel(body));
+        userModel.set({id: user_id});
+        return userModel.save().then(function(model){
+            return toUserProfile(model);
+        });
+    },
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
     }
 });
+
+
+
+
+
 
 module.exports = bookshelf.model('User', User);
