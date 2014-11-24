@@ -312,4 +312,126 @@ Data.onUpdate = function() {
     console.log('Data.onUpdate not set');
 }
 
-module.exports = Data;
+var Reflux = require('reflux');
+var Actions = require('./action');
+var request = require('superagent');
+var StatusTypes = require('status-types');
+
+// module.exports = Data;
+var DataStore = Reflux.createStore({
+    listenables: [Actions],
+    onGetCurrentUser: function() {
+        request
+            .get('/api/auth')
+            .end(function(err, res) {
+                //user not logged in, set current user to null/redirect to index
+                if (res.status === StatusTypes.unauthorized) {
+                    console.log('user not logged in');
+                    // console.log(res.body);
+                    Data.currentUser = null;
+                }
+                //user logged in, set current user to user
+                if (res.status === StatusTypes.ok) {
+                    console.log('user is logged in');
+                    // console.log(res.body);
+                    Data.currentUser = res.body;
+                }
+                this.trigger(Data);
+            }.bind(this));
+    },
+    onLogin: function(login_data) {
+        request
+            .post('/api/auth')
+            .send(login_data)
+            .end(function(err, res) {
+                //not logged in, show error message/update ui?
+                if (res.status === StatusTypes.unauthorized) {
+                    // console.log(res.body.message);
+                    console.log('user failed to log in');
+                    Data.errorMessages.login = res.body.message;
+                    this.trigger(Data);
+                    return;
+                }
+                //logged in, set current user to user/update ui
+                if (res.status === StatusTypes.ok) {
+                    // console.log(res.body)
+                    console.log('user logged in successfully');
+                    Data.currentUser = res.body;
+                    // Data.profileData.users[Data.currentUser.id] = Data.currentUser;
+                    Data.errorMessages.login = null;
+                    this.trigger(Data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+    onLogout: function() {
+        request
+            .del('/api/auth')
+            .end(function(err, res) {
+                //logged out, set current user to null/update ui/redirect to index
+                if (res.status === StatusTypes.noContent) {
+                    console.log('user logged out successfully');
+                    Data.currentUser = null;
+                    this.trigger(Data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+    onSignup: function(register_data) {
+        request
+            .post('/api/auth/register')
+            .send(register_data)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.content) {
+                    console.log('user registered/logged in successfully');
+                    Data.currentUser = res.body;
+                    Data.errorMessages.signup = null;
+                    this.trigger(Data);
+                    return;
+                }
+                if (res.status === StatusTypes.badRequest) {
+                    console.log('user failed to be registered');
+                    console.log(res.body.message);
+                    Data.errorMessages.signup = res.body.message;
+                    this.trigger(Data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onGetProfile: function(id) {
+        var context = this;
+        request
+            .get('/api/users/' + id + '/profile')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    Data.profileData = res.body;
+                    console.log(Data.profileData.featured_track);
+                    this.trigger(Data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     Data.profileData.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onGetCollections: function(id) {
+        request
+            .get('/api/users/' + id + '/collections')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    Data.collections = res.body;
+                    this.trigger(Data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
+});
+
+module.exports = DataStore;

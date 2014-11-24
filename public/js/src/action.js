@@ -1,3 +1,4 @@
+var Reflux = require('reflux');
 var request = require('superagent');
 var Data = require('./store');
 var StatusTypes = require('status-types');
@@ -115,6 +116,15 @@ var Action = {
                 console.log('unknown status: ', res.status);
             });
     }
-}
+};
 
-module.exports = Action;
+var Actions = Reflux.createActions([
+    'getCurrentUser',
+    'login',
+    'logout',
+    'signup',
+    'getProfile',
+    'getCollections'
+]);
+
+module.exports = Actions;

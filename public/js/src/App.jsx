@@ -5,6 +5,7 @@ var Routes = Router.Routes;
 var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
+var Reflux = require('reflux');
 
 // when you refactor this file, relative paths are gonna get messed up
 var Editor = require('./linerider/Editor.jsx');
@@ -20,6 +21,41 @@ var Action = require('./action');
 
 
 var App = React.createClass({
+    mixins: [
+        Reflux.listenTo(Data, 'onDataChanged')
+    ],
+    componentWillMount: function() {
+        Action.getCurrentUser();
+    },
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: {
+                // currentUser: SampleUser1,
+                currentUser: null,
+                errorMessages: {
+                    login: null,
+                    signup: null
+                },
+                indexData: {},
+                profileData: null,
+                collections: null,
+                subscriptionsData: {
+                    users: {}
+                },
+                favoritesData: {
+                    users: {}
+                },
+                yourTracksData: {
+                    users: {}
+                }
+            }
+        }
+    },
     render: function() {
         // return (
         //     <div className='login-link'>
@@ -29,10 +65,11 @@ var App = React.createClass({
         //     </div>
         // );
         // var { currentUser, index, profile, subscriptions, ...other } = Data;
+        var data = this.state.data;
         return (
             <div className='container'>
-                <Navbar currentUser={Data.currentUser} errorMessages={Data.errorMessages} />
-                <this.props.activeRouteHandler data={Data} />
+                <Navbar currentUser={data.currentUser} errorMessages={data.errorMessages} />
+                <this.props.activeRouteHandler data={data} />
             </div>
         );
     }
@@ -1034,6 +1071,6 @@ function doRender(target, callback) {
     React.render(routes, target, callback);
 };
 
-Data.onUpdate = doRender.bind(null, document.body, function(){});
+// Data.onUpdate = doRender.bind(null, document.body, function(){});
 
 module.exports = doRender;
