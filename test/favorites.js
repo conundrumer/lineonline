@@ -33,57 +33,57 @@ describe('Favorites: A user', function () {
     //bob adding dolan's track to his favorites
     it('should be able to favorite a track (put: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
-            .put('/users/' + bob.id + '/favorites/' + track_ids.dolan[0])
+            .put('/favorites/' + track_ids.dolan[0])
             .expect(StatusTypes.noContent, done);
     });
 
     //bob getting his own favorites
     it('should be able to get her favorite tracks (get: /users/:user_id/favorites)', function (done) {
         agent.bob
-            .get('/users/' + bob.id + '/favorites')
+            .get('/favorites')
             .expect(StatusTypes.ok, bob.favorites(), done);
     });
 
     //bob removing dolan's track from his own favorites
     it('should be able to unfavorite a track (delete: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
-            .delete('/users/' + bob.id + '/favorites/' + track_ids.dolan[0])
+            .delete('/favorites/' + track_ids.dolan[0])
             .expect(StatusTypes.noContent, done);
-    });
-
-    //bob cannot get someone else's favorites
-    it('should be not be able get someone else\'s favorite tracks (get: /users/:user_id/favorites)', function (done) {
-        agent.bob
-            .get('/users/' + dolan.id + '/favorites')
-            .expect(StatusTypes.unauthorized, done);
-    });
-
-    //bob cannot add a track to someone else's favorites
-    it('should not be able to favorite a track for someone else (put: /users/:user_id/favorites/:track_id)', function (done) {
-        agent.bob
-            .put('/users/' + dolan.id + '/favorites/' + track_ids.bob[0])
-            .expect(StatusTypes.unauthorized, done);
-    });
-
-    //bob cannot remove a track from someone else's favorites
-    it('should not be able to unfavorite a track for someone else (delete: /users/:user_id/favorites/:track_id)', function (done) {
-        agent.bob
-            .delete('/users/' + dolan.id + '/favorites/' + track_ids.bob[0])
-            .expect(StatusTypes.unauthorized, done);
     });
 
     //bob cannot add a non-existent track to his favorites
     it('should not be able to favorite a non-existent track (put: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
-            .put('/users/' + bob.id + '/favorites/' + 0)
+            .put('/favorites/' + 0)
             .expect(StatusTypes.notFound, done);
     });
 
     //bob cannot remove a non-existent track from his favorites
     it('should not be able to unfavorite a non-existent track (put: /users/:user_id/favorites/:track_id)', function (done) {
         agent.bob
-            .delete('/users/' + bob.id + '/favorites/' + 0)
+            .delete('favorites/' + 0)
             .expect(StatusTypes.notFound, done);
+    });
+
+    //cow is not logged in and cannot favorite a track
+    it('should not be able to favorite a track if not logged in (put: /users/:user_id/favorites/:track_id)', function (done) {
+        agent.cow
+            .put('/favorites/' + track_ids.dolan[0])
+            .expect(StatusTypes.unauthorized, done);
+    });
+
+    //cow is not logged in and cannot get his own favorites
+    it('should not be able to get her favorite tracks if not logged in (get: /users/:user_id/favorites)', function (done) {
+        agent.cow
+            .get('/favorites')
+            .expect(StatusTypes.unauthorized, done);
+    });
+
+    //cow is not logged in and cannot unfavorite a track
+    it('should not be able to unfavorite a track if not logged in (delete: /users/:user_id/favorites/:track_id)', function (done) {
+        agent.cow
+            .delete('/favorites/' + track_ids.dolan[0])
+            .expect(StatusTypes.unauthorized, done);
     });
 
     after(function() {
