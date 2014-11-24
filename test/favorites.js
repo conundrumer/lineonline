@@ -86,13 +86,6 @@ describe('Favorites: A user', function () {
             .expect(StatusTypes.notFound, done);
     });
 
-    //bob cannot remove an unfavorited track from his own favorites
-    // it('should not be able to unfavorite an unfavorited track (delete: /users/:user_id/favorites/:track_id)', function (done) {
-    //     agent.bob
-    //         .delete('/users/' + bob.id + '/favorites/' + track_ids.dolan[0])
-    //         .expect(StatusTypes.notFound, done);
-    // });
-
     after(function() {
         return new Promise.all([
             auth.logout(agent.dolan),
