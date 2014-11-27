@@ -1,5 +1,6 @@
 var React = require('react/addons');
 var Display = require('./Display.jsx');
+var Icon = require('../ui/Icon.jsx');
 
 var EDIT_STATE = {
     LINE: 1,
@@ -72,6 +73,7 @@ function lineSegmentDistance(p, line) {
 }
 
 var Editor = React.createClass({
+    navbarOffset: 70,
     getInitialState: function() {
         // setting init state w/ props is generally an anti-pattern
         // but there is no synchronization needed atm
@@ -121,7 +123,7 @@ var Editor = React.createClass({
         window.addEventListener('mouseup', this.onMouseUp);
         var startPos = {
             x: e.pageX,
-            y: e.pageY
+            y: e.pageY - this.navbarOffset
         };
         switch (this.state.editState) {
             case EDIT_STATE.ERASE:
@@ -135,7 +137,7 @@ var Editor = React.createClass({
         var startPos = this.state.startPos;
         var movePos = {
             x: e.pageX,
-            y: e.pageY
+            y: e.pageY - this.navbarOffset
         };
         switch (this.state.editState) {
             case EDIT_STATE.PENCIL:
@@ -157,7 +159,7 @@ var Editor = React.createClass({
         var startPos = this.state.startPos;
         var endPos = {
             x: e.pageX,
-            y: e.pageY
+            y: e.pageY - this.navbarOffset
         };
         switch (this.state.editState) {
             case EDIT_STATE.LINE:
@@ -230,21 +232,36 @@ var Editor = React.createClass({
                     drawingLine={drawingLine}
                     lines={toLineSegments(this.state.scene)}
                 />
-                <div onMouseDown={this.onToolBarMouseDown} style={toolbarStyle}>
-                    <button onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
-                        Pencil
+                <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
+                        <Icon class='toolbar-icon' icon='pencil' />
+                        <span className='toolbar-title'>
+                            Pencil
+                        </span>
                     </button>
-                    <button onClick={this.onToolClick(EDIT_STATE.LINE)}>
-                        Line
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.LINE)}>
+                        <Icon class='toolbar-icon' icon='minus' />
+                        <span className='toolbar-title'>
+                            Line
+                        </span>
                     </button>
-                    <button onClick={this.onToolClick(EDIT_STATE.ERASE)}>
-                        Erase
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.ERASE)}>
+                        <Icon class='toolbar-icon' icon='delete' />
+                        <span className='toolbar-title'>
+                            Erase
+                        </span>
                     </button>
-                    <button onClick={this.onSave}>
-                        Save
+                    <button className='btn-toolbar' onClick={this.onSave}>
+                        <Icon class='toolbar-icon' icon='check' />
+                        <span className='toolbar-title'>
+                            Save
+                        </span>
                     </button>
-                    <button onClick={this.onClear}>
-                        Clear
+                    <button className='btn-toolbar' onClick={this.onClear}>
+                        <Icon class='toolbar-icon' icon='x' />
+                        <span className='toolbar-title'>
+                            Clear
+                        </span>
                     </button>
                 </div>
             </div>

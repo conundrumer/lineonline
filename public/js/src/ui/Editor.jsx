@@ -28,7 +28,7 @@ var Editor = React.createClass({
         var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             <div className='main-content'>
-                <Panel>
+                <Panel isEditor={true}>
                     <LineriderEditor
                         initScene={EMPTY_SCENE}
                         onSave={DEFAULT_HANDLER}

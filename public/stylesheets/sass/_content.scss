@@ -10,6 +10,63 @@
     height: 100%;
 }
 
+.toolbar {
+    position: absolute;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 20px;
+    opacity: 0.9;
+    // background: red;
+    // left: 0;
+    // top: 0;
+    .toolbar-icon {
+        font-size: 10px;
+    }
+
+    .toolbar-title {
+        padding-left: 12px;
+        font-size: 13px;
+    }
+}
+
+.btn-toolbar {
+    @extend %uppercase-header;
+    @include transition(color 0.2s ease-in-out 0);
+    // font-size: 13px;
+    border: 1px solid $border-col;
+    background: #fff;
+    margin: 0 5px;//0 5px;
+    display: inline-block;
+    padding: 3px 10px 8px;
+    width: 100px;
+    &:hover {
+        cursor: pointer;
+        color: $light-col;
+    }
+    // padding: 10px;
+}
+
+// .display, .display-wrapper, .display-svg {
+//     @include box-sizing(border-box);
+// }
+
+.display {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    // bottom: 0;
+    left: 0;
+    // right: 0;
+}
+
+.display-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .not-found {
     p {
         font-size: 66px;
@@ -535,6 +592,13 @@
 }
 
 .editor {
+    position: relative;
+    border-bottom: none;
+    // background: #fff url('../../images/sample_editor.png') no-repeat top center;
+    // background-size: 100% auto;//contain;
+}
+
+#editor-panel {
     position: relative;
     background: #fff url('../../images/sample_editor.png') no-repeat top center;
     background-size: 100% auto;//contain;

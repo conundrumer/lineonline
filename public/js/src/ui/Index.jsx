@@ -23,7 +23,7 @@ var Index = React.createClass({
                 <Panel isMasthead={true} id='masthead-panel' />
                 <ScrollDivider link='#editor-panel' />
                 <Link to={'editor'}>
-                    <Panel isEditor={true} id='editor-panel' />
+                    <Panel id='editor-panel' />
                 </Link>
                 <ScrollDivider link='#gallery-panel' />
                 <PanelPadded isGallery={true} id='gallery-panel'>

@@ -5,7 +5,8 @@ var fullSize = {
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0
+    right: 0,
+    background: 'red'
 };
 
 var Line = React.createClass({
@@ -30,6 +31,7 @@ var Line = React.createClass({
 });
 
 var Display = React.createClass({
+    lineriderRed: '#D62525',
     getInitialState: function() {
         return {
             width: 0,
@@ -52,13 +54,13 @@ var Display = React.createClass({
     },
     render: function() {
         return (
-            <div ref='container' style={fullSize}>
-                <svg width={this.state.width} height={this.state.height}>
+            <div ref='container' className='display'>
+                <svg className='display-svg'>
                     {this.props.lines.map(function(line) {
                         return <Line line={line} />;
                     })}
                     { this.props.drawingLine ?
-                        <Line line={this.props.drawingLine} color='red' /> :
+                        <Line line={this.props.drawingLine} color={this.lineriderRed} /> :
                         null
                     }
                 </svg>
