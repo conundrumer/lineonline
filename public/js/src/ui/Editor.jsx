@@ -7,7 +7,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var HomeStore = require('../stores/home');
+// var EditorStore = require('../stores/editor');
 
 //UI Components
 var Conversation = require('./Conversation.jsx');

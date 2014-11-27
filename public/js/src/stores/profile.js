@@ -8,12 +8,12 @@ var ProfileStore = Reflux.createStore({
     getDefaultData: function() {
         this.data = {
             profile: null,
-            collections: null
+            tracks: null,
+            featuredTrack: null
         };
         return this.data
     },
     onGetProfile: function(id) {
-        var context = this;
         request
             .get('/api/users/' + id + '/profile')
             .end(function(err, res) {
@@ -30,18 +30,59 @@ var ProfileStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onGetCollections: function(id) {
+    onGetTrackSnippets: function(id) {
         request
-            .get('/api/users/' + id + '/collections')
+            .get('/api/users/' + id + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
-                    this.data.collections = res.body;
+                    this.data.tracks = res.body;
+                    console.log('got user track snippets!!!!');
                     this.trigger(this.data);
                     return;
                 }
+                // if (res.notFound) {
+                //     this.data.profileData.notFound = true
+                // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
+    },
+
+    onGetFeaturedTrack: function(id) {
+        // request
+        //     .get('/api/users/' + id + '/featured')
+        //     .end(function(err, res) {
+        //         if (res.status === StatusTypes.ok) {
+        //             this.data.profile = res.body;
+        //             console.log('got user featured track!!!!');
+        //             this.trigger(this.data);
+        //             return;
+        //         }
+        //         // if (res.notFound) {
+        //         //     this.data.profileData.notFound = true
+        //         // }
+        //         console.log('unknown status: ', res.status);
+        //     }.bind(this));
+
+
+
+        setTimeout(function() {
+            this.data.featuredTrack = {};
+            this.trigger(this.data);
+        }.bind(this));
     }
+
+    // onGetCollections: function(id) {
+    //     request
+    //         .get('/api/users/' + id + '/collections')
+    //         .end(function(err, res) {
+    //             if (res.status === StatusTypes.ok) {
+    //                 this.data.collections = res.body;
+    //                 this.trigger(this.data);
+    //                 return;
+    //             }
+    //             console.log('unknown status: ', res.status);
+    //         }.bind(this));
+    // }
 });
 
 module.exports = ProfileStore;

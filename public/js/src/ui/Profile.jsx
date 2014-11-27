@@ -32,12 +32,16 @@ var Profile = React.createClass({
     },
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
-        Actions.getCollections(this.props.params.profileId);
+        Actions.getTrackSnippets(this.props.params.profileId);
+        // Actions.getFeaturedTrack(this.props.params.profileId);
+        // Actions.getCollections(this.props.params.profileId);
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
-            Actions.getCollections(nextProps.params.profileId);
+            Actions.getTracks(this.props.params.profileId);
+            // Actions.getFeaturedTrack(this.props.params.profileId);
+            // Actions.getCollections(nextProps.params.profileId);
         }
     },
     render: function() {
@@ -61,30 +65,48 @@ var Profile = React.createClass({
                             }
                         </div>
                         <div className='col span_3_of_4'>
-                            { data.collections ?
-                                <ProfileMain
-                                    username={data.profile.username}
-                                    featuredTrack={data.profile.featured_track}
-                                    collections={data.collections}
-                                />
-                                : null
-                            }
+                            <section className='profile-main'>
+                                { data.featuredTrack ?
+                                    <ProfileFeaturedTrack featuredTrack={data.featuredTrack} />
+                                    :
+                                    <article className='profile-featured-track'>
+                                        <Icon class='preview-icon' icon='fullscreen-enter' />
+                                        <MediaIcons />
+                                        <aside className='info'>
+                                            <div>
+                                                <h3>Sample Featured Track</h3>
+                                                <p>
+                                                    Sample description
+                                                </p>
+                                                <h3>Owner</h3>
+                                                <p>
+                                                    <Link to={'/profile/' + id}>
+                                                        Sample Owner
+                                                    </Link>
+
+                                                </p>
+                                                <h3>Collaborators</h3>
+                                                <ul>
+                                                    <li>
+                                                        <Link to={'/profile/'+ id}>
+                                                            Sample Collaborator
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </aside>
+                                    </article>
+                                }
+                                { data.tracks && data.profile ?
+                                    <ProfileTrackSnippets tracks={data.tracks} username={data.profile.username} />
+                                    : null
+                                }
+                            </section>
                         </div>
                     </div>
                 </PanelPadded>
                 <Footer />
             </div>
-        );
-    }
-});
-
-var ProfileMain = React.createClass({
-    render: function() {
-        return (
-            <section className='profile-main'>
-                <ProfileFeaturedTrack featuredTrack={this.props.featuredTrack} />
-                <ProfileCollections collections={this.props.collections} />
-            </section>
         );
     }
 });
@@ -105,29 +127,41 @@ var ProfileFeaturedTrack = React.createClass({
                 <Icon class='preview-icon' icon='fullscreen-enter' />
                 <MediaIcons />
                 <aside className='info'>
-                    {this.props.featuredTrack ?
-                        <div>
-                            <h3>{this.props.featuredTrack.title}</h3>
-                            <p>
-                                {this.props.featuredTrack.description}
-                            </p>
-                            <h3>Owner</h3>
-                            <p>
-                                <Link to={'/profile/' + this.props.featuredTrack.owner.id}>
-                                    {this.props.featuredTrack.owner.username}
-                                </Link>
+                    <div>
+                        <h3>{this.props.featuredTrack.title}</h3>
+                        <p>
+                            {this.props.featuredTrack.description}
+                        </p>
+                        <h3>Owner</h3>
+                        <p>
+                            <Link to={'/profile/' + this.props.featuredTrack.owner.id}>
+                                {this.props.featuredTrack.owner.username}
+                            </Link>
 
-                            </p>
-                            <h3>Collaborators</h3>
-                            <ul>
-                                {collaboratorListItems}
-                            </ul>
-                        </div>
-                        : null
-                    }
-
+                        </p>
+                        <h3>Collaborators</h3>
+                        <ul>
+                            {collaboratorListItems}
+                        </ul>
+                    </div>
                 </aside>
             </article>
+        );
+    }
+});
+
+var ProfileTrackSnippets = React.createClass({
+    render: function() {
+        console.log(this.props.tracks);
+        return (
+            <section className='profile-collections'>
+                <article className='track-collection'>
+                    <h3 className='collection-title'>
+                        All Tracks
+                    </h3>
+                    <TracksPreview tracks={this.props.tracks} />
+                </article>
+            </section>
         );
     }
 });

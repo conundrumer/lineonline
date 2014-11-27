@@ -7,7 +7,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var YourTracksStore = require('../stores/your-tracks');
+// var HomeStore = require('../stores/home');
 
 //UI Components
 var TracksPreview = require('./GalleryPreview.jsx');

@@ -12,7 +12,9 @@ var Actions = Reflux.createActions([
 
     //profile
     'getProfile',
-    'getCollections'
+    'getCollections',
+    'getTrackSnippets',
+    'getFeaturedTrack'
 ]);
 
 module.exports = Actions;

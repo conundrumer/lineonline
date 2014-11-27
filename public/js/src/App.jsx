@@ -67,16 +67,6 @@ var App = React.createClass({
 // Object.keys(o) = ['foo', 'de']
 // blah = ['foo has bar', 'de has lu']
 
-var Logout = React.createClass({
-    render: function() {
-        return (
-            <div className='main-content'>
-                <Footer />
-            </div>
-        );
-    }
-});
-
 var Navbar = React.createClass({
     getInitialState: function() {
         return {
@@ -336,7 +326,7 @@ var Dropdown = React.createClass({
                     <DropdownItem title='Favorites' link='favorites' icon='heart' />
                     <DropdownItem title='Subscriptions' link='subscriptions' icon='people' />
                     <DropdownItem title='Settings' link='settings' icon='cog' />
-                    <DropdownItem title='Logout' link='logout' icon='account-logout' onClick={this.handleLogout} />
+                    <DropdownItem title='Logout' icon='account-logout' onClick={this.handleLogout} />
                 </ul>
             </div>
         );
@@ -387,13 +377,12 @@ var routes = (
         <Route name='app' path='/' handler={App}>
             <DefaultRoute name='index' handler={Index} />
             <Route name='home' handler={Home} />
-            <Route name='gallery' handler={Gallery} />
             <Route name='editor' handler={Editor} />
+            <Route name='gallery' handler={Gallery} />
             <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
             <Route name='subscriptions' handler={Subscriptions} />
             <Route name='settings' handler={Settings} />
-            <Route name='logout' handler={Index} />
             <Route name='subscribe' handler={Profile} />
             <NotFoundRoute name='404' handler={NotFound} />
         </Route>
