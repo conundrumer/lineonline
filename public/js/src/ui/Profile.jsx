@@ -46,7 +46,7 @@ var Profile = React.createClass({
     },
     render: function() {
         var id = this.props.params.profileId;
-        var data = this.state.data;
+        // var data = this.state.data;
         console.log(data);
         return (
             <div className='main-content'>
@@ -55,19 +55,19 @@ var Profile = React.createClass({
                         <div className='col span_1_of_4'>
                             { data.profile ?
                                 <ProfileSidebar
-                                    avatarUrl={data.profile.avatar_url}
-                                    username={data.profile.username}
-                                    location={data.profile.location}
-                                    email={data.profile.email}
-                                    about={data.profile.about}
+                                    avatarUrl={this.state.data.profile.avatar_url}
+                                    username={this.state.data.profile.username}
+                                    location={this.state.data.profile.location}
+                                    email={this.state.data.profile.email}
+                                    about={this.state.data.profile.about}
                                 />
                                 : null
                             }
                         </div>
                         <div className='col span_3_of_4'>
                             <section className='profile-main'>
-                                { data.featuredTrack ?
-                                    <ProfileFeaturedTrack featuredTrack={data.featuredTrack} />
+                                { this.state.data.featuredTrack ?
+                                    <ProfileFeaturedTrack featuredTrack={this.state.data.featuredTrack} />
                                     :
                                     <article className='profile-featured-track'>
                                         <Icon class='preview-icon' icon='fullscreen-enter' />
@@ -97,8 +97,8 @@ var Profile = React.createClass({
                                         </aside>
                                     </article>
                                 }
-                                { data.tracks && data.profile ?
-                                    <ProfileTrackSnippets tracks={data.tracks} username={data.profile.username} />
+                                { this.state.data.tracks && this.state.data.profile ?
+                                    <ProfileTrackSnippets tracks={this.state.data.tracks} username={this.state.data.profile.username} />
                                     : null
                                 }
                             </section>

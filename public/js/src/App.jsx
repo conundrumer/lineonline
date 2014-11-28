@@ -50,11 +50,10 @@ var App = React.createClass({
     },
     render: function() {
         var data = this.state.data;
-        console.log('HELLOOO', data);
         return (
             <div className='container'>
                 <Navbar currentUser={data.currentUser} errorMessages={data.errorMessages} />
-                <this.props.activeRouteHandler data={data} />
+                <this.props.activeRouteHandler currentUser={data.currentUser} />
             </div>
         );
     }
@@ -306,7 +305,6 @@ var Dropdown = React.createClass({
             'dropdown-settings': true,
             'hidden': this.props.isHidden
         });
-        console.log('ajkldfdajklfa ', this.props);
         return (
             <div className={classes}>
                 <ul>
@@ -378,6 +376,7 @@ var routes = (
             <DefaultRoute name='index' handler={Index} />
             <Route name='home' handler={Home} />
             <Route name='editor' handler={Editor} />
+            <Route name='edit' path='/edit/:trackId' handler={Editor} />
             <Route name='gallery' handler={Gallery} />
             <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
