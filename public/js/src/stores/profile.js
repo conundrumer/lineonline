@@ -1,3 +1,4 @@
+var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
@@ -13,9 +14,9 @@ var ProfileStore = Reflux.createStore({
         };
         return this.data
     },
-    onGetProfile: function(id) {
+    onGetProfile: function(userId) {
         request
-            .get('/api/users/' + id + '/profile')
+            .get('/api/users/' + userId + '/profile')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.profile = res.body;
@@ -30,9 +31,9 @@ var ProfileStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onGetTrackSnippets: function(id) {
+    onGetTrackSnippets: function(userId) {
         request
-            .get('/api/users/' + id + '/tracks')
+            .get('/api/users/' + userId + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.tracks = res.body;
@@ -47,9 +48,9 @@ var ProfileStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onGetFeaturedTrack: function(id) {
+    onGetFeaturedTrack: function(userId) {
         // request
-        //     .get('/api/users/' + id + '/featured')
+        //     .get('/api/users/' + userId + '/featured')
         //     .end(function(err, res) {
         //         if (res.status === StatusTypes.ok) {
         //             this.data.profile = res.body;
@@ -63,17 +64,15 @@ var ProfileStore = Reflux.createStore({
         //         console.log('unknown status: ', res.status);
         //     }.bind(this));
 
-
-
         setTimeout(function() {
             this.data.featuredTrack = {};
             this.trigger(this.data);
         }.bind(this));
     }
 
-    // onGetCollections: function(id) {
+    // onGetCollections: function(userId) {
     //     request
-    //         .get('/api/users/' + id + '/collections')
+    //         .get('/api/users/' + userId + '/collections')
     //         .end(function(err, res) {
     //             if (res.status === StatusTypes.ok) {
     //                 this.data.collections = res.body;

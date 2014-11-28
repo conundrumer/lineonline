@@ -389,6 +389,75 @@
     overflow-x: hidden;
 }
 
+.track-extra {
+    display: block;
+    // background: yellow;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    // margin-bottom: 40px; //may change
+
+    .extra-icon {
+        font-size: 13px;
+    }
+
+    .extra-title {
+        padding-left: 12px;
+        font-size: 16px;
+    }
+
+    .btn-extra {
+        @extend %uppercase-header;
+        @include transition(color 0.2s ease-in-out 0);
+        border: 1px solid $border-col;
+        background: #fff;
+        display: block;
+        padding: 12px 15px 13px;
+        width: 175px;
+        max-width: 100%;
+        margin: 0 auto;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+        // padding: 10px;
+    }
+}
+
+.panel-flexible {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid $border-col;
+    // padding-top: 20px;
+
+    .flexible-icon {
+        font-size: 16px;
+    }
+
+    .flexible-title {
+        @extend %uppercase-header;
+        padding-left: 20px;
+    }
+
+    .section-title {
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+
+    h2 {
+        @extend %uppercase-header;
+        margin-bottom: 20px;
+    }
+
+    &.panel-last {
+        border-bottom: none;
+    }
+
+    .panel-padded {
+        padding-bottom: 10px;
+    }
+}
+
 .side-panel {
 }
 
@@ -899,8 +968,8 @@
         border: 1px solid $border-col;
 
         //sample image
-        background: #fff url('../../images/sample_masthead.png') no-repeat center center;
-        background-size: cover;
+        // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+        // background-size: cover;
         position: relative;
 
         .preview-icon {
@@ -909,6 +978,18 @@
             right: 12px;
             top: 12px;
             font-size: 13px;
+            &:hover {
+                color: $light-col;
+                cursor: pointer;
+            }
+        }
+
+        .x-icon {
+            @include transition(color 0.2s ease-in-out 0);
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 20px;
             &:hover {
                 color: $light-col;
                 cursor: pointer;
@@ -963,6 +1044,10 @@
         position: relative;
         padding-left: 12px;
     }
+}
+
+.gallery-row {
+    margin-bottom: 30px;
 }
 
 .gallery,

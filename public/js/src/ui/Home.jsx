@@ -34,36 +34,78 @@ var Home = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.currentUser) {
-            Actions.getInvitations();
+            Actions.getInvitations(this.props.currentUser.user_id);
             Actions.getYourTracks(this.props.currentUser.user_id);
-            Actions.getCollaborations();
+            Actions.getCollaborations(this.props.currentUser.user_id);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.currentUser !== nextProps.currentUser)
             && nextProps.currentUser) {
-            Actions.getInvitations();
-            console.log(nextProps.currentUser);
+            Actions.getInvitations(nextProps.currentUser.user_id);
             Actions.getYourTracks(nextProps.currentUser.user_id);
-            Actions.getCollaborations();
+            Actions.getCollaborations(nextProps.currentUser.user_id);
         }
     },
     render: function() {
         return (
             <div className='main-content'>
                 { this.props.currentUser ?
-                    <PanelPadded isHome={true}>
-                        <div className='section group'>
-                            { this.state.data.yourTracks ?
-                                <TracksPreview tracks={this.state.data.yourTracks} />
-                                : null
-                            }
-                        </div>
-                    </PanelPadded>
+                    // <PanelPadded isHome={true}>
+                    <div>
+                        { this.state.data.invitations ?
+                            <FlexiblePanel
+                                title='Invitations'
+                                icon='envelope-closed'
+                                userId={this.props.currentUser.user_id}
+                                extra='invitation'
+                                tracks={this.state.data.invitations}
+                            />
+                            : null
+                        }
+                        { this.state.data.yourTracks ?
+                            <FlexiblePanel
+                                title='Your Tracks'
+                                icon='project'
+                                userId={this.props.currentUser.user_id}
+                                extra='your-track'
+                                tracks={this.state.data.yourTracks}
+                            />
+                            : null
+                        }
+                        { this.state.data.collaborations ?
+                            <FlexiblePanel
+                                title='Collaborations'
+                                icon='people'
+                                userId={this.props.currentUser.user_id}
+                                extra='collaboration'
+                                tracks={this.state.data.collaborations}
+                            />
+                            : null
+                        }
+                    </div>
                     : null
                 }
                 <Footer />
             </div>
+        );
+    }
+});
+
+var FlexiblePanel = React.createClass({
+    render: function() {
+        return (
+            <section className='panel-flexible'>
+                <div className='panel-padded section group'>
+                    <div className='section-title'>
+                        <Icon class='flexible-icon' icon={this.props.icon} />
+                        <span className='flexible-title'>
+                            {this.props.title}
+                        </span>
+                    </div>
+                    <TracksPreview userId={this.props.userId} tracks={this.props.tracks} extra={this.props.extra} />
+                </div>
+            </section>
         );
     }
 });

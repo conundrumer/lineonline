@@ -47,13 +47,12 @@ var Profile = React.createClass({
     render: function() {
         var id = this.props.params.profileId;
         // var data = this.state.data;
-        console.log(data);
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
                     <div className='section group'>
                         <div className='col span_1_of_4'>
-                            { data.profile ?
+                            { this.state.data.profile ?
                                 <ProfileSidebar
                                     avatarUrl={this.state.data.profile.avatar_url}
                                     username={this.state.data.profile.username}

@@ -14,13 +14,26 @@ var TracksPreview = React.createClass({
             var colIdx = idx % 3;
             tracksCols[colIdx].push(track);
         });
-        console.log('YAHOO');
-        console.log(this.props.tracks);
         return (
             <div className='section group'>
-                <TracksCol col='col-first' tracks={tracksCols[0]} />
-                <TracksCol col='col-mid' tracks={tracksCols[1]} />
-                <TracksCol col='col-last' tracks={tracksCols[2]} />
+                <TracksCol
+                    col='col-first'
+                    userId={this.props.userId}
+                    tracks={tracksCols[0]}
+                    extra={this.props.extra}
+                />
+                <TracksCol
+                    col='col-mid'
+                    userId={this.props.userId}
+                    tracks={tracksCols[1]}
+                    extra={this.props.extra}
+                />
+                <TracksCol
+                    col='col-last'
+                    userId={this.props.userId}
+                    tracks={tracksCols[2]}
+                    extra={this.props.extra}
+                />
             </div>
         );
     }
@@ -30,8 +43,18 @@ var TracksCol = React.createClass({
     render: function() {
         var tracks = this.props.tracks;
         var galleryTiles = this.props.tracks.map(function(track) {
+            var trackPreview = '../../images/sample_masthead.png'; //track.preview
             return (
-                <GalleryTile key={track.id} title={track.title} description={track.description} col={this.props.col} />
+                <GalleryTile
+                    key={track.id}
+                    userId={this.props.userId}
+                    trackId={track.track_id}
+                    title={track.title}
+                    description={track.description}
+                    col={this.props.col}
+                    extra={this.props.extra}
+                    trackPreview={trackPreview}
+                />
             );
         }.bind(this));
         return (

@@ -1,3 +1,4 @@
+var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');

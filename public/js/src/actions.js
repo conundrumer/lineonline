@@ -20,6 +20,11 @@ var Actions = Reflux.createActions([
     'getInvitations',
     'getYourTracks',
     'getCollaborations',
+
+    'acceptInvitation',
+    'rejectInvitation',
+    'deleteTrack',
+    'leaveCollaboration',
     //see 'getCollections'
 
     //editor
