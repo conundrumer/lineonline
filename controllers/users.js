@@ -35,6 +35,31 @@ exports.getTracks = function(req, res) {
         .catch(console.error);
 };
 
+
+exports.getSubscriptions = function(req, res) {
+    var user_id = parseInt(req.params.user_id);
+
+    console.log("Here 1");
+
+    User
+        .getByID(user_id)
+        .then(function (user) {
+            console.log("Here 1.5");
+            return user.getSubscriptions();
+        })
+        // .then(function (trackSnippets) {
+        //     res.status(200).json(trackSnippets);
+        // })
+        .catch(Subscription.NotFoundError, function() {
+            res.status(404).json(ERRORS.SUBSCRIPTION_NOT_FOUND);
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(404).json(ERRORS.USER_NOT_FOUND);
+        })
+        .catch(console.error);
+};
+
+
 exports.getUserSnippet = function(req, res){
     var id = req.params.id;
     User
