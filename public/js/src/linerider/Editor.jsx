@@ -113,7 +113,32 @@ var Editor = React.createClass({
     },
     onSave: function(e) {
         e.preventDefault();
-        this.props.onSave(this.state.scene);
+        var data = {
+            scene: this.state.scene
+        };
+        // if (this.props.isBlank) {
+        //     data = {
+        //         scene: this.state.scene,
+        //         title: this.props.track.title
+        //         description: this.props.track.description,
+        //         collaborators: this.props.track.collaborators,
+        //         invitees: this.props.track.invitees,
+        //         tags: this.props.track.tags,
+        //         preview: this.props.track.preview
+        //     };
+        // } else {
+        //     data = {
+        //         track_id: this.props.track.track_id,
+        //         scene: this.state.scene,
+        //         title: this.props.track.title
+        //         description: this.props.track.description,
+        //         collaborators: this.props.track.collaborators,
+        //         invitees: this.props.track.invitees,
+        //         tags: this.props.track.tags,
+        //         preview: this.props.track.preview
+        //     };
+        // }
+        this.props.onSave(data);
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex

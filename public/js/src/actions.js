@@ -30,6 +30,8 @@ var Actions = Reflux.createActions([
     //editor
     'getFullTrack',
     'getConversation',
+    'updateTrack',
+    'createTrack',
 
     //gallery
     'getGallery',
