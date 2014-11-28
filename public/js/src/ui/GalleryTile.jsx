@@ -51,6 +51,8 @@ var GalleryTile = React.createClass({
 
         var previewIcon;
         var button;
+        var links;
+
         if (this.props.extra === 'invitation') {
             previewIcon =
                 <div onClick={this.handleRejectInvitation}>
@@ -64,6 +66,15 @@ var GalleryTile = React.createClass({
                            Join
                        </span>
                     </button>
+                </div>;
+            links =
+                <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='link-intact' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='heart' />
+                    </div>
                 </div>
         } else if (this.props.extra === 'your-track') {
             previewIcon =
@@ -80,7 +91,19 @@ var GalleryTile = React.createClass({
                            </span>
                         </button>
                     </Link>
+                </div>;
+            var links =
+            <div className='tile-tools'>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='link-intact' />
                 </div>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='heart' />
+                </div>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='bookmark' />
+                </div>
+            </div>;
         } else if (this.props.extra === 'collaboration') {
             previewIcon =
                 <div onClick={this.handleLeaveCollaboration}>
@@ -96,13 +119,34 @@ var GalleryTile = React.createClass({
                            </span>
                         </button>
                     </Link>
+                </div>;
+            var links =
+            <div className='tile-tools'>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='link-intact' />
                 </div>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='heart' />
+                </div>
+                <div className='tile-tool-link'>
+                    <Icon class='tile-tool-icon' icon='bookmark' />
+                </div>
+            </div>;
         } else {
             previewIcon =
                 <div onClick={this.handlePlayback}>
                     <Icon class='preview-icon' icon='fullscreen-enter' />
                 </div>;
             button = null;
+            links =
+                <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='link-intact' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='heart' />
+                    </div>
+                </div>
         }
 
         return (
@@ -110,6 +154,7 @@ var GalleryTile = React.createClass({
                 <article className={'tile ' + this.props.col}>
                     <div className='preview' style={tileBg}>
                         {previewIcon}
+                        {links}
                     </div>
                     <div className='info'>
                         <h3>

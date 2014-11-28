@@ -12,7 +12,6 @@ var Actions = require('./actions');
 
 //Data Stores
 var AuthStore = require('./stores/auth');
-var ProfileStore = require('./stores/profile');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
