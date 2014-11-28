@@ -10,7 +10,7 @@ require('./track-edit');
 require('./users-profile');
 // TODO: gallery
 // TODO: subscriptions
-// TODO: favorites
+require('./favorites');
 // TODO: collections
 
 // TODO: invitations
