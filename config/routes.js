@@ -3,6 +3,9 @@ var express = require('express');
 var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
+var favorites = require('../controllers/favorites');
+
+
 
 var api = express.Router();
 
@@ -34,13 +37,14 @@ api.route('/tracks/:track_id')
     .put(tracks.editTrack)
     .delete(tracks.deleteTrack);
 
-
-
-
 // profile
 api.route('/users/:id/profile')
     .get(users.getProfile)
     .put(users.editProfile);
+
+// favorites
+api.route('/favorites/:track_id')
+    .put(favorites.addFavorite);
 
 module.exports = function (app, passport) {
     app.use('/api', api);

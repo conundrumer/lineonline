@@ -67,9 +67,10 @@ var User = bookshelf.Model.extend({
     // // collaborations: function(){
     // //     return this.belongsToMany('User', '')
     // }
-    // favorites: function(){
-    //     return this.hasMany('Track', 'favorites');
-    // },
+    favorites: function(){
+        // return this.hasMany(Track, 'favorite_id');
+        return this.belongsToMany(Track, 'favorites', 'favoriter', 'track');
+    },
     asUserSnippet: function() {
         return toUserSnippet(this);
     },
