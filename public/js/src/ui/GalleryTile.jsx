@@ -53,6 +53,33 @@ var GalleryTile = React.createClass({
         var button;
         var links;
 
+        if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
+            links =
+                <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='link-intact' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='heart' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='bookmark' />
+                    </div>
+                </div>;
+        } else {
+            links =
+                <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='link-intact' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='heart' />
+                    </div>
+                </div>
+        }
+
+
+
         if (this.props.extra === 'invitation') {
             previewIcon =
                 <div onClick={this.handleRejectInvitation}>
@@ -67,15 +94,6 @@ var GalleryTile = React.createClass({
                        </span>
                     </button>
                 </div>;
-            links =
-                <div className='tile-tools'>
-                    <div className='tile-tool-link'>
-                        <Icon class='tile-tool-icon' icon='link-intact' />
-                    </div>
-                    <div className='tile-tool-link'>
-                        <Icon class='tile-tool-icon' icon='heart' />
-                    </div>
-                </div>
         } else if (this.props.extra === 'your-track') {
             previewIcon =
                 <div onClick={this.handleDeleteTrack}>
@@ -92,18 +110,6 @@ var GalleryTile = React.createClass({
                         </button>
                     </Link>
                 </div>;
-            var links =
-            <div className='tile-tools'>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='link-intact' />
-                </div>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='heart' />
-                </div>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='bookmark' />
-                </div>
-            </div>;
         } else if (this.props.extra === 'collaboration') {
             previewIcon =
                 <div onClick={this.handleLeaveCollaboration}>
@@ -120,33 +126,12 @@ var GalleryTile = React.createClass({
                         </button>
                     </Link>
                 </div>;
-            var links =
-            <div className='tile-tools'>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='link-intact' />
-                </div>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='heart' />
-                </div>
-                <div className='tile-tool-link'>
-                    <Icon class='tile-tool-icon' icon='bookmark' />
-                </div>
-            </div>;
         } else {
             previewIcon =
                 <div onClick={this.handlePlayback}>
                     <Icon class='preview-icon' icon='fullscreen-enter' />
                 </div>;
             button = null;
-            links =
-                <div className='tile-tools'>
-                    <div className='tile-tool-link'>
-                        <Icon class='tile-tool-icon' icon='link-intact' />
-                    </div>
-                    <div className='tile-tool-link'>
-                        <Icon class='tile-tool-icon' icon='heart' />
-                    </div>
-                </div>
         }
 
         return (
