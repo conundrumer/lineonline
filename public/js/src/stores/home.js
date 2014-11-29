@@ -131,7 +131,7 @@ var HomeStore = Reflux.createStore({
 
     onRejectInvitation: function(userId, trackId) {
         // request
-        //     .delete('/api/invitations/' + userId + '/tracks/'  + trackId)
+        //     .del('/api/invitations/' + userId + '/tracks/'  + trackId)
         //     .end(function(err, res) {
         //         if (res.status === StatusTypes.ok) {
         //             this.data.invitations = res.body;
@@ -160,21 +160,40 @@ var HomeStore = Reflux.createStore({
         }.bind(this));
     },
 
-    onDeleteTrack: function(userId, trackId) {
-        setTimeout(function() {
-            var newYourTracks = [];
-
-            for (var i = 0; i < this.data.yourTracks.length; i++) {
-                // console.log(key);
-                if (this.data.yourTracks[i].track_id !== trackId) {
-                    newYourTracks.push(this.data.yourTracks[i]);
+    onDeleteTrack: function(trackId) {
+        request
+            .del('/api/tracks/' + trackId)
+            .end(function(err, res) {
+                var newYourTracks = [];
+                if (res.status === StatusTypes.noContent) {
+                    for (var i = 0; i < this.data.yourTracks.length; i++) {
+                        if (this.data.yourTracks[i].track_id !== trackId) {
+                            newYourTracks.push(this.data.yourTracks[i]);
+                        }
+                    }
+                    this.data.yourTracks = newYourTracks;
+                    this.trigger(this.data);
+                    return;
                 }
-            }
+                // if (res.notFound) {
+                //     this.data.track.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+        // setTimeout(function() {
+        //     var newYourTracks = [];
 
-            this.data.yourTracks = newYourTracks;
+        //     for (var i = 0; i < this.data.yourTracks.length; i++) {
+        //         // console.log(key);
+        //         if (this.data.yourTracks[i].track_id !== trackId) {
+        //             newYourTracks.push(this.data.yourTracks[i]);
+        //         }
+        //     }
 
-            this.trigger(this.data);
-        }.bind(this));
+        //     this.data.yourTracks = newYourTracks;
+
+        //     this.trigger(this.data);
+        // }.bind(this));
     },
 
     onLeaveCollaboration: function(userId, trackId) {

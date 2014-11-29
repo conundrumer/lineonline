@@ -30,7 +30,7 @@ var GalleryTile = React.createClass({
         var c = confirm('Are you sure you want to delete this track?');
         if (c) {
             console.log('deleting track');
-            Actions.deleteTrack(this.props.userId, this.props.trackId);
+            Actions.deleteTrack(this.props.trackId);
         }
     },
     handleLeaveCollaboration: function(event) {
