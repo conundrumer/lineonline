@@ -187,7 +187,7 @@ var DropdownLogin = React.createClass({
     handleChange: function(inputName) {
         return function (event, value) {
             // console.log(event.target.value);
-            var state = {}
+            var state = {};
             state[inputName] = event.target.value;
             this.setState(state);
         }.bind(this);
@@ -323,7 +323,7 @@ var Dropdown = React.createClass({
                     <DropdownItem title='Favorites' link='favorites' icon='heart' />
                     <DropdownItem title='Subscriptions' link='subscriptions' icon='people' />
                     <DropdownItem title='Settings' link='settings' icon='cog' />
-                    <DropdownItem title='Logout' icon='account-logout' onClick={this.handleLogout} />
+                    <DropdownItem title='Logout' link='index' icon='account-logout' onClick={this.handleLogout} />
                 </ul>
             </div>
         );

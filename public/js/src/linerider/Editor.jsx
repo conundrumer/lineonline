@@ -78,11 +78,15 @@ var Editor = React.createClass({
         // setting init state w/ props is generally an anti-pattern
         // but there is no synchronization needed atm
         var initScene = this.props.initScene;
+
+        //CHANGE ISMODALHIDDEN TO TRUE
         return {
             scene: initScene,
             editState: EDIT_STATE.PENCIL,
             startPos: null,
-            movePos: null
+            movePos: null,
+            isModalHidden: false,
+            isCollabFormDisabled: true,
         };
     },
     componentDidMount: function() {
@@ -110,6 +114,33 @@ var Editor = React.createClass({
                 lines:{}
             }
         });
+    },
+    handleAnyClick: function(event) {
+        if (!this.state.modalHidden) {
+            this.setState({
+                isModalHidden: true
+            });
+        }
+        window.removeEventListener('click', this.handleAnyClick);
+    },
+    handleSaveToolClick: function(event) {
+        if (this.state.modalHidden) {
+            this.setState({
+                isModalHidden: false
+            });
+            event.stopPropagation();
+            window.addEventListener('click', this.handleAnyClick);
+        }
+    },
+    handleSaveTrack: function(e) {
+        e.preventDefault();
+        //show modal, trigger save on clicking save
+        // this.onSave(e);
+        console.log('handling saving track');
+    },
+    handleSaveCollab: function(e) {
+        e.preventDefault();
+        console.log('handling saving collab info for track');
     },
     onSave: function(e) {
         e.preventDefault();
@@ -252,43 +283,169 @@ var Editor = React.createClass({
                 break;
         }
         return (
-            <div onMouseDown={this.onMouseDown}>
-                <Display
-                    drawingLine={drawingLine}
-                    lines={toLineSegments(this.state.scene)}
+            <div>
+                <SaveModal
+                    isModalHidden={this.state.isModalHidden}
+                    isCollabFormDisabled={this.state.isCollabFormDisabled}
+                    handleSaveTrack={this.handleSaveTrack}
+                    handleSaveCollab={this.handleSaveCollab}
                 />
-                <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
-                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
-                        <Icon class='toolbar-icon' icon='pencil' />
-                        <span className='toolbar-title'>
-                            Pencil
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.LINE)}>
-                        <Icon class='toolbar-icon' icon='minus' />
-                        <span className='toolbar-title'>
-                            Line
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.ERASE)}>
-                        <Icon class='toolbar-icon' icon='delete' />
-                        <span className='toolbar-title'>
-                            Erase
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onSave}>
-                        <Icon class='toolbar-icon' icon='check' />
-                        <span className='toolbar-title'>
-                            Save
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onClear}>
-                        <Icon class='toolbar-icon' icon='x' />
-                        <span className='toolbar-title'>
-                            Clear
-                        </span>
-                    </button>
+                <div onMouseDown={this.onMouseDown}>
+                    <Display
+                        drawingLine={drawingLine}
+                        lines={toLineSegments(this.state.scene)}
+                    />
+                    <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
+                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
+                            <Icon class='toolbar-icon' icon='pencil' />
+                            <span className='toolbar-title'>
+                                Pencil
+                            </span>
+                        </button>
+                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.LINE)}>
+                            <Icon class='toolbar-icon' icon='minus' />
+                            <span className='toolbar-title'>
+                                Line
+                            </span>
+                        </button>
+                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.ERASE)}>
+                            <Icon class='toolbar-icon' icon='delete' />
+                            <span className='toolbar-title'>
+                                Erase
+                            </span>
+                        </button>
+                        <button className='btn-toolbar' onClick={this.handleSave}>
+                            <Icon class='toolbar-icon' icon='check' />
+                            <span className='toolbar-title'>
+                                Save
+                            </span>
+                        </button>
+                        <button className='btn-toolbar' onClick={this.onClear}>
+                            <Icon class='toolbar-icon' icon='x' />
+                            <span className='toolbar-title'>
+                                Clear
+                            </span>
+                        </button>
+                    </div>
                 </div>
+            </div>
+        );
+    }
+});
+
+var SaveModal = React.createClass({
+    getInitialState: function() {
+        return {
+            track_form_title: '',
+            track_form_description: '',
+            track_form_tags: []
+        };
+    },
+    handleChange: function(inputName) {
+        return function (event) {
+            // console.log(event.target.value);
+            var inputValueArr = event.target.value.split(',');
+            inputValueArr.forEach(function(el, idx, arr) {
+                arr[idx] = el.trim();
+                console.log(arr[idx]);
+            });
+            inputValueArr = inputValueArr.filter(function(el) {
+                return el !== '';
+            });
+            console.log(inputValueArr);
+            var state = {};
+            state[inputName] = inputValueArr;
+            this.setState(state);
+        }.bind(this);
+    },
+    render: function() {
+        return (
+            <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
+                <div>
+                    <Icon class='x-icon' icon='circle-x' />
+                </div>
+                <form className='form-editor form-editor-track'>
+                    <div className='field'>
+                        <label for='title'>
+                            Title:
+                        </label>
+                        <input ref='inputTitle' name='title' type='text' />
+                    </div>
+                    <div className='field'>
+                        <label for='description'>
+                            Description:
+                        </label>
+                        <textarea ref='inputDescription' name='description' />
+                    </div>
+                    <div className='field'>
+                        <label for='tags'>
+                            Tags: <span className='note'>(separated by a comma)</span>
+                        </label>
+                        <input ref='inputTags' name='tags' type='text' onChange={this.handleChange('track_form_tags')} />
+                    </div>
+                </form>
+                <form className={'form-editor form-editor-collab' + (this.props.isCollabFormDisabled ? ' form-disabled' : '')}>
+                    <div className='field'>
+                        <h3>
+                            Collaborators:
+                        </h3>
+                        <div className='collab-preview collab-preview-collaborators'>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='field'>
+                        <label for='invitees'>
+                            Invitees:
+                        </label>
+                        <div className='collab-preview collab-preview-invitees'>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                            <div className='user-img'>
+                                <img src='../../images/sample_profile.png' />
+                            </div>
+                        </div>
+                        <input ref='inputInvitees' name='invitees' type='text' />
+                        <button className='btn-submit' type='submit' onClick={this.props.handleSaveCollab}>
+                            Invite
+                        </button>
+                    </div>
+                </form>
+                <button className='btn-submit btn-save-modal' type='submit' onClick={this.props.handleSaveTrack}>
+                    Save
+                </button>
             </div>
         );
     }
