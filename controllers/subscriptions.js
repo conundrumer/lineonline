@@ -65,7 +65,9 @@ exports.deleteSubscription = function (req, res) {
         })
         .fetch()
         .then(function (sub) {
-            return sub.destroy();
+            if (sub) {
+                sub.destroy();
+            }
         })
         .then(function () {
             res.status(StatusTypes.noContent).send();
