@@ -1,5 +1,7 @@
 var React = require('react/addons');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
+var CurrentPath = Router.CurrentPath;
 var Link = Router.Link;
 var Reflux = require('reflux');
 
@@ -19,12 +21,21 @@ var LineriderEditor = require('../linerider/Editor.jsx');
 
 var Editor = React.createClass({
     mixins: [
-        Reflux.listenTo(EditorStore, 'onDataChanged')
+        Reflux.listenTo(EditorStore, 'onDataChanged'),
+        Navigation,
+        CurrentPath
     ],
     onDataChanged: function(newData) {
         this.setState({
             data: newData
         });
+
+        if (this.getCurrentPath() === '/editor'
+            && this.state.data.track
+            && this.state.data.track.track_id) {
+            console.log('transitioning the page...');
+            this.transitionTo('/edit/'  + this.state.data.track.track_id);
+        }
     },
     getInitialState: function() {
         return {
@@ -44,13 +55,15 @@ var Editor = React.createClass({
         }
     },
     handleCreateTrack: function(unsavedTrackData) {
-        // Actions.createTrack(unsavedTrackData);
+        Actions.createTrack(unsavedTrackData);
         console.log('creating a track!!!');
         console.log(unsavedTrackData);
     },
     handleUpdateTrack: function(fullTrackData) {
+        Actions.updateTrack(fullTrackData);
+        console.log('FULL TRACK DATA');
+        console.log(fullTrackData);
         console.log('updating a track!!!');
-        // console.log(this.props.params.trackId);
         console.log(fullTrackData);
     },
     render: function() {

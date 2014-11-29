@@ -52,7 +52,8 @@ var EditorStore = Reflux.createStore({
             .post('/api/tracks/')
             .send(unsavedTrackData)
             .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
+                if (res.status === StatusTypes.content) {
+                    console.log('OH MY GOD ACTUALLY CREATED A TRACK, THIS IS THE RESPONSE BODY: ', res.body);
                     this.data.track = res.body;
                     this.trigger(this.data);
                     return;

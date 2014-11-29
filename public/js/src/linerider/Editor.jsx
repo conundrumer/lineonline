@@ -264,7 +264,6 @@ var Editor = React.createClass({
                 }
                 break;
         }
-        console.log('curr track: ', this.state.track);
         return (
             <div>
                 <SaveModal
@@ -342,12 +341,10 @@ var SaveModal = React.createClass({
         var inputValueArr = value.split(',');
         inputValueArr.forEach(function(el, idx, arr) {
             arr[idx] = el.trim();
-            console.log(arr[idx]);
         });
         inputValueArr = inputValueArr.filter(function(el) {
             return el !== '';
         });
-        console.log(inputValueArr);
         return inputValueArr;
     },
     handleFormSubmit: function(e) {
@@ -361,7 +358,6 @@ var SaveModal = React.createClass({
             collaborators: this.state.track.collaborators
         };
 
-        // console.log(trackData);
         this.props.onSave(trackData);
     },
     handleInvite: function(e) {
