@@ -65,12 +65,16 @@ exports.deleteSubscription = function (req, res) {
     var subscribee_id = parseInt(req.params.user_id);
     var subscriber_id = req.user.id;
 
-    Subscription
-        .forge({
-            subscriber: subscriber_id,
-            subscribee: subscribee_id
+    User
+        .getByID(subscribee_id)
+        .then(function(user_exists) {
+            return Subscription
+                .forge({
+                    subscriber: subscriber_id,
+                    subscribee: subscribee_id
+                })
+                .fetch();
         })
-        .fetch()
         .then(function (sub) {
             if (sub) {
                 sub.destroy();
@@ -78,6 +82,9 @@ exports.deleteSubscription = function (req, res) {
         })
         .then(function () {
             res.status(StatusTypes.noContent).send();
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(StatusTypes.notFound).send();
         })
         .catch(console.error);
 };
