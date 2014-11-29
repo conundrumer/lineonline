@@ -15,14 +15,21 @@ exports.addSubscription = function(req, res) {
     var subscribee_id = parseInt(req.params.user_id);
     var subscriber_id = req.user.id;
 
-    Subscription
+    var future_sub = Subscription
         .forge({
             subscriber: subscriber_id,
             subscribee: subscribee_id
-        })
-        .save()
-        .then(function () {
+        });
+
+    future_sub
+        .fetch({ require: true })
+        .then(function(existing_sub) {
             res.status(StatusTypes.noContent).send();
+        })
+        .catch(Subscription.NotFoundError, function() {
+            future_sub.save().then(function() {
+                res.status(StatusTypes.noContent).send();
+            });
         })
         .catch(console.error);
 };
