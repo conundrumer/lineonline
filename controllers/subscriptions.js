@@ -16,50 +16,37 @@ exports.addSubscription = function(req, res) {
     var subscriber_id = req.user.id;
 
     Subscription
-        .create(subscriber_id, subscribee_id)
+        .forge({
+            subscriber: subscriber_id,
+            subscribee: subscribee_id
+        })
+        .save()
         .then(function () {
             res.status(StatusTypes.noContent).send();
         })
         .catch(console.error);
 };
 
+exports.getSubscriptions = function(req, res) {
+    req.user
+        .subscriptions()
+        .fetch()
+        .then(function(subscribees) {
+            return new Promise.all(subscribees.models.map(function(user){
+                var userSnippet = user.asUserSnippet();
+                return user.getTrackSnippets().then(function (tracks) {
+                    return {
+                        subscribee: userSnippet,
+                        track_snippets: tracks
+                    };
+                });
+            }));
+        }).then(function (subscriptions) {
+            res.json(subscriptions);
+        })
+        .catch(console.error);
+};
 
+exports.deleteSubscription = function (req, res) {
 
-
-// exports.getSubscriptions = function(req, res) {
-//     var id = req.user.id;
-//     var subsArray = [];
-
-//     Subscription
-//         .where({subscriber: id}).fetch({require: true})
-//         .then(function (subscriptions) {
-//             for (var subscription in subscriptions) {
-//                 subscription.asSubscription().then(function(sub){
-//                     subsArray.push(sub);
-//                     console.log("a subscription: " + JSON.stringify(sub));
-
-//                 });
-//             }
-
-
-//             });
-//             res.status(StatusTypes.ok).json(subsArray);
-//         })
-//         .catch(console.error);
-
-
-     // Track
-     //    .getByID(track_id)
-     //    .then(function (track) {
-     //        return track
-     //            .asFullTrack()
-     //            .makeOwnerSnippet();
-     //    })
-     //    .then(function(fullTrack) {
-     //        res.status(200).json(fullTrack);
-     //    })
-     //    .catch(Track.NotFoundError, function() {
-     //        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
-     //    })
-     //    .catch(console.error);
-// };
+};
