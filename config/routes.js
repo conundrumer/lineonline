@@ -5,8 +5,6 @@ var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 var favorites = require('../controllers/favorites');
 
-
-
 var api = express.Router();
 
 // auth
@@ -44,7 +42,10 @@ api.route('/users/:id/profile')
 
 // favorites
 api.route('/favorites/:track_id')
-    .put(favorites.addFavorite);
+    .put(auth.loginRequired, favorites.addFavorite)
+    .delete(auth.loginRequired, favorites.removeFavorite);
+api.route('/favorites')
+    .get(auth.loginRequired, users.getFavorites);
 
 module.exports = function (app, passport) {
     app.use('/api', api);

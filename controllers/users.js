@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 
 var User = require('../models/user');
+var Favorite = require('../models/favorite');
 
 var ERRORS = {
     TRACK_NOT_FOUND: {
@@ -17,23 +18,6 @@ function Unauthorized(message) {
 }
 Unauthorized.prototype = new Error();
 Unauthorized.prototype.constructor = Unauthorized;
-
-exports.getTracks = function(req, res) {
-    var user_id = req.params.id;
-
-    User
-        .getByID(user_id)
-        .then(function (user) {
-            return user.getTrackSnippets();
-        })
-        .then(function (trackSnippets) {
-            res.status(200).json(trackSnippets);
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(404).json(ERRORS.USER_NOT_FOUND);
-        })
-        .catch(console.error);
-};
 
 exports.getUserSnippet = function(req, res){
     var id = req.params.id;
@@ -87,3 +71,34 @@ exports.editProfile = function(req, res) {
         })
         .catch(console.error);
 }
+
+exports.getTracks = function(req, res) {
+    var user_id = req.params.id;
+
+    User
+        .getByID(user_id)
+        .then(function (user) {
+            return user.getTrackSnippets();
+        })
+        .then(function (trackSnippets) {
+            res.status(200).json(trackSnippets);
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(404).json(ERRORS.USER_NOT_FOUND);
+        })
+        .catch(console.error);
+};
+
+exports.getFavorites = function(req, res) {
+    return Favorite
+        .getFavorites(req.user.id)
+        .then(function (trackSnippets){
+            console.log("After getting favorites, the json of trackSnippets: ");
+            console.log(JSON.stringify(trackSnippets));
+            res.status(StatusTypes.ok).json(trackSnippets);
+    }).catch(User.NotFoundError, function() {
+        res.status(404).json(ERRORS.USER_NOT_FOUND);
+    })
+    .catch(console.error);
+
+};
