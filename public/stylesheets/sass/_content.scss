@@ -955,6 +955,12 @@
 
 }
 
+.profile {
+    .panel-padded {
+        padding-bottom: 10px;
+    }
+}
+
 .profile, .subscriptions {
     .profile-section {
 
@@ -1116,12 +1122,11 @@
             margin-top: 30px;
 
            .track-collection {
-
                 // border: 1px solid $border-col;
                 // margin-bottom: 0;
                 // padding: 30px 30px 10px;
 
-                margin-bottom: 20px;
+                margin-bottom: 0; //30px
 
                 &:first-child {
                     border-bottom: none;
@@ -1137,7 +1142,7 @@
                    .preview {
                        height: 175px;
                    }
-                   padding-bottom: 15px;
+                   padding-bottom: 5px;
                }
            }
         }
