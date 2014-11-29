@@ -4,7 +4,7 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 
-var HomeStore = Reflux.createStore({
+var EditorStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
@@ -17,6 +17,7 @@ var HomeStore = Reflux.createStore({
             .get('/api/tracks/' + trackId)
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
+                    // console.log(res.body);
                     this.data.track = res.body;
                     this.trigger(this.data);
                     return;
@@ -103,4 +104,4 @@ var TracksCol = React.createClass({
 
 
 
-module.exports = HomeStore;
+module.exports = EditorStore;

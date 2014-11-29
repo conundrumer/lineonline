@@ -114,9 +114,6 @@
             left: 12px;
             top: 12px;
             margin: 5px 8px;
-            &:not(:last-child) {
-                // margin-right: 10px;
-            }
             overflow: hidden;
             img {
                 height: auto;
@@ -124,6 +121,11 @@
                 text-align: center;
                 display: block;
                 margin: 0 auto;
+            }
+
+            &:hover {
+                opacity: 0.5;
+
             }
         }
 
@@ -149,7 +151,7 @@
     input, textarea {
         border: 1px solid $border-col;
         width: 100%;
-        padding: 0 7px;
+        padding: 7px 7px;
         height: 36px;
     }
 

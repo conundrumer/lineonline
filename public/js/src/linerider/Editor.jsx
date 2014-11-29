@@ -1,6 +1,7 @@
 var React = require('react/addons');
 var Display = require('./Display.jsx');
 var Icon = require('../ui/Icon.jsx');
+var _ = require('underscore');
 
 var EDIT_STATE = {
     LINE: 1,
@@ -78,15 +79,15 @@ var Editor = React.createClass({
         // setting init state w/ props is generally an anti-pattern
         // but there is no synchronization needed atm
         var initScene = this.props.initScene;
+        var initTrack = this.props.initTrack;
 
-        //CHANGE ISMODALHIDDEN TO TRUE
         return {
             scene: initScene,
+            track: initTrack,
             editState: EDIT_STATE.PENCIL,
             startPos: null,
             movePos: null,
-            isModalHidden: false,
-            isCollabFormDisabled: true,
+            isModalHidden: true
         };
     },
     componentDidMount: function() {
@@ -94,6 +95,19 @@ var Editor = React.createClass({
     componentWillUnmount: function() {
         window.removeEventListener('mousemove', this.onMouseMove);
         window.removeEventListener('mouseup', this.onMouseUp);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if (this.state.scene !== nextProps.initScene) {
+            this.setState({
+                scene: nextProps.initScene
+            });
+        }
+
+        if (this.state.track !== nextProps.initTrack) {
+            this.setState({
+                track: nextProps.initTrack
+            });
+        }
     },
     // mouse handlers
     onToolClick: function(editState) {
@@ -115,61 +129,29 @@ var Editor = React.createClass({
             }
         });
     },
-    handleAnyClick: function(event) {
-        if (!this.state.modalHidden) {
+    onCloseModal: function(event) {
+        if (!this.state.isModalHidden) {
             this.setState({
                 isModalHidden: true
             });
         }
-        window.removeEventListener('click', this.handleAnyClick);
     },
-    handleSaveToolClick: function(event) {
-        if (this.state.modalHidden) {
+    onOpenModal: function(event) {
+        if (this.state.isModalHidden) {
             this.setState({
                 isModalHidden: false
             });
-            event.stopPropagation();
-            window.addEventListener('click', this.handleAnyClick);
         }
     },
-    handleSaveTrack: function(e) {
-        e.preventDefault();
-        //show modal, trigger save on clicking save
-        // this.onSave(e);
-        console.log('handling saving track');
+    onInvite: function(e) {
+        console.log('inviting');
+        // Actions.checkUser
     },
-    handleSaveCollab: function(e) {
-        e.preventDefault();
-        console.log('handling saving collab info for track');
-    },
-    onSave: function(e) {
-        e.preventDefault();
-        var data = {
-            scene: this.state.scene
-        };
-        // if (this.props.isBlank) {
-        //     data = {
-        //         scene: this.state.scene,
-        //         title: this.props.track.title
-        //         description: this.props.track.description,
-        //         collaborators: this.props.track.collaborators,
-        //         invitees: this.props.track.invitees,
-        //         tags: this.props.track.tags,
-        //         preview: this.props.track.preview
-        //     };
-        // } else {
-        //     data = {
-        //         track_id: this.props.track.track_id,
-        //         scene: this.state.scene,
-        //         title: this.props.track.title
-        //         description: this.props.track.description,
-        //         collaborators: this.props.track.collaborators,
-        //         invitees: this.props.track.invitees,
-        //         tags: this.props.track.tags,
-        //         preview: this.props.track.preview
-        //     };
-        // }
-        this.props.onSave(data);
+    onSave: function(formData) {
+        this.setState({
+            track: _.extend(this.state.track, formData, { scene : this.state.scene })
+        })
+        this.props.handleSave(this.state.track);
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -282,13 +264,15 @@ var Editor = React.createClass({
                 }
                 break;
         }
+        console.log('curr track: ', this.state.track);
         return (
             <div>
                 <SaveModal
                     isModalHidden={this.state.isModalHidden}
-                    isCollabFormDisabled={this.state.isCollabFormDisabled}
-                    handleSaveTrack={this.handleSaveTrack}
-                    handleSaveCollab={this.handleSaveCollab}
+                    onInvite={this.onInvite}
+                    onSave={this.onSave}
+                    onCloseModal={this.onCloseModal}
+                    track={this.state.track}
                 />
                 <div onMouseDown={this.onMouseDown}>
                     <Display
@@ -314,7 +298,7 @@ var Editor = React.createClass({
                                 Erase
                             </span>
                         </button>
-                        <button className='btn-toolbar' onClick={this.handleSave}>
+                        <button className='btn-toolbar' onClick={this.onOpenModal}>
                             <Icon class='toolbar-icon' icon='check' />
                             <span className='toolbar-title'>
                                 Save
@@ -336,55 +320,121 @@ var Editor = React.createClass({
 var SaveModal = React.createClass({
     getInitialState: function() {
         return {
-            track_form_title: '',
-            track_form_description: '',
-            track_form_tags: []
+            track: this.props.track
         };
     },
-    handleChange: function(inputName) {
-        return function (event) {
-            // console.log(event.target.value);
-            var inputValueArr = event.target.value.split(',');
-            inputValueArr.forEach(function(el, idx, arr) {
-                arr[idx] = el.trim();
-                console.log(arr[idx]);
+    onTitleChange: function(event) {
+        this.setState({
+            track: _.extend(this.state.track, { title: event.target.value })
+        });
+    },
+    onDescriptionChange: function(event) {
+        this.setState({
+            track: _.extend(this.state.track, { description: event.target.value })
+        });
+    },
+    onTagsChange: function(event) {
+        this.setState({
+            track: _.extend(this.state.track, { tags: event.target.value.split(',') })
+        });
+    },
+    processTags: function(value) {
+        var inputValueArr = value.split(',');
+        inputValueArr.forEach(function(el, idx, arr) {
+            arr[idx] = el.trim();
+            console.log(arr[idx]);
+        });
+        inputValueArr = inputValueArr.filter(function(el) {
+            return el !== '';
+        });
+        console.log(inputValueArr);
+        return inputValueArr;
+    },
+    handleFormSubmit: function(e) {
+        e.preventDefault();
+
+        var trackData = {
+            title: this.refs.trackTitle.getDOMNode().value.trim(),
+            description: this.refs.trackDescription.getDOMNode().value.trim(),
+            tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim()),
+            invitees: this.state.track.invitees,
+            collaborators: this.state.track.collaborators
+        };
+
+        // console.log(trackData);
+        this.props.onSave(trackData);
+    },
+    handleInvite: function(e) {
+        e.preventDefault();
+        var username = this.refs.inviteeUsername.getDOMNode().value.trim();
+        // Actions.getUserFromUsername();
+
+        // this.props.inviteeUsernames.push(username);
+
+        // this.props.onInvite(this.props.collaboratorU, invitees);
+    },
+    handleDeleteCollaborator: function(e) {
+
+    },
+    handleDeleteInvitee: function(e) {
+
+    },
+    componentWillMount: function() {
+        this.setState({
+            track: this.props.track
+        });
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if (this.state.track !== nextProps.track) {
+            this.setState({
+                track: nextProps.track
             });
-            inputValueArr = inputValueArr.filter(function(el) {
-                return el !== '';
-            });
-            console.log(inputValueArr);
-            var state = {};
-            state[inputName] = inputValueArr;
-            this.setState(state);
-        }.bind(this);
+        }
     },
     render: function() {
         return (
             <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
-                <div>
+                <div onClick={this.props.onCloseModal}>
                     <Icon class='x-icon' icon='circle-x' />
                 </div>
-                <form className='form-editor form-editor-track'>
+                <form ref='trackForm' className='form-editor form-editor-track'>
                     <div className='field'>
                         <label for='title'>
                             Title:
                         </label>
-                        <input ref='inputTitle' name='title' type='text' />
+                        <input
+                            ref='trackTitle'
+                            name='title'
+                            type='text'
+                            value={this.state.track ? this.state.track.title : ''}
+                            onChange={this.onTitleChange}
+                        />
                     </div>
                     <div className='field'>
                         <label for='description'>
                             Description:
                         </label>
-                        <textarea ref='inputDescription' name='description' />
+                        <textarea
+                            ref='trackDescription'
+                            name='description'
+                            value={this.state.track ? this.state.track.description : ''}
+                            onChange={this.onDescriptionChange}
+                        />
                     </div>
                     <div className='field'>
                         <label for='tags'>
                             Tags: <span className='note'>(separated by a comma)</span>
                         </label>
-                        <input ref='inputTags' name='tags' type='text' onChange={this.handleChange('track_form_tags')} />
+                        <input
+                            ref='trackTags'
+                            name='tags'
+                            type='text'
+                            value={this.state.track ? (this.state.track.tags) : ''}
+                            onChange={this.onTagsChange}
+                        />
                     </div>
                 </form>
-                <form className={'form-editor form-editor-collab' + (this.props.isCollabFormDisabled ? ' form-disabled' : '')}>
+                <form ref='collabForm' className='form-editor form-editor-collab'>
                     <div className='field'>
                         <h3>
                             Collaborators:
@@ -437,13 +487,13 @@ var SaveModal = React.createClass({
                                 <img src='../../images/sample_profile.png' />
                             </div>
                         </div>
-                        <input ref='inputInvitees' name='invitees' type='text' />
-                        <button className='btn-submit' type='submit' onClick={this.props.handleSaveCollab}>
+                        <input ref='inviteeUsername' name='invitees' type='text' />
+                        <button className='btn-submit' type='submit' onClick={this.handleInvite}>
                             Invite
                         </button>
                     </div>
                 </form>
-                <button className='btn-submit btn-save-modal' type='submit' onClick={this.props.handleSaveTrack}>
+                <button className='btn-submit btn-save-modal' type='submit' onClick={this.handleFormSubmit}>
                     Save
                 </button>
             </div>

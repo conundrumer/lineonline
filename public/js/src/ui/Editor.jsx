@@ -33,6 +33,7 @@ var Editor = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
+            console.log('have track id');
             Actions.getFullTrack(this.props.params.trackId);
         }
     },
@@ -42,57 +43,60 @@ var Editor = React.createClass({
             Actions.getFullTrack(nextProps.params.trackId);
         }
     },
-    handleCreateTrack: function(data) {
-        // Actions.createTrack(data);
+    handleCreateTrack: function(unsavedTrackData) {
+        // Actions.createTrack(unsavedTrackData);
         console.log('creating a track!!!');
-        console.log(data);
+        console.log(unsavedTrackData);
     },
-    handleUpdateTrack: function(data) {
-        // var updatedTrack = this.state.data.track;
-        // updatedTrack.scene = scene;
-        // Actions.updateTrack(this.props.params.trackId, updatedTrack);
+    handleUpdateTrack: function(fullTrackData) {
         console.log('updating a track!!!');
-        console.log(this.props.params.trackId);
-        console.log(data);
+        // console.log(this.props.params.trackId);
+        console.log(fullTrackData);
     },
     render: function() {
         var EMPTY_SCENE = {
             next_point_id: 0,
             next_line_id: 0,
-            points:{},
-            lines:{}
+            points: {},
+            lines: {}
+        };
+
+        var DEFAULT_PREVIEW = {
+            top: 0,
+            left: 0,
+            bottom: 360,
+            right: 480
         };
 
         var EMPTY_TRACK = {
             scene: EMPTY_SCENE,
-            title: null,
-            description: null,
-            collaborators: null,
-            invitees: null,
-            tags: null,
-            preview: null
+            title: '',
+            description: '',
+            collaborators: [],
+            invitees: [],
+            tags: [],
+            preview: DEFAULT_PREVIEW
         };
 
-        var isBlank = this.props.params.trackId ? false : true;
+        var handler, track, scene;
 
-        var handler = this.props.params.trackId ?
-            this.handleUpdateTrack : this.handleCreateTrack;
+        if (this.state.data.track) {
+            handler = this.handleUpdateTrack;
+            scene = this.state.data.track.scene;
+            track = this.state.data.track;
+        } else {
+            handler = this.handleCreateTrack;
+            scene = EMPTY_SCENE;
+            track = EMPTY_TRACK;
+        }
 
-        var scene = this.state.data.track ?
-            this.state.data.track.scene : EMPTY_SCENE;
-
-        var track = this.state.data.track ?
-            this.state.data.track : EMPTY_TRACK;
-
-        var DEFAULT_HANDLER = function(e){console.log(e)};
         return (
             <div className='main-content'>
                 <Panel isEditor={true}>
                     <LineriderEditor
-                        isBlank={isBlank}
                         initScene={scene}
-                        onSave={handler}
-                        track={track}
+                        initTrack={track}
+                        handleSave={handler}
                     />
                     <Conversation />
                 </Panel>

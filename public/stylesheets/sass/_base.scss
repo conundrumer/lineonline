@@ -44,6 +44,10 @@ input, select, textarea, button {
     line-height: inherit;
 }
 
+textarea {
+    resize: none;
+}
+
 .clearfix:before,
 .clearfix:after {
     content: '';
