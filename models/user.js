@@ -52,28 +52,6 @@ function toUserProfile(model) {
     });
 }
 
-function toSubscription(subs){
-    // var subscriptions = []
-    console.log("HERE AAAA");
-    var subscribee_id = parseInt(subs.get('subscribee'));
-    console.log("HERE BBBB");
-    return User.getByID(subscribee_id).then(function(subscribee){
-        var get_info = Promise.all([
-            subscribee.asUserSnippet(),
-            subscribee.getTrackSnippets()
-            ]);
-        return get_info.then(function(info){
-            var userSnippet = info[0];
-            var trackSnippets = info[1];
-            console.log('SUBSRCIPTIONS ARE: ' + JSON.stringify(info));
-            return {subscribee: userSnippet, track_snippets: trackSnippets};
-        });
-
-
-    });
-
-}
-
 var User = bookshelf.Model.extend({
     tableName: 'users',
     tracks: function(){
@@ -105,31 +83,6 @@ var User = bookshelf.Model.extend({
                 return track
                     .asTrackSnippet()
                     .addOwnerSnippet(userSnippet);
-            });
-        });
-    },
-    getSubscriptions: function () {
-        console.log("Here 2");
-        // return res.send("Hello");
-        return this.subscriptions().fetch().then(function(subs){
-            // this gives us the array of users we have subscribed to
-            // along with _pivot_subscriber and _pivot_subscribee
-            console.log("Here 3");
-            console.log("subs are: " + JSON.stringify(subs));
-            return subs.models.map(function (sub) {
-                console.log("Here 3.2");
-                console.log("subscriber is: " + sub.json().get('subscriber'));
-                console.log("subscribee is: " + sub.get('_pivot_subscribee'));
-                // get the actual subscription
-                return Subscription.where({
-                    'subscriber': sub.get('_pivot_subscriber'),
-                    'subscribee': sub.get('_pivot_subscribee'),
-                })
-                .fetch({require: true})
-                .then(function (subscriptionObject){
-                    console.log("Here 4");
-                    return toSubscription(subscriptionObject);
-                });
             });
         });
     }
