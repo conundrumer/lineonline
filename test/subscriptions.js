@@ -36,11 +36,11 @@ describe('Subscriptions: A user', function () {
             .expect(StatusTypes.noContent, done);
     });
 
-    it('should be able to see her subscriptions (get: /subscriptions)', function (done) {
-        agent.bob
-            .get('/subscriptions/' + bob.id)
-            .expect(StatusTypes.ok, bob.subscriptions(), done);
-    });
+    // it('should be able to see her subscriptions (get: /subscriptions)', function (done) {
+    //     agent.bob
+    //         .get('/subscriptions/' + bob.id)
+    //         .expect(StatusTypes.ok, bob.subscriptions(), done);
+    // });
 
     // // IDEMPOTENCE
     // it('should be able to subscribe more than once without any effect (put: /subscriptions/:user_id)', function (done) {
@@ -55,11 +55,11 @@ describe('Subscriptions: A user', function () {
     //         .expect(StatusTypes.ok, bob.subscriptions(), done);
     // });
 
-    // it('should be able to unsubscribe from a user (delete: /subscriptions/:user_id)', function (done) {
-    //     agent.bob
-    //         .delete('/subscriptions/' + bob.model.subscriptions[0])
-    //         .expect(StatusTypes.noContent, done);
-    // });
+    it('should be able to unsubscribe from a user (delete: /subscriptions/:user_id)', function (done) {
+        agent.bob
+            .delete('/subscriptions/' + bob.model.subscriptions[0])
+            .expect(StatusTypes.noContent, done);
+    });
 
     // it('should see no subscriptions (get: /subscriptions)', function (done) {
     //     agent.bob
