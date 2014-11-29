@@ -313,7 +313,7 @@ Data.onUpdate = function() {
 }
 
 var Reflux = require('reflux');
-var Actions = require('./action');
+var Actions = require('./actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 
@@ -395,37 +395,6 @@ var DataStore = Reflux.createStore({
                     console.log('user failed to be registered');
                     console.log(res.body.message);
                     Data.errorMessages.signup = res.body.message;
-                    this.trigger(Data);
-                    return;
-                }
-                console.log('unknown status: ', res.status);
-            }.bind(this));
-    },
-
-    onGetProfile: function(id) {
-        var context = this;
-        request
-            .get('/api/users/' + id + '/profile')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    Data.profileData = res.body;
-                    console.log(Data.profileData.featured_track);
-                    this.trigger(Data);
-                    return;
-                }
-                // if (res.notFound) {
-                //     Data.profileData.notFound = true
-                // }
-                console.log('unknown status: ', res.status);
-            }.bind(this));
-    },
-
-    onGetCollections: function(id) {
-        request
-            .get('/api/users/' + id + '/collections')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    Data.collections = res.body;
                     this.trigger(Data);
                     return;
                 }
