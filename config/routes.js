@@ -8,12 +8,12 @@ var subscriptions = require('../controllers/subscriptions');
 var api = express.Router();
 
 // subscriptions
-    console.log("IN USER SNIPPET");
-api.route('/subscriptions/:user_id')
-    .get(users.getSubscriptions);
+api.route('/subscriptions')
+    .get(auth.loginRequired, subscriptions.getSubscriptions);
 
 api.route('/subscriptions/:user_id')
-    .put(subscriptions.addSubscription);
+    .put(auth.loginRequired, subscriptions.addSubscription)
+    .delete(auth.loginRequired, subscriptions.deleteSubscription);
 
 // auth
 
