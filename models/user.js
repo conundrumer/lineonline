@@ -68,7 +68,6 @@ var User = bookshelf.Model.extend({
     // //     return this.belongsToMany('User', '')
     // }
     favorites: function(){
-        // return this.hasMany(Track, 'favorite_id');
         return this.belongsToMany(Track, 'favorites', 'favoriter', 'track');
     },
     asUserSnippet: function() {
@@ -101,10 +100,5 @@ var User = bookshelf.Model.extend({
         return User.forge({id: id}).fetch({require: true});
     }
 });
-
-
-
-
-
 
 module.exports = bookshelf.model('User', User);
