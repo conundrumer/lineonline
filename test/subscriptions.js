@@ -46,7 +46,7 @@ describe('Subscriptions: A user', function () {
     it('should be able to subscribe more than once without any effect (put: /subscriptions/:user_id)', function (done) {
         agent.bob
             .put('/subscriptions/' + bob.model.subscriptions[0])
-            .expect(StatusTypes.ok, bob.subscriptions()[0], done);
+            .expect(StatusTypes.noContent, done);
     });
 
     it('should not have multiple subscriptions to one user (get: /subscriptions)', function (done) {
