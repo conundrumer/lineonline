@@ -130,30 +130,54 @@ exports.getInvitations = function(req, res) {
 };
 
 exports.invite = function(req, res) {
-    var invite = Invitation.forge({
-            track: req.params.track_id,
-            invitee: req.params.user_id
-        });
+    var track_id = req.params.track_id;
+    var owner_id = req.user.id;
 
-    invite
-        .fetch({ require: true })
-        .then(function(){
-            res.status(StatusTypes.noContent).send();
+    Track
+        .getByID(track_id)
+        .then(function(trackModel){
+            if (owner_id != trackModel.get('owner')){
+                throw new Unauthorized('You do not have permission to edit this track.');
+            }
+            var invite = Invitation.forge({
+                    track: track_id,
+                    invitee: req.params.user_id
+                });
+
+            invite
+                .fetch({ require: true })
+                .then(function(){
+                    res.status(StatusTypes.noContent).send();
+                })
+                .catch(Invitation.NotFoundError, function() {
+                    invite.save().then(function() {
+                        res.status(StatusTypes.noContent).send();
+                    });
+                });
         })
-        .catch(Invitation.NotFoundError, function() {
-            invite.save().then(function() {
-                res.status(StatusTypes.noContent).send();
-            });
-        });
+        .catch(Unauthorized, function(err) {
+            res.status(StatusTypes.unauthorized).json(err);
+        })
+
 };
 
 exports.uninvite = function(req, res) {
-    Invitation
-        .where({
-            track: req.params.track_id,
-            invitee: req.params.user_id
+    var track_id = req.params.track_id;
+    var owner_id = req.user.id;
+
+    Track
+        .getByID(track_id)
+        .then(function(trackModel){
+            if (owner_id != trackModel.get('owner')){
+                throw new Unauthorized('You do not have permission to edit this track.');
+            }
+            return Invitation
+                .where({
+                    track: req.params.track_id,
+                    invitee: req.params.user_id
+                })
+                .fetch();
         })
-        .fetch()
         .then(function(invite){
             if (invite) {
                 invite.destroy();
@@ -161,5 +185,8 @@ exports.uninvite = function(req, res) {
         })
         .then(function() {
             res.status(StatusTypes.noContent).send();
-        });
+        })
+        .catch(Unauthorized, function(err) {
+            res.status(StatusTypes.unauthorized).json(err);
+        })
 };
