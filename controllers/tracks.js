@@ -131,11 +131,16 @@ exports.getInvitations = function(req, res) {
 
 exports.invite = function(req, res) {
     var track_id = req.params.track_id;
+    var invitee_id = req.params.user_id;
     var owner_id = req.user.id;
+
+    if (owner_id == invitee_id) {
+        return res.status(400).json({message: "you can't invite yourself to your own track"});
+    }
 
     new Promise.all([
         User
-            .getByID(req.params.user_id),
+            .getByID(invitee_id),
         Track
             .getByID(track_id)
             .then(function(trackModel){
@@ -147,7 +152,7 @@ exports.invite = function(req, res) {
     .then(function() {
         var invite = Invitation.forge({
                 track: track_id,
-                invitee: req.params.user_id
+                invitee: invitee_id
             });
 
         invite
@@ -176,12 +181,16 @@ exports.invite = function(req, res) {
 
 exports.uninvite = function(req, res) {
     var track_id = req.params.track_id;
+    var invitee_id = req.params.user_id;
     var owner_id = req.user.id;
 
+    if (owner_id == invitee_id) {
+        return res.status(400).json({message: "you can't uninvite yourself from your own track"});
+    }
 
     new Promise.all([
         User
-            .getByID(req.params.user_id),
+            .getByID(invitee_id),
         Track
             .getByID(track_id)
             .then(function(trackModel){
@@ -194,7 +203,7 @@ exports.uninvite = function(req, res) {
         return Invitation
             .where({
                 track: req.params.track_id,
-                invitee: req.params.user_id
+                invitee: invitee_id
             })
             .fetch();
     })
