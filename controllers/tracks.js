@@ -130,14 +130,20 @@ exports.getInvitations = function(req, res) {
 };
 
 exports.invite = function(req, res) {
-    Invitation
-        .forge({
+    var invite = Invitation.forge({
             track: req.params.track_id,
             invitee: req.params.user_id
-        })
-        .save()
+        });
+
+    invite
+        .fetch({ require: true })
         .then(function(){
             res.status(StatusTypes.noContent).send();
+        })
+        .catch(Invitation.NotFoundError, function() {
+            invite.save().then(function() {
+                res.status(StatusTypes.noContent).send();
+            });
         });
 };
 
