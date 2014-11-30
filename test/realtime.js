@@ -128,16 +128,15 @@ describe('Realtime editing: A user', function () {
     });
 
     it('should be able to get a track updated by realtime editing (get: /tracks/:track_id)', function(done) {
+        //cow's id is 3
         var edited_track = cow.full_tracks()[0];
         edited_track.scene = {
-            next_point_id: 3,
-            next_line_id: 1,
             points: {
-                0: { x: 0, y: 0 },
-                2: { x: 480, y: 360 }
+                '3_0': { x: 0, y: 0 },
+                '3_1': { x: 480, y: 360 }
             },
             lines: {
-                0: { p1: 0, p2: 2 }
+                '3_0': { p1: 0, p2: 2 }
             }
         };
         agent.bob

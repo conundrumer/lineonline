@@ -31,23 +31,24 @@ function lineData(p1, p2, line_id, x1, y1, x2, y2) {
     ];
 }
 
-function makeLineData(offset, hop) {
-    var points = offset;
-    var lines = offset;
+function makeLineData(user_id) {
+    var id = user_id + '_';
+    var points = 0;
+    var lines = 0;
     return function(x1, y1, x2, y2) {
-        var p1 = points;
-        var p2 = points+hop;
-        var line_id = lines;
+        var p1 = id + points;
+        var p2 = id + (points+1);
+        var line_id =  id + lines;
         var data = lineData(p1, p2, line_id, x1, y1, x2, y2);
-        points += 2*hop;
-        lines += hop;
+        points += 2;
+        lines += 1;
         return data;
     };
 }
 
 var line = {
-    cow: makeLineData(0, 2),
-    bob: makeLineData(1, 2)
+    cow: makeLineData(3), // cow.id: 3
+    bob: makeLineData(2) // bob.id: 2
 };
 var lines = {
     bob: [
