@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 var User = require('../models/user');
 var Track = require('../models/track');
+var Invitation = require('../models/invitation');
 
 var ERRORS = {
     TRACK_NOT_FOUND: {
@@ -110,13 +111,47 @@ exports.editTrack = function(req, res) {
 };
 
 exports.getInvitations = function(req, res) {
-    res.status(501).send();
+    Invitation
+        .where({
+            track: req.params.track_id
+        })
+        .fetchAll()
+        .then(function(invites) {
+            return new Promise.all(invites.models.map(function(invite) {
+                    return invite.invitee().fetch();
+                }));
+        })
+        .then(function(users) {
+            var invitees = users.map(function(user) {
+                return user.asUserSnippet();
+            });
+            res.status(StatusTypes.ok).json(invitees);
+        });
 };
 
 exports.invite = function(req, res) {
-    res.status(501).send();
+    Invitation
+        .forge({
+            track: req.params.track_id,
+            invitee: req.params.user_id
+        })
+        .save()
+        .then(function(){
+            res.status(StatusTypes.noContent).send();
+        });
 };
 
 exports.uninvite = function(req, res) {
-    res.status(501).send();
+    Invitation
+        .where({
+            track: req.params.track_id,
+            invitee: req.params.user_id
+        })
+        .fetch()
+        .then(function(invite){
+            if (invite) {
+                invite.destroy();
+            }
+            res.status(StatusTypes.noContent).send();
+        });
 };
