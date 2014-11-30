@@ -22,3 +22,5 @@ require('./subscriptions');
 // TODO: account settings
 
 // TODO: edge cases?
+
+require('./realtime');
