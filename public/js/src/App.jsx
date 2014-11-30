@@ -321,7 +321,7 @@ var Dropdown = React.createClass({
                         </Link>
                     </li>
                     <DropdownItem title='Favorites' link='favorites' icon='heart' />
-                    <DropdownItem title='Subscriptions' link='subscriptions' icon='people' />
+                    <DropdownItem title='Subscriptions' link='subscriptions' icon='rss' />
                     <DropdownItem title='Settings' link='settings' icon='cog' />
                     <DropdownItem title='Logout' link='index' icon='account-logout' onClick={this.handleLogout} />
                 </ul>

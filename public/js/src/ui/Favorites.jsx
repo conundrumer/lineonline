@@ -7,25 +7,57 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var FavoritesStore = require('../stores/favorites');
+var FavoritesStore = require('../stores/favorites');
 
 //UI Components
-var TracksPreview = require('./GalleryPreview.jsx');
+var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
 var Favorites = React.createClass({
+    mixins: [
+        Reflux.listenTo(FavoritesStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: FavoritesStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        if (this.props.currentUser) {
+            Actions.getFavorites();
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if ((this.props.currentUser !== nextProps.currentUser)
+            && nextProps.currentUser) {
+            Actions.getFavorites();
+        }
+    },
     render: function() {
-        var id = this.props.data.currentUser.id;
-        var favoritesData = this.props.data.favoritesData.users[id];
+
         return (
             <div className='main-content'>
-                <PanelPadded isFavorites={true}>
-                    <div className='section group'>
-                        <TracksPreview tracks={favoritesData.favorites} />
+                {this.props.currentUser ?
+                    <div>
+                        {this.state.data.favorites ?
+                            <PanelPadded isFavorites={true}>
+                                <div className='section group'>
+                                    <TracksPreview tracks={this.state.data.favorites} />
+                                </div>
+                            </PanelPadded>
+                            : null
+                        }
+                        <Footer />
                     </div>
-                </PanelPadded>
-                <Footer />
+                    : null
+                }
+
             </div>
         );
     }
