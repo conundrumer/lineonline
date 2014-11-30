@@ -108,3 +108,15 @@ exports.editTrack = function(req, res) {
         .catch(console.error);
 
 };
+
+exports.getInvitations = function(req, res) {
+    res.status(501).send();
+};
+
+exports.invite = function(req, res) {
+    res.status(501).send();
+};
+
+exports.uninvite = function(req, res) {
+    res.status(501).send();
+};
