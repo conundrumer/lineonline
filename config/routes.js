@@ -4,8 +4,17 @@ var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 var favorites = require('../controllers/favorites');
+var subscriptions = require('../controllers/subscriptions');
 
 var api = express.Router();
+
+// subscriptions
+api.route('/subscriptions')
+    .get(auth.loginRequired, subscriptions.getSubscriptions);
+
+api.route('/subscriptions/:user_id')
+    .put(auth.loginRequired, subscriptions.addSubscription)
+    .delete(auth.loginRequired, subscriptions.deleteSubscription);
 
 // auth
 
@@ -45,7 +54,8 @@ api.route('/favorites/:track_id')
     .put(auth.loginRequired, favorites.addFavorite)
     .delete(auth.loginRequired, favorites.removeFavorite);
 api.route('/favorites')
-    .get(auth.loginRequired, users.getFavorites);
+    .get(auth.loginRequired, favorites.getFavorites);
+
 
 module.exports = function (app, passport) {
     app.use('/api', api);

@@ -10,56 +10,81 @@ function Unauthorized(message) {
 Unauthorized.prototype = new Error();
 Unauthorized.prototype.constructor = Unauthorized;
 
-
 exports.addSubscription = function(req, res) {
     var subscribee_id = parseInt(req.params.user_id);
     var subscriber_id = req.user.id;
 
-    Subscription
-        .create(subscriber_id, subscribee_id)
-        .then(function () {
-            res.status(StatusTypes.noContent).send();
+    User
+        .getByID(subscribee_id)
+        .then(function(user_exists) {
+            var future_sub = Subscription
+                .forge({
+                    subscriber: subscriber_id,
+                    subscribee: subscribee_id
+                });
+
+            return future_sub
+                .fetch({ require: true })
+                .then(function(existing_sub) {
+                    res.status(StatusTypes.noContent).send();
+                })
+                .catch(Subscription.NotFoundError, function() {
+                    future_sub.save().then(function() {
+                        res.status(StatusTypes.noContent).send();
+                    });
+                });
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(StatusTypes.notFound).send();
         })
         .catch(console.error);
 };
 
 
+exports.getSubscriptions = function(req, res) {
+    req.user
+        .subscriptions()
+        .fetch()
+        .then(function(subscribees) {
+            return new Promise.all(subscribees.models.map(function(user){
+                var userSnippet = user.asUserSnippet();
+                return user.getTrackSnippets().then(function (tracks) {
+                    return {
+                        subscribee: userSnippet,
+                        track_snippets: tracks
+                    };
+                });
+            }));
+        }).then(function (subscriptions) {
+            res.json(subscriptions);
+        })
+        .catch(console.error);
+};
 
+exports.deleteSubscription = function (req, res) {
+    var subscribee_id = parseInt(req.params.user_id);
+    var subscriber_id = req.user.id;
 
-// exports.getSubscriptions = function(req, res) {
-//     var id = req.user.id;
-//     var subsArray = [];
-
-//     Subscription
-//         .where({subscriber: id}).fetch({require: true})
-//         .then(function (subscriptions) {
-//             for (var subscription in subscriptions) {
-//                 subscription.asSubscription().then(function(sub){
-//                     subsArray.push(sub);
-//                     console.log("a subscription: " + JSON.stringify(sub));
-
-//                 });
-//             }
-
-
-//             });
-//             res.status(StatusTypes.ok).json(subsArray);
-//         })
-//         .catch(console.error);
-
-
-     // Track
-     //    .getByID(track_id)
-     //    .then(function (track) {
-     //        return track
-     //            .asFullTrack()
-     //            .makeOwnerSnippet();
-     //    })
-     //    .then(function(fullTrack) {
-     //        res.status(200).json(fullTrack);
-     //    })
-     //    .catch(Track.NotFoundError, function() {
-     //        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
-     //    })
-     //    .catch(console.error);
-// };
+    User
+        .getByID(subscribee_id)
+        .then(function(user_exists) {
+            return Subscription
+                .forge({
+                    subscriber: subscriber_id,
+                    subscribee: subscribee_id
+                })
+                .fetch();
+        })
+        .then(function (sub) {
+            if (sub) {
+                sub.destroy();
+            }
+        })
+        .then(function () {
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(StatusTypes.notFound).send();
+        })
+        .catch(console.error);
+};

@@ -93,8 +93,8 @@ User.prototype = {
     subscriptions: function() {
         return this.model.subscriptions.map(function(sub) {
             return {
-                subscribee: toUserRep(sub.subscribee),
-                track_snippets: toUserTrackSnippets(sub.subscribee)
+                subscribee: toUserRep(sub),
+                track_snippets: toUserTrackSnippets(sub)
             };
         });
     },
