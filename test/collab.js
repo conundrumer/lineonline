@@ -28,29 +28,91 @@ describe('Collaboration: A user', function () {
             auth.login(agent.dolan, dolan),
             auth.login(agent.bob, bob)
         ]).then(function(){
-            return agent.bob
+            return agent.bob // bob invite dolan
                 .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
-                .expect(StatusTypes.noContent);
         })
         .then(function(){done();});
     });
 
     it('should be able to accept an invitation (put: /invitations/:track_id)', function (done) {
-        agent.dolan
+        agent.dolan // dolan accept bob's invitation
             .put('/invitations/' + track_ids.bob[0])
             .expect(StatusTypes.noContent, done);
     });
 
-    it('should be a collaborator of a track after accepting (get: /collaborations)', function (done) {
-        agent.dolan
+    it('should be a collaborator of a track after accepting (get: /collaborations & get: /tracks/:track_id/collaborators)', function (done) {
+        agent.dolan // dolan see his collabs
             .get('/collaborations')
-            .expect(StatusTypes.noContent, done);
+            .expect(StatusTypes.noContent, [bob.track_snippets()[0]])
+            .then(function() {
+                return agent.bob // see track's collaborators
+                    .get('/tracks/' + track_ids.bob[0] + '/collaborators')
+                    .expect(StatusTypes.ok, [dolan.user()]);
+            })
+            .then(function() {
+                var updatedTrack = bob.full_tracks()[0];
+                updatedTrack.collaborators = [dolan.user()];
+                return agent.bob // see track with collaborators
+                    .get('/tracks/' + track_ids.bob[0])
+                    .expect(StatusTypes.ok, updatedTrack);
+            })
+            .then(function() {done();})
+            .catch(done);
     });
 
-    it('should be a leave a track (delete: /collaborations/:track_id)', function (done) {
-        agent.dolan
+    it('should be able to leave a collab (delete: /collaborations/:track_id)', function (done) {
+        agent.dolan // leave collab
             .delete('/collaborations/' + track_ids.bob[0])
-            .expect(StatusTypes.noContent, done);
+            .expect(StatusTypes.noContent)
+            .then(function() {
+                return agent.dolan // see no collab
+                    .get('/collaborations')
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.bob // see no colalbroatrs on track
+                    .get('/tracks/' + track_ids.bob[0] + '/collaborators')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {
+                return agent.bob // see track with no collabs
+                    .get('/tracks/' + track_ids.bob[0])
+                    .expect(StatusTypes.ok, bob.full_tracks()[0]);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
+    it('should be able to remove a collaborator from a track she owns (delete: /tracks/:track_id/collaborators/:user_id)', function (done) {
+        agent.bob // invite dolan
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function() {
+                return agent.dolan // accept invitation
+                    .put('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.bob // remove dolan
+                    .delete('/tracks/' + track_ids.bob[0] + '/collaborators/' + dolan.id)
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.dolan // see no collab
+                    .get('/collaborations')
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.bob // see no collab on track
+                    .get('/tracks/' + track_ids.bob[0] + '/collaborators')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {
+                return agent.bob // track has no collab
+                    .get('/tracks/' + track_ids.bob[0])
+                    .expect(StatusTypes.ok, bob.full_tracks()[0]);
+            })
+            .then(function() {done();})
+            .catch(done);
     });
 
 });
