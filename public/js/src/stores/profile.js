@@ -31,6 +31,36 @@ var ProfileStore = Reflux.createStore({
             }.bind(this));
     },
 
+    onUpdateProfile: function(userId, userProfile) {
+        request
+            .put('/api/users/' + userId + '/profile')
+            .send(userProfile)
+            .end(function(err, res) {
+                console.log('ended');
+                if (res.status === StatusTypes.ok) {
+                    this.data.profile = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.profileData.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+
+
+            // .end(function(err, res) {
+            //     console.log(res);
+            //     if (res.status === StatusTypes.ok) {
+            //         console.log('UPDATING PROFIELEEE WOOHOO');
+            //         this.data.profile = res.body;
+            //         this.trigger(this.data);
+            //         return;
+            //     }
+            //     console.log('unknown status: ', res.status);
+            // }.bind(this));
+    },
+
     onGetTrackSnippets: function(userId) {
         request
             .get('/api/users/' + userId + '/tracks')

@@ -44,10 +44,11 @@ var Actions = Reflux.createActions([
     //subscriptions
     'getSubscriptions',
     'addSubscription',
-    'removeSubscription'
+    'removeSubscription',
 
     //settings
     //see 'getProfile'
+    'updateProfile'
 
 ]);
 

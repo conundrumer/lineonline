@@ -9,6 +9,7 @@ var Panel = React.createClass({
             'editor': this.props.isEditor,
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
+            'settings': this.props.isSettings,
             'home': this.props.isHome,
             'profile': this.props.isProfile,
             'subscriptions': this.props.isSubscriptions,
