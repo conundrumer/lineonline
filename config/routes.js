@@ -4,6 +4,7 @@ var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 var invitations = require('../controllers/invitations');
+var subscriptions = require('../controllers/subscriptions');
 
 var api = express.Router();
 
@@ -24,6 +25,12 @@ api.route('/users/:id')
 
 api.route('/users/:id/tracks')
     .get(users.getTracks);
+
+
+// profile
+api.route('/users/:id/profile')
+    .get(users.getProfile)
+    .put(users.editProfile);
 
 // tracks
 
@@ -52,12 +59,14 @@ api.route('/invitations/:track_id')
     .delete(auth.loginRequired, invitations.decline);
 
 
+// subscriptions
+api.route('/subscriptions')
+    .get(auth.loginRequired, subscriptions.getSubscriptions);
 
+api.route('/subscriptions/:user_id')
+    .put(auth.loginRequired, subscriptions.addSubscription)
+    .delete(auth.loginRequired, subscriptions.deleteSubscription);
 
-// profile
-api.route('/users/:id/profile')
-    .get(users.getProfile)
-    .put(users.editProfile);
 
 module.exports = function (app, passport) {
     app.use('/api', api);

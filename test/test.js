@@ -6,10 +6,11 @@ require('./auth'); // registers dolan
 require('./auth-errors');
 require('./users-basic'); // registers bob
 require('./tracks-basic'); // makes dolan's and bob's tracks
-require('./track-edit');
-require('./users-profile');
+// require('./track-edit');
+// require('./users-profile');
 // TODO: gallery
 // TODO: subscriptions
+require('./subscriptions');
 // TODO: favorites
 // TODO: collections
 

@@ -2,6 +2,7 @@ var bookshelf = require('../db/bookshelf.dev');
 var User = require('./user');
 
 var Subscription = bookshelf.Model.extend({
+    tableName: 'subscriptions',
     subscriber: function(){
         return this.belongsTo(User, 'subscriber');
     },
