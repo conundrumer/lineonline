@@ -66,6 +66,26 @@ describe('Invitations: A user', function () {
             .expect(StatusTypes.ok, [], done);
     });
 
+    it('should be able to decline invitations (delete: /invitations/:track_id)', function (done) {
+        agent.bob
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function(){
+                return agent.dolan
+                    .delete('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.dolan
+                    .get('/invitations')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function(){
+                agent.bob
+                    .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+                    .expect(StatusTypes.ok, [], done);
+            });
+    });
+
     it('should not be able to invite someone to someone else\'s track (put: /tracks/:track_id/invitations/:user_id)', function (done) {
         agent.bob
             .put('/tracks/' + track_ids.dolan[0] + '/invitations/' + dolan.id)
