@@ -152,6 +152,8 @@ exports.uninvite = function(req, res) {
             if (invite) {
                 invite.destroy();
             }
+        })
+        .then(function() {
             res.status(StatusTypes.noContent).send();
         });
 };

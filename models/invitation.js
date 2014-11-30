@@ -5,7 +5,7 @@ var Track = require('./track');
 var Invitation = bookshelf.Model.extend({
     tableName: 'invitation',
     track: function() {
-        return this.belongsTo(Track);
+        return this.belongsTo(Track, 'track');
     },
     invitee: function() {
         return this.belongsTo(User, 'invitee');
