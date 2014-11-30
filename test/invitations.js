@@ -53,17 +53,17 @@ describe('Invitations: A user', function () {
             .delete('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
             .expect(StatusTypes.noContent)
             .then(function(){
-                agent.bob
+                return agent.bob
                     .get('/tracks/' + track_ids.bob[0] + '/invitations/')
-                    .expect(StatusTypes.ok, [], done);
+                    .expect(StatusTypes.ok, []);
             })
+            .then(function() {
+                return agent.dolan
+                    .get('/invitations')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {done();})
             .catch(done);
-    });
-
-    it('should have no invitations (get: /invitations)', function (done) {
-        agent.dolan
-            .get('/invitations')
-            .expect(StatusTypes.ok, [], done);
     });
 
     it('should be able to decline invitations (delete: /invitations/:track_id)', function (done) {
@@ -103,7 +103,7 @@ describe('Invitations: A user', function () {
             .then(function(){
                 agent.bob
                     .get('/tracks/' + track_ids.bob[0] + '/invitations/')
-                    .expect(StatusTypes.ok, [dolan.user()], done);
+                    .expect(StatusTypes.ok, [dolan.user()]);
             })
             .then(function() {done();})
             .catch(done);
@@ -171,13 +171,13 @@ describe('Invitations: A user', function () {
     });
 
     it('should not be able to invite a non-existent user to her own track (put: /tracks/:track_id/invitations/:user_id)', function (done) {
-        agent.bob
+        agent.dolan
             .put('/tracks/' + track_ids.dolan[0] + '/invitations/' + 0)
             .expect(StatusTypes.notFound, done);
     });
 
     it('should not be able to uninvite a non-existent user from her own track (delete: /tracks/:track_id/invitations/:user_id)', function (done) {
-        agent.bob
+        agent.dolan
             .delete('/tracks/' + track_ids.dolan[0] + '/invitations/' + 0)
             .expect(StatusTypes.notFound, done);
     });

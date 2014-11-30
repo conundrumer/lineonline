@@ -134,15 +134,15 @@ exports.invite = function(req, res) {
     var owner_id = req.user.id;
 
     new Promise.all([
+        User
+            .getByID(req.params.user_id),
         Track
             .getByID(track_id)
             .then(function(trackModel){
                 if (owner_id != trackModel.get('owner')){
                     throw new Unauthorized('You do not have permission to invite people to this track.');
                 }
-            }),
-        User
-            .getByID(req.params.user_id)
+            })
     ])
     .then(function() {
         var invite = Invitation.forge({
@@ -180,15 +180,15 @@ exports.uninvite = function(req, res) {
 
 
     new Promise.all([
+        User
+            .getByID(req.params.user_id),
         Track
             .getByID(track_id)
             .then(function(trackModel){
                 if (owner_id != trackModel.get('owner')){
                     throw new Unauthorized('You do not have permission to uninvite people from this track.');
                 }
-            }),
-        User
-            .getByID(req.params.user_id)
+            })
     ])
     .then(function() {
         return Invitation
