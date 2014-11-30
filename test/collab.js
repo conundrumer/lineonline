@@ -26,7 +26,8 @@ describe('Collaboration: A user', function () {
     before(function(done) {
         new Promise.all([
             auth.login(agent.dolan, dolan),
-            auth.login(agent.bob, bob)
+            auth.login(agent.bob, bob),
+            auth.login(agent.cow, cow)
         ]).then(function(){
             return agent.bob // bob invite dolan
                 .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
@@ -212,6 +213,29 @@ describe('Collaboration: A user', function () {
                 return agent.bob // track has no collab
                     .get('/tracks/' + track_ids.bob[0])
                     .expect(StatusTypes.ok, bob.full_tracks()[0]);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
+    it('should not be able to accept an invitation to a track she wasn\'t invited to (put: /invitations/:track_id)', function (done) {
+        agent.dolan // dolan attempts to bob's other track
+            .put('/invitations/' + track_ids.bob[1])
+            .expect(StatusTypes.badRequest, done);
+    });
+
+    it('should not be able to remove a collaborator from a track she doesn\'t own (delete: /tracks/:track_id/collaborators/:user_id)', function (done) {
+        agent.bob // invite dolan
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function() {
+                return agent.dolan // accept invitation
+                    .put('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.cow // remove dolan
+                    .delete('/tracks/' + track_ids.bob[0] + '/collaborators/' + dolan.id)
+                    .expect(StatusTypes.unauthorized);
             })
             .then(function() {done();})
             .catch(done);
