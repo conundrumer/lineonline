@@ -10,30 +10,13 @@ var Favorite = bookshelf.Model.extend({
     tableName: 'favorites',
     build: function (table) {
         table.increments('id').primary();
-        table.integer('favoriter').references('users.id');// .notNullable();
-        table.integer('track').references('tracks.id');// .notNullable();
+        table.integer('favoriter').references('users.id');
+        table.integer('track').references('tracks.id');
     },
-
     create: function (user_id, track_id) {
         return Favorite
             .forge({favoriter: user_id, track: track_id})
             .save();
-    },
-
-    getFavorites: function (user_id) {
-        Track.fetchAll().then(function (tracks){
-            console.log("PRINTING ALL TRACKS! " + JSON.stringify(tracks));
-        }).then(function (){
-            return Favorite.where({favoriter : user_id}).fetchAll().then(function (favorites){
-                return favorites.models.map(function (faveModel){
-                    return Track.getByID(faveModel.get('track')).then(function(track){
-                        console.log('track is: ' + JSON.stringify(track));
-                        return track.asTrackSnippet();
-                    });
-                });
-            });
-
-        });
     }
 });
 

@@ -35,7 +35,6 @@ exports.addFavorite = function(req, res) {
             Favorite
                 .create(user_id, track_id)
                 .then(function (fave){
-                    console.log(JSON.stringify(fave));
                     res.status(StatusTypes.noContent).send();
                 })
                 .catch(console.error);
@@ -46,10 +45,21 @@ exports.addFavorite = function(req, res) {
         .catch(console.error);
 };
 
-
+exports.getFavorites = function(req, res) {
+    req.user
+        .favorites()
+        .fetch() // get each track and then turn it into snippets
+        .then(function(tracks) {
+            return new Promise.all(tracks.models.map(function(track){
+                return track.asTrackSnippet().makeOwnerSnippet();
+            }));
+        }).then(function (favorites) {
+            res.status(StatusTypes.ok).json(favorites);
+        })
+        .catch(console.error);
+};
 
 exports.removeFavorite = function(req, res){
-    console.log("In removeFavorite!");
     var user_id = req.user.id;
     var track_id = req.params.track_id;
 
@@ -61,9 +71,7 @@ exports.removeFavorite = function(req, res){
             .fetch({require: true})
             .then(function (faveModel){
                 faveModel.destroy();
-                console.log("Destroyed the favorite's model!");
                 return res.status(StatusTypes.noContent).send();
-
             })
             .catch(Favorite.NotFoundError, function() {
                 res.status(404).json(ERRORS.FAVORITE_NOT_FOUND);
@@ -75,21 +83,5 @@ exports.removeFavorite = function(req, res){
         })
         .catch(console.error);
 
-    // Track
-    //     .getByID(track_id)
-    //     .then(function(trackModel){
-    //         if (owner.get('id') != trackModel.get('owner')){
-    //             throw new Unauthorized('You do not have permission to delete this track.');
-    //         }
-    //         trackModel.destroy();
-    //         return res.status(StatusTypes.noContent).send();
-    //     })
-    //     .catch(Unauthorized, function(err) {
-    //         res.status(StatusTypes.unauthorized).json(err);
-    //     })
-    //     .catch(Track.NotFoundError, function() {
-    //         res.status(404).json(ERRORS.TRACK_NOT_FOUND);
-    //     })
-    //     .catch(console.error);
 }
 

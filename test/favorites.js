@@ -37,12 +37,12 @@ describe('Favorites: A user', function () {
             .expect(StatusTypes.noContent, done);
     });
 
-    // //bob getting his own favorites
-    // it('should be able to get her favorite tracks (get: /users/:user_id/favorites)', function (done) {
-    //     agent.bob
-    //         .get('/favorites')
-    //         .expect(StatusTypes.ok, bob.favorites(), done);
-    // });
+    //bob getting his own favorites
+    it('should be able to get her favorite tracks (get: /users/:user_id/favorites)', function (done) {
+        agent.bob
+            .get('/favorites')
+            .expect(StatusTypes.ok, bob.favorites(), done);
+    });
 
     //bob removing dolan's track from his own favorites
     it('should be able to unfavorite a track (delete: /users/:user_id/favorites/:track_id)', function (done) {
