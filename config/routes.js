@@ -3,6 +3,7 @@ var express = require('express');
 var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
+var invitations = require('../controllers/invitations');
 
 var api = express.Router();
 
@@ -33,6 +34,22 @@ api.route('/tracks/:track_id')
     .get(tracks.getTrack)
     .put(tracks.editTrack)
     .delete(tracks.deleteTrack);
+
+api.route('/tracks/:track_id/invitations')
+    .get(auth.loginRequired, tracks.getInvitations);
+
+api.route('/tracks/:track_id/invitations/:user_id')
+    .put(auth.loginRequired, tracks.invite)
+    .delete(auth.loginRequired, tracks.uninvite);
+
+
+// invitations
+api.route('/invitations')
+    .get(auth.loginRequired, invitations.getInvitations);
+
+api.route('/invitations/:track_id')
+    .put(auth.loginRequired, invitations.accept)
+    .delete(auth.loginRequired, invitations.decline);
 
 
 

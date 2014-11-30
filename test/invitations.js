@@ -42,6 +42,12 @@ describe('Invitations: A user', function () {
             .expect(StatusTypes.ok, [dolan.user()], done);
     });
 
+    it('should be able to get invitations (get: /invitations)', function (done) {
+        agent.dolan
+            .get('/invitations')
+            .expect(StatusTypes.ok, [bob.track_snippets()[0]], done);
+    });
+
     it('should be able to uninvite someone from her own track (delete: /tracks/:track_id/invitations/:user_id)', function (done) {
         agent.bob
             .delete('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
@@ -51,6 +57,12 @@ describe('Invitations: A user', function () {
     it('should get no invitees for her own track (get: /tracks/:track_id/invitations)', function (done) {
         agent.bob
             .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+            .expect(StatusTypes.ok, [], done);
+    });
+
+    it('should have no invitations (get: /invitations)', function (done) {
+        agent.dolan
+            .get('/invitations')
             .expect(StatusTypes.ok, [], done);
     });
 
