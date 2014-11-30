@@ -51,13 +51,13 @@ describe('Invitations: A user', function () {
     it('should be able to uninvite someone from her own track (delete: /tracks/:track_id/invitations/:user_id)', function (done) {
         agent.bob
             .delete('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
-            .expect(StatusTypes.noContent, done);
-    });
-
-    it('should get no invitees for her own track (get: /tracks/:track_id/invitations)', function (done) {
-        agent.bob
-            .get('/tracks/' + track_ids.bob[0] + '/invitations/')
-            .expect(StatusTypes.ok, [], done);
+            .expect(StatusTypes.noContent)
+            .then(function(){
+                agent.bob
+                    .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+                    .expect(StatusTypes.ok, [], done);
+            })
+            .catch(done);
     });
 
     it('should have no invitations (get: /invitations)', function (done) {
@@ -82,8 +82,80 @@ describe('Invitations: A user', function () {
             .then(function(){
                 agent.bob
                     .get('/tracks/' + track_ids.bob[0] + '/invitations/')
-                    .expect(StatusTypes.ok, [], done);
-            });
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
+    it('should be able to invite someone multiple times with no effect (put: /tracks/:track_id/invitations/:user_id)', function (done) {
+        agent.bob
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function(){
+                return agent.bob
+                    .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id);
+            })
+            .then(function() {
+                return agent.dolan
+                    .get('/invitations')
+                    .expect(StatusTypes.ok, [bob.track_snippets()[0]]);
+            })
+            .then(function(){
+                agent.bob
+                    .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+                    .expect(StatusTypes.ok, [dolan.user()], done);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
+    it('should be able to uninvite someone multiple times with no effect (delete: /tracks/:track_id/invitations/:user_id)', function (done) {
+        agent.bob
+            .delete('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function(){
+                return agent.bob
+                    .delete('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.dolan
+                    .get('/invitations')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function(){
+                agent.bob
+                    .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
+    it('should be able to decline invitations multiple times with no effect (delete: /invitations/:track_id)', function (done) {
+        agent.bob
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function(){
+                return agent.dolan
+                    .delete('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function(){
+                return agent.dolan
+                    .delete('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.dolan
+                    .get('/invitations')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function(){
+                agent.bob
+                    .get('/tracks/' + track_ids.bob[0] + '/invitations/')
+                    .expect(StatusTypes.ok, []);
+            })
+            .then(function() {done();})
+            .catch(done);
     });
 
     it('should not be able to invite someone to someone else\'s track (put: /tracks/:track_id/invitations/:user_id)', function (done) {
