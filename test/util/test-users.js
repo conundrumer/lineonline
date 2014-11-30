@@ -4,18 +4,21 @@ var User = require('./mongo-user');
 var user_ids = {
     dolan: 1,
     bob: 2,
-    eve: 3
+    cow: 3,
+    eve: 4
 };
 
 var track_ids = {
     dolan: [1],
     bob: [2, 3],
-    eve: [4, 5, 6]
+    cow: [4],
+    eve: [5, 6, 7]
 };
 
 var collection_ids = {
     dolan: [],
     bob: [1],
+    cow: [],
     eve: [2, 3]
 };
 
@@ -153,16 +156,55 @@ var bob = new User({
     }]
 });
 
-// user with nondefault featured track and actual collections
-var cow;
+// user with collaborations
+var cow = new User({
+    user: {
+        user_id: user_ids.cow,
+        username: 'cow',
+        avatar_url: '/images/default.png',
+        password: 'moo',
+        email: 'cow@moo.com',
+        location: '',
+        about: '',
+    },
+    tracks: [{
+        track_id: track_ids.cow[0],
+        scene: {
+            next_point_id: 0,
+            next_line_id: 0,
+            points: {},
+            lines: {}
+        },
+        title: 'cow\'s realtime track',
+        description: 'moooooo',
+        collaborators: [user_ids.bob],
+        invitees: [],
+        time_created: '',
+        time_modified: '',
+        tags: [],
+        preview: {
+            top: 0,
+            left: 0,
+            bottom: 360,
+            right: 480
+        },
+        conversation: {
+            messages: []
+        }
 
-// user with collaborations and messages
+    }],
+    subscriptions: [],
+    favorites: [],
+    collections: []
+});
+
+// user with nondefault featured track and actual collections
 var eve;
 
 module.exports = {
     dolan: dolan,
     bob: bob,
-    // cow: cow,
+    cow: cow,
     // eve: eve,
     user_ids: user_ids,
     track_ids: track_ids,
