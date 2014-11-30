@@ -930,27 +930,27 @@
         &:hover {
             opacity: 0.7;
             cursor: pointer;
-            &:after {
-                opacity: 1;
-            }
+            // &:after {
+            //     opacity: 1;
+            // }
         }
 
-        &:after {
-            @include transition(opacity 0.2s ease-in-out 0);
-            font-family: 'Icons';
-            content: '\e09d';
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: $linerider-red;
-            font-size: 24px;
-            text-align: center;
-            width: 100%;
-            display: block;
-            height: 100%;
-            line-height: 8;
-            opacity: 0;
-        }
+        // &:after {
+        //     @include transition(opacity 0.2s ease-in-out 0);
+        //     font-family: 'Icons';
+        //     content: '\e09d';
+        //     position: absolute;
+        //     left: 0;
+        //     top: 0;
+        //     color: $linerider-red;
+        //     font-size: 24px;
+        //     text-align: center;
+        //     width: 100%;
+        //     display: block;
+        //     height: 100%;
+        //     line-height: 8;
+        //     opacity: 0;
+        // }
     }
 
 }

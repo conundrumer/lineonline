@@ -43,16 +43,13 @@ var Favorites = React.createClass({
 
         return (
             <div className='main-content'>
-                {this.props.currentUser ?
+                {this.props.currentUser && this.state.data.favorites ?
                     <div>
-                        {this.state.data.favorites ?
-                            <PanelPadded isFavorites={true}>
-                                <div className='section group'>
-                                    <TracksPreview tracks={this.state.data.favorites} />
-                                </div>
-                            </PanelPadded>
-                            : null
-                        }
+                        <PanelPadded isFavorites={true}>
+                            <div className='section group'>
+                                <TracksPreview tracks={this.state.data.favorites} />
+                            </div>
+                        </PanelPadded>
                         <Footer />
                     </div>
                     : null

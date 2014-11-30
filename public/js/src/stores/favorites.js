@@ -8,7 +8,7 @@ var HomeStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            favorites: []
+            favorites: null
         };
         return this.data
     },

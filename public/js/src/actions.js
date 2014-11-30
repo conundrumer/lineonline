@@ -38,9 +38,13 @@ var Actions = Reflux.createActions([
 
     //favorites
     'getFavorites',
+    'addFavorite',
+    'removeFavorite',
 
     //subscriptions
-    'getSubscriptions'
+    'getSubscriptions',
+    'addSubscription',
+    'removeSubscription'
 
     //settings
     //see 'getProfile'
