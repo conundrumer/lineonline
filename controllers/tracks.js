@@ -133,31 +133,44 @@ exports.invite = function(req, res) {
     var track_id = req.params.track_id;
     var owner_id = req.user.id;
 
-    Track
-        .getByID(track_id)
-        .then(function(trackModel){
-            if (owner_id != trackModel.get('owner')){
-                throw new Unauthorized('You do not have permission to edit this track.');
-            }
-            var invite = Invitation.forge({
-                    track: track_id,
-                    invitee: req.params.user_id
-                });
+    new Promise.all([
+        Track
+            .getByID(track_id)
+            .then(function(trackModel){
+                if (owner_id != trackModel.get('owner')){
+                    throw new Unauthorized('You do not have permission to invite people to this track.');
+                }
+            }),
+        User
+            .getByID(req.params.user_id)
+    ])
+    .then(function() {
+        var invite = Invitation.forge({
+                track: track_id,
+                invitee: req.params.user_id
+            });
 
-            invite
-                .fetch({ require: true })
-                .then(function(){
+        invite
+            .fetch({ require: true })
+            .then(function(){
+                res.status(StatusTypes.noContent).send();
+            })
+            .catch(Invitation.NotFoundError, function() {
+                invite.save().then(function() {
                     res.status(StatusTypes.noContent).send();
-                })
-                .catch(Invitation.NotFoundError, function() {
-                    invite.save().then(function() {
-                        res.status(StatusTypes.noContent).send();
-                    });
                 });
-        })
-        .catch(Unauthorized, function(err) {
-            res.status(StatusTypes.unauthorized).json(err);
-        })
+            });
+    })
+    .catch(Unauthorized, function(err) {
+        res.status(StatusTypes.unauthorized).json(err);
+    })
+    .catch(User.NotFoundError, function() {
+        res.status(404).json(ERRORS.USER_NOT_FOUND);
+    })
+    .catch(Track.NotFoundError, function() {
+        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
+    })
+    .catch(console.error);
 
 };
 
@@ -165,28 +178,43 @@ exports.uninvite = function(req, res) {
     var track_id = req.params.track_id;
     var owner_id = req.user.id;
 
-    Track
-        .getByID(track_id)
-        .then(function(trackModel){
-            if (owner_id != trackModel.get('owner')){
-                throw new Unauthorized('You do not have permission to edit this track.');
-            }
-            return Invitation
-                .where({
-                    track: req.params.track_id,
-                    invitee: req.params.user_id
-                })
-                .fetch();
-        })
-        .then(function(invite){
-            if (invite) {
-                invite.destroy();
-            }
-        })
-        .then(function() {
-            res.status(StatusTypes.noContent).send();
-        })
-        .catch(Unauthorized, function(err) {
-            res.status(StatusTypes.unauthorized).json(err);
-        })
+
+    new Promise.all([
+        Track
+            .getByID(track_id)
+            .then(function(trackModel){
+                if (owner_id != trackModel.get('owner')){
+                    throw new Unauthorized('You do not have permission to uninvite people from this track.');
+                }
+            }),
+        User
+            .getByID(req.params.user_id)
+    ])
+    .then(function() {
+        return Invitation
+            .where({
+                track: req.params.track_id,
+                invitee: req.params.user_id
+            })
+            .fetch();
+    })
+    .then(function(invite){
+        if (invite) {
+            invite.destroy();
+        }
+    })
+    .then(function() {
+        res.status(StatusTypes.noContent).send();
+    })
+    .catch(Unauthorized, function(err) {
+        res.status(StatusTypes.unauthorized).json(err);
+    })
+    .catch(User.NotFoundError, function() {
+        res.status(404).json(ERRORS.USER_NOT_FOUND);
+    })
+    .catch(Track.NotFoundError, function() {
+        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
+    })
+    .catch(console.error);
+
 };
