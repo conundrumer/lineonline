@@ -56,7 +56,6 @@ api.route('/favorites/:track_id')
 api.route('/favorites')
     .get(auth.loginRequired, favorites.getFavorites);
 
-
 module.exports = function (app, passport) {
     app.use('/api', api);
 

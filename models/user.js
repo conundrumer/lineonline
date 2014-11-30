@@ -1,5 +1,6 @@
 var bookshelf = require('../db/bookshelf.dev');
 var Track = require('./track');
+var Subscription = require('./subscription');
 var _ = require('underscore');
 
 function buildUserTable(table) {
@@ -31,6 +32,7 @@ function toUserModel(body) {
     };
 }
 
+
 // model -> representations without related
 var DEFAULT_AVATAR_URL = '/images/default.png';
 function toUserSnippet(model) {
@@ -55,12 +57,13 @@ var User = bookshelf.Model.extend({
     tracks: function(){
         return this.hasMany('Track', 'owner');
     },
+
     asUserProfile: function() {
         return toUserProfile(this);
     },
-    // subscriptions: function(){
-    //     return this.belongsToMany('User', 'subscriptions', 'subscriber', 'subscribee');
-    // },
+    subscriptions: function(){
+        return this.belongsToMany('User', 'subscriptions', 'subscriber', 'subscribee');
+    },
     // subscribers: function(){
     //     return this.belongsToMany('User', 'subscriptions', 'subscribee', 'subscriber');
     // },

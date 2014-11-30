@@ -35,12 +35,33 @@ exports.addFavorite = function(req, res) {
             Favorite
                 .create(user_id, track_id)
                 .then(function (fave){
+                    console.log(JSON.stringify(fave));
                     res.status(StatusTypes.noContent).send();
                 })
                 .catch(console.error);
         })
         .catch(Track.NotFoundError, function() {
             res.status(404).json(ERRORS.TRACK_NOT_FOUND);
+        })
+        .catch(console.error);
+};
+
+exports.getSubscriptions = function(req, res) {
+    req.user
+        .subscriptions()
+        .fetch()
+        .then(function(subscribees) {
+            return new Promise.all(subscribees.models.map(function(user){
+                var userSnippet = user.asUserSnippet();
+                return user.getTrackSnippets().then(function (tracks) {
+                    return {
+                        subscribee: userSnippet,
+                        track_snippets: tracks
+                    };
+                });
+            }));
+        }).then(function (subscriptions) {
+            res.json(subscriptions);
         })
         .catch(console.error);
 };
