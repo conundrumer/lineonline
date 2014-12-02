@@ -56,7 +56,7 @@ describe('Realtime editing: A user', function () {
             })
             .then(function() {
                 return agent.bob // bob accept
-                    .put('/tracks/' + track_ids.cow[0] + '/collaborators/' + bob.id);
+                    .put('/invitations/' + track_ids.cow[0]);
             })
             .then(function(){done();});
     });

@@ -47,6 +47,9 @@ api.route('/tracks/:track_id')
     .put(auth.loginRequired, tracks.ownershipRequired, tracks.editTrack)
     .delete(auth.loginRequired, tracks.ownershipRequired, tracks.deleteTrack);
 
+api.route('/tracks/:track_id/session')
+    .get(auth.loginRequired, tracks.collabRequired, tracks.session);
+
 // invitations
 api.use('/invitations', auth.loginRequired);
 
