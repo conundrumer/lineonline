@@ -218,6 +218,23 @@ describe('Collaboration: A user', function () {
             .catch(done);
     });
 
+    it('should not be able to invite a collaborator (put: /tracks/:track_id/invitations/:user_id)', function (done) {
+        agent.bob // invite dolan
+            .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+            .then(function() {
+                return agent.dolan // accept invitation
+                    .put('/invitations/' + track_ids.bob[0])
+                    .expect(StatusTypes.noContent);
+            })
+            .then(function() {
+                return agent.bob // reinivte dolan
+                    .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
+                    .expect(StatusTypes.badRequest);
+            })
+            .then(function() {done();})
+            .catch(done);
+    });
+
     it('should not be able to accept an invitation to a track she wasn\'t invited to (put: /invitations/:track_id)', function (done) {
         agent.dolan // dolan attempts to bob's other track
             .put('/invitations/' + track_ids.bob[1])

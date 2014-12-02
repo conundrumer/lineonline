@@ -102,11 +102,23 @@ exports.invite = function(req, res) {
         });
 
     pending_invite
-        .fetch()
+        .fetch({ require: true })
         .then(function(existing_invite){
-            if (existing_invite) {
-                return res.status(StatusTypes.noContent).send();
-            }
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(Invitation.NotFoundError, function() {
+            return Collaboration
+                .forge({
+                    track: req.params.track_id,
+                    collaborator: invitee_id
+                })
+                .fetch({ require: true });
+        })
+        .then(function(existing_collab) {
+            if (!existing_collab) return;
+            res.status(StatusTypes.badRequest).send();
+        })
+        .catch(Collaboration.NotFoundError, function() {
             pending_invite.save().then(function() {
                 res.status(StatusTypes.noContent).send();
             });

@@ -17,20 +17,6 @@ exports.getInvitations = function(req, res) {
         });
 };
 
-function NotInvitedError(message) {
-    this.name = 'NotInvitedError';
-    this.message = message || 'You were not invited!';
-}
-NotInvitedError.prototype = new Error();
-NotInvitedError.prototype.constructor = NotInvitedError;
-
-function AlreadyCollaborating(message) {
-    this.name = 'AlreadyCollaborating';
-    this.message = message || 'You are already collaborating!';
-}
-AlreadyCollaborating.prototype = new Error();
-AlreadyCollaborating.prototype.constructor = AlreadyCollaborating;
-
 exports.accept = function(req, res) {
     var user_id = req.user.id;
     var track_id = req.track.get('id');
@@ -42,31 +28,26 @@ exports.accept = function(req, res) {
         });
 
     pending_collab
-        .fetch()
+        .fetch({ require: true })
         .then(function(existing_collab){
-            if (existing_collab) {
-                throw new AlreadyCollaborating();
-            }
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(Collaboration.NotFoundError, function() {
             return Invitation
                 .forge({
                     track: req.params.track_id,
                     invitee: req.user.id
                 })
-                .fetch();
+                .fetch({ require: true });
         })
         .then(function(invited){
-            if (!invited) {
-                throw new NotInvitedError();
-            }
+            if (!invited) return;
             pending_collab.save().then(function() {
                 // lol poor function names
                 exports.decline(req, res);
             });
         })
-        .catch(AlreadyCollaborating, function() {
-            res.status(StatusTypes.noContent).send();
-        })
-        .catch(NotInvitedError, function() {
+        .catch(Invitation.NotFoundError, function() {
             res.status(StatusTypes.badRequest).json({
                 message: 'You were not invited!'
             });
