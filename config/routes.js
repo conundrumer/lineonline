@@ -68,12 +68,14 @@ api.route('/invitations/:track_id')
 
 
 // subscriptions
+api.use('/subscriptions', auth.loginRequired);
+
 api.route('/subscriptions')
-    .get(auth.loginRequired, subscriptions.getSubscriptions);
+    .get(subscriptions.getSubscriptions);
 
 api.route('/subscriptions/:user_id')
-    .put(auth.loginRequired, subscriptions.addSubscription)
-    .delete(auth.loginRequired, subscriptions.deleteSubscription);
+    .put(subscriptions.addSubscription)
+    .delete(subscriptions.deleteSubscription);
 
 
 module.exports = function (app, passport) {
