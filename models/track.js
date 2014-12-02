@@ -47,15 +47,22 @@ function toTrackSnippet(model) {
     };
 }
 function toFullTrack(model) {
-    return _.extend(toTrackSnippet(model), {
-        collaborators: [],
-        invitees: [],
-        time_created: '',
-        time_modified: '',
-        tags: [],
-        conversation: {
-            messages: []
-        }
+    return new Promise.all(
+        // model.collaborators().fetch(),
+        [model.invitees().fetch()]
+    ).then(function (values) {
+        return _.extend(toTrackSnippet(model), {
+            collaborators: [],
+            invitees: values[0].models.map(function(invitee) {
+                return invitee.asUserSnippet();
+            }),
+            time_created: '',
+            time_modified: '',
+            tags: [],
+            conversation: {
+                messages: []
+            }
+        });
     });
 }
 
@@ -65,33 +72,35 @@ var Track = bookshelf.Model.extend({
     owner: function(){
         return this.belongsTo('User', 'owner');
     },
-    // representations
-    asFullTrack: function() {
-        return this.handleOwnerSnippet(toFullTrack(this));
+    invitees: function() {
+        return this.belongsToMany('User', 'invitation', 'track', 'invitee');
     },
-    asTrackSnippet: function() {
-        return this.handleOwnerSnippet(toTrackSnippet(this));
+    // representations
+    asFullTrack: function(ownerSnippet) {
+        return toFullTrack(this)
+            .then(function(fullTrack) {
+                return this.handleOwnerSnippet(fullTrack, ownerSnippet);
+            }.bind(this));
+    },
+    asTrackSnippet: function(ownerSnippet) {
+        return this.handleOwnerSnippet(toTrackSnippet(this), ownerSnippet);
     },
     // helper
-    handleOwnerSnippet: function (trackRep) {
-        return {
-            // sync
-            addOwnerSnippet: function(ownerSnippet) {
+    handleOwnerSnippet: function (trackRep, ownerSnippet) {
+        if (ownerSnippet) {
+            trackRep.owner = ownerSnippet;
+            return new Promise(function(resolve, reject) {
+                return resolve(trackRep);
+            });
+        }
+        return this.owner().fetch({ require: true })
+            .then(function (user) {
+                return user.asUserSnippet();
+            })
+            .then(function(ownerSnippet) {
                 trackRep.owner = ownerSnippet;
                 return trackRep;
-            },
-            // async promise
-            makeOwnerSnippet: function() {
-                return this.owner().fetch({ require: true })
-                    .then(function (user) {
-                        return user.asUserSnippet();
-                    })
-                    .then(function(ownerSnippet) {
-                        trackRep.owner = ownerSnippet;
-                        return trackRep;
-                    });
-            }.bind(this)
-        };
+            });
     }
 }, {
     tableName: 'tracks',

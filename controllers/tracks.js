@@ -21,8 +21,7 @@ exports.makeTrack = function(req, res) {
         .create(req.body, owner.get('id'))
         .then(function (track) {
             return track
-                .asFullTrack()
-                .addOwnerSnippet(owner.asUserSnippet());
+                .asFullTrack(owner.asUserSnippet());
         })
         .then(function(fullTrack) {
             res.status(201).json(fullTrack);
@@ -59,8 +58,7 @@ exports.getTrack = function(req, res) {
         .getByID(track_id)
         .then(function (track) {
             return track
-                .asFullTrack()
-                .makeOwnerSnippet();
+                .asFullTrack();
         })
         .then(function(fullTrack) {
             res.status(200).json(fullTrack);

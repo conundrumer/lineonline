@@ -2,6 +2,7 @@ var bookshelf = require('../db/bookshelf.dev');
 var Track = require('./track');
 var Subscription = require('./subscription');
 var _ = require('underscore');
+var Promise = require('bluebird');
 
 function buildUserTable(table) {
     table.increments('id').primary();
@@ -79,11 +80,10 @@ var User = bookshelf.Model.extend({
     getTrackSnippets: function () {
         var userSnippet = this.asUserSnippet();
         return this.tracks().fetch().then(function(trackResults) {
-            return trackResults.models.map(function (track) {
-                return track
-                    .asTrackSnippet()
-                    .addOwnerSnippet(userSnippet);
-            });
+            return new Promise.all(trackResults.models.map(function (track) {
+                    return track
+                        .asTrackSnippet(userSnippet);
+                }));
         });
     }
 }, {
