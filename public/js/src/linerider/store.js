@@ -43,15 +43,21 @@ function lineSegmentDistance(p, line) {
     }
 }
 
+function getMaxID(hashmap) {
+    return _.keys(hashmap).map(function(id) {
+        return parseInt(id.split('_')[1]);
+    }).reduce(Math.max, 0);
+}
+
 var SceneStore = Reflux.createStore({
     listenables: [EditorActions],
     getDefaultData: function() {
         this.scene = {
-            next_point_id: 0,
-            next_line_id: 0,
             points:{},
             lines:{}
         };
+        this.next_point_id = 0;
+        this.next_line_id = 0;
         return this.scene;
     },
     onNewScene: function () {
@@ -59,23 +65,25 @@ var SceneStore = Reflux.createStore({
     },
     onLoadScene: function (scene) {
         this.scene = scene;
+        this.next_point_id = getMaxID(scene.points);
+        this.next_line_id = getMaxID(scene.points);
         this.trigger(scene, 'load scene');
     },
     // editing functions
     // no snapping but stuff will get more complicated when that's implemented
-    onAddLine: function (p1, p2) {
+    onDrawLine: function (p1, p2) {
         var scene = this.scene;
-        var pointID = scene.next_point_id;
-        var lineID = scene.next_line_id;
+        var pointID = this.next_point_id;
+        var lineID = this.next_line_id;
         // no correction for pan/zoom
         scene.points[pointID] = p1;
         scene.points[pointID+1] = p2;
         scene.lines[lineID] = { p1: pointID, p2: pointID+1 };
-        scene.next_point_id = pointID + 2;
-        scene.next_line_id = lineID + 1;
+        this.next_point_id = pointID + 2;
+        this.next_line_id = lineID + 1;
         this.trigger(scene, 'add line');
     },
-    onRemoveLines: function (pos) {
+    onEraseLines: function (pos) {
         var scene = this.scene;
         _.keys(scene.lines).filter(function(id) {
             var line = scene.lines[id];

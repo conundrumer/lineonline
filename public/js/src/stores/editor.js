@@ -10,8 +10,6 @@ var EditorStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         var EMPTY_SCENE = {
-            next_point_id: 0,
-            next_line_id: 0,
             points: {},
             lines: {}
         };

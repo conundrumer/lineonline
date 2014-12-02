@@ -77,7 +77,7 @@ var Editor = React.createClass({
         };
         switch (this.state.editState) {
             case TOOL.ERASE:
-                Actions.removeLines(startPos);
+                Actions.eraseLines(startPos);
                 break;
         }
         this.setState({ startPos: startPos });
@@ -92,12 +92,12 @@ var Editor = React.createClass({
         switch (this.state.editState) {
             case TOOL.PENCIL:
                 if (distance(startPos, movePos) > MIN_LINE_LENGTH) {
-                    Actions.addLine(startPos, movePos);
+                    Actions.drawLine(startPos, movePos);
                     this.setState({ startPos: movePos });
                 }
                 break;
             case TOOL.ERASE:
-                Actions.removeLines(movePos);
+                Actions.eraseLines(movePos);
                 break;
         }
         this.setState({ movePos: movePos });
@@ -114,7 +114,7 @@ var Editor = React.createClass({
         switch (this.state.editState) {
             case TOOL.LINE:
                 if (distance(startPos, endPos) > MIN_LINE_LENGTH) {
-                    Actions.addLine(startPos, endPos);
+                    Actions.drawLine(startPos, endPos);
                 }
                 break;
         }
