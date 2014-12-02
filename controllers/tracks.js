@@ -8,9 +8,29 @@ var ERRORS = {
     TRACK_NOT_FOUND: {
         message: 'No track exists with the given ID'
     },
-    USER_NOT_FOUND: {
-        message: 'No use exists with the given ID'
+    NOT_AUTHORIZED: {
+        message: 'You are not authorized to do this.'
     }
+};
+
+exports.getByID = function(req, res, next, track_id) {
+    Track
+        .getByID(track_id)
+        .then(function (track) {
+            req.track = track;
+            next();
+        })
+        .catch(User.NotFoundError, function() {
+            res.status(StatusTypes.notFound).json(ERRORS.TRACK_NOT_FOUND);
+        })
+        .catch(console.error);
+};
+
+exports.ownershipRequired = function(req, res, next) {
+    if (req.user.get('id') == req.track.get('owner')) {
+        return next();
+    }
+    res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
 };
 
 exports.makeTrack = function(req, res) {
@@ -42,12 +62,6 @@ exports.deleteTrack = function(req, res){
             trackModel.destroy();
             return res.status(StatusTypes.noContent).send();
         })
-        .catch(Unauthorized, function(err) {
-            res.status(StatusTypes.unauthorized).json(err);
-        })
-        .catch(Track.NotFoundError, function() {
-            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
-        })
         .catch(console.error);
 }
 
@@ -62,9 +76,6 @@ exports.getTrack = function(req, res) {
         })
         .then(function(fullTrack) {
             res.status(200).json(fullTrack);
-        })
-        .catch(Track.NotFoundError, function() {
-            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
         })
         .catch(console.error);
 };
@@ -97,12 +108,6 @@ exports.editTrack = function(req, res) {
         .then(function(fullTrack){
 
             res.status(StatusTypes.ok).json(fullTrack);
-        })
-        .catch(Unauthorized, function(err) {
-            res.status(StatusTypes.unauthorized).json(err);
-        })
-        .catch(Track.NotFoundError, function() {
-            res.status(404).json(ERRORS.TRACK_NOT_FOUND);
         })
         .catch(console.error);
 
@@ -164,15 +169,6 @@ exports.invite = function(req, res) {
                 });
             });
     })
-    .catch(Unauthorized, function(err) {
-        res.status(StatusTypes.unauthorized).json(err);
-    })
-    .catch(User.NotFoundError, function() {
-        res.status(404).json(ERRORS.USER_NOT_FOUND);
-    })
-    .catch(Track.NotFoundError, function() {
-        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
-    })
     .catch(console.error);
 
 };
@@ -212,15 +208,6 @@ exports.uninvite = function(req, res) {
     })
     .then(function() {
         res.status(StatusTypes.noContent).send();
-    })
-    .catch(Unauthorized, function(err) {
-        res.status(StatusTypes.unauthorized).json(err);
-    })
-    .catch(User.NotFoundError, function() {
-        res.status(404).json(ERRORS.USER_NOT_FOUND);
-    })
-    .catch(Track.NotFoundError, function() {
-        res.status(404).json(ERRORS.TRACK_NOT_FOUND);
     })
     .catch(console.error);
 

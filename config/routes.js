@@ -36,20 +36,24 @@ api.route('/users/:user_id/profile')
 
 // tracks
 
+api.param('track_id', tracks.getByID);
+
 api.route('/tracks')
     .post(auth.loginRequired, tracks.makeTrack);
 
 api.route('/tracks/:track_id')
     .get(tracks.getTrack)
-    .put(tracks.editTrack)
-    .delete(tracks.deleteTrack);
+    .put(auth.loginRequired, tracks.ownershipRequired, tracks.editTrack)
+    .delete(auth.loginRequired, tracks.ownershipRequired, tracks.deleteTrack);
+
+api.use('/tracks/:track_id/invitations', auth.loginRequired);
 
 api.route('/tracks/:track_id/invitations')
-    .get(auth.loginRequired, tracks.getInvitations);
+    .get(tracks.getInvitations);
 
 api.route('/tracks/:track_id/invitations/:user_id')
-    .put(auth.loginRequired, tracks.invite)
-    .delete(auth.loginRequired, tracks.uninvite);
+    .put(tracks.ownershipRequired, tracks.invite)
+    .delete(tracks.ownershipRequired, tracks.uninvite);
 
 
 // invitations

@@ -12,9 +12,9 @@ var ERRORS = {
     }
 };
 
-exports.getByID = function(req, res, next, id) {
+exports.getByID = function(req, res, next, user_id) {
     User
-        .getByID(id)
+        .getByID(user_id)
         .then(function (user) {
             req.user_model = user;
             next();
