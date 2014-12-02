@@ -44,10 +44,10 @@ exports.accept = function(req, res) {
             if (!invite) return;
             pending_collab.save().then(function() {
                 return invite.destroy();
+            })
+            .then(function() {
+                res.status(StatusTypes.noContent).send();
             });
-        })
-        .then(function() {
-            res.status(StatusTypes.noContent).send();
         })
         .catch(Invitation.NotFoundError, function() {
             res.status(StatusTypes.badRequest).json({
