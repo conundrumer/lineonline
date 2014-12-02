@@ -32,6 +32,11 @@ var Actions = Reflux.createActions([
     'getConversation',
     'updateTrack',
     'createTrack',
+    'addInvitee',
+    'addInvitees',
+    'addCollaborators',
+    'getInvitees',
+    // 'getInvitee',
 
     //gallery
     'getGallery',

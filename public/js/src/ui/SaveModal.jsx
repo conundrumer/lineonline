@@ -39,23 +39,44 @@ var SaveModal = React.createClass({
 
         var titleValue = this.refs.trackTitle.getDOMNode().value.trim()
         titleValue = (titleValue === '') ? 'Untitled' : titleValue;
+        // console.log(this.state.track.invitees);
 
         var trackMetaData = {
             title: titleValue,
             description: this.refs.trackDescription.getDOMNode().value.trim(),
-            tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim()),
-            invitees: this.state.track.invitees,
-            collaborators: this.state.track.collaborators
+            tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim())
         };
 
         this.props.onSave(trackMetaData);
     },
     handleInvite: function(e) {
         e.preventDefault();
-        var username = this.refs.inviteeUsername.getDOMNode().value.trim();
+
+        var userId = this.refs.inviteeUsername.getDOMNode().value.trim();
+        var currInvitees = this.state.track.invitees;
+
+        var user = {
+            user_id: userId,
+            avatar_url: '../../images/sample_profile.png',
+            username: 'balasdfjkl',
+        };
+
+        if (userId !== '') { //&& valid
+
+            this.props.onInvite(user);
+
+            // this.setState({
+            //     track: _.extend(this.state.track, { invitees: _.union(currInvitees, [user]) })
+            // });
+            // console.log(this.state.track.invitees);
+        }
+
+        this.refs.inviteeUsername.getDOMNode().value = '';
+
+
+
+        // var username = this.refs.inviteeUsername.getDOMNode().value.trim();
         // Actions.getUserFromUsername();
-        // this.props.inviteeUsernames.push(username);
-        // this.props.onInvite(this.props.collaboratorU, invitees);
     },
     handleDeleteCollaborator: function(e) {
 
@@ -69,13 +90,25 @@ var SaveModal = React.createClass({
         });
     },
     componentWillReceiveProps: function(nextProps) {
-        if (this.state.track !== nextProps.track) {
+        console.log('save modal this props invitees: ')
+        console.log(this.props.track.invitees);
+
+        console.log('save modal next props invitees: ')
+        console.log(nextProps.track.invitees);
+
+        if (this.props.track !== nextProps.track) {
             this.setState({
                 track: nextProps.track
             });
         }
     },
     render: function() {
+        var inviteeBubbles = this.state.track.invitees.map(function(invitee) {
+            return (
+                <UserBubble imageSrc={invitee.avatar_url} />
+            );
+        });
+
         return (
             <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
                 <div onClick={this.props.onCloseModal}>
@@ -125,27 +158,9 @@ var SaveModal = React.createClass({
                             Collaborators:
                         </h3>
                         <div className='collab-preview collab-preview-collaborators'>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
+                            <UserBubble imageSrc='../../images/sample_profile.png' />
+                            <UserBubble imageSrc='../../images/sample_profile.png' />
+                            <UserBubble imageSrc='../../images/sample_profile.png' />
                         </div>
                     </div>
                     <div className='field'>
@@ -153,24 +168,7 @@ var SaveModal = React.createClass({
                             Invitees:
                         </label>
                         <div className='collab-preview collab-preview-invitees'>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
+                            {inviteeBubbles}
                         </div>
                         <input ref='inviteeUsername' name='invitees' type='text' />
                         <button className='btn-submit' type='submit' onClick={this.handleInvite}>
@@ -181,6 +179,16 @@ var SaveModal = React.createClass({
                 <button className='btn-submit btn-save-modal' type='submit' onClick={this.handleFormSubmit}>
                     Save
                 </button>
+            </div>
+        );
+    }
+});
+
+var UserBubble = React.createClass({
+    render: function() {
+        return (
+            <div className='user-img'>
+                <img src={this.props.imageSrc} />
             </div>
         );
     }

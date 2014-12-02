@@ -47,17 +47,20 @@ var Editor = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
-            console.log('have track id');
             Actions.getFullTrack(this.props.params.trackId);
+            Actions.getInvitees(this.props.params.trackId);
         }
     },
     componentWillReceiveProps: function(nextProps) {
-        console.log('this props: ', this.props.params.trackId)
-        console.log('next props: ', nextProps.params.trackId)
+        // console.log('this props: ', this.props.params.trackId)
+        // console.log('next props: ', nextProps.params.trackId)
         if (this.props.params.trackId !== nextProps.params.trackId
             && nextProps.params.trackId) {
+            console.log('On Existing Editor')
             Actions.getFullTrack(nextProps.params.trackId);
+            Actions.getInvitees(this.props.params.trackId);
         } else if (this.props.params.trackId !== nextProps.params.trackId) {
+            console.log('On New Editor')
             this.setState({
                 data: EditorStore.getDefaultData()
             });
@@ -87,18 +90,23 @@ var Editor = React.createClass({
     handleCreateTrack: function(trackMetaData) {
         var unsavedTrackData = _.extend(this.state.data.track, trackMetaData)
         Actions.createTrack(unsavedTrackData);
+        // Actions.addInvitees(unsavedTrackData);
+
         console.log('creating a track!!!');
-        console.log(unsavedTrackData);
     },
     handleUpdateTrack: function(trackMetaData) {
         var updatedTrackData = _.extend(this.state.data.track, trackMetaData)
         Actions.updateTrack(updatedTrackData);
+        // Actions.addInvitees(updatedTrackData);
+
         console.log('updating a track!!!');
-        console.log(updatedTrackData);
     },
     handleUpdateScene: function(scene) {
         console.log('updating scene on server...')
-        console.log(this.state.data.track.scene);
+        var updatedTrack = _.extend(this.state.data.track, { scene: scene });
+        this.setState({
+            data: _.extend(this.state.data, { track: updatedTrack })
+        });
         Actions.updateTrack(this.state.data.track);
     },
     handleSaveSceneForFutureUpdate: function(scene) {
@@ -108,8 +116,12 @@ var Editor = React.createClass({
             data: _.extend(this.state.data, { track: updatedTrack })
         });
     },
-    handleInvite: function(e) {
-        console.log('handling invite');
+    handleInvite: function(user) {
+        if (this.props.params.trackId) {
+            Actions.addInvitee(this.props.params.trackId, user);
+        } else {
+            alert('You must save your track before inviting anyone!');
+        }
     },
     render: function() {
         var saveHandler, isNewTrack, sceneUpdateHandler;
@@ -123,13 +135,15 @@ var Editor = React.createClass({
             isNewTrack = true
         }
 
+        // console.log(this.state.data.track.scene);
+
         return (
             <div className='main-content'>
                 <Panel isEditor={true}>
                     <SaveModal
                         isModalHidden={this.state.isModalHidden}
-                        onInvite={this.handleInvite}
                         onSave={saveHandler}
+                        onInvite={this.handleInvite}
                         onCloseModal={this.handleCloseModal}
                         track={this.state.data.track}
                     />

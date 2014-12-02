@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var _ = require('underscore');
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -86,46 +87,68 @@ var EditorStore = Reflux.createStore({
                 // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
-    }
-});
+    },
 
-var TracksPreview = React.createClass({
-    render: function() {
-        var tracksCols = {
-            0: [],
-            1: [],
-            2: []
-        };
-        this.props.tracks.forEach(function(track, idx) {
-            var colIdx = idx % 3;
-            tracksCols[colIdx].push(track);
-        });
-        return (
-            <div className='section group'>
-                <TracksCol col='col-first' tracks={tracksCols[0]} extra={this.props.extra} />
-                <TracksCol col='col-mid' tracks={tracksCols[1]} extra={this.props.extra} />
-                <TracksCol col='col-last' tracks={tracksCols[2]} extra={this.props.extra} />
-            </div>
-        );
-    }
-});
+    onAddInvitee: function(trackId, invitee) {
+        var userId = invitee.user_id;
+        request
+            .put('/api/tracks/' + trackId + '/invitations/' + userId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    //added invitee
+                    // this.data.track.invitees = _.union(this.data.track.invitees, [invitee]);
 
-var TracksCol = React.createClass({
-    render: function() {
-        var tracks = this.props.tracks;
-        var galleryTiles = this.props.tracks.map(function(track) {
-            return (
-                <GalleryTile key={track.id} title={track.title} description={track.description} col={this.props.col} extra={this.props.extra} />
-            );
+                    var unique = this.data.track.invitees.every(function(existingInvitee) {
+                        return invitee.user_id !== existingInvitee.user_id;
+                    }.bind(this));
+
+                    if (unique) {
+                        this.data.track.invitees.push(invitee);
+                        this.trigger(this.data);
+                        console.log('added unique individual invitee!!!');
+                    }
+
+                }
+            }.bind(this))
+    },
+
+    onAddInvitees: function(trackData) {
+        var invitees = trackData.invitees;
+        var trackId = trackData.track_id;
+        invitees.forEach(function(invitee, idx, arr) {
+            var userId = invitee.user_id; //for now, invitee will be the userId
+            request
+                .put('/api/tracks/' + trackId + '/invitations/' + userId)
+                .end(function(err, res) {
+                    if (res.status === StatusTypes.noContent) {
+                        //added invitee
+                        console.log('added invitee!!!');
+                    }
+                }.bind(this))
         }.bind(this));
-        return (
-            <div className='gallery-col col span_1_of_3'>
-               {galleryTiles}
-            </div>
-        );
-    }
-});
+    },
 
+    onGetInvitees: function(trackId) {
+        request
+            .get('/api/tracks/' + trackId + '/invitations/')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.track.invitees = res.body;
+                    this.trigger(this.data);
+                }
+            }.bind(this));
+    }
+
+    // onGetInvitee: function(userId) {
+    //     request
+    //         .get('/api/users/' + userId)
+    //         .end(function(err, res) {
+    //             if (res.status === StatusTypes.ok) {
+
+    //             }
+    //         }.bind(this));
+    // }
+});
 
 
 module.exports = EditorStore;
