@@ -16,7 +16,7 @@ exports.getInvitations = function(req, res) {
         })
         .then(function(tracks) {
             return new Promise.all(tracks.map(function(track) {
-                    return track.asTrackSnippet().makeOwnerSnippet();
+                    return track.asTrackSnippet();
                 }));
         })
         .then(function(trackSnippets) {
