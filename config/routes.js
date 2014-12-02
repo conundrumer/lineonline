@@ -75,11 +75,13 @@ api.route('/collaborations')
 api.route('/collaborations/:track_id')
     .delete(collaborations.leaveCollaboration);
 
+api.use('/tracks/:track_id/collaborators', auth.loginRequired);
+
 api.route('/tracks/:track_id/collaborators')
     .get(tracks.getCollaborators);
 
 api.route('/tracks/:track_id/collaborators/:user_id')
-    .delete(tracks.removeCollaborator);
+    .delete(tracks.ownershipRequired, users.noSelfReference, tracks.removeCollaborator);
 
 // subscriptions
 api.use('/subscriptions', auth.loginRequired);

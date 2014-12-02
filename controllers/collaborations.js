@@ -18,5 +18,18 @@ exports.getCollaborations = function(req, res) {
 };
 
 exports.leaveCollaboration = function(req, res) {
-    res.status(501).send();
+    Collaboration
+        .forge({
+            track: req.params.track_id,
+            collaborator: req.user.id
+        })
+        .fetch()
+        .then(function(collab){
+            if (collab) {
+                collab.destroy();
+            }
+        })
+        .then(function() {
+            res.status(StatusTypes.noContent).send();
+        });
 };

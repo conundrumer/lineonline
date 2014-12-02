@@ -3,6 +3,7 @@ var StatusTypes = require('status-types');
 var User = require('../models/user');
 var Track = require('../models/track');
 var Invitation = require('../models/invitation');
+var Collaboration = require('../models/collaboration');
 
 var ERRORS = {
     TRACK_NOT_FOUND: {
@@ -27,7 +28,7 @@ exports.getByID = function(req, res, next, track_id) {
 };
 
 exports.ownershipRequired = function(req, res, next) {
-    if (req.user.get('id') == req.track.get('owner')) {
+    if (req.user.id == req.track.get('owner')) {
         return next();
     }
     res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
@@ -147,5 +148,18 @@ exports.getCollaborators = function(req, res) {
 };
 
 exports.removeCollaborator = function(req, res) {
-    res.status(501).send();
+    Collaboration
+        .forge({
+            track: req.params.track_id,
+            collaborator: req.params.user_id
+        })
+        .fetch()
+        .then(function(collab){
+            if (collab) {
+                collab.destroy();
+            }
+        })
+        .then(function() {
+            res.status(StatusTypes.noContent).send();
+        });
 };
