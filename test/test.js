@@ -23,3 +23,5 @@ require('./collab')
 // TODO: account settings
 
 // TODO: edge cases?
+
+require('./realtime');
