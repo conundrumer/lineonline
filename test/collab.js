@@ -44,7 +44,7 @@ describe('Collaboration: A user', function () {
     it('should be a collaborator of a track after accepting (get: /collaborations & get: /tracks/:track_id/collaborators)', function (done) {
         agent.dolan // dolan see his collabs
             .get('/collaborations')
-            .expect(StatusTypes.noContent, [bob.track_snippets()[0]])
+            .expect(StatusTypes.ok, [bob.track_snippets()[0]])
             .then(function() {
                 return agent.bob // see track's collaborators
                     .get('/tracks/' + track_ids.bob[0] + '/collaborators')
@@ -100,7 +100,7 @@ describe('Collaboration: A user', function () {
             .then(function() {
                 return agent.dolan // see no collab
                     .get('/collaborations')
-                    .expect(StatusTypes.noContent);
+                    .expect(StatusTypes.ok);
             })
             .then(function() {
                 return agent.bob // see no collab on track
@@ -134,7 +134,7 @@ describe('Collaboration: A user', function () {
             .then(function() {
                 return agent.dolan // dolan see one of his collabs
                     .get('/collaborations')
-                    .expect(StatusTypes.noContent, [bob.track_snippets()[0]])
+                    .expect(StatusTypes.ok, [bob.track_snippets()[0]])
             })
             .then(function() {
                 return agent.bob // see track's 1 collaborators
@@ -164,7 +164,7 @@ describe('Collaboration: A user', function () {
             .then(function() {
                 return agent.dolan // see no collab
                     .get('/collaborations')
-                    .expect(StatusTypes.noContent);
+                    .expect(StatusTypes.ok);
             })
             .then(function() {
                 return agent.bob // see no colalbroatrs on track
@@ -202,7 +202,7 @@ describe('Collaboration: A user', function () {
             .then(function() {
                 return agent.dolan // see no collab
                     .get('/collaborations')
-                    .expect(StatusTypes.noContent);
+                    .expect(StatusTypes.ok);
             })
             .then(function() {
                 return agent.bob // see no collab on track
