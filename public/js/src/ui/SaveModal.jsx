@@ -10,15 +10,14 @@ var SaveModal = React.createClass({
             track: this.props.track
         };
     },
-    onTitleChange: function(event) {
-        this.setState({
-            track: _.extend(this.state.track, { title: event.target.value })
-        });
-    },
-    onDescriptionChange: function(event) {
-        this.setState({
-            track: _.extend(this.state.track, { description: event.target.value })
-        });
+    onInputChange: function(inputName) {
+        return function(event) {
+            var newTrackData = {};
+            newTrackData[inputName] = event.target.value;
+            this.setState({
+                track: _.extend(this.state.track, newTrackData)
+            });
+        }.bind(this);
     },
     onTagsChange: function(event) {
         this.setState({
@@ -38,8 +37,11 @@ var SaveModal = React.createClass({
     handleFormSubmit: function(e) {
         e.preventDefault();
 
+        var titleValue = this.refs.trackTitle.getDOMNode().value.trim()
+        titleValue = (titleValue === '') ? 'Untitled' : titleValue;
+
         var trackMetaData = {
-            title: this.refs.trackTitle.getDOMNode().value.trim(),
+            title: titleValue,
             description: this.refs.trackDescription.getDOMNode().value.trim(),
             tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim()),
             invitees: this.state.track.invitees,
@@ -88,8 +90,9 @@ var SaveModal = React.createClass({
                             ref='trackTitle'
                             name='title'
                             type='text'
+                            placeholder='Untitled'
                             value={this.state.track ? this.state.track.title : ''}
-                            onChange={this.onTitleChange}
+                            onChange={this.onInputChange('title')}
                         />
                     </div>
                     <div className='field'>
@@ -100,7 +103,7 @@ var SaveModal = React.createClass({
                             ref='trackDescription'
                             name='description'
                             value={this.state.track ? this.state.track.description : ''}
-                            onChange={this.onDescriptionChange}
+                            onChange={this.onInputChange('description')}
                         />
                     </div>
                     <div className='field'>

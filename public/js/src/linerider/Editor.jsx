@@ -95,7 +95,7 @@ var Editor = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         //QUESTIONABLE
-        if (this.state.scene !== nextProps.initScene) {
+        if (this.props.initScene !== nextProps.initScene) {
             this.setState({
                 scene: nextProps.initScene
             });
