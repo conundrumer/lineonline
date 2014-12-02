@@ -3,7 +3,7 @@ var User = require('./user');
 var Track = require('./track');
 
 var Invitation = bookshelf.Model.extend({
-    tableName: 'invitation',
+    tableName: 'invitations',
     track: function() {
         return this.belongsTo(Track, 'track');
     },
@@ -11,7 +11,7 @@ var Invitation = bookshelf.Model.extend({
         return this.belongsTo(User, 'invitee');
     }
 }, {
-    tableName: 'invitation',
+    tableName: 'invitations',
     build: function (table) {
         table.increments('id').primary();
         table.integer('track').references('tracks.id');

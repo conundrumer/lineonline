@@ -3,7 +3,7 @@ var User = require('./user');
 var Track = require('./track');
 
 var Collaboration = bookshelf.Model.extend({
-    tableName: 'collaboration',
+    tableName: 'collaborations',
     track: function() {
         return this.belongsTo(Track, 'track');
     },
@@ -11,7 +11,7 @@ var Collaboration = bookshelf.Model.extend({
         return this.belongsTo(User, 'collaborator');
     }
 }, {
-    tableName: 'collaboration',
+    tableName: 'collaborations',
     build: function (table) {
         table.increments('id').primary();
         table.integer('track').references('tracks.id');
