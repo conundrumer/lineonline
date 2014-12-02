@@ -4,7 +4,9 @@ var EditorActions = Reflux.createActions([
     'newScene',
     'loadScene',
     'drawLine',
-    'eraseLines'
+    'eraseLines',
+    'addLine',
+    'removeLine'
 ]);
 
 module.exports = EditorActions;

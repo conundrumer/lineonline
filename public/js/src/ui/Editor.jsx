@@ -52,18 +52,18 @@ var Editor = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         if (!this.props.params.trackId && nextProps.params.trackId) {
-            console.log('A new track is being created.');
+            console.log('A new track is being created/loaded.');
             return;
         }
-        if (this.props.params.trackId !== nextProps.params.trackId
-            && nextProps.params.trackId) {
-            console.log('On Existing Editor', this.props.params.trackId, nextProps.params.trackId)
-            this.loadTrack(nextProps.params.trackId);
-        } else if (this.props.params.trackId !== nextProps.params.trackId) {
-            console.log('On New Editor');
-            Actions.closeEditorSession();
-            Actions.newTrack();
-        }
+        if (this.props.params.trackId !== nextProps.params.trackId {
+            if (nextProps.params.trackId) {
+                console.log('Switching tracks', this.props.params.trackId, nextProps.params.trackId)
+                this.loadTrack(nextProps.params.trackId);
+            } else {
+                console.log('Switching to empty track');
+                Actions.closeEditorSession();
+                Actions.newTrack();
+            }
     },
     componentWillUnmount: function() {
         Actions.closeEditorSession();
