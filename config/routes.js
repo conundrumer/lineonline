@@ -20,17 +20,19 @@ api.route('/auth/register')
 
 // users
 
-api.route('/users/:id')
-    .get(users.getByID, users.getUserSnippet);
+api.param('user_id', users.getByID);
 
-api.route('/users/:id/tracks')
-    .get(users.getByID, users.getTracks);
+api.route('/users/:user_id')
+    .get(users.getUserSnippet);
+
+api.route('/users/:user_id/tracks')
+    .get(users.getTracks);
 
 
 // profile
-api.route('/users/:id/profile')
-    .get(users.getByID, users.getProfile)
-    .put(users.getByID, users.editProfile);
+api.route('/users/:user_id/profile')
+    .get(users.getProfile)
+    .put(users.editProfile);
 
 // tracks
 
