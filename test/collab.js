@@ -241,4 +241,10 @@ describe('Collaboration: A user', function () {
             .catch(done);
     });
 
+    it('should not be able to accept an invitation to a non-existent track (put: /invitations/:track_id)', function(done) {
+        agent.dolan // dolan attempts to bob's other track
+            .put('/invitations/' + 0)
+            .expect(StatusTypes.notFound, done);
+    });
+
 });
