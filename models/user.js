@@ -65,12 +65,15 @@ var User = bookshelf.Model.extend({
     subscriptions: function(){
         return this.belongsToMany('User', 'subscriptions', 'subscriber', 'subscribee');
     },
-    // subscribers: function(){
-    //     return this.belongsToMany('User', 'subscriptions', 'subscribee', 'subscriber');
-    // },
-    // // collaborations: function(){
-    // //     return this.belongsToMany('User', '')
-    // }
+    subscribers: function(){
+        return this.belongsToMany('User', 'subscriptions', 'subscribee', 'subscriber');
+    },
+    invitations: function() {
+        return this.belongsToMany('Track', 'invitations', 'invitee', 'track');
+    },
+    collaborations: function(){
+        return this.belongsToMany('Track', 'collaborations', 'collaborator', 'track');
+    },
     // favorites: function(){
     //     return this.hasMany('Track', 'favorites');
     // },

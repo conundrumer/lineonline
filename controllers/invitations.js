@@ -3,19 +3,11 @@ var StatusTypes = require('status-types');
 var Invitation = require('../models/invitation');
 
 exports.getInvitations = function(req, res) {
-    var user_id = req.user.id;
-    Invitation
-        .where({
-            invitee: user_id
-        })
-        .fetchAll()
-        .then(function(invites) {
-            return new Promise.all(invites.models.map(function(invite) {
-                    return invite.track().fetch();
-                }));
-        })
+
+    req.user.invitations()
+        .fetch()
         .then(function(tracks) {
-            return new Promise.all(tracks.map(function(track) {
+            return new Promise.all(tracks.models.map(function(track) {
                     return track.asTrackSnippet();
                 }));
         })

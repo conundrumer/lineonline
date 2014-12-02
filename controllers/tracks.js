@@ -118,16 +118,14 @@ exports.uninvite = function(req, res) {
     var invitee_id = req.user_model.get('id');
     var track_id = req.track.get('id');
 
-    var pending_invite = Invitation.forge({
+    Invitation.forge({
             track: track_id,
             invitee: invitee_id
-        });
-
-    pending_invite
+        })
         .fetch()
         .then(function(existing_invite){
             if (existing_invite) {
-                existing_invite.destroy();
+                return existing_invite.destroy();
             }
         })
         .then(function() {

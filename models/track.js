@@ -78,7 +78,10 @@ var Track = bookshelf.Model.extend({
         return this.belongsTo('User', 'owner');
     },
     invitees: function() {
-        return this.belongsToMany('User', 'invitation', 'track', 'invitee');
+        return this.belongsToMany('User', 'invitations', 'track', 'invitee');
+    },
+    collaborators: function() {
+        return this.belongsToMany('User', 'collaborations', 'track', 'collaborator');
     },
     // representations
     asFullTrack: function(ownerSnippet) {
