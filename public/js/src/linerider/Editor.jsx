@@ -127,6 +127,10 @@ var Editor = React.createClass({
     onToolBarMouseDown: function(e) {
         e.stopPropagation();
     },
+    onSaveSetting: function(e) {
+        e.preventDefault();
+        this.props.onOpenModal(this.state.scene);
+    },
     render: function() {
         var drawingLine;
         var startPos = this.state.startPos;
@@ -152,7 +156,7 @@ var Editor = React.createClass({
                     <ToolButton onClick={this.onToolClick(TOOL.PENCIL)} icon='pencil' name='Pencil' />
                     <ToolButton onClick={this.onToolClick(TOOL.LINE)} icon='minus' name='Line' />
                     <ToolButton onClick={this.onToolClick(TOOL.ERASE)} icon='delete' name='Erase' />
-                    <ToolButton onClick={this.props.onOpenModal} icon='check'
+                    <ToolButton onClick={this.onSaveSetting} icon='check'
                         name={ this.props.isNewTrack ? 'Save' : 'Settings' } />
                     <ToolButton onClick={this.onClear} icon='x' name='Clear' />
                 </div>
