@@ -80,16 +80,8 @@ exports.editTrack = function(req, res) {
 };
 
 exports.getInvitations = function(req, res) {
-    Invitation
-        .where({
-            track: req.params.track_id
-        })
-        .fetchAll()
-        .then(function(invites) {
-            return new Promise.all(invites.models.map(function(invite) {
-                    return invite.invitee().fetch();
-                }));
-        })
+    req.track.invitees()
+        .fetch()
         .then(function(users) {
             var invitees = users.map(function(user) {
                 return user.asUserSnippet();
@@ -99,82 +91,59 @@ exports.getInvitations = function(req, res) {
 };
 
 exports.invite = function(req, res) {
-    var track_id = req.params.track_id;
-    var invitee_id = req.params.user_id;
     var owner_id = req.user.id;
+    var invitee_id = req.user_model.get('id');
+    var track_id = req.track.get('id');
 
     if (owner_id == invitee_id) {
-        return res.status(400).json({message: "you can't invite yourself to your own track"});
+        return res.status(400).json({
+            message: "you can't invite yourself to your own track"
+        });
     }
 
-    new Promise.all([
-        User
-            .getByID(invitee_id),
-        Track
-            .getByID(track_id)
-            .then(function(trackModel){
-                if (owner_id != trackModel.get('owner')){
-                    throw new Unauthorized('You do not have permission to invite people to this track.');
-                }
-            })
-    ])
-    .then(function() {
-        var invite = Invitation.forge({
-                track: track_id,
-                invitee: invitee_id
-            });
+    var pending_invite = Invitation.forge({
+            track: track_id,
+            invitee: invitee_id
+        });
 
-        invite
-            .fetch({ require: true })
-            .then(function(){
+    pending_invite
+        .fetch()
+        .then(function(existing_invite){
+            if (existing_invite) {
+                return res.status(StatusTypes.noContent).send();
+            }
+            pending_invite.save().then(function() {
                 res.status(StatusTypes.noContent).send();
-            })
-            .catch(Invitation.NotFoundError, function() {
-                invite.save().then(function() {
-                    res.status(StatusTypes.noContent).send();
-                });
             });
-    })
-    .catch(console.error);
-
+        })
+        .catch(console.error);
 };
 
 exports.uninvite = function(req, res) {
-    var track_id = req.params.track_id;
-    var invitee_id = req.params.user_id;
     var owner_id = req.user.id;
+    var invitee_id = req.user_model.get('id');
+    var track_id = req.track.get('id');
 
     if (owner_id == invitee_id) {
-        return res.status(400).json({message: "you can't uninvite yourself from your own track"});
+        return res.status(400).json({
+            message: "you can't invite yourself to your own track"
+        });
     }
 
-    new Promise.all([
-        User
-            .getByID(invitee_id),
-        Track
-            .getByID(track_id)
-            .then(function(trackModel){
-                if (owner_id != trackModel.get('owner')){
-                    throw new Unauthorized('You do not have permission to uninvite people from this track.');
-                }
-            })
-    ])
-    .then(function() {
-        return Invitation
-            .where({
-                track: req.params.track_id,
-                invitee: invitee_id
-            })
-            .fetch();
-    })
-    .then(function(invite){
-        if (invite) {
-            invite.destroy();
-        }
-    })
-    .then(function() {
-        res.status(StatusTypes.noContent).send();
-    })
-    .catch(console.error);
+    var pending_invite = Invitation.forge({
+            track: track_id,
+            invitee: invitee_id
+        });
 
+    pending_invite
+        .fetch()
+        .then(function(existing_invite){
+            if (existing_invite) {
+                existing_invite.destroy();
+            }
+        })
+        .then(function() {
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(console.error);
 };

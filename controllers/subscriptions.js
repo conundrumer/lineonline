@@ -15,19 +15,19 @@ exports.addSubscription = function(req, res) {
     var subscriber_id = req.user.id;
     var subscribee_id = req.user_model.id;
 
-    var future_sub = Subscription
+    var pending_subscription = Subscription
         .forge({
             subscriber: subscriber_id,
             subscribee: subscribee_id
         });
 
-    future_sub
+    pending_subscription
         .fetch()
         .then(function(existing_sub) {
             if (existing_sub) {
                 return res.status(StatusTypes.noContent).send();
             }
-            future_sub.save().then(function() {
+            pending_subscription.save().then(function() {
                 res.status(StatusTypes.noContent).send();
             });
         })
