@@ -68,7 +68,7 @@ describe('Collaboration: A user', function () {
             .then(function() {
                 return agent.dolan // see no collab
                     .get('/collaborations')
-                    .expect(StatusTypes.noContent);
+                    .expect(StatusTypes.ok);
             })
             .then(function() {
                 return agent.bob // see no colalbroatrs on track
