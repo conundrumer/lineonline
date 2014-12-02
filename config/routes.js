@@ -57,12 +57,14 @@ api.route('/tracks/:track_id/invitations/:user_id')
 
 
 // invitations
+api.use('/invitations', auth.loginRequired);
+
 api.route('/invitations')
-    .get(auth.loginRequired, invitations.getInvitations);
+    .get(invitations.getInvitations);
 
 api.route('/invitations/:track_id')
-    .put(auth.loginRequired, invitations.accept)
-    .delete(auth.loginRequired, invitations.decline);
+    .put(invitations.accept)
+    .delete(invitations.decline);
 
 
 // subscriptions
