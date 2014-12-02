@@ -22,7 +22,8 @@ var agent = {
 };
 
 var io = require('socket.io-client');
-var socket_url = 'http://localhost:3000/tracks';
+// var socket_url = 'http://localhost:3000/tracks';
+var socket_url = 'http://localhost:3000'; // /tracks doens't work yet for some reaosn
 var socket = {};
 
 var lines = require('./util/realtime-track');
