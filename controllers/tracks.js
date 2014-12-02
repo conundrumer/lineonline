@@ -42,7 +42,7 @@ exports.collabRequired = function(req, res, next) {
         .fetch()
         .then(function(collabs) {
             var isCollab = collabs.models.some(function(track) {
-                return track.get('id') === req.params.track_id;
+                return track.get('id') == req.params.track_id;
             });
             if (isCollab) {
                 return next();
@@ -191,10 +191,4 @@ exports.removeCollaborator = function(req, res) {
         .then(function() {
             res.status(StatusTypes.noContent).send();
         });
-};
-
-exports.session = function(req, res) {
-    res.status(200).json({
-        token: 'faketoken'
-    });
 };

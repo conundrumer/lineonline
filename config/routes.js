@@ -6,6 +6,7 @@ var tracks = require('../controllers/tracks');
 var invitations = require('../controllers/invitations');
 var collaborations = require('../controllers/collaborations');
 var subscriptions = require('../controllers/subscriptions');
+var editTrack = require('../controllers/edit-track');
 
 var api = express.Router();
 
@@ -48,7 +49,7 @@ api.route('/tracks/:track_id')
     .delete(auth.loginRequired, tracks.ownershipRequired, tracks.deleteTrack);
 
 api.route('/tracks/:track_id/session')
-    .get(auth.loginRequired, tracks.collabRequired, tracks.session);
+    .get(auth.loginRequired, tracks.collabRequired, editTrack.session);
 
 // invitations
 api.use('/invitations', auth.loginRequired);
