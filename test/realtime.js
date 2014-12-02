@@ -67,11 +67,7 @@ describe('Realtime editing: A user', function () {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.body.must.have.own('token');
-                res.body.must.have.own('offset', 0);
-                res.body.must.have.own('hop', 2);
                 cow.token = res.body.token;
-                cow.offset = res.body.offset;
-                cow.hop = res.body.hop;
                 done();
             });
     });
@@ -82,11 +78,7 @@ describe('Realtime editing: A user', function () {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.body.must.have.own('token');
-                res.body.must.have.own('offset', 1);
-                res.body.must.have.own('hop', 2);
                 bob.token = res.body.token;
-                bob.offset = res.body.offset;
-                bob.hop = res.body.hop;
                 done();
             });
     });
