@@ -14,11 +14,14 @@ require('./subscriptions');
 // TODO: favorites
 // TODO: collections
 
-// TODO: invitations
+require('./invitations');
 // TODO: collaboration (non-realtime)
+require('./collab')
 // TODO: privacy
 // TODO: conversations (non-realtime)
 
 // TODO: account settings
 
 // TODO: edge cases?
+
+// require('./realtime');

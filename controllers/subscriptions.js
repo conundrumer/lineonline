@@ -12,31 +12,24 @@ Unauthorized.prototype.constructor = Unauthorized;
 
 
 exports.addSubscription = function(req, res) {
-    var subscribee_id = parseInt(req.params.user_id);
     var subscriber_id = req.user.id;
+    var subscribee_id = req.user_model.id;
 
-    User
-        .getByID(subscribee_id)
-        .then(function(user_exists) {
-            var future_sub = Subscription
-                .forge({
-                    subscriber: subscriber_id,
-                    subscribee: subscribee_id
-                });
+    var pending_subscription = Subscription
+        .forge({
+            subscriber: subscriber_id,
+            subscribee: subscribee_id
+        });
 
-            return future_sub
-                .fetch({ require: true })
-                .then(function(existing_sub) {
-                    res.status(StatusTypes.noContent).send();
-                })
-                .catch(Subscription.NotFoundError, function() {
-                    future_sub.save().then(function() {
-                        res.status(StatusTypes.noContent).send();
-                    });
-                });
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(StatusTypes.notFound).send();
+    pending_subscription
+        .fetch()
+        .then(function(existing_sub) {
+            if (existing_sub) {
+                return res.status(StatusTypes.noContent).send();
+            }
+            pending_subscription.save().then(function() {
+                res.status(StatusTypes.noContent).send();
+            });
         })
         .catch(console.error);
 };
@@ -62,29 +55,22 @@ exports.getSubscriptions = function(req, res) {
 };
 
 exports.deleteSubscription = function (req, res) {
-    var subscribee_id = parseInt(req.params.user_id);
     var subscriber_id = req.user.id;
+    var subscribee_id = req.user_model.id;
 
-    User
-        .getByID(subscribee_id)
-        .then(function(user_exists) {
-            return Subscription
-                .forge({
-                    subscriber: subscriber_id,
-                    subscribee: subscribee_id
-                })
-                .fetch();
+    Subscription
+        .forge({
+            subscriber: subscriber_id,
+            subscribee: subscribee_id
         })
-        .then(function (sub) {
-            if (sub) {
-                sub.destroy();
+        .fetch()
+        .then(function(existing_sub) {
+            if (existing_sub) {
+                return existing_sub.destroy();
             }
         })
         .then(function () {
             res.status(StatusTypes.noContent).send();
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(StatusTypes.notFound).send();
         })
         .catch(console.error);
 };
