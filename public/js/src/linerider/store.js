@@ -68,19 +68,19 @@ var SceneStore = Reflux.createStore({
         this.scene = scene;
         this.next_point_id = getMaxID(scene.points);
         this.next_line_id = getMaxID(scene.lines);
-        console.log("loaded scene, point line:", this.next_point_id, this.next_line_id)
         this.trigger(scene, 'load scene');
     },
     // editing functions
     // no snapping but stuff will get more complicated when that's implemented
     onDrawLine: function (id, p1, p2) {
         var scene = this.scene;
-        var pointID = id + '_' + this.next_point_id;
+        var p1ID = id + '_' + this.next_point_id;
+        var p2ID = id + '_' + (this.next_point_id + 1);
         var lineID = id + '_' + this.next_line_id;
         // no correction for pan/zoom
-        scene.points[pointID] = p1;
-        scene.points[pointID+1] = p2;
-        scene.lines[lineID] = { p1: pointID, p2: pointID+1 };
+        scene.points[p1ID] = p1;
+        scene.points[p2ID] = p2;
+        scene.lines[lineID] = { p1: p1ID, p2: p2ID };
         this.next_point_id = this.next_point_id + 2;
         this.next_line_id = this.next_line_id + 1;
         this.trigger(scene, 'add line');
