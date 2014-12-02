@@ -1,8 +1,6 @@
 var Reflux = require('reflux');
-var request = require('superagent');
-var Data = require('./store');
-var StatusTypes = require('status-types');
 
+// you can split this up
 var Actions = Reflux.createActions([
     //auth
     'getCurrentUser',
@@ -37,6 +35,8 @@ var Actions = Reflux.createActions([
     'addInvitees',
     'addCollaborators',
     'getInvitees',
+    'openEditorSession',
+    'closeEditorSession',
     // 'getInvitee',
 
     //gallery

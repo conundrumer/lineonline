@@ -90,12 +90,6 @@ var SaveModal = React.createClass({
         });
     },
     componentWillReceiveProps: function(nextProps) {
-        console.log('save modal this props invitees: ')
-        console.log(this.props.track.invitees);
-
-        console.log('save modal next props invitees: ')
-        console.log(nextProps.track.invitees);
-
         if (this.props.track !== nextProps.track) {
             this.setState({
                 track: nextProps.track

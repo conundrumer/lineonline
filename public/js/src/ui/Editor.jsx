@@ -47,13 +47,10 @@ var Editor = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
-            Actions.getFullTrack(this.props.params.trackId);
-            Actions.getInvitees(this.props.params.trackId);
+            this.loadTrack(this.props.params.trackId);
         }
     },
     componentWillReceiveProps: function(nextProps) {
-        // console.log('this props: ', this.props.params.trackId)
-        // console.log('next props: ', nextProps.params.trackId)
         if (!this.props.params.trackId && nextProps.params.trackId) {
             console.log('A new track is being created.');
             return;
@@ -61,22 +58,20 @@ var Editor = React.createClass({
         if (this.props.params.trackId !== nextProps.params.trackId
             && nextProps.params.trackId) {
             console.log('On Existing Editor', this.props.params.trackId, nextProps.params.trackId)
-            Actions.getFullTrack(nextProps.params.trackId);
-            Actions.getInvitees(this.props.params.trackId);
+            this.loadTrack(nextProps.params.trackId);
         } else if (this.props.params.trackId !== nextProps.params.trackId) {
             console.log('On New Editor');
+            Actions.closeEditorSession();
             Actions.newTrack();
-            // this.setState({
-            //     data: EditorStore.getDefaultData()
-            // });
         }
-        // else if (this.props.params.trackId !== nextProps.params.trackId) {
-        //     this.setState({
-        //         data: _.extend(this.state.data.track, {  })
-        //     })
-
-        //     track: _.extend(this.state.data.track, { title: event.target.value })
-        // }
+    },
+    componentWillUnmount: function() {
+        Actions.closeEditorSession();
+    },
+    loadTrack: function(trackID) {
+        Actions.getFullTrack(trackID);
+        Actions.getInvitees(trackID);
+        Actions.openEditorSession(trackID);
     },
     handleOpenModal: function(scene) {
         if (this.state.isModalHidden) {
@@ -124,8 +119,6 @@ var Editor = React.createClass({
             // sceneUpdateHandler = this.handleSaveSceneForFutureUpdate;
             isNewTrack = true
         }
-
-        console.log(this.state.data.track.scene);
 
         return (
             <div className='main-content'>

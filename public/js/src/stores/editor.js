@@ -35,14 +35,19 @@ var EditorStore = Reflux.createStore({
         };
         return this.data
     },
+    onOpenEditorSession: function(trackID) {
+        console.log("opening session for this track:", trackID)
+        // .get('/tracks/' + track_ids.cow[0] + '/session')
+    },
+    onCloseEditorSession: function() {
+        console.log("closing session")
+    },
     onNewTrack: function() {
-        console.log("onNewTrack")
         this.data = this.getDefaultData();
         this.trigger(this.data);
         LineRiderActions.newScene();
     },
     onGetFullTrack: function(trackId) {
-        console.log("onGetFullTrack", trackId)
         request
             .get('/api/tracks/' + trackId)
             .end(function(err, res) {
