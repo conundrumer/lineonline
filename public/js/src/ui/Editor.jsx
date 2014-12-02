@@ -73,7 +73,7 @@ var Editor = React.createClass({
         //     track: _.extend(this.state.data.track, { title: event.target.value })
         // }
     },
-    handleOpenModal: function(e) {
+    handleOpenModal: function(scene) {
         if (this.state.isModalHidden) {
             this.setState({
                 isModalHidden: !this.state.isModalHidden
@@ -101,21 +101,25 @@ var Editor = React.createClass({
 
         console.log('updating a track!!!');
     },
-    handleUpdateScene: function(scene) {
+    handleSceneUpdate: function(scene) {
         console.log('updating scene on server...')
         var updatedTrack = _.extend(this.state.data.track, { scene: scene });
         this.setState({
             data: _.extend(this.state.data, { track: updatedTrack })
         });
-        Actions.updateTrack(this.state.data.track);
+
+        // if (this.props.params.trackId) {
+        //     console.log('updating scene');
+        //     Actions.updateTrack(this.state.data.track);
+        // }
     },
-    handleSaveSceneForFutureUpdate: function(scene) {
-        console.log('saving scene data for future update...')
-        var updatedTrack = _.extend(this.state.data.track, { scene: scene });
-        this.setState({
-            data: _.extend(this.state.data, { track: updatedTrack })
-        });
-    },
+    // handleSaveSceneForFutureUpdate: function(scene) {
+    //     console.log('saving scene data for future update...')
+    //     var updatedTrack = _.extend(this.state.data.track, { scene: scene });
+    //     this.setState({
+    //         data: _.extend(this.state.data, { track: updatedTrack })
+    //     });
+    // },
     handleInvite: function(user) {
         if (this.props.params.trackId) {
             Actions.addInvitee(this.props.params.trackId, user);
@@ -124,18 +128,18 @@ var Editor = React.createClass({
         }
     },
     render: function() {
-        var saveHandler, isNewTrack, sceneUpdateHandler;
+        var saveHandler, isNewTrack; //, sceneUpdateHandler;
         if (this.props.params.trackId) {
             saveHandler = this.handleUpdateTrack;
-            sceneUpdateHandler = this.handleUpdateScene;
+            // sceneUpdateHandler = this.handleUpdateScene;
             isNewTrack = false
         } else {
             saveHandler = this.handleCreateTrack;
-            sceneUpdateHandler = this.handleSaveSceneForFutureUpdate;
+            // sceneUpdateHandler = this.handleSaveSceneForFutureUpdate;
             isNewTrack = true
         }
 
-        // console.log(this.state.data.track.scene);
+        console.log(this.state.data.track.scene);
 
         return (
             <div className='main-content'>
@@ -151,7 +155,7 @@ var Editor = React.createClass({
                         initScene={this.state.data.track.scene}
                         isNewTrack={isNewTrack}
                         onOpenModal={this.handleOpenModal}
-                        onUpdateScene={sceneUpdateHandler}
+                        onUpdateScene={this.handleSceneUpdate}
                     />
                     <Conversation />
                 </Panel>
