@@ -45,7 +45,6 @@ function lineSegmentDistance(p, line) {
 
 function getMaxID(hashmap) {
     return _.keys(hashmap).map(function(id) {
-        console.log(id.split('_')[1])
         return parseInt(id.split('_')[1]);
     }).reduce(function(a,b){return Math.max(a,b);}, 0) + 1;
 }
