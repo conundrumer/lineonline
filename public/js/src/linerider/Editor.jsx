@@ -92,7 +92,7 @@ var Editor = React.createClass({
         switch (this.state.editState) {
             case TOOL.PENCIL:
                 if (distance(startPos, movePos) > MIN_LINE_LENGTH) {
-                    Actions.drawLine(startPos, movePos);
+                    Actions.drawLine(this.props.userID, startPos, movePos);
                     this.setState({ startPos: movePos });
                 }
                 break;
@@ -114,7 +114,7 @@ var Editor = React.createClass({
         switch (this.state.editState) {
             case TOOL.LINE:
                 if (distance(startPos, endPos) > MIN_LINE_LENGTH) {
-                    Actions.drawLine(startPos, endPos);
+                    Actions.drawLine(this.props.userID, startPos, endPos);
                 }
                 break;
         }

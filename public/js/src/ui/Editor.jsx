@@ -134,6 +134,7 @@ var Editor = React.createClass({
                         track={this.state.data.track}
                     />
                     <LineriderEditor
+                        userID={this.props.currentUser && this.props.currentUser.user_id || 0}
                         isNewTrack={isNewTrack}
                         onOpenModal={this.handleOpenModal}
                     />
