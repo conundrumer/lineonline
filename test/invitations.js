@@ -33,7 +33,16 @@ describe('Invitations: A user', function () {
     it('should be able to invite someone to her own track (put: /tracks/:track_id/invitations/:user_id)', function (done) {
         agent.bob
             .put('/tracks/' + track_ids.bob[0] + '/invitations/' + dolan.id)
-            .expect(StatusTypes.noContent, done);
+            .expect(StatusTypes.noContent)
+            .then(function() {
+                var updatedTrack = bob.full_tracks()[0];
+                updatedTrack.invitees = [dolan.user()];
+                return agent.bob
+                    .get('/tracks/' + track_ids.bob[0])
+                    .expect(StatusTypes.ok, updatedTrack);
+            })
+            .then(function(){done();})
+            .catch(done);
     });
 
     it('should be able to get invitees for her own track (get: /tracks/:track_id/invitations)', function (done) {
