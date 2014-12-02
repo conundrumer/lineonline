@@ -11,6 +11,6 @@ module.exports = function (server) {
 
     io // not sure why can't namespace it
         // .of('/tracks')
-        .on('connection', editTrack.onConnection);
+        .on('connection', editTrack.onConnection.bind(null, io));
 
 };
