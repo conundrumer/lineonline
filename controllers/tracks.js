@@ -135,3 +135,11 @@ exports.uninvite = function(req, res) {
         })
         .catch(console.error);
 };
+
+exports.getCollaborators = function(req, res) {
+    res.status(501).send();
+};
+
+exports.removeCollaborator = function(req, res) {
+    res.status(501).send();
+};

@@ -4,6 +4,7 @@ var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 var invitations = require('../controllers/invitations');
+var collaborations = require('../controllers/collaborations');
 var subscriptions = require('../controllers/subscriptions');
 
 var api = express.Router();
@@ -46,16 +47,6 @@ api.route('/tracks/:track_id')
     .put(auth.loginRequired, tracks.ownershipRequired, tracks.editTrack)
     .delete(auth.loginRequired, tracks.ownershipRequired, tracks.deleteTrack);
 
-api.use('/tracks/:track_id/invitations', auth.loginRequired);
-
-api.route('/tracks/:track_id/invitations')
-    .get(tracks.getInvitations);
-
-api.route('/tracks/:track_id/invitations/:user_id')
-    .put(tracks.ownershipRequired, users.noSelfReference, tracks.invite)
-    .delete(tracks.ownershipRequired, users.noSelfReference, tracks.uninvite);
-
-
 // invitations
 api.use('/invitations', auth.loginRequired);
 
@@ -66,6 +57,29 @@ api.route('/invitations/:track_id')
     .put(invitations.accept)
     .delete(invitations.decline);
 
+api.use('/tracks/:track_id/invitations', auth.loginRequired);
+
+api.route('/tracks/:track_id/invitations')
+    .get(tracks.getInvitations);
+
+api.route('/tracks/:track_id/invitations/:user_id')
+    .put(tracks.ownershipRequired, users.noSelfReference, tracks.invite)
+    .delete(tracks.ownershipRequired, users.noSelfReference, tracks.uninvite);
+
+// collaborations
+api.use('/collaborations', auth.loginRequired);
+
+api.route('/collaborations')
+    .get(collaborations.getCollaborations);
+
+api.route('/collaborations/:track_id')
+    .delete(collaborations.leaveCollaboration);
+
+api.route('/tracks/:track_id/collaborators')
+    .get(tracks.getCollaborators);
+
+api.route('/tracks/:track_id/collaborators/:user_id')
+    .delete(tracks.removeCollaborator);
 
 // subscriptions
 api.use('/subscriptions', auth.loginRequired);
