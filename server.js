@@ -19,3 +19,5 @@ require('./config/express')(app, passport);
 
 // Bootstrap routes ??? => Routes
 require('./config/routes')(app, passport);
+
+require('./config/socket')(server);

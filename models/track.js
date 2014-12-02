@@ -47,62 +47,76 @@ function toTrackSnippet(model) {
     };
 }
 function toFullTrack(model) {
-    return _.extend(toTrackSnippet(model), {
-        collaborators: [],
-        invitees: [],
-        time_created: '',
-        time_modified: '',
-        tags: [],
-        conversation: {
-            messages: []
-        }
+    return new Promise.all([
+        model.collaborators().fetch(),
+        model.invitees().fetch()
+    ]).then(function (values) {
+        return _.extend(toTrackSnippet(model), {
+            collaborators: values[0].models.map(function(collab) {
+                return collab.asUserSnippet();
+            }),
+            invitees: values[1].models.map(function(invitee) {
+                return invitee.asUserSnippet();
+            }),
+            time_created: '',
+            time_modified: '',
+            tags: [],
+            conversation: {
+                messages: []
+            }
+        });
     });
 }
 
 var Track = bookshelf.Model.extend({
     tableName: 'tracks',
+    update: function (body, track_id) {
+        var track = toTrackModel(body, this.get('owner'));
+        track.id = this.get('id');
+        return Track.forge(track).save();
+    },
     // relation queries
     owner: function(){
         return this.belongsTo('User', 'owner');
     },
-    // representations
-    asFullTrack: function() {
-        return this.handleOwnerSnippet(toFullTrack(this));
+    invitees: function() {
+        return this.belongsToMany('User', 'invitations', 'track', 'invitee');
     },
-    asTrackSnippet: function() {
-        return this.handleOwnerSnippet(toTrackSnippet(this));
+    collaborators: function() {
+        return this.belongsToMany('User', 'collaborations', 'track', 'collaborator');
+    },
+    // representations
+    asFullTrack: function(ownerSnippet) {
+        return toFullTrack(this)
+            .then(function(fullTrack) {
+                return this.handleOwnerSnippet(fullTrack, ownerSnippet);
+            }.bind(this));
+    },
+    asTrackSnippet: function(ownerSnippet) {
+        return this.handleOwnerSnippet(toTrackSnippet(this), ownerSnippet);
     },
     // helper
-    handleOwnerSnippet: function (trackRep) {
-        return {
-            // sync
-            addOwnerSnippet: function(ownerSnippet) {
+    handleOwnerSnippet: function (trackRep, ownerSnippet) {
+        if (ownerSnippet) {
+            trackRep.owner = ownerSnippet;
+            return new Promise(function(resolve, reject) {
+                return resolve(trackRep);
+            });
+        }
+        return this.owner().fetch({ require: true })
+            .then(function (user) {
+                return user.asUserSnippet();
+            })
+            .then(function(ownerSnippet) {
                 trackRep.owner = ownerSnippet;
                 return trackRep;
-            },
-            // async promise
-            makeOwnerSnippet: function() {
-                return this.owner().fetch({ require: true })
-                    .then(function (user) {
-                        return user.asUserSnippet();
-                    })
-                    .then(function(ownerSnippet) {
-                        trackRep.owner = ownerSnippet;
-                        return trackRep;
-                    });
-            }.bind(this)
-        };
+            });
     }
 }, {
     tableName: 'tracks',
     build: buildTrackTable,
     create: function (body, owner_id) {
         return Track.forge(toTrackModel(body, owner_id)).save();
-    },
-    update: function (body, track_id, owner_id) {
-        var track = toTrackModel(body, owner_id);
-        track.id = track_id;
-        return Track.forge(track).save();
     },
     // self queries
     getByID: function (id) {
