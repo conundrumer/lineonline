@@ -25,6 +25,15 @@ exports.getByID = function(req, res, next, user_id) {
         .catch(console.error);
 };
 
+exports.noSelfReference = function(req, res, next) {
+    if (req.user.id === req.user_model.get('id')) {
+        return res.status(StatusTypes.badRequest).json({
+            message: "you can't do that to yourself"
+        });
+    }
+    next();
+};
+
 exports.getTracks = function(req, res) {
     req.user_model
         .getTrackSnippets()

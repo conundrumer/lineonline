@@ -52,8 +52,8 @@ api.route('/tracks/:track_id/invitations')
     .get(tracks.getInvitations);
 
 api.route('/tracks/:track_id/invitations/:user_id')
-    .put(tracks.ownershipRequired, tracks.invite)
-    .delete(tracks.ownershipRequired, tracks.uninvite);
+    .put(tracks.ownershipRequired, users.noSelfReference, tracks.invite)
+    .delete(tracks.ownershipRequired, users.noSelfReference, tracks.uninvite);
 
 
 // invitations

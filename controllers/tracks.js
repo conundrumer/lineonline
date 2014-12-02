@@ -95,12 +95,6 @@ exports.invite = function(req, res) {
     var invitee_id = req.user_model.get('id');
     var track_id = req.track.get('id');
 
-    if (owner_id == invitee_id) {
-        return res.status(400).json({
-            message: "you can't invite yourself to your own track"
-        });
-    }
-
     var pending_invite = Invitation.forge({
             track: track_id,
             invitee: invitee_id
@@ -123,12 +117,6 @@ exports.uninvite = function(req, res) {
     var owner_id = req.user.id;
     var invitee_id = req.user_model.get('id');
     var track_id = req.track.get('id');
-
-    if (owner_id == invitee_id) {
-        return res.status(400).json({
-            message: "you can't invite yourself to your own track"
-        });
-    }
 
     var pending_invite = Invitation.forge({
             track: track_id,
