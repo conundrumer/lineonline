@@ -14,7 +14,7 @@ var ERRORS = {
 
 exports.getByID = function(req, res, next, user_id) {
     User
-        .getByID(user_id)
+        .getByID(parseInt(user_id) || 0)
         .then(function (user) {
             req.user_model = user;
             next();
