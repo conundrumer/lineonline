@@ -28,6 +28,7 @@ var Actions = Reflux.createActions([
     //see 'getCollections'
 
     //editor
+    'newTrack',
     'getFullTrack',
     'getConversation',
     'updateTrack',

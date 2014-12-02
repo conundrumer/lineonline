@@ -60,10 +60,11 @@ var Editor = React.createClass({
             Actions.getFullTrack(nextProps.params.trackId);
             Actions.getInvitees(this.props.params.trackId);
         } else if (this.props.params.trackId !== nextProps.params.trackId) {
-            console.log('On New Editor')
-            this.setState({
-                data: EditorStore.getDefaultData()
-            });
+            console.log('On New Editor');
+            Actions.newTrack();
+            // this.setState({
+            //     data: EditorStore.getDefaultData()
+            // });
         }
         // else if (this.props.params.trackId !== nextProps.params.trackId) {
         //     this.setState({
@@ -101,25 +102,6 @@ var Editor = React.createClass({
 
         console.log('updating a track!!!');
     },
-    handleSceneUpdate: function(scene) {
-        console.log('updating scene on server...')
-        var updatedTrack = _.extend(this.state.data.track, { scene: scene });
-        this.setState({
-            data: _.extend(this.state.data, { track: updatedTrack })
-        });
-
-        // if (this.props.params.trackId) {
-        //     console.log('updating scene');
-        //     Actions.updateTrack(this.state.data.track);
-        // }
-    },
-    // handleSaveSceneForFutureUpdate: function(scene) {
-    //     console.log('saving scene data for future update...')
-    //     var updatedTrack = _.extend(this.state.data.track, { scene: scene });
-    //     this.setState({
-    //         data: _.extend(this.state.data, { track: updatedTrack })
-    //     });
-    // },
     handleInvite: function(user) {
         if (this.props.params.trackId) {
             Actions.addInvitee(this.props.params.trackId, user);
@@ -152,10 +134,8 @@ var Editor = React.createClass({
                         track={this.state.data.track}
                     />
                     <LineriderEditor
-                        initScene={this.state.data.track.scene}
                         isNewTrack={isNewTrack}
                         onOpenModal={this.handleOpenModal}
-                        onUpdateScene={this.handleSceneUpdate}
                     />
                     <Conversation />
                 </Panel>

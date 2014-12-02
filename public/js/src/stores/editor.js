@@ -4,6 +4,7 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
+var LineRiderActions = require('../linerider/actions')
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -36,6 +37,11 @@ var EditorStore = Reflux.createStore({
         };
         return this.data
     },
+    onNewTrack: function() {
+        this.data = this.getDefaultData();
+        this.trigger(this.data);
+        LineRiderActions.newScene();
+    },
     onGetFullTrack: function(trackId) {
         request
             .get('/api/tracks/' + trackId)
@@ -44,6 +50,7 @@ var EditorStore = Reflux.createStore({
                     // console.log(res.body);
                     this.data.track = res.body;
                     this.trigger(this.data);
+                    LineRiderActions.loadScene(this.data.track.scene);
                     return;
                 }
                 // if (res.notFound) {

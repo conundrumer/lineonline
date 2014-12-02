@@ -35,7 +35,6 @@ var Editor = React.createClass({
     onSceneChanged: function(scene, action) {
         this.setState({ scene: scene });
         // do something with action
-        this.props.onUpdateScene(this.state.scene);
     },
     getInitialState: function() {
         return {
@@ -46,9 +45,6 @@ var Editor = React.createClass({
         };
     },
     componentWillMount: function() {
-        if (this.props.initScene) {
-            Actions.loadScene(this.props.initScene);
-        }
     },
     componentWillUnmount: function() {
         window.removeEventListener('mousemove', this.onMouseMove);
