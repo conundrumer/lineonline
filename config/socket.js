@@ -1,22 +1,16 @@
+var editTrack = require('../controllers/edit-track');
+var socketio_jwt = require('socketio-jwt');
+var jwt_secret = 'omgwtfsecret';
 module.exports = function (server) {
     var io = require('socket.io')(server);
 
-    io.of('/tracks').on('connection', function(socket){
-    // io.sockets.on('connection', function(socket){
-        console.log('a user connected');
-        // socket.join(trackroom);
+    io.use(socketio_jwt.authorize({
+        secret: jwt_secret,
+        handshake: true
+    }));
 
-        socket.on('disconnect', function() {
-            console.log('user disconnected');
-        });
-
-        socket.on('add', function (data) {
-            socket.broadcast.emit('add', data);
-        });
-
-        socket.on('remove', function (data) {
-            socket.broadcast.emit('remove', data);
-        });
-    });
+    io // not sure why can't namespace it
+        // .of('/tracks')
+        .on('connection', editTrack.onConnection.bind(null, io));
 
 };

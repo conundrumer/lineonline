@@ -16,7 +16,7 @@ require('./subscriptions');
 
 require('./invitations');
 // TODO: collaboration (non-realtime)
-require('./collab')
+require('./collab');
 // TODO: privacy
 // TODO: conversations (non-realtime)
 
@@ -24,4 +24,4 @@ require('./collab')
 
 // TODO: edge cases?
 
-// require('./realtime');
+require('./realtime');

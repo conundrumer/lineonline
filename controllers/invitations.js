@@ -40,11 +40,13 @@ exports.accept = function(req, res) {
                 })
                 .fetch({ require: true });
         })
-        .then(function(invited){
-            if (!invited) return;
+        .then(function(invite){
+            if (!invite) return;
             pending_collab.save().then(function() {
-                // lol poor function names
-                exports.decline(req, res);
+                return invite.destroy();
+            })
+            .then(function() {
+                res.status(StatusTypes.noContent).send();
             });
         })
         .catch(Invitation.NotFoundError, function() {

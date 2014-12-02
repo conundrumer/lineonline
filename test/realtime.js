@@ -22,7 +22,8 @@ var agent = {
 };
 
 var io = require('socket.io-client');
-var socket_url = 'http://localhost:3000/tracks';
+// var socket_url = 'http://localhost:3000/tracks';
+var socket_url = 'http://localhost:3000'; // /tracks doens't work yet for some reaosn
 var socket = {};
 
 var lines = require('./util/realtime-track');
@@ -56,7 +57,7 @@ describe('Realtime editing: A user', function () {
             })
             .then(function() {
                 return agent.bob // bob accept
-                    .put('/tracks/' + track_ids.cow[0] + '/collaborators/' + bob.id);
+                    .put('/invitations/' + track_ids.cow[0]);
             })
             .then(function(){done();});
     });
@@ -67,11 +68,7 @@ describe('Realtime editing: A user', function () {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.body.must.have.own('token');
-                res.body.must.have.own('offset', 0);
-                res.body.must.have.own('hop', 2);
                 cow.token = res.body.token;
-                cow.offset = res.body.offset;
-                cow.hop = res.body.hop;
                 done();
             });
     });
@@ -82,11 +79,7 @@ describe('Realtime editing: A user', function () {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.body.must.have.own('token');
-                res.body.must.have.own('offset', 1);
-                res.body.must.have.own('hop', 2);
                 bob.token = res.body.token;
-                bob.offset = res.body.offset;
-                bob.hop = res.body.hop;
                 done();
             });
     });
