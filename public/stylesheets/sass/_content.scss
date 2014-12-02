@@ -1191,9 +1191,18 @@
     right: -10px;
     top: -10px;
     font-size: 20px;
+    // opacity: 0.2;
+    color: $light-col;
     &:hover {
-        color: $light-col;
+        color: #000;//$light-col;
         cursor: pointer;
+    }
+
+    &.x-icon-dark {
+        color: #000;
+        &:hover {
+            color: $light-col;
+        }
     }
 }
 

@@ -391,7 +391,7 @@ var SaveModal = React.createClass({
         return (
             <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
                 <div onClick={this.props.onCloseModal}>
-                    <Icon class='x-icon' icon='circle-x' />
+                    <Icon class='x-icon x-icon-dark' icon='circle-x' />
                 </div>
                 <form ref='trackForm' className='form-editor form-editor-track'>
                     <div className='field'>

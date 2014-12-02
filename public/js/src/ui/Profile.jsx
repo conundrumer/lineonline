@@ -39,7 +39,7 @@ var Profile = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
-            Actions.getTracks(this.props.params.profileId);
+            Actions.getTrackSnippets(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
         }
