@@ -55,17 +55,6 @@ var Editor = React.createClass({
         window.removeEventListener('mouseup', this.onMouseUp);
     },
     componentWillReceiveProps: function(nextProps) {
-        //QUESTIONABLE
-        // if (this.props.initScene.scene !== nextProps.initScene) {
-        //     this.setState({
-        //         scene: nextProps.initScene
-        //     });
-        // }
-        // if (this.state.track !== nextProps.initTrack) {
-        //     this.setState({
-        //         track: nextProps.initTrack
-        //     });
-        // }
     },
     // mouse handlers
     onToolClick: function(editState) {
@@ -80,17 +69,6 @@ var Editor = React.createClass({
         e.preventDefault();
         Actions.newScene();
     },
-    // onInvite: function(e) {
-    //     console.log('inviting');
-    //     // Actions.checkUser
-    // },
-    // onOpenModal: function() {
-    //     // this.setState({
-    //     //     track: _.extend(this.state.track, formData, { scene : this.state.scene })
-    //     // })
-    //     // this.props.handleSave(this.state.track);
-    //     this.props.handleOpenModal();
-    // },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
     onMouseDown: function(e) {
@@ -171,46 +149,29 @@ var Editor = React.createClass({
                     scene={this.state.scene}
                 />
                 <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
-                    <button className='btn-toolbar' onClick={this.onToolClick(TOOL.PENCIL)}>
-                        <Icon class='toolbar-icon' icon='pencil' />
-                        <span className='toolbar-title'>
-                            Pencil
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onToolClick(TOOL.LINE)}>
-                        <Icon class='toolbar-icon' icon='minus' />
-                        <span className='toolbar-title'>
-                            Line
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onToolClick(TOOL.ERASE)}>
-                        <Icon class='toolbar-icon' icon='delete' />
-                        <span className='toolbar-title'>
-                            Erase
-                        </span>
-                    </button>
-                    <button className='btn-toolbar' onClick={this.props.onOpenModal}>
-                        <Icon class='toolbar-icon' icon='check' />
-                        {this.props.isNewTrack ?
-                            <span className='toolbar-title'>
-                                Save
-                            </span>
-                            :
-                            <span className='toolbar-title'>
-                                Settings
-                            </span>
-                        }
-                    </button>
-                    <button className='btn-toolbar' onClick={this.onClear}>
-                        <Icon class='toolbar-icon' icon='x' />
-                        <span className='toolbar-title'>
-                            Clear
-                        </span>
-                    </button>
+                    <ToolButton onClick={this.onToolClick(TOOL.PENCIL)} icon='pencil' name='Pencil' />
+                    <ToolButton onClick={this.onToolClick(TOOL.LINE)} icon='minus' name='Line' />
+                    <ToolButton onClick={this.onToolClick(TOOL.ERASE)} icon='delete' name='Erase' />
+                    <ToolButton onClick={this.props.onOpenModal} icon='check'
+                        name={ this.props.isNewTrack ? 'Save' : 'Settings' } />
+                    <ToolButton onClick={this.onClear} icon='x' name='Clear' />
                 </div>
             </div>
         );
     }
 });
+
+var ToolButton = React.createClass({
+    render: function() {
+        return (
+            <button className='btn-toolbar' onClick={this.props.onClick}>
+                <Icon class='toolbar-icon' icon={this.props.icon} />
+                <span className='toolbar-title'>
+                    {this.props.name}
+                </span>
+            </button>
+        );
+    }
+})
 
 module.exports = Editor;
