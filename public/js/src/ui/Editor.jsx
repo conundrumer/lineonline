@@ -54,9 +54,13 @@ var Editor = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         // console.log('this props: ', this.props.params.trackId)
         // console.log('next props: ', nextProps.params.trackId)
+        if (!this.props.params.trackId && nextProps.params.trackId) {
+            console.log('A new track is being created.');
+            return;
+        }
         if (this.props.params.trackId !== nextProps.params.trackId
             && nextProps.params.trackId) {
-            console.log('On Existing Editor')
+            console.log('On Existing Editor', this.props.params.trackId, nextProps.params.trackId)
             Actions.getFullTrack(nextProps.params.trackId);
             Actions.getInvitees(this.props.params.trackId);
         } else if (this.props.params.trackId !== nextProps.params.trackId) {

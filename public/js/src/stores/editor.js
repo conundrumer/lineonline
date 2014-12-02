@@ -36,11 +36,13 @@ var EditorStore = Reflux.createStore({
         return this.data
     },
     onNewTrack: function() {
+        console.log("onNewTrack")
         this.data = this.getDefaultData();
         this.trigger(this.data);
         LineRiderActions.newScene();
     },
     onGetFullTrack: function(trackId) {
+        console.log("onGetFullTrack", trackId)
         request
             .get('/api/tracks/' + trackId)
             .end(function(err, res) {
@@ -59,6 +61,7 @@ var EditorStore = Reflux.createStore({
     },
 
     onUpdateTrack: function(updatedTrackData) {
+        console.log("onUpdateTrack", updatedTrackData.track_id)
         var trackId = updatedTrackData.track_id;
         request
             .put('/api/tracks/' + trackId)
@@ -77,6 +80,7 @@ var EditorStore = Reflux.createStore({
     },
 
     onCreateTrack: function(unsavedTrackData) {
+        console.log("onCreateTrack")
         request
             .post('/api/tracks/')
             .send(unsavedTrackData)

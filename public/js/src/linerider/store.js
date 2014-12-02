@@ -67,7 +67,7 @@ var SceneStore = Reflux.createStore({
     onLoadScene: function (scene) {
         this.scene = scene;
         this.next_point_id = getMaxID(scene.points);
-        this.next_line_id = getMaxID(scene.points);
+        this.next_line_id = getMaxID(scene.lines);
         console.log("loaded scene, point line:", this.next_point_id, this.next_line_id)
         this.trigger(scene, 'load scene');
     },
