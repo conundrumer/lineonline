@@ -47,13 +47,15 @@ function toTrackSnippet(model) {
     };
 }
 function toFullTrack(model) {
-    return new Promise.all(
-        // model.collaborators().fetch(),
-        [model.invitees().fetch()]
-    ).then(function (values) {
+    return new Promise.all([
+        model.collaborators().fetch(),
+        model.invitees().fetch()
+    ]).then(function (values) {
         return _.extend(toTrackSnippet(model), {
-            collaborators: [],
-            invitees: values[0].models.map(function(invitee) {
+            collaborators: values[0].models.map(function(collab) {
+                return collab.asUserSnippet();
+            }),
+            invitees: values[1].models.map(function(invitee) {
                 return invitee.asUserSnippet();
             }),
             time_created: '',

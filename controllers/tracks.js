@@ -135,7 +135,15 @@ exports.uninvite = function(req, res) {
 };
 
 exports.getCollaborators = function(req, res) {
-    res.status(501).send();
+    req.track.collaborators()
+        .fetch()
+        .then(function(collabs) {
+            var userSnippets = collabs.models.map(function(collab){
+                return collab.asUserSnippet();
+            });
+            res.status(StatusTypes.ok).json(userSnippets);
+        })
+        .catch(console.error);
 };
 
 exports.removeCollaborator = function(req, res) {
