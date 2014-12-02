@@ -4,86 +4,53 @@ var StatusTypes = require('status-types');
 var User = require('../models/user');
 
 var ERRORS = {
-    TRACK_NOT_FOUND: {
-        message: 'No track exists with the given ID'
-    },
     USER_NOT_FOUND: {
         message: 'No use exists with the given ID'
+    },
+    NOT_AUTHORIZED: {
+        message: 'You are not authorized to do this.'
     }
 };
-function Unauthorized(message) {
-    this.name = 'Unauthorized';
-    this.message = message || 'You are not authorized to do this.';
-}
-Unauthorized.prototype = new Error();
-Unauthorized.prototype.constructor = Unauthorized;
 
-exports.getTracks = function(req, res) {
+exports.getByID = function(req, res, next) {
     var user_id = req.params.id;
 
     User
         .getByID(user_id)
         .then(function (user) {
-            return user.getTrackSnippets();
-        })
-        .then(function (trackSnippets) {
-            res.status(200).json(trackSnippets);
+            req.user_model = user;
+            next();
         })
         .catch(User.NotFoundError, function() {
-            res.status(404).json(ERRORS.USER_NOT_FOUND);
+            res.status(StatusTypes.notFound).json(ERRORS.USER_NOT_FOUND);
+        })
+        .catch(console.error);
+};
+
+exports.getTracks = function(req, res) {
+    req.user_model
+        .getTrackSnippets()
+        .then(function (trackSnippets) {
+            res.status(StatusTypes.ok).json(trackSnippets);
         })
         .catch(console.error);
 };
 
 exports.getUserSnippet = function(req, res){
-    var id = req.params.id;
-    User
-        .getByID(id)
-        .then(function(user){
-            return user.asUserSnippet();
-        })
-        .then(function(userSnippet) {
-            res.status(200).json(userSnippet);
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(404).json({message: 'This user does not exist'});
-        });
+    res.status(StatusTypes.ok).json(req.user_model.asUserSnippet());
 };
 
 exports.getProfile = function(req, res) {
-    var id = req.params.id;
-    User
-        .getByID(id)
-        .then(function(user){
-            return user.asUserProfile();
-        })
-        .then(function(userProfile) {
-            res.status(StatusTypes.ok).json(userProfile);
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(404).json({message: 'This user does not exist'});
-        })
-        .catch(console.error);
-}
+    res.status(StatusTypes.ok).json(req.user_model.asUserProfile());
+};
 
 exports.editProfile = function(req, res) {
-    var id = req.params.id;
-    User
-        .getByID(id)
-        .then(function(user){
-            if (req.user.id != user.get('id')){
-                throw new Unauthorized('You do not have permission to edit this profile.');
-            }
-            return User.update(req.body, id);
-        })
+    if (req.user.id != req.user_model.get('id')){
+        res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
+    }
+    User.update(req.body, req.user.id)
         .then(function(userProfile) {
             res.status(StatusTypes.ok).json(userProfile);
         })
-        .catch(Unauthorized, function(err) {
-            res.status(StatusTypes.unauthorized).json(err);
-        })
-        .catch(User.NotFoundError, function() {
-            res.status(404).json({message: 'This user does not exist'});
-        })
         .catch(console.error);
-}
+};

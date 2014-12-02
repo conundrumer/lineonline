@@ -21,16 +21,16 @@ api.route('/auth/register')
 // users
 
 api.route('/users/:id')
-    .get(users.getUserSnippet);
+    .get(users.getByID, users.getUserSnippet);
 
 api.route('/users/:id/tracks')
-    .get(users.getTracks);
+    .get(users.getByID, users.getTracks);
 
 
 // profile
 api.route('/users/:id/profile')
-    .get(users.getProfile)
-    .put(users.editProfile);
+    .get(users.getByID, users.getProfile)
+    .put(users.getByID, users.editProfile);
 
 // tracks
 
