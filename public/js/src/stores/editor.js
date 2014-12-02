@@ -7,8 +7,31 @@ var StatusTypes = require('status-types');
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
+        var EMPTY_SCENE = {
+            next_point_id: 0,
+            next_line_id: 0,
+            points: {},
+            lines: {}
+        };
+
+        var DEFAULT_PREVIEW = {
+            top: 0,
+            left: 0,
+            bottom: 360,
+            right: 480
+        };
+
+        var EMPTY_TRACK = {
+            scene: EMPTY_SCENE,
+            title: '',
+            description: '',
+            collaborators: [],
+            invitees: [],
+            tags: [],
+            preview: DEFAULT_PREVIEW
+        };
         this.data = {
-            track: null
+            track: EMPTY_TRACK
         };
         return this.data
     },

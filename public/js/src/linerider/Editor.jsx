@@ -79,15 +79,12 @@ var Editor = React.createClass({
         // setting init state w/ props is generally an anti-pattern
         // but there is no synchronization needed atm
         var initScene = this.props.initScene;
-        var initTrack = this.props.initTrack;
 
         return {
             scene: initScene,
-            track: initTrack,
             editState: EDIT_STATE.PENCIL,
             startPos: null,
-            movePos: null,
-            isModalHidden: true
+            movePos: null
         };
     },
     componentDidMount: function() {
@@ -97,17 +94,17 @@ var Editor = React.createClass({
         window.removeEventListener('mouseup', this.onMouseUp);
     },
     componentWillReceiveProps: function(nextProps) {
+        //QUESTIONABLE
         if (this.state.scene !== nextProps.initScene) {
             this.setState({
                 scene: nextProps.initScene
             });
         }
-
-        if (this.state.track !== nextProps.initTrack) {
-            this.setState({
-                track: nextProps.initTrack
-            });
-        }
+        // if (this.state.track !== nextProps.initTrack) {
+        //     this.setState({
+        //         track: nextProps.initTrack
+        //     });
+        // }
     },
     // mouse handlers
     onToolClick: function(editState) {
@@ -128,31 +125,21 @@ var Editor = React.createClass({
                 lines:{}
             }
         });
+
+        console.log(this.state.scene)
+        this.props.onUpdateScene(this.state.scene)
     },
-    onCloseModal: function(event) {
-        if (!this.state.isModalHidden) {
-            this.setState({
-                isModalHidden: true
-            });
-        }
-    },
-    onOpenModal: function(event) {
-        if (this.state.isModalHidden) {
-            this.setState({
-                isModalHidden: false
-            });
-        }
-    },
-    onInvite: function(e) {
-        console.log('inviting');
-        // Actions.checkUser
-    },
-    onSave: function(formData) {
-        this.setState({
-            track: _.extend(this.state.track, formData, { scene : this.state.scene })
-        })
-        this.props.handleSave(this.state.track);
-    },
+    // onInvite: function(e) {
+    //     console.log('inviting');
+    //     // Actions.checkUser
+    // },
+    // onOpenModal: function() {
+    //     // this.setState({
+    //     //     track: _.extend(this.state.track, formData, { scene : this.state.scene })
+    //     // })
+    //     // this.props.handleSave(this.state.track);
+    //     this.props.handleOpenModal();
+    // },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
     onMouseDown: function(e) {
@@ -226,6 +213,9 @@ var Editor = React.createClass({
         this.setState({
             scene: scene
         });
+
+        this.props.onUpdateScene(this.state.scene)
+
         // this.props.onAddPoint({id: pointID, x: p1.x, y: p1.y});
         // this.props.onAddPoint({id: pointID+1, x: p2.x, y: p2.y});
         // this.props.onAddLine({id: lineID, p1: pointID, p2: pointID+1});
@@ -248,6 +238,7 @@ var Editor = React.createClass({
             // this.props.onRemoveLine({id: parseInt(id)});
         }.bind(this));
         this.setState({ scene: scene });
+        this.props.onUpdateScene(this.state.scene)
     },
     render: function() {
         var drawingLine;
@@ -265,237 +256,52 @@ var Editor = React.createClass({
                 break;
         }
         return (
-            <div>
-                <SaveModal
-                    isModalHidden={this.state.isModalHidden}
-                    onInvite={this.onInvite}
-                    onSave={this.onSave}
-                    onCloseModal={this.onCloseModal}
-                    track={this.state.track}
+            <div onMouseDown={this.onMouseDown}>
+                <Display
+                    drawingLine={drawingLine}
+                    lines={toLineSegments(this.state.scene)}
                 />
-                <div onMouseDown={this.onMouseDown}>
-                    <Display
-                        drawingLine={drawingLine}
-                        lines={toLineSegments(this.state.scene)}
-                    />
-                    <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
-                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
-                            <Icon class='toolbar-icon' icon='pencil' />
-                            <span className='toolbar-title'>
-                                Pencil
-                            </span>
-                        </button>
-                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.LINE)}>
-                            <Icon class='toolbar-icon' icon='minus' />
-                            <span className='toolbar-title'>
-                                Line
-                            </span>
-                        </button>
-                        <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.ERASE)}>
-                            <Icon class='toolbar-icon' icon='delete' />
-                            <span className='toolbar-title'>
-                                Erase
-                            </span>
-                        </button>
-                        <button className='btn-toolbar' onClick={this.onOpenModal}>
-                            <Icon class='toolbar-icon' icon='check' />
+                <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.PENCIL)}>
+                        <Icon class='toolbar-icon' icon='pencil' />
+                        <span className='toolbar-title'>
+                            Pencil
+                        </span>
+                    </button>
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.LINE)}>
+                        <Icon class='toolbar-icon' icon='minus' />
+                        <span className='toolbar-title'>
+                            Line
+                        </span>
+                    </button>
+                    <button className='btn-toolbar' onClick={this.onToolClick(EDIT_STATE.ERASE)}>
+                        <Icon class='toolbar-icon' icon='delete' />
+                        <span className='toolbar-title'>
+                            Erase
+                        </span>
+                    </button>
+                    <button className='btn-toolbar' onClick={this.props.onOpenModal}>
+                        <Icon class='toolbar-icon' icon='check' />
+                        {this.props.isNewTrack ?
                             <span className='toolbar-title'>
                                 Save
                             </span>
-                        </button>
-                        <button className='btn-toolbar' onClick={this.onClear}>
-                            <Icon class='toolbar-icon' icon='x' />
+                            :
                             <span className='toolbar-title'>
-                                Clear
+                                Settings
                             </span>
-                        </button>
-                    </div>
+                        }
+                    </button>
+                    <button className='btn-toolbar' onClick={this.onClear}>
+                        <Icon class='toolbar-icon' icon='x' />
+                        <span className='toolbar-title'>
+                            Clear
+                        </span>
+                    </button>
                 </div>
             </div>
         );
     }
 });
-
-var SaveModal = React.createClass({
-    getInitialState: function() {
-        return {
-            track: this.props.track
-        };
-    },
-    onTitleChange: function(event) {
-        this.setState({
-            track: _.extend(this.state.track, { title: event.target.value })
-        });
-    },
-    onDescriptionChange: function(event) {
-        this.setState({
-            track: _.extend(this.state.track, { description: event.target.value })
-        });
-    },
-    onTagsChange: function(event) {
-        this.setState({
-            track: _.extend(this.state.track, { tags: event.target.value.split(',') })
-        });
-    },
-    processTags: function(value) {
-        var inputValueArr = value.split(',');
-        inputValueArr.forEach(function(el, idx, arr) {
-            arr[idx] = el.trim();
-        });
-        inputValueArr = inputValueArr.filter(function(el) {
-            return el !== '';
-        });
-        return inputValueArr;
-    },
-    handleFormSubmit: function(e) {
-        e.preventDefault();
-
-        var trackData = {
-            title: this.refs.trackTitle.getDOMNode().value.trim(),
-            description: this.refs.trackDescription.getDOMNode().value.trim(),
-            tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim()),
-            invitees: this.state.track.invitees,
-            collaborators: this.state.track.collaborators
-        };
-
-        this.props.onSave(trackData);
-    },
-    handleInvite: function(e) {
-        e.preventDefault();
-        var username = this.refs.inviteeUsername.getDOMNode().value.trim();
-        // Actions.getUserFromUsername();
-
-        // this.props.inviteeUsernames.push(username);
-
-        // this.props.onInvite(this.props.collaboratorU, invitees);
-    },
-    handleDeleteCollaborator: function(e) {
-
-    },
-    handleDeleteInvitee: function(e) {
-
-    },
-    componentWillMount: function() {
-        this.setState({
-            track: this.props.track
-        });
-    },
-    componentWillReceiveProps: function(nextProps) {
-        if (this.state.track !== nextProps.track) {
-            this.setState({
-                track: nextProps.track
-            });
-        }
-    },
-    render: function() {
-        return (
-            <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
-                <div onClick={this.props.onCloseModal}>
-                    <Icon class='x-icon x-icon-dark' icon='circle-x' />
-                </div>
-                <form ref='trackForm' className='form-editor form-editor-track'>
-                    <div className='field'>
-                        <label for='title'>
-                            Title:
-                        </label>
-                        <input
-                            ref='trackTitle'
-                            name='title'
-                            type='text'
-                            value={this.state.track ? this.state.track.title : ''}
-                            onChange={this.onTitleChange}
-                        />
-                    </div>
-                    <div className='field'>
-                        <label for='description'>
-                            Description:
-                        </label>
-                        <textarea
-                            ref='trackDescription'
-                            name='description'
-                            value={this.state.track ? this.state.track.description : ''}
-                            onChange={this.onDescriptionChange}
-                        />
-                    </div>
-                    <div className='field'>
-                        <label for='tags'>
-                            Tags: <span className='note'>(separated by a comma)</span>
-                        </label>
-                        <input
-                            ref='trackTags'
-                            name='tags'
-                            type='text'
-                            value={this.state.track ? (this.state.track.tags) : ''}
-                            onChange={this.onTagsChange}
-                        />
-                    </div>
-                </form>
-                <form ref='collabForm' className='form-editor form-editor-collab'>
-                    <div className='field'>
-                        <h3>
-                            Collaborators:
-                        </h3>
-                        <div className='collab-preview collab-preview-collaborators'>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                        </div>
-                    </div>
-                    <div className='field'>
-                        <label for='invitees'>
-                            Invitees:
-                        </label>
-                        <div className='collab-preview collab-preview-invitees'>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                            <div className='user-img'>
-                                <img src='../../images/sample_profile.png' />
-                            </div>
-                        </div>
-                        <input ref='inviteeUsername' name='invitees' type='text' />
-                        <button className='btn-submit' type='submit' onClick={this.handleInvite}>
-                            Invite
-                        </button>
-                    </div>
-                </form>
-                <button className='btn-submit btn-save-modal' type='submit' onClick={this.handleFormSubmit}>
-                    Save
-                </button>
-            </div>
-        );
-    }
-});
-
 
 module.exports = Editor;
