@@ -188,11 +188,21 @@ describe('Realtime editing: A user', function () {
         socket.cow.emit('remove', lines.cow[1]);
     });
 
-    it('should be able to get an empty track updated by realtime editing (get: /tracks/:track_id)', function(done) {
-        //cow's id is 3
+    it('should be able to get track updated by additions and deletions (get: /tracks/:track_id)', function(done) {
+        //bob's id is 2
+        var edited_track = cow.full_tracks()[0];
+        edited_track.scene = {
+            points: {
+                '2_2': { x: 40, y: 60 },
+                '2_3': { x: 60, y: 40 }
+            },
+            lines: {
+                '2_1': { p1: '2_2', p2: '2_3' }
+            }
+        };
         agent.bob
             .get('/tracks/' + track_ids.cow[0])
-            .expect(StatusTypes.ok, cow.full_tracks()[0], done);
+            .expect(StatusTypes.ok, edited_track, done);
     });
     // TODO:
     // handle error cases like invalid add/removals
