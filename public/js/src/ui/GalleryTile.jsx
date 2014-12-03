@@ -6,12 +6,54 @@ var Reflux = require('reflux');
 //Actions
 var Actions = require('../actions');
 
+//Data Stores
+var FavoritesStore = require('../stores/favorites');
+
 //UI Components
 var GalleryRow = require('./GalleryRow.jsx');
 var Icon = require('./Icon.jsx');
 
 // this.props.trackPreview
 var GalleryTile = React.createClass({
+    mixins: [
+        Reflux.listenTo(FavoritesStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        if (this.isMounted()) {
+            this.setState({
+                data: newData
+            });
+        }
+    },
+    getInitialState: function() {
+        return {
+            data: FavoritesStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        if (this.props.userId) {
+            Actions.getFavorites();
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        console.log(nextProps.userId);
+        if ((this.props.userId !== nextProps.userId)
+            && nextProps.userId) {
+            Actions.getFavorites();
+        }
+    },
+    isInFavorites: function(trackId) {
+        if (this.state.data.favorites) {
+            for (var i = 0; i < this.state.data.favorites.length; i++) {
+                if (this.state.data.favorites[i].track_id === trackId) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    },
     handleAcceptInvitation: function(event) {
         event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
@@ -68,10 +110,8 @@ var GalleryTile = React.createClass({
         var button;
         var links;
 
-        // console.log(this.props.isInFavorites);
-
-        var favoritesHandler = this.props.isInFavorites ? this.handleRemoveFavorite : this.handleAddFavorite;
-        var favoritesClassName = this.props.isInFavorites ? 'favorited' : 'unfavorited';
+        var favoritesHandler = this.isInFavorites(this.props.trackId) ? this.handleRemoveFavorite : this.handleAddFavorite;
+        var favoritesClassName = this.isInFavorites(this.props.trackId) ? 'favorited' : 'unfavorited';
 
         if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
             links =

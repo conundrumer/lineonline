@@ -19,9 +19,11 @@ var Favorites = React.createClass({
         Reflux.listenTo(FavoritesStore, 'onDataChanged')
     ],
     onDataChanged: function(newData) {
-        this.setState({
-            data: newData
-        });
+        if (this.isMounted()) {
+            this.setState({
+                data: newData
+            });
+        }
     },
     getInitialState: function() {
         return {
@@ -40,30 +42,24 @@ var Favorites = React.createClass({
         }
     },
     render: function() {
-
         return (
             <div className='main-content'>
-                {this.props.currentUser && this.state.data.favorites
-                    && this.state.data.favorites.length > 0 ?
+                {this.props.currentUser && this.state.data.favorites ?
                     <div>
                         <PanelPadded isFavorites={true}>
                             <div className='section group'>
-                                <TracksPreview tracks={this.state.data.favorites} />
+                                {this.state.data.favorites.length > 0 ?
+                                    <TracksPreview userId={this.props.currentUser} tracks={this.state.data.favorites} />
+                                    :
+                                    <p className='message-panel message-panel-center'>
+                                        No favorites to show.
+                                    </p>
+                                }
                             </div>
                         </PanelPadded>
                         <Footer />
                     </div>
-                    :
-                    <div>
-                        <PanelPadded isFavorites={true}>
-                            <div className='section group'>
-                                <p className='message-panel message-panel-center'>
-                                    No favorites to show.
-                                </p>
-                            </div>
-                        </PanelPadded>
-                        <Footer />
-                    </div>
+                    : null
                 }
 
             </div>

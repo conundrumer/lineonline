@@ -24,11 +24,12 @@ var FavoritesStore = Reflux.createStore({
                         .end(function(err, res) {
                             console.log('got just favorited track!');
                             if (res.status === StatusTypes.ok) {
+                                this.data.favorites = this.data.favorites ? this.data.favorites : [];
                                 this.data.favorites.push(res.body);
                                 this.trigger(this.data);
                                 return;
                             }
-                            console.log('unknon status hereeeee');
+                            console.log('unknown status: ', res.status);
                         }.bind(this));
                     return;
                 }
@@ -59,7 +60,6 @@ var FavoritesStore = Reflux.createStore({
     onGetFavorites: function() {
         request
             .get('/api/favorites')
-            // .get('/api/users/' + 2 + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.favorites = res.body;
