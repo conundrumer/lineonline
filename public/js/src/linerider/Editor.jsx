@@ -32,9 +32,15 @@ var Editor = React.createClass({
     mixins: [
         Reflux.listenTo(sceneStore, 'onSceneChanged')
     ],
-    onSceneChanged: function(scene, action) {
-        this.setState({ scene: scene });
-        // do something with action
+    onSceneChanged: function(data, action) {
+        if (action == 'add') {
+            this.props.onAddLine(data);
+        } else if (action == 'remove') {
+            this.props.onRemoveLine(data);
+        } else {
+            this.setState({ scene: data });
+        }
+
     },
     getInitialState: function() {
         return {

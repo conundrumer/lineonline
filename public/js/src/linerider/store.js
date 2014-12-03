@@ -43,6 +43,36 @@ function lineSegmentDistance(p, line) {
     }
 }
 
+// subject to change
+var ENTITY = {
+    POINT: 0,
+    LINE: 1
+};
+
+function makePoint(id, p) {
+    return {
+        type: ENTITY.POINT,
+        id: id,
+        x: p.x,
+        y: p.y
+    };
+}
+function makeLine(id, p1, p2) {
+    return {
+        type: ENTITY.LINE,
+        id: id,
+        p1: p1,
+        p2: p2
+    };
+}
+function lineData(p1ID, p2ID, line_id, p1, p2) {
+    return [
+        makePoint(p1ID, p1),
+        makePoint(p2ID, p2),
+        makeLine(line_id, p1ID, p2ID),
+    ];
+}
+
 function getMaxID(hashmap) {
     return _.keys(hashmap).map(function(id) {
         return parseInt(id.split('_')[1]);
@@ -82,7 +112,8 @@ var SceneStore = Reflux.createStore({
         scene.lines[lineID] = { p1: p1ID, p2: p2ID };
         this.next_point_id = this.next_point_id + 2;
         this.next_line_id = this.next_line_id + 1;
-        this.trigger(scene, 'add line');
+        this.trigger(scene);
+        this.trigger(lineData(p1ID, p2ID, lineID, p1, p2), 'add');
     },
     onEraseLines: function (pos) {
         var scene = this.scene;
@@ -94,17 +125,46 @@ var SceneStore = Reflux.createStore({
             return lineSegmentDistance(pos, {p1: p1, p2: p2}) < ERASER_RADIUS;
         }).forEach(function(id) {
             var line = scene.lines[id];
+            var p1 = scene.points[line.p1];
+            var p2 = scene.points[line.p2];
             delete scene.points[line.p1];
             delete scene.points[line.p2];
             delete scene.lines[id];
+            this.trigger(lineData(line.p1, line.p2, id, p1, p2), 'remove');
         }.bind(this));
-        this.trigger(scene, 'remove lines');
+        this.trigger(scene);
     },
     onAddLine: function(data) {
-        console.log('adding line:', data);
+        data.forEach(function (e) {
+            switch (e.type) {
+                case ENTITY.POINT:
+                    this.scene.points[e.id] = {
+                        x: e.x,
+                        y: e.y
+                    };
+                    break;
+                case ENTITY.LINE:
+                    this.scene.lines[e.id] = {
+                        p1: e.p1,
+                        p2: e.p2
+                    };
+                    break;
+            }
+        }.bind(this));
+        this.trigger(this.scene);
     },
     onRemoveLine: function(data) {
-        console.log('removing line:', data);
+        data.forEach(function (e) {
+            switch (e.type) {
+                case ENTITY.POINT:
+                    delete this.scene.points[e.id];
+                    break;
+                case ENTITY.LINE:
+                    delete this.scene.lines[e.id];
+                    break;
+            }
+        }.bind(this));
+        this.trigger(this.scene);
     }
 });
 

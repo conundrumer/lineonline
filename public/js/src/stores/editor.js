@@ -4,7 +4,8 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
-var LineRiderActions = require('../linerider/actions')
+var LineRiderActions = require('../linerider/actions');
+var io = require('socket.io-client');
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -37,10 +38,58 @@ var EditorStore = Reflux.createStore({
     },
     onOpenEditorSession: function(trackID) {
         console.log("opening session for this track:", trackID)
-        // .get('/tracks/' + track_ids.cow[0] + '/session')
+        request
+            .get('/api/tracks/' + trackID + '/session')
+            .end(function(err, res) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                if (res.status == StatusTypes.ok) {
+                    this.connectSession(res.body.token);
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+    connectSession: function(token) {
+        var socket = io.connect('/', {
+            query: 'token=' + token
+        });
+        socket.on('connect', function() {
+            console.log('editor session connected');
+        });
+        socket.on('connect_error', function(err) {
+            console.error(err);
+        });
+        socket.on('disconnect', function() {
+            console.log('disconnected');
+        });
+        socket.on('add', LineRiderActions.addLine);
+        socket.on('remove', LineRiderActions.removeLine);
+        this.socket = socket;
+    },
+    onEmitAddLine: function(data) {
+        if (this.socket) {
+            this.socket.emit('add', data);
+            this.socket.once('sync', function() {
+                console.log('line added to server');
+            });
+        }
+    },
+    onEmitRemoveLine: function(data) {
+        if (this.socket) {
+            this.socket.emit('remove', data);
+            this.socket.once('sync', function() {
+                console.log('line removed from server');
+            });
+        }
     },
     onCloseEditorSession: function() {
-        console.log("closing session")
+        console.log("closing session");
+        if (this.socket) {
+            this.socket.disconnect();
+            this.socket = null;
+        }
     },
     onNewTrack: function() {
         this.data = this.getDefaultData();
