@@ -157,17 +157,35 @@ var SaveModal = React.createClass({
                         <h3>
                             Collaborators:
                         </h3>
-                        <div className='collab-preview collab-preview-collaborators'>
-                            {collaboratorBubbles}
-                        </div>
+                        {collaboratorBubbles.length > 0 ?
+                            <div className='collab-preview collab-preview-collaborators'>
+                                {collaboratorBubbles}
+                            </div>
+                            :
+                            <div className='collab-preview collab-preview-collaborators'>
+                                <p className='message-panel message-panel-center message-panel-bubbles'>
+                                    No collaborators to show.
+                                </p>
+                            </div>
+
+                        }
                     </div>
                     <div className='field'>
                         <label for='invitees'>
                             Invitees:
                         </label>
-                        <div className='collab-preview collab-preview-invitees'>
-                            {inviteeBubbles}
-                        </div>
+                        {inviteeBubbles.length > 0 ?
+                            <div className='collab-preview collab-preview-invitees'>
+                                {inviteeBubbles}
+                            </div>
+                            :
+                            <div className='collab-preview collab-preview-invitees'>
+                                <p className='message-panel message-panel-center message-panel-bubbles'>
+                                    No invitees to show.
+                                </p>
+                            </div>
+
+                        }
                         <input ref='inviteeUsername' name='invitees' type='text' />
                         <button className='btn-submit' type='submit' onClick={this.handleInvite}>
                             Invite

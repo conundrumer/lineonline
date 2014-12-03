@@ -16,8 +16,13 @@
         text-align: center;
     }
 
+    &.message-panel-bubbles {
+        padding-top: 10px;
+    }
+
     &.message-panel-tracks {
-        margin-bottom: 30px;
+        padding-top: 15px;
+        padding-bottom: 40px;
         text-align: left;
     }
 }
@@ -1035,9 +1040,7 @@
             }
 
             .about {
-                p {
-                    padding-bottom: 10px;
-                }
+                padding-bottom: 10px;
             }
         }
 

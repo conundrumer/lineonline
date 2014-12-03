@@ -157,7 +157,7 @@ var ProfileTrackSnippets = React.createClass({
                     {this.props.tracks.length > 0 ?
                         <div>
                             <h3 className='collection-title'>
-                                All Tracks
+                                {this.props.username + '\'s tracks'}
                             </h3>
                             <TracksPreview tracks={this.props.tracks} />
                         </div>
@@ -211,18 +211,24 @@ var ProfileContactDetail = React.createClass({
         return (
             <div className='detail contact'>
                 <h3>{this.props.username}</h3>
-                <p>
-                    <Icon class='profile-icon' icon='map-marker' />
-                    <span className='profile-title'>
-                        {this.props.location}
-                    </span>
-                </p>
-                <p>
-                    <Icon class='profile-icon' icon='envelope-closed' />
-                    <span className='profile-title'>
-                        {this.props.email}
-                    </span>
-                </p>
+                {this.props.location && this.props.location !== '' ?
+                    <p>
+                        <Icon class='profile-icon' icon='map-marker' />
+                        <span className='profile-title'>
+                            {this.props.location}
+                        </span>
+                    </p>
+                    : null
+                }
+                {this.props.email && this.props.email !== '' ?
+                   <p>
+                        <Icon class='profile-icon' icon='envelope-closed' />
+                        <span className='profile-title'>
+                            {this.props.email}
+                        </span>
+                    </p>
+                    : null
+                }
             </div>
         );
     }
@@ -232,10 +238,15 @@ var ProfileAboutDetail = React.createClass({
     render: function() {
         return (
             <div className='detail about'>
-                <h3>About</h3>
-                <p>
-                    {this.props.about}
-                </p>
+                {this.props.about && this.props.about !== '' ?
+                    <div>
+                        <h3>About</h3>
+                        <p>
+                            {this.props.about}
+                        </p>
+                    </div>
+                    : null
+                }
             </div>
         );
     }
