@@ -299,10 +299,18 @@
 .unsubscribe-link,
 .tile-tool-link {
     @include transition(color 0.2s ease-in-out 0);
-    color: $linerider-red;
+    color: $light-col;
     &:hover {
         cursor: pointer;
-        color: $light-col;
+        color: $linerider-red;
+    }
+
+    &.favorited {
+        color: $linerider-red;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
     }
 }
 

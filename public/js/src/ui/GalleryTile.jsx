@@ -6,39 +6,12 @@ var Reflux = require('reflux');
 //Actions
 var Actions = require('../actions');
 
-//Data Stores
-var FavoritesStore = require('../stores/favorites');
-
 //UI Components
 var GalleryRow = require('./GalleryRow.jsx');
 var Icon = require('./Icon.jsx');
 
 // this.props.trackPreview
 var GalleryTile = React.createClass({
-    mixins: [
-        Reflux.listenTo(FavoritesStore, 'onDataChanged')
-    ],
-    onDataChanged: function(newData) {
-        this.setState({
-            data: newData
-        });
-    },
-    getInitialState: function() {
-        return {
-            data: FavoritesStore.getDefaultData()
-        }
-    },
-    componentWillMount: function() {
-        if (this.props.currentUser) {
-            Actions.getFavorites();
-        }
-    },
-    componentWillReceiveProps: function(nextProps) {
-        if ((this.props.currentUser !== nextProps.currentUser)
-            && nextProps.currentUser) {
-            Actions.getFavorites();
-        }
-    },
     handleAcceptInvitation: function(event) {
         event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
@@ -78,6 +51,7 @@ var GalleryTile = React.createClass({
         event.preventDefault();
         console.log('attempting to add fav...');
         Actions.addFavorite(this.props.trackId);
+        // Actions.getFavorites();
     },
     handleRemoveFavorite: function(event) {
         event.preventDefault();
@@ -94,13 +68,21 @@ var GalleryTile = React.createClass({
         var button;
         var links;
 
+        // console.log(this.props.isInFavorites);
+
+        var favoritesHandler = this.props.isInFavorites ? this.handleRemoveFavorite : this.handleAddFavorite;
+        var favoritesClassName = this.props.isInFavorites ? 'favorited' : 'unfavorited';
+
         if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
             links =
                 <div className='tile-tools'>
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link' onClick={this.handleAddFavorite}>
+                    <div
+                        className={'tile-tool-link ' + favoritesClassName}
+                        onClick={favoritesHandler}
+                    >
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                     <div className='tile-tool-link'>
@@ -113,7 +95,10 @@ var GalleryTile = React.createClass({
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link' onClick={this.handleAddFavorite}>
+                    <div
+                        className={'tile-tool-link ' + favoritesClassName}
+                        onClick={favoritesHandler}
+                    >
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                 </div>

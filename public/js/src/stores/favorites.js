@@ -4,7 +4,7 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 
-var HomeStore = Reflux.createStore({
+var FavoritesStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
@@ -14,13 +14,22 @@ var HomeStore = Reflux.createStore({
     },
 
     onAddFavorite: function(trackId) {
-        console.log("adding???");
         request
             .put('/api/favorites/' + trackId)
             .end(function(err, res) {
-                console.log('asdjfklasdjlkfsdaj');
                 if (res.status === StatusTypes.noContent) {
                     console.log('added favorite!');
+                    request
+                        .get('/api/tracks/' + trackId)
+                        .end(function(err, res) {
+                            console.log('got just favorited track!');
+                            if (res.status === StatusTypes.ok) {
+                                this.data.favorites.push(res.body);
+                                this.trigger(this.data);
+                                return;
+                            }
+                            console.log('unknon status hereeeee');
+                        }.bind(this));
                     return;
                 }
                 console.log('unknown status: ', res.status);
@@ -66,4 +75,4 @@ var HomeStore = Reflux.createStore({
 });
 
 
-module.exports = HomeStore;
+module.exports = FavoritesStore;
