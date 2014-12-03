@@ -14,28 +14,13 @@ var HomeStore = Reflux.createStore({
         };
         return this.data
     },
-    onGetInvitations: function(userId) {
-        // request
-        //     .get('/api/invitations/' + userId)
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.invitations = res.body;
-        //             console.log('got user invitations!!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.invitations.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
+    onGetInvitations: function() {
         request
-            .get('/api/users/' + userId + '/tracks')
+            .get('/api/invitations/')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.invitations = res.body;
-                    // console.log('got your invitations!!!!');
-                    // console.log(res.body);
+                    console.log('got user invitations!!!!');
                     this.trigger(this.data);
                     return;
                 }
@@ -44,6 +29,21 @@ var HomeStore = Reflux.createStore({
                 // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
+        // request
+        //     .get('/api/users/' + userId + '/tracks')
+        //     .end(function(err, res) {
+        //         if (res.status === StatusTypes.ok) {
+        //             this.data.invitations = res.body;
+        //             // console.log('got your invitations!!!!');
+        //             // console.log(res.body);
+        //             this.trigger(this.data);
+        //             return;
+        //         }
+        //         // if (res.notFound) {
+        //         //     this.data.invitations.notFound = true
+        //         // }
+        //         console.log('unknown status: ', res.status);
+        //     }.bind(this));
     },
 
     onGetYourTracks: function(userId) {
@@ -65,27 +65,12 @@ var HomeStore = Reflux.createStore({
     },
 
     onGetCollaborations: function(userId) {
-        // request
-        //     .get('/api/collaborations/' + userId)
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.collaborations = res.body;
-        //             console.log('got user collaborations!!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.collaborations.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
         request
-            .get('/api/users/' + userId + '/tracks')
+            .get('/api/collaborations/')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.collaborations = res.body;
-                    // console.log('got your collaborations!!!!');
-                    // console.log(res.body);
+                    console.log('got user collaborations!!!!');
                     this.trigger(this.data);
                     return;
                 }
@@ -96,68 +81,56 @@ var HomeStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onAcceptInvitation: function(userId, trackId) {
-        // request
-        //     .put('/api/invitations/' + userId + '/tracks/'  + trackId)
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.invitations = res.body;
-        //             console.log(res.body);
-        //             console.log('accepted invitation!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.invitations.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
-        setTimeout(function() {
-            var newInvitations = [];
+    onAcceptInvitation: function(trackId) {
+        request
+            .put('/api/invitations/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    var newInvitations = [];
 
-            for (var i = 0; i < this.data.invitations.length; i++) {
-                // console.log(key);
-                if (this.data.invitations[i].track_id !== trackId) {
-                    newInvitations.push(this.data.invitations[i]);
-                } else {
-                    this.data.collaborations.push(this.data.invitations[i]);
+                    for (var i = 0; i < this.data.invitations.length; i++) {
+                        if (this.data.invitations[i].track_id !== trackId) {
+                            newInvitations.push(this.data.invitations[i]);
+                        } else {
+                            this.data.collaborations.push(this.data.invitations[i]);
+                        }
+                    }
+
+                    this.data.invitations = newInvitations;
+                    this.trigger(this.data);
+                    return;
                 }
-            }
-            this.data.invitations = newInvitations;
-
-            this.trigger(this.data);
-        }.bind(this));
+                // if (res.notFound) {
+                //     this.data.invitations.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     },
 
-    onRejectInvitation: function(userId, trackId) {
-        // request
-        //     .del('/api/invitations/' + userId + '/tracks/'  + trackId)
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.invitations = res.body;
-        //             console.log('rejected invitation!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.invitations.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
-        setTimeout(function() {
-            var newInvitations = [];
+    onRejectInvitation: function(trackId) {
+        request
+            .del('/api/invitations/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('rejected invitation!!!');
 
-            for (var i = 0; i < this.data.invitations.length; i++) {
-                // console.log(key);
-                if (this.data.invitations[i].track_id !== trackId) {
-                    newInvitations.push(this.data.invitations[i]);
+                    var newInvitations = [];
+
+                    for (var i = 0; i < this.data.invitations.length; i++) {
+                        if (this.data.invitations[i].track_id !== trackId) {
+                            newInvitations.push(this.data.invitations[i]);
+                        }
+                    }
+                    this.data.invitations = newInvitations;
+
+                    this.trigger(this.data);
+                    return;
                 }
-            }
-
-            this.data.invitations = newInvitations;
-
-            this.trigger(this.data);
-        }.bind(this));
+                // if (res.notFound) {
+                //     this.data.invitations.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     },
 
     onDeleteTrack: function(trackId) {
@@ -180,37 +153,31 @@ var HomeStore = Reflux.createStore({
                 // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
-        // setTimeout(function() {
-        //     var newYourTracks = [];
-
-        //     for (var i = 0; i < this.data.yourTracks.length; i++) {
-        //         // console.log(key);
-        //         if (this.data.yourTracks[i].track_id !== trackId) {
-        //             newYourTracks.push(this.data.yourTracks[i]);
-        //         }
-        //     }
-
-        //     this.data.yourTracks = newYourTracks;
-
-        //     this.trigger(this.data);
-        // }.bind(this));
     },
 
-    onLeaveCollaboration: function(userId, trackId) {
-        setTimeout(function() {
-            var newCollaborations = [];
+    onLeaveCollaboration: function(trackId) {
+        request
+            .del('/api/collaborations/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    var newCollaborations = [];
 
-            for (var i = 0; i < this.data.collaborations.length; i++) {
-                // console.log(key);
-                if (this.data.collaborations[i].track_id !== trackId) {
-                    newCollaborations.push(this.data.collaborations[i]);
+                    for (var i = 0; i < this.data.collaborations.length; i++) {
+                        if (this.data.collaborations[i].track_id !== trackId) {
+                            newCollaborations.push(this.data.collaborations[i]);
+                        }
+                    }
+
+                    this.data.collaborations = newCollaborations;
+
+                    this.trigger(this.data);
+                    return;
                 }
-            }
-
-            this.data.collaborations = newCollaborations;
-
-            this.trigger(this.data);
-        }.bind(this));
+                // if (res.notFound) {
+                //     this.data.track.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     }
 });
 

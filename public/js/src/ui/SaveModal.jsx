@@ -103,6 +103,12 @@ var SaveModal = React.createClass({
             );
         });
 
+        var collaboratorBubbles = this.state.track.collaborators.map(function(collaborator) {
+            return (
+                <UserBubble imageSrc={collaborator.avatar_url} />
+            );
+        });
+
         return (
             <div className={'save-modal' + (this.props.isModalHidden ? ' hide' : '')}>
                 <div onClick={this.props.onCloseModal}>
@@ -152,9 +158,7 @@ var SaveModal = React.createClass({
                             Collaborators:
                         </h3>
                         <div className='collab-preview collab-preview-collaborators'>
-                            <UserBubble imageSrc='../../images/sample_profile.png' />
-                            <UserBubble imageSrc='../../images/sample_profile.png' />
-                            <UserBubble imageSrc='../../images/sample_profile.png' />
+                            {collaboratorBubbles}
                         </div>
                     </div>
                     <div className='field'>

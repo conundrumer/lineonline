@@ -13,7 +13,7 @@ var Icon = require('./Icon.jsx');
 // this.props.trackPreview
 var GalleryTile = React.createClass({
     handleAcceptInvitation: function(event) {
-        Actions.acceptInvitation(this.props.userId, this.props.trackId);
+        Actions.acceptInvitation(this.props.trackId);
         // console.log(this.props.trackId);
         // console.log(this.props.userId);
         // console.log('JOINING INVITATION');
@@ -23,7 +23,7 @@ var GalleryTile = React.createClass({
         var c = confirm('Are you sure you want to reject this invitation?');
         if (c) {
             console.log('rejecting!!!');
-            Actions.rejectInvitation(this.props.userId, this.props.trackId);
+            Actions.rejectInvitation(this.props.trackId);
         }
     },
     handleDeleteTrack: function(event) {
@@ -37,7 +37,7 @@ var GalleryTile = React.createClass({
         var c = confirm('Are you sure you want to leave this collaboration?');
         if (c) {
             console.log('leaving collab');
-            Actions.leaveCollaboration(this.props.userId, this.props.trackId);
+            Actions.leaveCollaboration(this.props.trackId);
         }
     },
     handlePlayback: function(event) {
