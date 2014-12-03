@@ -9,15 +9,12 @@ require('./tracks-basic'); // makes dolan's and bob's tracks
 // require('./track-edit');
 // require('./users-profile');
 // TODO: gallery
-// TODO: subscriptions
+require('./favorites');
 require('./subscriptions');
-// TODO: favorites
 // TODO: collections
 
 require('./invitations');
-// TODO: collaboration (non-realtime)
-require('./collab')
-// TODO: privacy
+require('./collab');
 // TODO: conversations (non-realtime)
 
 // TODO: account settings
