@@ -46,12 +46,7 @@ var dolan = new User({
         time_created: '', // datetime
         time_modified: '', // datetime
         tags: [/* 'strings' */],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             // participants: [user_ids]
             messages: [
@@ -100,12 +95,7 @@ var bob = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }
@@ -130,12 +120,7 @@ var bob = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }
@@ -174,12 +159,7 @@ var cow = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }

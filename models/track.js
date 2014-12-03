@@ -9,7 +9,7 @@ function buildTrackTable(table) {
     table.string('title', 100).notNullable();
     table.string('description', 100);
     table.integer('owner').references('users.id').notNullable();
-    table.json('scene', USE_JSONB);
+    table.json('scene', USE_JSONB).notNullable();
     table.float('preview_top');
     table.float('preview_left');
     table.float('preview_bottom');
@@ -22,28 +22,28 @@ function toTrackModel(body, owner_id) {
         scene: body.scene,
         title: body.title,
         description: body.description,
-        owner: owner_id,
-        preview_top: body.preview.top,
-        preview_left: body.preview.left,
-        preview_bottom: body.preview.bottom,
-        preview_right: body.preview.right
+        owner: owner_id
     };
 }
 
 // model -> representations without related fields
 function toTrackSnippet(model) {
+    var preview = {
+        top: model.get('preview_top'),
+        left: model.get('preview_left'),
+        bottom: model.get('preview_bottom'),
+        right: model.get('preview_right'),
+    };
+    if (!preview.top || !preview.right || !preview.bottom || !preview.left ) {
+        preview = null;
+    }
     return {
         track_id: model.get('id'),
         scene: model.get('scene'),
         title: model.get('title'),
         description: model.get('description'),
         owner: null,
-        preview: {
-            top: model.get('preview_top'),
-            left: model.get('preview_left'),
-            bottom: model.get('preview_bottom'),
-            right: model.get('preview_right'),
-        }
+        preview: preview
     };
 }
 function toFullTrack(model) {
@@ -71,9 +71,19 @@ function toFullTrack(model) {
 var Track = bookshelf.Model.extend({
     tableName: 'tracks',
     update: function (body, track_id) {
-        var track = toTrackModel(body, this.get('owner'));
-        track.id = this.get('id');
-        return Track.forge(track).save();
+        var track = {
+            title: body.title || this.get('title'),
+            description: body.description || this.get('description'),
+            scene: body.scene || this.get('scene')
+        };
+        if (body.preview && body.preview_top && body.preview_right &&
+            body.preview_bottom && body.preview_left) {
+            track.preview_top = body.preview_top;
+            track.preview_right = body.preview_right;
+            track.preview_bottom = body.preview_bottom;
+            track.preview_left = body.preview_left;
+        }
+        return this.save(track, { patch: true });
     },
     // relation queries
     owner: function(){
