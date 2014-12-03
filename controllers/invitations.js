@@ -8,13 +8,14 @@ exports.getInvitations = function(req, res) {
     req.user.invitations()
         .fetch()
         .then(function(tracks) {
-            return new Promise.all(tracks.models.map(function(track) {
+            return Promise.map(tracks.models, function(track) {
                     return track.asTrackSnippet();
-                }));
+                });
         })
         .then(function(trackSnippets) {
             res.status(StatusTypes.ok).json(trackSnippets);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.accept = function(req, res) {
@@ -66,10 +67,11 @@ exports.decline = function(req, res) {
         .fetch()
         .then(function(invite){
             if (invite) {
-                invite.destroy();
+                return invite.destroy();
             }
         })
         .then(function() {
             res.status(StatusTypes.noContent).send();
-        });
+        })
+        .catch(console.error);
 };

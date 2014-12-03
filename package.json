@@ -39,6 +39,7 @@
     "pg": "^3.6.2",
     "react": "^0.12.0",
     "react-router": "^0.10.2",
+    "reflux": "^0.2.0",
     "socket.io": "^1.2.1",
     "socket.io-client": "^1.2.1",
     "socketio-jwt": "^2.3.5",

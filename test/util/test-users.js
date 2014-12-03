@@ -47,12 +47,7 @@ var dolan = new User({
         time_created: '', // datetime
         time_modified: '', // datetime
         tags: [/* 'strings' */],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             // participants: [user_ids]
             messages: [
@@ -101,12 +96,7 @@ var bob = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }
@@ -120,8 +110,8 @@ var bob = new User({
                 '2_3': { x: 0, y: 360 }
             },
             lines: {
-                '2_0': { p1: 0, p2: 1 },
-                '2_1': { p1: 2, p2: 3}
+                '2_0': { p1: '2_0', p2: '2_1' },
+                '2_1': { p1: '2_2', p2: '2_3'}
             }
         },
         title: 'bob\'s track TWOOOO',
@@ -131,12 +121,7 @@ var bob = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }
@@ -175,12 +160,7 @@ var cow = new User({
         time_created: '',
         time_modified: '',
         tags: [],
-        preview: {
-            top: 0,
-            left: 0,
-            bottom: 360,
-            right: 480
-        },
+        preview: null,
         conversation: {
             messages: []
         }

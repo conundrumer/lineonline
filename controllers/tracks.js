@@ -16,7 +16,7 @@ var ERRORS = {
 
 exports.getByID = function(req, res, next, track_id) {
     Track
-        .getByID(track_id)
+        .getByID(parseInt(track_id) || 0)
         .then(function (track) {
             req.track = track;
             next();

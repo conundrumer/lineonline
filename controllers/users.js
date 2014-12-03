@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 
 var User = require('../models/user');
+var Favorite = require('../models/favorite');
 
 var ERRORS = {
     USER_NOT_FOUND: {
@@ -14,7 +15,7 @@ var ERRORS = {
 
 exports.getByID = function(req, res, next, user_id) {
     User
-        .getByID(user_id)
+        .getByID(parseInt(user_id) || 0)
         .then(function (user) {
             req.user_model = user;
             next();
@@ -52,12 +53,10 @@ exports.getProfile = function(req, res) {
 };
 
 exports.editProfile = function(req, res) {
-    if (req.user.id != req.user_model.get('id')){
-        res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
-    }
-    User.update(req.body, req.user.id)
-        .then(function(userProfile) {
-            res.status(StatusTypes.ok).json(userProfile);
+    req.user
+        .update(req.body)
+        .then(function(user) {
+            res.status(StatusTypes.ok).json(user.asUserProfile());
         })
         .catch(console.error);
 };

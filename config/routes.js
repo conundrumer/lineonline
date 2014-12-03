@@ -5,6 +5,7 @@ var users = require('../controllers/users');
 var tracks = require('../controllers/tracks');
 var invitations = require('../controllers/invitations');
 var collaborations = require('../controllers/collaborations');
+var favorites = require('../controllers/favorites');
 var subscriptions = require('../controllers/subscriptions');
 var editTrack = require('../controllers/edit-track');
 
@@ -33,7 +34,9 @@ api.route('/users/:user_id/tracks')
 
 // profile
 api.route('/users/:user_id/profile')
-    .get(users.getProfile)
+    .get(users.getProfile);
+
+api.route('/profile')
     .put(users.editProfile);
 
 // tracks
@@ -97,6 +100,15 @@ api.route('/subscriptions/:user_id')
     .put(subscriptions.addSubscription)
     .delete(subscriptions.deleteSubscription);
 
+// favorites
+api.use('/favorites', auth.loginRequired);
+
+api.route('/favorites')
+    .get(favorites.getFavorites);
+
+api.route('/favorites/:track_id')
+    .put(favorites.addFavorite)
+    .delete(favorites.removeFavorite);
 
 module.exports = function (app, passport) {
     app.use('/api', api);

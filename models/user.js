@@ -16,20 +16,13 @@ function buildUserTable(table) {
 
 // post body -> model
 function toUserModel(body) {
-    location = '';
-    if (body.location != null && body.location != undefined){
-        location = body.location;
-    }
-    if (body.about == null || body.about == undefined){
-        body.about = '';
-    }
     return {
         username: body.username,
         password: body.password,
         email: body.email,
         avatar_url: DEFAULT_AVATAR_URL,
-        about: body.about,
-        location: location
+        about: '',
+        location: ''
     };
 }
 
@@ -74,20 +67,29 @@ var User = bookshelf.Model.extend({
     collaborations: function(){
         return this.belongsToMany('Track', 'collaborations', 'collaborator', 'track');
     },
-    // favorites: function(){
-    //     return this.hasMany('Track', 'favorites');
-    // },
+    favorites: function(){
+        return this.belongsToMany(Track, 'favorites', 'favoriter', 'track');
+    },
     asUserSnippet: function() {
         return toUserSnippet(this);
     },
     getTrackSnippets: function () {
         var userSnippet = this.asUserSnippet();
         return this.tracks().fetch().then(function(trackResults) {
-            return new Promise.all(trackResults.models.map(function (track) {
+            return Promise.map(trackResults.models, function (track) {
                     return track
                         .asTrackSnippet(userSnippet);
-                }));
+                });
         });
+    },
+    update: function(body) {
+        var newProfile = {
+            avatar_url: body.avatar_url || this.get('avatar_url'),
+            email: body.email || this.get('email'),
+            location: body.location || this.get('location'),
+            about: body.about || this.get('about')
+        };
+        return this.save(newProfile, { patch: true });
     }
 }, {
     tableName: 'users',
@@ -95,21 +97,9 @@ var User = bookshelf.Model.extend({
     create: function(body) {
         return User.forge(toUserModel(body)).save();
     },
-    update: function(body, user_id){
-        var userModel = User.forge(toUserModel(body));
-        userModel.set({id: user_id});
-        return userModel.save().then(function(model){
-            return toUserProfile(model);
-        });
-    },
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
     }
 });
-
-
-
-
-
 
 module.exports = bookshelf.model('User', User);

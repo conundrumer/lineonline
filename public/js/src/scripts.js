@@ -75,17 +75,5 @@ var LINEONLINE = {
         e.preventDefault();
     }
 }
-var Action = require('./action');
 
-Action.getCurrentUser(function() {
-    require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
-});
-
-// React.render(React.createElement(App, null), document.body, LINEONLINE.init.bind(LINEONLINE));
-// React.render((
-//     <Routes location='history'>
-//         <Route name='app' path='/' handler={App}>
-//             <Route name='home' handler={Inbox} />
-//         </Route>
-//     </Routes>
-// ), document.body, LINEONLINE.init.bind(LINEONLINE));
+require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));

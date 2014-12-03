@@ -36,9 +36,9 @@ describe('User Profile: A user', function () {
             .expect(StatusTypes.ok, dolan.profile(), done);
     });
 
-    it('should be able to edit her own profile (put: /users/:id/profile)', function (done) {
+    it('should be able to edit her own profile (put: /profile)', function (done) {
         agent.bob
-            .put('/users/' + bob.id + '/profile')
+            .put('/profile')
             .send(bob.unsaved_profile())
             .expect(StatusTypes.ok, bob.profile(), done);
     });
@@ -48,14 +48,6 @@ describe('User Profile: A user', function () {
         agent.dolan
             .get('/users/' + 0 + '/profile')
             .expect(StatusTypes.notFound, done);
-    });
-
-
-    it('should not be able to edit someone else\'s profile (put: /users/:id/profile)', function (done) {
-        agent.bob
-            .put('/users/' + dolan.id + '/profile')
-            .send(bob.unsaved_profile())
-            .expect(StatusTypes.unauthorized, done);
     });
 
     after(function() {
