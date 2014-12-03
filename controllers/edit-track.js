@@ -21,11 +21,6 @@ exports.session = function(req, res) {
 var mutex = {};
 var mutexQueue = {};
 
-// setInterval(function() {
-//     console.log("mutex:", mutex);
-//     console.log("mutexQueue:", mutexQueue);
-// }, 500);
-
 // subject to change
 var ENTITY = {
     POINT: 0,
@@ -90,10 +85,8 @@ function updateScene(updateFn, socket, entities) {
             .then(function() {
                 mutex[room] = false;
                 socket.emit('sync');
-                console.log("mutexQueue", mutexQueue[room]);
                 var next = mutexQueue[room].shift();
                 if (next) {
-                console.log("next", next);
                     next();
                 }
             });
@@ -108,7 +101,7 @@ exports.onConnection = function(io, socket) {
     socket.join(room);
 
     socket.on('disconnect', function() {
-        console.log('user disconnected');
+        console.log('User', data.user_id, 'disconnected from track', room);
     });
 
     if (!mutexQueue[room]) {
