@@ -9,6 +9,7 @@ var bob = users.bob;
 var cow = users.cow;
 var eve = users.eve;
 var cat = users.cat;
+var cathy = users.cathy;
 var track_ids = users.track_ids;
 var collection_ids = users.collection_ids;
 
@@ -20,12 +21,17 @@ var agent = {
     bob: request.agent(url),
     cow: request.agent(url),
     eve: request.agent(url),
-    cat: request.agent(url)
+    cat: request.agent(url),
+    cathy: request.agent(url)
 };
 
 describe('User querying: A user', function () {
-    before(function () {
-        return auth.register(agent.cat, cat);
+    before(function(done) {
+        new Promise.all([
+            auth.register(agent.cat, cat),
+            auth.register(agent.cathy, cathy)
+        ])
+        .then(function(){done();});
     });
     it('should be able to search by full username (get: /users?q=username)', function (done) {
         agent.dolan
@@ -35,11 +41,11 @@ describe('User querying: A user', function () {
     it('should be able to search by partial username (get: /users?q=username)', function (done) {
         agent.dolan
             .get('/users?q=c')
-            .expect(StatusTypes.ok, [cat.user(), cow.user()], done);
+            .expect(StatusTypes.ok, [cat.user(), cathy.user(), cow.user()], done);
     });
     it('should not get any results with no query (get: /users?q=username)', function (done) {
         agent.dolan
-            .get('/users?q=c')
+            .get('/users?q=x')
             .expect(StatusTypes.ok, [], done);
     });
     it('should not get any results with no params (get: /users?q=username)', function (done) {

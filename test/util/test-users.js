@@ -5,8 +5,9 @@ var user_ids = {
     dolan: 1,
     bob: 2,
     cow: 3,
-    eve: 4,
-    cat: 5
+    cat: 4,
+    cathy: 5,
+    eve: 6
 };
 
 var track_ids = {
@@ -188,6 +189,22 @@ var cat = new User({
     collections: []
 });
 
+// some random user
+var cathy = new User({
+    user: {
+        user_id: user_ids.cathy,
+        username: 'cathy',
+        avatar_url: '/images/default.png',
+        password: 'hat',
+        email: 'cathy@hat.com',
+        location: '',
+        about: '',
+    },
+    tracks: [],
+    subscriptions: [],
+    favorites: [],
+    collections: []
+});
 // user with nondefault featured track and actual collections
 var eve;
 
@@ -196,6 +213,7 @@ module.exports = {
     bob: bob,
     cow: cow,
     cat: cat,
+    cathy: cathy,
     // eve: eve,
     user_ids: user_ids,
     track_ids: track_ids,

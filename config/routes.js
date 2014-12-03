@@ -25,6 +25,9 @@ api.route('/auth/register')
 
 api.param('user_id', users.getByID);
 
+api.route('/users')
+    .get(users.search);
+
 api.route('/users/:user_id')
     .get(users.getUserSnippet);
 
