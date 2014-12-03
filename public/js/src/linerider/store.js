@@ -117,21 +117,22 @@ var SceneStore = Reflux.createStore({
     },
     onEraseLines: function (pos) {
         var scene = this.scene;
-        _.keys(scene.lines).filter(function(id) {
+        var deletedLines = _.keys(scene.lines).filter(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];
             var p2 = scene.points[line.p2];
             // console.log(lineSegmentDistance(pos, {p1: p1, p2: p2}))
             return lineSegmentDistance(pos, {p1: p1, p2: p2}) < ERASER_RADIUS;
-        }).forEach(function(id) {
+        }).map(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];
             var p2 = scene.points[line.p2];
             delete scene.points[line.p1];
             delete scene.points[line.p2];
             delete scene.lines[id];
-            this.trigger(lineData(line.p1, line.p2, id, p1, p2), 'remove');
+            return lineData(line.p1, line.p2, id, p1, p2);
         }.bind(this));
+        this.trigger(_.flatten(deletedLines), 'remove');
         this.trigger(scene);
     },
     onAddLine: function(data) {

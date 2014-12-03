@@ -47,14 +47,17 @@ var EditorStore = Reflux.createStore({
                 }
                 if (res.status == StatusTypes.ok) {
                     this.connectSession(res.body.token);
+                    return;
                 }
                 console.log('unknown status: ', res.status);
             }.bind(this));
     },
     connectSession: function(token) {
         var socket = io.connect('/', {
+            'force new connection': true,
             query: 'token=' + token
         });
+        console.log('connecting');
         socket.on('connect', function() {
             console.log('editor session connected');
         });
