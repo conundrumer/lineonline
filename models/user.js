@@ -83,10 +83,10 @@ var User = bookshelf.Model.extend({
     getTrackSnippets: function () {
         var userSnippet = this.asUserSnippet();
         return this.tracks().fetch().then(function(trackResults) {
-            return new Promise.all(trackResults.models.map(function (track) {
+            return Promise.map(trackResults.models, function (track) {
                     return track
                         .asTrackSnippet(userSnippet);
-                }));
+                });
         });
     }
 }, {

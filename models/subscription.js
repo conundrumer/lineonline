@@ -1,7 +1,5 @@
 var bookshelf = require('../db/bookshelf.dev');
 var User = require('./user');
-var Track = require('./track');
-var _ = require('underscore');
 
 var Subscription = bookshelf.Model.extend({
     tableName: 'subscriptions',
