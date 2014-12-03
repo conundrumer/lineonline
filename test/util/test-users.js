@@ -172,7 +172,7 @@ var cow = new User({
 });
 
 // some random user
-var cow = new User({
+var cat = new User({
     user: {
         user_id: user_ids.cat,
         username: 'cat',
@@ -195,7 +195,7 @@ module.exports = {
     dolan: dolan,
     bob: bob,
     cow: cow,
-    cat,
+    cat: cat,
     // eve: eve,
     user_ids: user_ids,
     track_ids: track_ids,

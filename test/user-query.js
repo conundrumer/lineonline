@@ -47,4 +47,4 @@ describe('User querying: A user', function () {
             .get('/users')
             .expect(StatusTypes.ok, [], done);
     });
-};
+});
