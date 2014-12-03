@@ -53,16 +53,20 @@ var Editor = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         if (!this.props.params.trackId && nextProps.params.trackId) {
             console.log('A new track is being created/loaded.');
+            this.loadTrack(nextProps.params.trackId);
+            this.setState({ isModalHidden: true });
             return;
         }
         if (this.props.params.trackId !== nextProps.params.trackId) {
             if (nextProps.params.trackId) {
                 console.log('Switching tracks', this.props.params.trackId, nextProps.params.trackId);
                 this.loadTrack(nextProps.params.trackId);
+                this.setState({ isModalHidden: true });
             } else {
                 console.log('Switching to empty track');
                 Actions.closeEditorSession();
                 Actions.newTrack();
+                this.setState({ isModalHidden: true });
             }
         }
     },
@@ -70,11 +74,19 @@ var Editor = React.createClass({
         Actions.closeEditorSession();
     },
     loadTrack: function(trackID) {
-        Actions.getFullTrack(trackID);
+        if (this.state.data.track.track_id != trackID) {
+            // load or switch tracks
+            Actions.getFullTrack(trackID);
+        }
         Actions.getInvitees(trackID);
         Actions.openEditorSession(trackID);
     },
     handleOpenModal: function(scene) {
+        var newData = this.state.data;
+        newData.track.scene = scene;
+        this.setState({
+            data: newData
+        });
         if (this.state.isModalHidden) {
             this.setState({
                 isModalHidden: !this.state.isModalHidden
