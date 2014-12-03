@@ -44,6 +44,11 @@ var Profile = React.createClass({
             // Actions.getCollections(nextProps.params.profileId);
         }
     },
+    onSubscribe: function(e) {
+        e.preventDefault();
+        console.log('trying to add subscription...');
+        Actions.addSubscription(this.props.params.profileId);
+    },
     render: function() {
         var id = this.props.params.profileId;
         // var data = this.state.data;
@@ -59,6 +64,7 @@ var Profile = React.createClass({
                                     location={this.state.data.profile.location}
                                     email={this.state.data.profile.email}
                                     about={this.state.data.profile.about}
+                                    subscribeHandler={this.onSubscribe}
                                 />
                                 : null
                             }
@@ -199,7 +205,7 @@ var ProfileSidebar = React.createClass({
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
                     <ProfileAboutDetail about={this.props.about} />
-                    <ProfileInteractDetail username={this.props.username} />
+                    <ProfileInteractDetail username={this.props.username} subscribeHandler={this.props.subscribeHandler} />
                 </div>
             </section>
         );
@@ -257,12 +263,10 @@ var ProfileInteractDetail = React.createClass({
         return (
             <div className='detail interact'>
                 <p>
-                    <Link to='subscribe'>
-                        <Icon class='profile-icon' icon='plus' />
-                        <span className='profile-title'>
-                            <span className='subscribe-link'>Subscribe</span> to <span className='bold'>{this.props.username}</span>
-                        </span>
-                    </Link>
+                    <Icon class='profile-icon' icon='plus' />
+                    <span className='profile-title'>
+                        <span className='subscribe-link' onClick={this.props.subscribeHandler}>Subscribe</span> to <span className='bold'>{this.props.username}</span>
+                    </span>
                 </p>
             </div>
         );

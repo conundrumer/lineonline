@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var _ = require('underscore');
 
 var SubscriptionsStore = Reflux.createStore({
     listenables: [Actions],
@@ -11,6 +12,30 @@ var SubscriptionsStore = Reflux.createStore({
             subscriptions: null
         };
         return this.data
+    },
+
+    onAddSubscription: function(userId) {
+        request
+            .put('/api/subscriptions/' + userId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('subscribed to user');
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onRemoveSubscription: function(userId) {
+        request
+            .del('/api/subscriptions/' + userId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('unsubscribed from user');
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     },
 
     onGetSubscriptions: function() {
@@ -33,7 +58,6 @@ var SubscriptionsStore = Reflux.createStore({
         // }.bind(this));
         request
             .get('/api/subscriptions')
-            // .get('/api/users/' + 2 + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.subscriptions = res.body;
