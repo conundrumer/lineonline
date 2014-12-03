@@ -21,4 +21,4 @@ require('./collab');
 
 // TODO: edge cases?
 
-// require('./realtime');
+require('./realtime');

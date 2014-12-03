@@ -34,6 +34,23 @@ exports.ownershipRequired = function(req, res, next) {
     res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
 };
 
+exports.collabRequired = function(req, res, next) {
+    if (req.user.id == req.track.get('owner')) {
+        return next();
+    }
+    req.user.collaborations()
+        .fetch()
+        .then(function(collabs) {
+            var isCollab = collabs.models.some(function(track) {
+                return track.get('id') == req.params.track_id;
+            });
+            if (isCollab) {
+                return next();
+            }
+            res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
+        });
+};
+
 exports.makeTrack = function(req, res) {
     var owner = req.user;
 
