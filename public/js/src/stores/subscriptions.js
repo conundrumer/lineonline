@@ -31,7 +31,15 @@ var SubscriptionsStore = Reflux.createStore({
             .del('/api/subscriptions/' + userId)
             .end(function(err, res) {
                 if (res.status === StatusTypes.noContent) {
-                    console.log('unsubscribed from user');
+                    console.log('unsubscribed from user!!!');
+                    var newSubscriptions = [];
+                    for (var i = 0; i < this.data.subscriptions.length; i++) {
+                        if (this.data.subscriptions[i].subscribee.user_id !== userId) {
+                            newSubscriptions.push(this.data.subscriptions[i]);
+                        }
+                    }
+                    this.data.subscriptions = newSubscriptions;
+                    this.trigger(this.data);
                     return;
                 }
                 console.log('unknown status: ', res.status);

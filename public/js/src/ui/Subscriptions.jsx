@@ -10,6 +10,7 @@ var Actions = require('../actions');
 var SubscriptionsStore = require('../stores/subscriptions');
 
 //UI Components
+var Icon = require('./Icon.jsx');
 var TracksSlider = require('./TracksSlider.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
@@ -39,6 +40,9 @@ var Subscriptions = React.createClass({
             Actions.getSubscriptions();
         }
     },
+    handleUnsubscribe: function(userId) {
+        Actions.removeSubscription(userId);
+    },
     render: function() {
         // var currentUser = this.props.data.currentUser;
         // var subscriptionsData = this.props.data.subscriptionsData;
@@ -49,11 +53,16 @@ var Subscriptions = React.createClass({
             subscriptionRow = this.state.data.subscriptions.map(function(sub) {
                 return (
                     <div className='section group'>
-                        <SubscriptionPicture avatarUrl={sub.subscribee.avatar_url} username={sub.subscribee.username} userId={sub.subscribee.user_id} />
+                        <SubscriptionPicture
+                            avatarUrl={sub.subscribee.avatar_url}
+                            username={sub.subscribee.username}
+                            userId={sub.subscribee.user_id}
+                            onUnsubscribe={this.handleUnsubscribe}
+                        />
                         <TracksSlider tracks={sub.track_snippets} />
                     </div>
                 );
-            });
+            }.bind(this));
         }
 
         return (
@@ -82,13 +91,22 @@ var Subscriptions = React.createClass({
 });
 
 var SubscriptionPicture = React.createClass({
+    handleUnsubscribe: function(e) {
+        e.preventDefault();
+        this.props.onUnsubscribe(this.props.userId);
+    },
     render: function() {
-        console.log('rendering pic');
         return (
-            <div className='col span_1_of_4'>
+            <div className='col span_1_of_4 subscription-user'>
+                <div className='picture picture-subscription'>
+                    <img src={this.props.avatarUrl} />
+                    <div onClick={this.handleUnsubscribe}>
+                        <Icon class='unsubscribe-icon' icon='circle-x' />
+                    </div>
+                </div>
                 <Link to={'/profile/' + this.props.userId}>
-                    <div className='picture picture-subscription'>
-                        <img src={this.props.avatarUrl} />
+                    <div className='subscription-username'>
+                        {this.props.username}
                     </div>
                 </Link>
             </div>

@@ -957,8 +957,13 @@
         @include transition(opacity 0.2s ease-in-out 0);
         position: relative;
         &:hover {
+            @include transition(opacity 0.2s ease-in-out 0);
             opacity: 0.7;
-            cursor: pointer;
+            // cursor: pointer;
+            .unsubscribe-icon {
+                // visibility: visible;
+                opacity: 1;
+            }
             // &:after {
             //     opacity: 1;
             // }
@@ -1291,12 +1296,29 @@
     //     width: 200px;
     //     height: 200px;
     // }
+    // .subscription-user {
+    //     position: relative;
+    // }
 
-    .unsubscribe {
-        padding-top: 10px;
-        font-size: 13px;
-        text-align: center;
-
+    .unsubscribe-icon {
+        @include transition(all 0.2s ease-in-out 0);
+        //@include transition(color 0.2s ease-in-out 0);
+        // padding-top: 10px;
+        // font-size: 13px;
+        // text-align: center;
+        font-size: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        // visibility: hidden;
+        opacity: 0;
+        &:hover {
+            // @include transition(color 0.2s ease-in-out 0);
+            color: $light-col;
+            cursor: pointer;
+        }
+        position: absolute;
     }
 
     .subscription-icon {
@@ -1308,6 +1330,16 @@
     .subscription-title {
         position: relative;
         padding-left: 12px;
+    }
+
+    .subscription-username {
+        @include transition(color 0.2s ease-in-out 0);
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        &:hover {
+            color: $light-col;
+        }
     }
 }
 
