@@ -108,14 +108,19 @@ describe('Realtime editing: A user', function () {
     function expectEvent(socket, event, expected) {
         return new Promise(function(resolve, reject) {
             socket.once(event, function (data) {
-                data.must.eql(expected);
+                if (expected){
+                    data.must.eql(expected);
+                }
                 resolve();
             });
         });
     }
 
     it('should be able to draw a line, where the other user receives the line', function (done) {
-        expectEvent(socket.bob, 'add', lines.cow[0]).then(done);
+        new Promise.all([
+            expectEvent(socket.bob, 'add', lines.cow[0]),
+            expectEvent(socket.cow, 'sync')
+        ]).then(function(){done();});
 
         socket.cow.emit('add', lines.cow[0]);
     });
@@ -129,7 +134,7 @@ describe('Realtime editing: A user', function () {
                 '3_1': { x: 480, y: 360 }
             },
             lines: {
-                '3_0': { p1: 0, p2: 2 }
+                '3_0': { p1: '3_0', p2: '3_1' }
             }
         };
         agent.bob
@@ -140,7 +145,9 @@ describe('Realtime editing: A user', function () {
     it('should be able to draw a line, while the other user draws a line', function (done) {
         new Promise.all([
             expectEvent(socket.bob, 'add', lines.cow[1]),
-            expectEvent(socket.cow, 'add', lines.bob[0])
+            expectEvent(socket.cow, 'add', lines.bob[0]),
+            expectEvent(socket.bob, 'sync'),
+            expectEvent(socket.cow, 'sync')
         ]).then(function(){done();});
 
         socket.cow.emit('add', lines.cow[1]);
@@ -149,7 +156,10 @@ describe('Realtime editing: A user', function () {
 
 
     it('should be able to remove a line, where the other user receives the update', function (done) {
-        expectEvent(socket.bob, 'remove', lines.bob[0]).then(done);
+        new Promise.all([
+            expectEvent(socket.bob, 'remove', lines.bob[0]),
+            expectEvent(socket.cow, 'sync')
+        ]).then(function(){done();});
 
         socket.cow.emit('remove', lines.bob[0]);
     });
@@ -157,7 +167,9 @@ describe('Realtime editing: A user', function () {
     it('should be able to remove a line, while the other user is adding a line', function (done) {
         new Promise.all([
             expectEvent(socket.cow, 'add', lines.bob[1]),
-            expectEvent(socket.bob, 'remove', lines.cow[0])
+            expectEvent(socket.bob, 'remove', lines.cow[0]),
+            expectEvent(socket.cow, 'sync'),
+            expectEvent(socket.bob, 'sync')
         ]).then(function(){done();});
 
         socket.bob.emit('add', lines.bob[1]);
@@ -167,15 +179,22 @@ describe('Realtime editing: A user', function () {
     it('should be able to remove a line, while the other user removes it at the same time', function (done) {
         new Promise.all([
             expectEvent(socket.cow, 'remove', lines.cow[1]),
-            expectEvent(socket.bob, 'remove', lines.cow[1])
+            expectEvent(socket.bob, 'remove', lines.cow[1]),
+            expectEvent(socket.cow, 'sync'),
+            expectEvent(socket.bob, 'sync')
         ]).then(function(){done();});
 
         socket.bob.emit('remove', lines.cow[1]);
         socket.cow.emit('remove', lines.cow[1]);
     });
 
+    it('should be able to get an empty track updated by realtime editing (get: /tracks/:track_id)', function(done) {
+        //cow's id is 3
+        agent.bob
+            .get('/tracks/' + track_ids.cow[0])
+            .expect(StatusTypes.ok, cow.full_tracks()[0], done);
+    });
     // TODO:
-    // handle edge cases like a person accepting an invitation while people collaborate on track
     // handle error cases like invalid add/removals
 
     after(function() {

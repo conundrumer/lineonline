@@ -37,7 +37,11 @@ exports.onConnection = function(io, socket) {
         socket.broadcast.to(room).emit('add', entities);
         bookshelf.transaction(function(t) {
             return Track
-                .getByID(data.track_id)
+                .where({ id: data.track_id })
+                .fetch({
+                    require: true,
+                    transacting: t
+                })
                 .then(function (track) {
                     var scene = track.get('scene');
                     entities.forEach(function (e) {
@@ -64,7 +68,7 @@ exports.onConnection = function(io, socket) {
                     });
                 })
                 .then(function() {
-                    socket.emit('sync', '');
+                    socket.emit('sync');
                 });
         })
         .catch(console.error);
@@ -74,7 +78,11 @@ exports.onConnection = function(io, socket) {
         socket.broadcast.to(room).emit('remove', entities);
         bookshelf.transaction(function(t) {
             return Track
-                .getByID(data.track_id)
+                .where({ id: data.track_id})
+                .fetch({
+                    require: true,
+                    transacting: t
+                })
                 .then(function (track) {
                     var scene = _.extend(track.get('scene'),{});
                     entities.forEach(function (e) {
@@ -95,7 +103,7 @@ exports.onConnection = function(io, socket) {
                     });
                 })
                 .then(function() {
-                    socket.emit('sync', '');
+                    socket.emit('sync');
                 });
         })
         .catch(console.error);
