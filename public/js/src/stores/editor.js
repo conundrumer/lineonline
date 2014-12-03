@@ -60,7 +60,8 @@ var EditorStore = Reflux.createStore({
         console.log('connecting');
         socket.on('connect', function() {
             console.log('editor session connected');
-        });
+            this.sync = 0;
+        }.bind(this));
         socket.on('connect_error', function(err) {
             console.error(err);
         });
@@ -74,17 +75,25 @@ var EditorStore = Reflux.createStore({
     onEmitAddLine: function(data) {
         if (this.socket) {
             this.socket.emit('add', data);
-            this.socket.once('sync', function() {
-                console.log('line added to server');
-            });
+            this.pending();
+            this.socket.once('sync', this.synchronize.bind(this));
         }
     },
     onEmitRemoveLine: function(data) {
         if (this.socket) {
             this.socket.emit('remove', data);
-            this.socket.once('sync', function() {
-                console.log('line removed from server');
-            });
+            this.pending();
+            this.socket.once('sync', this.synchronize.bind(this));
+        }
+    },
+    pending: function() {
+        this.sync++;
+        this.trigger(null, this.sync)
+    },
+    synchronize: function() {
+        this.sync--;
+        if (this.sync === 0) {
+            this.trigger(null, this.sync)
         }
     },
     onCloseEditorSession: function() {

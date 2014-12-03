@@ -27,7 +27,11 @@ var Editor = React.createClass({
         Navigation,
         CurrentPath
     ],
-    onDataChanged: function(newData) {
+    onDataChanged: function(newData, sync) {
+        if (!newData && sync !== null && sync !== undefined) {
+            console.log(sync > 0 ? "Syncronizing..." : "Syncronized")
+            return;
+        }
         this.setState({
             data: newData
         });
