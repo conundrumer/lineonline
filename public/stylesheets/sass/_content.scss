@@ -11,8 +11,14 @@
 }
 
 .message-panel {
+
     &.message-panel-center {
         text-align: center;
+    }
+
+    &.message-panel-tracks {
+        margin-bottom: 30px;
+        text-align: left;
     }
 }
 

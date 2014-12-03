@@ -43,7 +43,7 @@ var Subscriptions = React.createClass({
         // var currentUser = this.props.data.currentUser;
         // var subscriptionsData = this.props.data.subscriptionsData;
         // var currentUserSubscriptions = subscriptionsData.users[currentUser.id].subscriptions;
-        console.log(this.state.data.subscriptions);
+        // console.log(this.state.data.subscriptions);
         var subscriptionRow = [];
         if (this.props.currentUser && this.state.data.subscriptions) {
             subscriptionRow = this.state.data.subscriptions.map(function(sub) {
@@ -58,14 +58,23 @@ var Subscriptions = React.createClass({
 
         return (
             <div className='main-content'>
-                {this.props.currentUser && this.state.data.subscriptions ?
+                {this.props.currentUser && this.state.data.subscriptions
+                    && this.state.data.subscriptions.length > 0 ?
                     <div>
                         <PanelPadded isSubscriptions={true}>
                             {subscriptionRow}
                         </PanelPadded>
                         <Footer />
                     </div>
-                    : null
+                    :
+                    <div>
+                        <PanelPadded isSubscriptions={true}>
+                            <p className='message-panel message-panel-center'>
+                                No subscriptions to show.
+                            </p>
+                        </PanelPadded>
+                        <Footer />
+                    </div>
                 }
             </div>
         );

@@ -43,7 +43,8 @@ var Favorites = React.createClass({
 
         return (
             <div className='main-content'>
-                {this.props.currentUser && this.state.data.favorites ?
+                {this.props.currentUser && this.state.data.favorites
+                    && this.state.data.favorites.length > 0 ?
                     <div>
                         <PanelPadded isFavorites={true}>
                             <div className='section group'>

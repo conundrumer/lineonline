@@ -15,36 +15,36 @@ var SubscriptionsStore = Reflux.createStore({
 
     onGetSubscriptions: function() {
 
-        setTimeout(function() {
-            var dummyData = [
-                {
-                    subscribee: {
-                        user_id: 1,
-                        username: 'dolan',
-                        avatar_url: '/images/default.png'
-                    },
+        // setTimeout(function() {
+        //     var dummyData = [
+        //         {
+        //             subscribee: {
+        //                 user_id: 1,
+        //                 username: 'dolan',
+        //                 avatar_url: '/images/default.png'
+        //             },
 
-                    track_snippets: []
-                }
-            ];
-            console.log('sending dummy data');
-            this.data.subscriptions = dummyData;
-            this.trigger(this.data);
-        }.bind(this));
-        // request
-        //     // .get('/api/subscriptions')
-        //     .get('/api/users/' + 2 + '/tracks')
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.favorites = res.body;
-        //             this.trigger(this.data);
-        //             return;
+        //             track_snippets: []
         //         }
-        //         // if (res.notFound) {
-        //         //     this.data.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
+        //     ];
+        //     console.log('sending dummy data');
+        //     this.data.subscriptions = dummyData;
+        //     this.trigger(this.data);
+        // }.bind(this));
+        request
+            .get('/api/subscriptions')
+            // .get('/api/users/' + 2 + '/tracks')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.subscriptions = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     }
 });
 
