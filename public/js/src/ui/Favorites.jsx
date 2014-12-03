@@ -52,7 +52,17 @@ var Favorites = React.createClass({
                         </PanelPadded>
                         <Footer />
                     </div>
-                    : null
+                    :
+                    <div>
+                        <PanelPadded isFavorites={true}>
+                            <div className='section group'>
+                                <p className='message-panel message-panel-center'>
+                                    No favorites to show.
+                                </p>
+                            </div>
+                        </PanelPadded>
+                        <Footer />
+                    </div>
                 }
 
             </div>

@@ -15,8 +15,8 @@ var HomeStore = Reflux.createStore({
 
     onGetFavorites: function() {
         request
-            // .get('/api/favorites')
-            .get('/api/users/' + 2 + '/tracks')
+            .get('/api/favorites')
+            // .get('/api/users/' + 2 + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.favorites = res.body;

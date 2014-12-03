@@ -151,14 +151,18 @@ var ProfileFeaturedTrack = React.createClass({
 
 var ProfileTrackSnippets = React.createClass({
     render: function() {
-        console.log(this.props.tracks);
         return (
             <section className='profile-collections'>
                 <article className='track-collection'>
-                    <h3 className='collection-title'>
-                        All Tracks
-                    </h3>
-                    <TracksPreview tracks={this.props.tracks} />
+                    {this.props.tracks.length > 0 ?
+                        <div>
+                            <h3 className='collection-title'>
+                                All Tracks
+                            </h3>
+                            <TracksPreview tracks={this.props.tracks} />
+                        </div>
+                        : null
+                    }
                 </article>
             </section>
         );
