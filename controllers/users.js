@@ -62,14 +62,3 @@ exports.editProfile = function(req, res) {
         })
         .catch(console.error);
 };
-
-exports.getFavorites = function(req, res) {
-    return Favorite
-        .getFavorites(req.user.id)
-        .then(function (trackSnippets){
-            res.status(StatusTypes.ok).json(trackSnippets);
-    }).catch(User.NotFoundError, function() {
-        res.status(404).json(ERRORS.USER_NOT_FOUND);
-    })
-    .catch(console.error);
-};
