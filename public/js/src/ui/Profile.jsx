@@ -44,6 +44,11 @@ var Profile = React.createClass({
             // Actions.getCollections(nextProps.params.profileId);
         }
     },
+    onSubscribe: function(e) {
+        e.preventDefault();
+        console.log('trying to add subscription...');
+        Actions.addSubscription(this.props.params.profileId);
+    },
     render: function() {
         var id = this.props.params.profileId;
         // var data = this.state.data;
@@ -59,6 +64,7 @@ var Profile = React.createClass({
                                     location={this.state.data.profile.location}
                                     email={this.state.data.profile.email}
                                     about={this.state.data.profile.about}
+                                    subscribeHandler={this.onSubscribe}
                                 />
                                 : null
                             }
@@ -151,14 +157,18 @@ var ProfileFeaturedTrack = React.createClass({
 
 var ProfileTrackSnippets = React.createClass({
     render: function() {
-        console.log(this.props.tracks);
         return (
             <section className='profile-collections'>
                 <article className='track-collection'>
-                    <h3 className='collection-title'>
-                        All Tracks
-                    </h3>
-                    <TracksPreview tracks={this.props.tracks} />
+                    {this.props.tracks.length > 0 ?
+                        <div>
+                            <h3 className='collection-title'>
+                                {this.props.username + '\'s tracks'}
+                            </h3>
+                            <TracksPreview tracks={this.props.tracks} />
+                        </div>
+                        : null
+                    }
                 </article>
             </section>
         );
@@ -195,7 +205,7 @@ var ProfileSidebar = React.createClass({
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
                     <ProfileAboutDetail about={this.props.about} />
-                    <ProfileInteractDetail username={this.props.username} />
+                    <ProfileInteractDetail username={this.props.username} subscribeHandler={this.props.subscribeHandler} />
                 </div>
             </section>
         );
@@ -207,18 +217,24 @@ var ProfileContactDetail = React.createClass({
         return (
             <div className='detail contact'>
                 <h3>{this.props.username}</h3>
-                <p>
-                    <Icon class='profile-icon' icon='map-marker' />
-                    <span className='profile-title'>
-                        {this.props.location}
-                    </span>
-                </p>
-                <p>
-                    <Icon class='profile-icon' icon='envelope-closed' />
-                    <span className='profile-title'>
-                        {this.props.email}
-                    </span>
-                </p>
+                {this.props.location && this.props.location !== '' ?
+                    <p>
+                        <Icon class='profile-icon' icon='map-marker' />
+                        <span className='profile-title'>
+                            {this.props.location}
+                        </span>
+                    </p>
+                    : null
+                }
+                {this.props.email && this.props.email !== '' ?
+                   <p>
+                        <Icon class='profile-icon' icon='envelope-closed' />
+                        <span className='profile-title'>
+                            {this.props.email}
+                        </span>
+                    </p>
+                    : null
+                }
             </div>
         );
     }
@@ -228,10 +244,15 @@ var ProfileAboutDetail = React.createClass({
     render: function() {
         return (
             <div className='detail about'>
-                <h3>About</h3>
-                <p>
-                    {this.props.about}
-                </p>
+                {this.props.about && this.props.about !== '' ?
+                    <div>
+                        <h3>About</h3>
+                        <p>
+                            {this.props.about}
+                        </p>
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -242,12 +263,10 @@ var ProfileInteractDetail = React.createClass({
         return (
             <div className='detail interact'>
                 <p>
-                    <Link to='subscribe'>
-                        <Icon class='profile-icon' icon='plus' />
-                        <span className='profile-title'>
-                            <span className='subscribe-link'>Subscribe</span> to <span className='bold'>{this.props.username}</span>
-                        </span>
-                    </Link>
+                    <Icon class='profile-icon' icon='plus' />
+                    <span className='profile-title'>
+                        <span className='subscribe-link' onClick={this.props.subscribeHandler}>Subscribe</span> to <span className='bold'>{this.props.username}</span>
+                    </span>
                 </p>
             </div>
         );

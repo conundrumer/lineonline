@@ -34,9 +34,9 @@ var Home = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.currentUser) {
-            Actions.getInvitations(this.props.currentUser.user_id);
+            Actions.getInvitations();
             Actions.getYourTracks(this.props.currentUser.user_id);
-            Actions.getCollaborations(this.props.currentUser.user_id);
+            Actions.getCollaborations();
         }
     },
     componentWillReceiveProps: function(nextProps) {

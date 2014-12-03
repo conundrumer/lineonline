@@ -143,7 +143,19 @@ var EditorStore = Reflux.createStore({
                     this.trigger(this.data);
                 }
             }.bind(this));
+    },
+
+    onGetCollaborators: function(trackId) {
+        request
+            .get('/api/tracks/' + trackId + '/collaborators/')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.track.collaborators = res.body;
+                    this.trigger(this.data);
+                }
+            }.bind(this))
     }
+
 
     // onGetInvitee: function(userId) {
     //     request

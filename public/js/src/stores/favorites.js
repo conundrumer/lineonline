@@ -4,7 +4,7 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 
-var HomeStore = Reflux.createStore({
+var FavoritesStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
@@ -13,10 +13,53 @@ var HomeStore = Reflux.createStore({
         return this.data
     },
 
+    onAddFavorite: function(trackId) {
+        request
+            .put('/api/favorites/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('added favorite!');
+                    request
+                        .get('/api/tracks/' + trackId)
+                        .end(function(err, res) {
+                            console.log('got just favorited track!');
+                            if (res.status === StatusTypes.ok) {
+                                this.data.favorites.push(res.body);
+                                this.trigger(this.data);
+                                return;
+                            }
+                            console.log('unknon status hereeeee');
+                        }.bind(this));
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onRemoveFavorite: function(trackId) {
+        request
+            .del('/api/favorites/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('removed favorite!!');
+                    var newFavorites = [];
+                    for (var i = 0; i < this.data.favorites.length; i++) {
+                        if (this.data.favorites[i].track_id !== trackId) {
+                            newFavorites.push(this.data.favorites[i]);
+                        }
+                    }
+                    this.data.favorites = newFavorites;
+                    this.trigger(this.data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
     onGetFavorites: function() {
         request
-            // .get('/api/favorites')
-            .get('/api/users/' + 2 + '/tracks')
+            .get('/api/favorites')
+            // .get('/api/users/' + 2 + '/tracks')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     this.data.favorites = res.body;
@@ -32,4 +75,4 @@ var HomeStore = Reflux.createStore({
 });
 
 
-module.exports = HomeStore;
+module.exports = FavoritesStore;

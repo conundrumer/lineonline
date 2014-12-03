@@ -5,6 +5,7 @@ var Routes = Router.Routes;
 var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
+var Navigation = Router.Navigation;
 var Reflux = require('reflux');
 
 //Actions
@@ -48,11 +49,10 @@ var App = React.createClass({
         Actions.getCurrentUser();
     },
     render: function() {
-        var data = this.state.data;
         return (
             <div className='container'>
-                <Navbar currentUser={data.currentUser} errorMessages={data.errorMessages} />
-                <this.props.activeRouteHandler currentUser={data.currentUser} />
+                <Navbar currentUser={this.state.data.currentUser} errorMessages={this.state.data.errorMessages} />
+                <this.props.activeRouteHandler currentUser={this.state.data.currentUser} />
             </div>
         );
     }
@@ -134,7 +134,10 @@ var Navbar = React.createClass({
                                     Sign Up/Log In
                                 </span>
                             </div>
-                            <DropdownLogin isHidden={this.state.hidden} signupErrorMessage={this.props.errorMessages.signup} loginErrorMessage={this.props.errorMessages.login} />
+                            <DropdownLogin
+                                isHidden={this.state.hidden}
+                                signupErrorMessage={this.props.errorMessages.signup}
+                                loginErrorMessage={this.props.errorMessages.login} />
                         </li>
                     }
 
@@ -293,8 +296,13 @@ var DropdownLogin = React.createClass({
 });
 
 var Dropdown = React.createClass({
+    mixins: [
+        Navigation,
+    ],
     handleLogout: function(event) {
         event.preventDefault();
+        console.log('logging outtttt');
+        this.transitionTo('index');
         Actions.logout();
     },
     render: function() {
@@ -307,23 +315,25 @@ var Dropdown = React.createClass({
         return (
             <div className={classes}>
                 <ul>
-                    <li className='dropdown-item dropdown-profile'>
-                        <Link to={'/profile/' + this.props.id} className='dropdown-link'>
-                            <div className='name'>
-                                {this.props.username}
-                            </div>
-                            <div className='description'>
-                                <Icon class='dropdown-icon' icon='person' />
-                                <span className='dropdown-title'>
-                                    View Your Profile
-                                </span>
-                            </div>
-                        </Link>
-                    </li>
+                    <Link to={'/profile/' + this.props.id} className='dropdown-link'>
+                        <li className='dropdown-item dropdown-profile'>
+
+                                <div className='name'>
+                                    {this.props.username}
+                                </div>
+                                <div className='description'>
+                                    <Icon class='dropdown-icon' icon='person' />
+                                    <span className='dropdown-title'>
+                                        View Your Profile
+                                    </span>
+                                </div>
+
+                        </li>
+                    </Link>
                     <DropdownItem title='Favorites' link='favorites' icon='heart' />
                     <DropdownItem title='Subscriptions' link='subscriptions' icon='rss' />
                     <DropdownItem title='Settings' link='settings' icon='cog' />
-                    <DropdownItem title='Logout' link='index' icon='account-logout' onClick={this.handleLogout} />
+                    <DropdownItem title='Logout' link='index' icon='account-logout' clickHandler={this.handleLogout} />
                 </ul>
             </div>
         );
@@ -333,23 +343,14 @@ var Dropdown = React.createClass({
 var DropdownItem = React.createClass({
     render: function() {
         return (
-            <li className='dropdown-item' onClick={this.props.onClick}>
-                {this.props.link ?
-                    <Link to={this.props.link} className='dropdown-link'>
-                        <Icon class='dropdown-icon' icon={this.props.icon} />
-                        <span className='dropdown-title'>
-                            {this.props.title}
-                        </span>
-                    </Link>
-                    :
-                    <div>
-                        <Icon class='dropdown-icon' icon={this.props.icon} />
-                        <span className='dropdown-title'>
-                            {this.props.title}
-                        </span>
-                    </div>
-                }
-            </li>
+            <Link to={this.props.link} className='dropdown-link' onClick={this.props.clickHandler}>
+                <li className='dropdown-item'>
+                    <Icon class='dropdown-icon' icon={this.props.icon} />
+                    <span className='dropdown-title'>
+                        {this.props.title}
+                    </span>
+                </li>
+            </Link>
         );
     }
 });

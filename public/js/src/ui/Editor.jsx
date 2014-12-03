@@ -79,13 +79,14 @@ var Editor = React.createClass({
     componentWillUnmount: function() {
         Actions.closeEditorSession();
     },
-    loadTrack: function(trackID) {
-        if (this.state.data.track.track_id != trackID) {
+    loadTrack: function(trackId) {
+        if (this.state.data.track.track_id !== trackId) {
             // load or switch tracks
-            Actions.getFullTrack(trackID);
+            Actions.getFullTrack(trackId);
         }
-        Actions.getInvitees(trackID);
-        Actions.openEditorSession(trackID);
+        // Actions.getCollaborators(trackId);
+        // Actions.getInvitees(trackId);
+        Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
         var newData = this.state.data;
@@ -93,6 +94,12 @@ var Editor = React.createClass({
         this.setState({
             data: newData
         });
+
+        if (this.props.params.trackId) {
+            Actions.getCollaborators(this.props.params.trackId);
+            Actions.getInvitees(this.props.params.trackId);
+        }
+
         if (this.state.isModalHidden) {
             this.setState({
                 isModalHidden: !this.state.isModalHidden

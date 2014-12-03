@@ -1,9 +1,55 @@
 var React = require('react/addons');
+var Reflux = require('reflux');
+
+//Actions
+var Actions = require('../actions');
+
+//Data Stores
+var FavoritesStore = require('../stores/favorites');
 
 //UI Components
 var GalleryTile = require('./GalleryTile.jsx');
 
 var TracksPreview = React.createClass({
+    mixins: [
+        Reflux.listenTo(FavoritesStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: FavoritesStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        if (this.props.userId) {
+            Actions.getFavorites();
+            console.log('gettingFavs');
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if ((this.props.userId !== nextProps.userId)
+            && nextProps.userId) {
+            Actions.getFavorites();
+        }
+    },
+    isInFavorites: function(trackId) {
+        // console.log(this.state.data.favorites);
+        // console.log(trackId);
+        if (this.state.data.favorites) {
+            for (var i = 0; i < this.state.data.favorites.length; i++) {
+                if (this.state.data.favorites[i].track_id === trackId) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    },
     render: function() {
         var tracksCols = {
             0: [],
@@ -15,25 +61,36 @@ var TracksPreview = React.createClass({
             tracksCols[colIdx].push(track);
         });
         return (
-            <div className='section group'>
-                <TracksCol
-                    col='col-first'
-                    userId={this.props.userId}
-                    tracks={tracksCols[0]}
-                    extra={this.props.extra}
-                />
-                <TracksCol
-                    col='col-mid'
-                    userId={this.props.userId}
-                    tracks={tracksCols[1]}
-                    extra={this.props.extra}
-                />
-                <TracksCol
-                    col='col-last'
-                    userId={this.props.userId}
-                    tracks={tracksCols[2]}
-                    extra={this.props.extra}
-                />
+            <div>
+                {this.props.tracks && this.props.tracks.length > 0 ?
+                    <div className='section group'>
+                        <TracksCol
+                            col='col-first'
+                            userId={this.props.userId}
+                            tracks={tracksCols[0]}
+                            extra={this.props.extra}
+                            isInFavorites={this.isInFavorites}
+                        />
+                        <TracksCol
+                            col='col-mid'
+                            userId={this.props.userId}
+                            tracks={tracksCols[1]}
+                            extra={this.props.extra}
+                            isInFavorites={this.isInFavorites}
+                        />
+                        <TracksCol
+                            col='col-last'
+                            userId={this.props.userId}
+                            tracks={tracksCols[2]}
+                            extra={this.props.extra}
+                            isInFavorites={this.isInFavorites}
+                        />
+                    </div>
+                    :
+                    <p className='message-panel message-panel-center message-panel-tracks'>
+                        No tracks to show.
+                    </p>
+                }
             </div>
         );
     }
@@ -44,6 +101,7 @@ var TracksCol = React.createClass({
         var tracks = this.props.tracks;
         var galleryTiles = this.props.tracks.map(function(track) {
             var trackPreview = '../../images/sample_masthead.png'; //track.preview
+            var isInFavorites = this.props.isInFavorites(track.track_id);
             return (
                 <GalleryTile
                     key={track.id}
@@ -54,6 +112,7 @@ var TracksCol = React.createClass({
                     col={this.props.col}
                     extra={this.props.extra}
                     trackPreview={trackPreview}
+                    isInFavorites={isInFavorites}
                 />
             );
         }.bind(this));

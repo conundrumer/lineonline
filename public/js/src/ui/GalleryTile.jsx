@@ -13,20 +13,23 @@ var Icon = require('./Icon.jsx');
 // this.props.trackPreview
 var GalleryTile = React.createClass({
     handleAcceptInvitation: function(event) {
-        Actions.acceptInvitation(this.props.userId, this.props.trackId);
+        event.preventDefault();
+        Actions.acceptInvitation(this.props.trackId);
         // console.log(this.props.trackId);
         // console.log(this.props.userId);
         // console.log('JOINING INVITATION');
         // console.log(event.target);
     },
     handleRejectInvitation: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to reject this invitation?');
         if (c) {
             console.log('rejecting!!!');
-            Actions.rejectInvitation(this.props.userId, this.props.trackId);
+            Actions.rejectInvitation(this.props.trackId);
         }
     },
     handleDeleteTrack: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to delete this track?');
         if (c) {
             console.log('deleting track');
@@ -34,14 +37,26 @@ var GalleryTile = React.createClass({
         }
     },
     handleLeaveCollaboration: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to leave this collaboration?');
         if (c) {
             console.log('leaving collab');
-            Actions.leaveCollaboration(this.props.userId, this.props.trackId);
+            Actions.leaveCollaboration(this.props.trackId);
         }
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
+    },
+    handleAddFavorite: function(event) {
+        event.preventDefault();
+        console.log('attempting to add fav...');
+        Actions.addFavorite(this.props.trackId);
+        // Actions.getFavorites();
+    },
+    handleRemoveFavorite: function(event) {
+        event.preventDefault();
+        console.log('attempting to remove fav...');
+        Actions.removeFavorite(this.props.trackId);
     },
     render: function() {
         var tileBg = {
@@ -53,13 +68,21 @@ var GalleryTile = React.createClass({
         var button;
         var links;
 
+        // console.log(this.props.isInFavorites);
+
+        var favoritesHandler = this.props.isInFavorites ? this.handleRemoveFavorite : this.handleAddFavorite;
+        var favoritesClassName = this.props.isInFavorites ? 'favorited' : 'unfavorited';
+
         if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
             links =
                 <div className='tile-tools'>
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link'>
+                    <div
+                        className={'tile-tool-link ' + favoritesClassName}
+                        onClick={favoritesHandler}
+                    >
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                     <div className='tile-tool-link'>
@@ -72,7 +95,10 @@ var GalleryTile = React.createClass({
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link'>
+                    <div
+                        className={'tile-tool-link ' + favoritesClassName}
+                        onClick={favoritesHandler}
+                    >
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                 </div>
