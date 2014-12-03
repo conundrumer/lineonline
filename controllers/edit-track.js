@@ -65,33 +65,29 @@ function updateScene(updateFn, socket, entities) {
     var data = socket.decoded_token;
     var room = data.track_id.toString();
     mutex[room] = true;
-    bookshelf.transaction(function(t) {
-        return Track
-            .where({ id: data.track_id })
-            .fetch({
-                require: true,
-                transacting: t
-            })
-            .then(function (track) {
-                var scene = track.get('scene');
-                scene = updateFn(entities, scene);
-                return track.save({
-                    scene: scene
-                }, {
-                    patch: true,
-                    transacting: t
-                });
-            })
-            .then(function() {
-                mutex[room] = false;
-                socket.emit('sync');
-                var next = mutexQueue[room].shift();
-                if (next) {
-                    next();
-                }
+    Track
+        .where({ id: data.track_id })
+        .fetch({
+            require: true
+        })
+        .then(function (track) {
+            var scene = track.get('scene');
+            scene = updateFn(entities, scene);
+            return track.save({
+                scene: scene
+            }, {
+                patch: true
             });
-    })
-    .catch(console.error);
+        })
+        .then(function() {
+            mutex[room] = false;
+            socket.emit('sync');
+            var next = mutexQueue[room].shift();
+            if (next) {
+                next();
+            }
+        })
+        .catch(console.error);
 }
 
 exports.onConnection = function(io, socket) {
