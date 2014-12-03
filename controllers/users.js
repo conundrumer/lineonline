@@ -53,12 +53,10 @@ exports.getProfile = function(req, res) {
 };
 
 exports.editProfile = function(req, res) {
-    if (req.user.id != req.user_model.get('id')){
-        res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
-    }
-    User.update(req.body, req.user.id)
-        .then(function(userProfile) {
-            res.status(StatusTypes.ok).json(userProfile);
+    req.user
+        .update(req.body)
+        .then(function(user) {
+            res.status(StatusTypes.ok).json(user.asUserProfile());
         })
         .catch(console.error);
 };

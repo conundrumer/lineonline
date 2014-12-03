@@ -34,7 +34,9 @@ api.route('/users/:user_id/tracks')
 
 // profile
 api.route('/users/:user_id/profile')
-    .get(users.getProfile)
+    .get(users.getProfile);
+
+api.route('/profile')
     .put(users.editProfile);
 
 // tracks
