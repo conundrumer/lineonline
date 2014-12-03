@@ -13,6 +13,40 @@ var HomeStore = Reflux.createStore({
         return this.data
     },
 
+    onAddFavorite: function(trackId) {
+        console.log("adding???");
+        request
+            .put('/api/favorites/' + trackId)
+            .end(function(err, res) {
+                console.log('asdjfklasdjlkfsdaj');
+                if (res.status === StatusTypes.noContent) {
+                    console.log('added favorite!');
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onRemoveFavorite: function(trackId) {
+        request
+            .del('/api/favorites/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('removed favorite!!');
+                    var newFavorites = [];
+                    for (var i = 0; i < this.data.favorites.length; i++) {
+                        if (this.data.favorites[i].track_id !== trackId) {
+                            newFavorites.push(this.data.favorites[i]);
+                        }
+                    }
+                    this.data.favorites = newFavorites;
+                    this.trigger(this.data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
     onGetFavorites: function() {
         request
             .get('/api/favorites')

@@ -6,13 +6,41 @@ var Reflux = require('reflux');
 //Actions
 var Actions = require('../actions');
 
+//Data Stores
+var FavoritesStore = require('../stores/favorites');
+
 //UI Components
 var GalleryRow = require('./GalleryRow.jsx');
 var Icon = require('./Icon.jsx');
 
 // this.props.trackPreview
 var GalleryTile = React.createClass({
+    mixins: [
+        Reflux.listenTo(FavoritesStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: FavoritesStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        if (this.props.currentUser) {
+            Actions.getFavorites();
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if ((this.props.currentUser !== nextProps.currentUser)
+            && nextProps.currentUser) {
+            Actions.getFavorites();
+        }
+    },
     handleAcceptInvitation: function(event) {
+        event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
         // console.log(this.props.trackId);
         // console.log(this.props.userId);
@@ -20,6 +48,7 @@ var GalleryTile = React.createClass({
         // console.log(event.target);
     },
     handleRejectInvitation: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to reject this invitation?');
         if (c) {
             console.log('rejecting!!!');
@@ -27,6 +56,7 @@ var GalleryTile = React.createClass({
         }
     },
     handleDeleteTrack: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to delete this track?');
         if (c) {
             console.log('deleting track');
@@ -34,6 +64,7 @@ var GalleryTile = React.createClass({
         }
     },
     handleLeaveCollaboration: function(event) {
+        event.preventDefault();
         var c = confirm('Are you sure you want to leave this collaboration?');
         if (c) {
             console.log('leaving collab');
@@ -42,6 +73,16 @@ var GalleryTile = React.createClass({
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
+    },
+    handleAddFavorite: function(event) {
+        event.preventDefault();
+        console.log('attempting to add fav...');
+        Actions.addFavorite(this.props.trackId);
+    },
+    handleRemoveFavorite: function(event) {
+        event.preventDefault();
+        console.log('attempting to remove fav...');
+        Actions.removeFavorite(this.props.trackId);
     },
     render: function() {
         var tileBg = {
@@ -59,7 +100,7 @@ var GalleryTile = React.createClass({
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link'>
+                    <div className='tile-tool-link' onClick={this.handleAddFavorite}>
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                     <div className='tile-tool-link'>
@@ -72,7 +113,7 @@ var GalleryTile = React.createClass({
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
-                    <div className='tile-tool-link'>
+                    <div className='tile-tool-link' onClick={this.handleAddFavorite}>
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
                 </div>
