@@ -34,7 +34,8 @@ var Settings = React.createClass({
         }
     },
     componentWillReceiveProps: function(nextProps) {
-        if (this.props.currentUser !== nextProps.currentUser) {
+        if (this.props.currentUser !== nextProps.currentUser
+            && nextProps.currentUser) {
             Actions.getProfile(nextProps.currentUser.user_id);
         }
     },
