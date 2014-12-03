@@ -132,7 +132,9 @@ var SceneStore = Reflux.createStore({
             delete scene.lines[id];
             return lineData(line.p1, line.p2, id, p1, p2);
         }.bind(this));
-        this.trigger(_.flatten(deletedLines), 'remove');
+        if (deletedLines.length > 0) {
+            this.trigger(_.flatten(deletedLines), 'remove');
+        }
         this.trigger(scene);
     },
     onAddLine: function(data) {
