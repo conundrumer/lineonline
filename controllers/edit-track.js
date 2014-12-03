@@ -16,96 +16,119 @@ exports.session = function(req, res) {
     });
 };
 
+// i can't believe i'm doing this
+// this will cause memory leaks i swear
+var mutex = {};
+var mutexQueue = {};
+
+// setInterval(function() {
+//     console.log("mutex:", mutex);
+//     console.log("mutexQueue:", mutexQueue);
+// }, 500);
+
 // subject to change
 var ENTITY = {
     POINT: 0,
     LINE: 1
 };
 
+function addEntities(entities, scene) {
+    entities.forEach(function (e) {
+        switch (e.type) {
+            case ENTITY.POINT:
+                scene.points[e.id] = {
+                    x: e.x,
+                    y: e.y
+                };
+                break;
+            case ENTITY.LINE:
+                scene.lines[e.id] = {
+                    p1: e.p1,
+                    p2: e.p2
+                };
+                break;
+        }
+    });
+    return scene;
+}
+
+function removeEntities(entities, scene) {
+    entities.forEach(function (e) {
+        switch (e.type) {
+            case ENTITY.POINT:
+                delete scene.points[e.id];
+                break;
+            case ENTITY.LINE:
+                delete scene.lines[e.id];
+                break;
+        }
+    });
+    return scene;
+}
+
+function updateScene(updateFn, socket, entities) {
+    var data = socket.decoded_token;
+    var room = data.track_id.toString();
+    mutex[room] = true;
+    bookshelf.transaction(function(t) {
+        return Track
+            .where({ id: data.track_id })
+            .fetch({
+                require: true,
+                transacting: t
+            })
+            .then(function (track) {
+                var scene = track.get('scene');
+                scene = updateFn(entities, scene);
+                return track.save({
+                    scene: scene
+                }, {
+                    patch: true,
+                    transacting: t
+                });
+            })
+            .then(function() {
+                mutex[room] = false;
+                socket.emit('sync');
+                console.log("mutexQueue", mutexQueue[room]);
+                var next = mutexQueue[room].shift();
+                if (next) {
+                console.log("next", next);
+                    next();
+                }
+            });
+    })
+    .catch(console.error);
+}
+
 exports.onConnection = function(io, socket) {
     var data = socket.decoded_token;
-    var room = toString(data.track_id);
-    console.log('a user connected:', data.user_id);
+    var room = data.track_id.toString();
+    console.log('User', data.user_id, 'connected to track', room);
     socket.join(room);
 
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
 
+    if (!mutexQueue[room]) {
+        mutexQueue[room] = [];
+    }
+
     // TODO: use memory stores instead of write heavy db
     socket.on('add', function (entities) {
         socket.broadcast.to(room).emit('add', entities);
-        bookshelf.transaction(function(t) {
-            return Track
-                .where({ id: data.track_id })
-                .fetch({
-                    require: true,
-                    transacting: t
-                })
-                .then(function (track) {
-                    var scene = track.get('scene');
-                    entities.forEach(function (e) {
-                        switch (e.type) {
-                            case ENTITY.POINT:
-                                scene.points[e.id] = {
-                                    x: e.x,
-                                    y: e.y
-                                };
-                                break;
-                            case ENTITY.LINE:
-                                scene.lines[e.id] = {
-                                    p1: e.p1,
-                                    p2: e.p2
-                                };
-                                break;
-                        }
-                    });
-                    track.save({
-                        scene: scene
-                    }, {
-                        patch: true,
-                        transacting: t
-                    });
-                })
-                .then(function() {
-                    socket.emit('sync');
-                });
-        })
-        .catch(console.error);
+        if (!mutex[room]) {
+            return updateScene(addEntities, socket, entities);
+        }
+        mutexQueue[room].push(updateScene.bind(null, addEntities, socket, entities));
     });
 
     socket.on('remove', function (entities) {
         socket.broadcast.to(room).emit('remove', entities);
-        bookshelf.transaction(function(t) {
-            return Track
-                .where({ id: data.track_id})
-                .fetch({
-                    require: true,
-                    transacting: t
-                })
-                .then(function (track) {
-                    var scene = _.extend(track.get('scene'),{});
-                    entities.forEach(function (e) {
-                        switch (e.type) {
-                            case ENTITY.POINT:
-                                delete scene.points[e.id];
-                                break;
-                            case ENTITY.LINE:
-                                delete scene.lines[e.id];
-                                break;
-                        }
-                    });
-                    track.save({
-                        scene: scene
-                    }, {
-                        patch: true,
-                        transacting: t
-                    });
-                })
-                .then(function() {
-                    socket.emit('sync');
-                });
-        })
-        .catch(console.error);
+        if (!mutex[room]) {
+            return updateScene(removeEntities, socket, entities);
+        }
+        mutexQueue[room].push(updateScene.bind(null, removeEntities, socket, entities));
     });
 };
