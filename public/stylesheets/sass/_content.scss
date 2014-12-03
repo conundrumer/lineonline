@@ -355,6 +355,12 @@
             padding: 5px 15px;
         }
 
+        &:first-child {
+            .dropdown-item {
+                padding-bottom: 13px;
+            }
+        }
+
         &:nth-child(2) {
             .dropdown-item {
                 padding-top: 13px;
