@@ -128,7 +128,7 @@ var GalleryTile = React.createClass({
             button =
                 <div className='track-extra'>
                     <Link to={'/edit/' + this.props.trackId}>
-                        <button className='btn-extra' onClick={this.handleAcceptInvitation}>
+                        <button className='btn-extra'>
                            <Icon class='extra-icon' icon='pencil' />
                            <span className='extra-title'>
                                Edit
