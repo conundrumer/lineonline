@@ -1,11 +1,9 @@
-var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
 var LineRiderActions = require('../linerider/actions');
-var io = require('socket.io-client');
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -35,73 +33,6 @@ var EditorStore = Reflux.createStore({
             track: EMPTY_TRACK
         };
         return this.data
-    },
-    onOpenEditorSession: function(trackID) {
-        console.log("opening session for this track:", trackID)
-        request
-            .get('/api/tracks/' + trackID + '/session')
-            .end(function(err, res) {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                if (res.status == StatusTypes.ok) {
-                    this.connectSession(res.body.token);
-                    return;
-                }
-                console.log('unknown status: ', res.status);
-            }.bind(this));
-    },
-    connectSession: function(token) {
-        var socket = io.connect('/', {
-            'force new connection': true,
-            query: 'token=' + token
-        });
-        console.log('connecting');
-        socket.on('connect', function() {
-            console.log('editor session connected');
-            this.sync = 0;
-        }.bind(this));
-        socket.on('connect_error', function(err) {
-            console.error(err);
-        });
-        socket.on('disconnect', function() {
-            console.log('disconnected');
-        });
-        socket.on('add', LineRiderActions.addLine);
-        socket.on('remove', LineRiderActions.removeLine);
-        this.socket = socket;
-    },
-    onEmitAddLine: function(data) {
-        if (this.socket) {
-            this.socket.emit('add', data);
-            this.pending();
-            this.socket.once('sync', this.synchronize.bind(this));
-        }
-    },
-    onEmitRemoveLine: function(data) {
-        if (this.socket) {
-            this.socket.emit('remove', data);
-            this.pending();
-            this.socket.once('sync', this.synchronize.bind(this));
-        }
-    },
-    pending: function() {
-        this.sync++;
-        this.trigger(null, this.sync)
-    },
-    synchronize: function() {
-        this.sync--;
-        if (this.sync === 0) {
-            this.trigger(null, this.sync)
-        }
-    },
-    onCloseEditorSession: function() {
-        console.log("closing session");
-        if (this.socket) {
-            this.socket.disconnect();
-            this.socket = null;
-        }
     },
     onNewTrack: function() {
         this.data = this.getDefaultData();

@@ -11,6 +11,7 @@ var Actions = require('../actions');
 
 //Data Stores
 var EditorStore = require('../stores/editor');
+var RealtimeEditorStore = require('../stores/realtime-editor');
 
 //UI Components
 var Conversation = require('./Conversation.jsx');
@@ -24,14 +25,15 @@ var LineriderEditor = require('../linerider/Editor.jsx');
 var Editor = React.createClass({
     mixins: [
         Reflux.listenTo(EditorStore, 'onDataChanged'),
+        Reflux.listenTo(RealtimeEditorStore, 'onSessionUpdate'),
         Navigation,
         CurrentPath
     ],
-    onDataChanged: function(newData, sync) {
-        if (!newData && sync !== null && sync !== undefined) {
-            console.log(sync > 0 ? "Syncronizing..." : "Syncronized")
-            return;
-        }
+    onSessionUpdate: function(sync) {
+        console.log(sync === 0 ? "Syncronized" : sync === -1 ? "Not connected" : "Syncronizing..." )
+        return;
+    },
+    onDataChanged: function(newData) {
         this.setState({
             data: newData
         });
