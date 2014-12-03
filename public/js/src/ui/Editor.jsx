@@ -74,12 +74,12 @@ var Editor = React.createClass({
         Actions.closeEditorSession();
     },
     loadTrack: function(trackId) {
-        if (this.state.data.track.track_id != trackId) {
+        if (this.state.data.track.track_id !== trackId) {
             // load or switch tracks
             Actions.getFullTrack(trackId);
         }
-        Actions.getCollaborators(trackId);
-        Actions.getInvitees(trackId);
+        // Actions.getCollaborators(trackId);
+        // Actions.getInvitees(trackId);
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
@@ -88,6 +88,12 @@ var Editor = React.createClass({
         this.setState({
             data: newData
         });
+
+        if (this.props.params.trackId) {
+            Actions.getCollaborators(this.props.params.trackId);
+            Actions.getInvitees(this.props.params.trackId);
+        }
+
         if (this.state.isModalHidden) {
             this.setState({
                 isModalHidden: !this.state.isModalHidden
