@@ -23,4 +23,5 @@ require('./collab');
 
 require('./realtime');
 
-require('./user-query');
+require('./users-query');
+require('./users-settings');

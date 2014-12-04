@@ -83,3 +83,52 @@ function statuslogin (status, req, res, next) {
 }
 
 exports.login = statuslogin.bind(null, 200);
+
+exports.settings = function(req, res) {
+    var password = req.body.password;
+    var newEmail = req.body.new_email;
+    var newPassword = req.body.new_password;
+    newPassword = (newPassword === req.body.confirm_password) ? newPassword : null;
+
+    if (!isCorrectPassword(req.user, password)) {
+        return res.status(StatusTypes.unauthorized).json({
+            message: 'Incorrect password'
+        });
+    }
+
+    if(newEmail) {
+        return User
+            .where({ email: newEmail})
+            .fetch()
+            .then(function(emailUsed) {
+                if (emailUsed) {
+                    return res.status(StatusTypes.badRequest).json({
+                        message: 'Email already in use'
+                    });
+                }
+                return req.user
+                    .save({ email: newEmail }, {patch:true})
+                    .then(function() {
+                        res.status(StatusTypes.noContent).send();
+                    });
+            })
+            .catch(console.error);
+    }
+
+    if(newPassword) {
+        return req.user
+            .save({ password: newPassword }, {patch:true})
+            .then(function() {
+                res.status(StatusTypes.noContent).send();
+            })
+            .catch(console.error);
+    }
+
+    res.status(StatusTypes.badRequest).json({
+        message: 'Missing fields'
+    });
+};
+
+function isCorrectPassword(userModel, password) {
+    return userModel.get('password') === password;
+}

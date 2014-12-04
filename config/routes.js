@@ -21,6 +21,10 @@ api.route('/auth')
 api.route('/auth/register')
     .post(auth.register);
 
+// settings
+api.route('/settings')
+    .put(auth.loginRequired, auth.settings);
+
 // users
 
 api.param('user_id', users.getByID);

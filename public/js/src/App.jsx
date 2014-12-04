@@ -111,6 +111,11 @@ var Navbar = React.createClass({
         }
     },
     render: function() {
+        var bgSrc = this.state.data.profile ? this.state.data.profile.avatar_url : ''
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
+
         return (
             <nav className='navbar'>
                 <ul className='nav-list section group'>
@@ -134,8 +139,7 @@ var Navbar = React.createClass({
                     }
                     {this.props.currentUser && this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>
-                            <div className='navlink' onClick={this.handleDropdownClick}>
-                                <img src={this.state.data.profile.avatar_url} />
+                            <div className='navlink' style={avatarStyle} onClick={this.handleDropdownClick}>
                                 <span className='hide'>
                                     Profile
                                 </span>

@@ -48432,6 +48432,11 @@ var Navbar = React.createClass({displayName: 'Navbar',
         }
     },
     render: function() {
+        var bgSrc = this.state.data.profile ? this.state.data.profile.avatar_url : ''
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
+
         return (
             React.createElement("nav", {className: "navbar"}, 
                 React.createElement("ul", {className: "nav-list section group"}, 
@@ -48455,8 +48460,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
                     
                     this.props.currentUser && this.state.data.profile ?
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
-                            React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
-                                React.createElement("img", {src: this.state.data.profile.avatar_url}), 
+                            React.createElement("div", {className: "navlink", style: avatarStyle, onClick: this.handleDropdownClick}, 
                                 React.createElement("span", {className: "hide"}, 
                                     "Profile"
                                 )
@@ -48805,6 +48809,8 @@ var Actions = Reflux.createActions([
     //current user
     'getCurrentProfile',
     'updateCurrentProfile',
+    'updateEmail',
+    'updatePassword',
 
     //playback
     'getTrack'
@@ -49415,7 +49421,7 @@ var CurrentUserStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onUpdateCurrentProfile: function(userId, userProfile) {
+    onUpdateCurrentProfile: function(userProfile) {
         request
             .put('/api/profile')
             .send(userProfile)
@@ -49431,19 +49437,32 @@ var CurrentUserStore = Reflux.createStore({
                 // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
-
-
-            // .end(function(err, res) {
-            //     console.log(res);
-            //     if (res.status === StatusTypes.ok) {
-            //         console.log('UPDATING PROFIELEEE WOOHOO');
-            //         this.data.profile = res.body;
-            //         this.trigger(this.data);
-            //         return;
-            //     }
-            //     console.log('unknown status: ', res.status);
-            // }.bind(this));
     },
+
+    onUpdateEmail: function(userId, email) {
+        request
+            .put('/api/settings')
+            .send(email)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    Actions.getCurrentProfile(userId); //update email
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onUpdatePassword: function(password) {
+        request
+            .put('/api/settings')
+            .send(password)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
 
 });
 
@@ -51282,10 +51301,13 @@ var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
 
 var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var profileAvatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             React.createElement("section", {className: "profile-sidebar"}, 
-                React.createElement("div", {className: "picture"}, 
-                    React.createElement("img", {src: this.props.avatarUrl})
+                React.createElement("div", {className: "picture", style: profileAvatarStyle}
                 ), 
                 React.createElement("div", {className: "info"}, 
                     React.createElement(ProfileContactDetail, {username: this.props.username, location: this.props.location, email: this.props.email}), 
@@ -51736,23 +51758,76 @@ var Settings = React.createClass({displayName: 'Settings',
             return data.trim();
         }
     },
-    handleSubmit: function(e) {
+    sanitizeAvatarUrl: function(url) {
+        if (url === '') {
+            return '/images/default.png';
+        } else {
+            //http://
+            var http = url.slice(0, 7);
+            var https = url.slice(0, 8);
+            var newUrl = url;
+            if (http !== 'http://' && https !== 'https://') {
+                console.log('not equal!');
+                newUrl = 'http://' + url;
+                var newData = {};
+                newData['avatar_url'] = newUrl;
+                var newProfile = _.extend(this.state.data.profile, newData)
+                this.setState({
+                    data: _.extend(this.state.data, { profile: newProfile })
+                });
+            }
+            return newUrl;
+        }
+    },
+    handleProfileSubmit: function(e) {
         e.preventDefault();
-        console.log('submitting...');
+        console.log('submitting profile...');
         var profileData = {
-            username: this.sanitizeTextData(this.state.data.profile.username),
             avatar_url: this.sanitizeTextData(this.state.data.profile.avatar_url),
-            email: this.sanitizeTextData(this.state.data.profile.email),
             location: this.sanitizeTextData(this.state.data.profile.location),
             about: this.sanitizeTextData(this.state.data.profile.about)
-        }
+        };
         console.log(profileData);
-        Actions.updateCurrentProfile(this.props.currentUser.user_id, profileData);
+        Actions.updateCurrentProfile(profileData);
+    },
+    handleEmailSubmit: function(e) {
+        e.preventDefault();
+        console.log('submitting email...');
+        var emailData = {
+            password: this.sanitizeTextData(this.refs.emailCurrentPassword.getDOMNode().value),
+            new_email: this.sanitizeTextData(this.state.data.profile.email)
+        };
+        console.log(emailData);
+        Actions.updateEmail(this.props.currentUser.user_id, emailData);
+    },
+    handlePasswordSubmit: function(e) {
+        e.preventDefault();
+        console.log('submitting password...');
+        var passwordData = {
+            password: this.sanitizeTextData(this.refs.passwordCurrentPassword.getDOMNode().value),
+            new_password: this.sanitizeTextData(this.refs.passwordNewPassword.getDOMNode().value),
+            confirm_password: this.sanitizeTextData(this.refs.passwordConfirmPassword.getDOMNode().value)
+        };
+        console.log(passwordData);
+        Actions.updatePassword(passwordData);
     },
     handleChange: function(inputName) {
         return function(e) {
+            var value = e.target.value;
+            if (inputName === 'avatar_url') {
+                if (value === '') {
+                    value = '/images/default.png';
+                } else {
+                    var http = value.slice(0, 7);
+                    var https = value.slice(0, 8);
+                    if (http !== 'http://' && https !== 'https://') {
+                        console.log('not equal!');
+                        value = 'http://' + value;
+                    }
+                }
+            }
             var newData = {};
-            newData[inputName] = e.target.value;
+            newData[inputName] = value;
             var newProfile = _.extend(this.state.data.profile, newData)
             this.setState({
                 data: _.extend(this.state.data, { profile: newProfile })
@@ -51762,6 +51837,10 @@ var Settings = React.createClass({displayName: 'Settings',
     render: function() {
         console.log('got profileeeeee');
         console.log(this.state.data.profile);
+        var avatarUrlShown = '';
+        if (this.props.currentUser && this.state.data.profile) {
+            avatarUrlShown = (this.state.data.profile.avatar_url === '/images/default.png') ? '' : this.state.data.profile.avatar_url;
+        }
         return (
             React.createElement("div", {className: "main-content"}, 
                 this.props.currentUser && this.state.data.profile ?
@@ -51772,32 +51851,7 @@ var Settings = React.createClass({displayName: 'Settings',
                                 ), 
                                 React.createElement("div", {className: "col span_8_of_12"}, 
                                     React.createElement("h2", null, "Profile Settings"), 
-                                    React.createElement("form", {className: "form-settings form-settings-profile", onSubmit: this.handleSubmit}, 
-                                        React.createElement("div", {className: "section group"}, 
-                                            React.createElement("div", {className: "field col span_6_of_12"}, 
-                                                React.createElement("label", {for: "username"}, 
-                                                    "Username"
-                                                ), 
-                                                React.createElement("input", {
-                                                    name: "username", 
-                                                    type: "text", 
-                                                    value: this.state.data.profile.username, 
-                                                    onChange: this.handleChange('username')}
-                                                )
-                                            ), 
-                                            React.createElement("div", {className: "field col span_6_of_12"}, 
-                                                React.createElement("label", {for: "email"}, 
-                                                    "Email"
-                                                ), 
-                                                React.createElement("input", {
-                                                    name: "email", 
-                                                    type: "email", 
-                                                    value: this.state.data.profile.email, 
-                                                    onChange: this.handleChange('email')}
-                                                )
-                                            )
-                                        ), 
-
+                                    React.createElement("form", {className: "form-settings form-settings-profile", onSubmit: this.handleProfileSubmit}, 
                                         React.createElement("div", {className: "section group"}, 
                                             React.createElement("div", {className: "field col span_12_of_12"}, 
                                                 React.createElement("label", {for: "avatarUrl"}, 
@@ -51805,8 +51859,9 @@ var Settings = React.createClass({displayName: 'Settings',
                                                 ), 
                                                 React.createElement("input", {
                                                     name: "avatarUrl", 
+                                                    placeholder: "http://", 
                                                     type: "text", 
-                                                    value: this.state.data.profile.avatar_url, 
+                                                    value: avatarUrlShown, 
                                                     onChange: this.handleChange('avatar_url')}
                                                 )
                                             )
@@ -51819,6 +51874,7 @@ var Settings = React.createClass({displayName: 'Settings',
                                                 ), 
                                                 React.createElement("input", {
                                                     name: "location", 
+                                                    placeholder: "somewhere...", 
                                                     type: "text", 
                                                     value: this.state.data.profile.location, 
                                                     onChange: this.handleChange('location')}
@@ -51833,6 +51889,7 @@ var Settings = React.createClass({displayName: 'Settings',
                                                 ), 
                                                 React.createElement("textarea", {
                                                     name: "about", 
+                                                    placeholder: "write something about yourself...", 
                                                     value: this.state.data.profile.about, 
                                                     onChange: this.handleChange('about')}
                                                 )
@@ -51846,7 +51903,106 @@ var Settings = React.createClass({displayName: 'Settings',
                                 ), 
                                 React.createElement("div", {className: "col span_2_of_12"}
                                 )
+                            ), 
+
+                            React.createElement("div", {className: "section group email-form"}, 
+                                React.createElement("div", {className: "col span_2_of_12"}
+                                ), 
+                                React.createElement("div", {className: "col span_8_of_12"}, 
+                                    React.createElement("h2", null, "Email Settings"), 
+                                    React.createElement("form", {className: "form-settings form-settings-email", onSubmit: this.handleEmailSubmit}, 
+                                        React.createElement("div", {className: "section group"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
+                                                React.createElement("label", {for: "currentPassword"}, 
+                                                    "Current Password:"
+                                                ), 
+                                                React.createElement("input", {
+                                                    ref: "emailCurrentPassword", 
+                                                    name: "currentPassword", 
+                                                    placeholder: "••••••••••••", 
+                                                    type: "password"}
+                                                )
+                                            )
+                                        ), 
+                                        React.createElement("div", {className: "section group"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
+                                                React.createElement("label", {for: "email"}, 
+                                                    "Email:"
+                                                ), 
+                                                React.createElement("input", {
+                                                    name: "email", 
+                                                    placeholder: "example@gmail.com", 
+                                                    type: "email", 
+                                                    value: this.state.data.profile.email, 
+                                                    onChange: this.handleChange('email')}
+                                                )
+                                            )
+                                        ), 
+
+                                        React.createElement("button", {className: "btn btn-submit", value: "submit"}, 
+                                            "Save Email"
+                                        )
+                                    )
+                                ), 
+                                React.createElement("div", {className: "col span_2_of_12"}
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "section group password-form"}, 
+                                React.createElement("div", {className: "col span_2_of_12"}
+                                ), 
+                                React.createElement("div", {className: "col span_8_of_12"}, 
+                                    React.createElement("h2", null, "Password Settings"), 
+                                    React.createElement("form", {className: "form-settings form-settings-password", onSubmit: this.handlePasswordSubmit}, 
+                                        React.createElement("div", {className: "section group"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
+                                                React.createElement("label", {for: "currentPassword"}, 
+                                                    "Current Password:"
+                                                ), 
+                                                React.createElement("input", {
+                                                    ref: "passwordCurrentPassword", 
+                                                    name: "currentPassword", 
+                                                    placeholder: "••••••••••••", 
+                                                    type: "password"}
+                                                )
+                                            )
+                                        ), 
+                                        React.createElement("div", {className: "section group"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
+                                                React.createElement("label", {for: "newPassword"}, 
+                                                    "New Password:"
+                                                ), 
+                                                React.createElement("input", {
+                                                    ref: "passwordNewPassword", 
+                                                    name: "newPassword", 
+                                                    placeholder: "••••••••••••", 
+                                                    type: "password"}
+                                                )
+                                            )
+                                        ), 
+                                        React.createElement("div", {className: "section group"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
+                                                React.createElement("label", {for: "confirmPassword"}, 
+                                                    "Confirm Password:"
+                                                ), 
+                                                React.createElement("input", {
+                                                    ref: "passwordConfirmPassword", 
+                                                    name: "confirmPassword", 
+                                                    placeholder: "••••••••••••", 
+                                                    type: "password"}
+                                                )
+                                            )
+                                        ), 
+                                        React.createElement("button", {className: "btn btn-submit", value: "submit"}, 
+                                            "Save Password"
+                                        )
+                                    )
+                                ), 
+                                React.createElement("div", {className: "col span_2_of_12"}
+                                )
                             )
+
+
                         ), 
                         React.createElement(Footer, null)
                     )
