@@ -45,6 +45,20 @@ exports.getTracks = function(req, res) {
         .catch(console.error);
 };
 
+exports.getCollaborations = function(req, res) {
+    req.user_model.collaborations()
+        .fetch()
+        .then(function(collabs) {
+            return Promise.map(collabs.models, function(collab) {
+                return collab.asTrackSnippet();
+            });
+        })
+        .then(function(trackSnippets) {
+            res.status(StatusTypes.ok).json(trackSnippets);
+        })
+        .catch(console.error);
+};
+
 exports.getUserSnippet = function(req, res){
     res.status(StatusTypes.ok).json(req.user_model.asUserSnippet());
 };
