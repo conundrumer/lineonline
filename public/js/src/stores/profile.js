@@ -10,7 +10,8 @@ var ProfileStore = Reflux.createStore({
         this.data = {
             profile: null,
             tracks: null,
-            featuredTrack: null
+            collaborations: null,
+            featuredTrack: null,
         };
         return this.data
     },
@@ -39,6 +40,23 @@ var ProfileStore = Reflux.createStore({
                 if (res.status === StatusTypes.ok) {
                     this.data.tracks = res.body;
                     console.log('got user track snippets!!!!');
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.profileData.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onGetCollabSnippets: function(userId) {
+        request
+            .get('/api/users/' + userId + '/collaborations')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.collaborations = res.body;
+                    console.log('got user collab snippets!!!!');
                     this.trigger(this.data);
                     return;
                 }

@@ -48759,6 +48759,7 @@ var Actions = Reflux.createActions([
     'getProfile',
     'getTrackSnippets',
     'getFeaturedTrack',
+    'getCollabSnippets',
     // 'getCollections',
 
     //home
@@ -50149,7 +50150,8 @@ var ProfileStore = Reflux.createStore({
         this.data = {
             profile: null,
             tracks: null,
-            featuredTrack: null
+            collaborations: null,
+            featuredTrack: null,
         };
         return this.data
     },
@@ -50178,6 +50180,23 @@ var ProfileStore = Reflux.createStore({
                 if (res.status === StatusTypes.ok) {
                     this.data.tracks = res.body;
                     console.log('got user track snippets!!!!');
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.profileData.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onGetCollabSnippets: function(userId) {
+        request
+            .get('/api/users/' + userId + '/collaborations')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.collaborations = res.body;
+                    console.log('got user collab snippets!!!!');
                     this.trigger(this.data);
                     return;
                 }
@@ -51304,6 +51323,7 @@ var Profile = React.createClass({displayName: 'Profile',
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getCollabSnippets(this.props.params.profileId);
         Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
@@ -51312,6 +51332,7 @@ var Profile = React.createClass({displayName: 'Profile',
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getCollabSnippets(this.props.params.profileId);
             Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
@@ -51324,11 +51345,7 @@ var Profile = React.createClass({displayName: 'Profile',
     },
     render: function() {
         var id = this.props.params.profileId;
-        console.log('GETTING THE PROFILE OF ', id);
-        console.log(this.state.data.profile);
-        // var data = this.state.data;
         if (this.state.data.featuredTrack) {
-            console.log('JKSDFJKLDSAFJLKDSAFLJKSADFLJKADSJLFKLASDFJKLDSAFJKDLSAJFDSKLAJFKLASJ');
             console.log(this.state.data.featuredTrack);
         }
         return (
@@ -51355,7 +51372,11 @@ var Profile = React.createClass({displayName: 'Profile',
                                     : null, 
                                 
                                  this.state.data.tracks && this.state.data.profile ?
-                                    React.createElement(ProfileTrackSnippets, {tracks: this.state.data.tracks, userId: this.props.currentUser.user_id, username: this.state.data.profile.username})
+                                    React.createElement(ProfileTrackSnippets, {collectionTitle: this.state.data.profile.username + '\'s Tracks', tracks: this.state.data.tracks, userId: this.props.currentUser.user_id, username: this.state.data.profile.username})
+                                    : null, 
+                                
+                                 this.state.data.collaborations && this.state.data.profile ?
+                                    React.createElement(ProfileTrackSnippets, {collectionTitle: this.state.data.profile.username + '\'s Collaborations', tracks: this.state.data.collaborations, userId: this.props.currentUser.user_id, username: this.state.data.profile.username})
                                     : null
                                 
                             )
@@ -51425,7 +51446,7 @@ var ProfileTrackSnippets = React.createClass({displayName: 'ProfileTrackSnippets
                     this.props.tracks.length > 0 ?
                         React.createElement("div", null, 
                             React.createElement("h3", {className: "collection-title"}, 
-                                this.props.username + '\'s tracks'
+                                this.props.collectionTitle
                             ), 
                             React.createElement(TracksPreview, {userId: this.props.userId, tracks: this.props.tracks})
                         )
