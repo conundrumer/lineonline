@@ -13,13 +13,15 @@ var InviteSearch = React.createClass({
         return {
             query: '',
             selectedUser: null,
-            searchResults: []
+            searchResults: [],
+            isAutocompleteBoxHidden: true
         };
     },
     componentWillMount: function() {
         this.eventStream('inputChanged')
             .map('.target.value')
             .onValue(function(username) {
+                console.log(username);
                 this.setState({
                     query: username
                 });
@@ -40,33 +42,82 @@ var InviteSearch = React.createClass({
             }.bind(this));
     },
     gotUsers: function(results) {
+        if (results.length > 0) {
+            this.setState({
+                searchResults: results,
+                isAutocompleteBoxHidden: false
+            });
+        } else {
+            console.log('no users in search results');
+            this.setState({
+                selectedUser: null,
+                searchResults: results,
+                isAutocompleteBoxHidden: true
+            });
+        }
         console.log('got users:', results.map(function(user) {
             return user.username;
         }));
-        this.setState({
-            searchResults: results
-        });
         if (results[0] && results[0].username === this.state.query) {
             this.setState({
-                selectedUser: results[0]
+                selectedUser: results[0],
+                isAutocompleteBoxHidden: true
             });
         }
     },
     onInvite: function(e) {
         e.preventDefault();
-        console.log("inviting: ", this.state.selectedUser);
-        if (this.state.selectedUser) {
+        if (this.state.selectedUser && this.state.selectedUser.username === this.state.query) {
             this.props.onInvite(this.state.selectedUser);
-            this.refs.inviteeUsername.getDOMNode().value = '';
+            this.setState({
+                query: '',
+                selectedUser: null,
+                isAutocompleteBoxHidden: true
+            });
         }
+    },
+    handleSelectUser: function(user) {
+        this.setState({
+            query: user.username,
+            selectedUser: user
+        });
+
+        this.setState({
+            isAutocompleteBoxHidden: true
+        });
     },
     render: function() {
         return (
             <div>
-                <input ref='inviteeUsername' autoComplete='off' type='text' name='username' value={this.state.query} onChange={this.inputChanged} />
+                <div className='invitee-search'>
+                    <input autoComplete='off' type='text' name='username' value={this.state.query} onChange={this.inputChanged} />
+                    <AutocompleteBox isHidden={this.state.isAutocompleteBoxHidden} onSelectUser={this.handleSelectUser} users={this.state.searchResults} />
+                </div>
                 <button className='btn-submit' type='submit' onClick={this.onInvite}>
                     Invite
                 </button>
+            </div>
+        );
+    }
+});
+
+var AutocompleteBox = React.createClass({
+    render: function() {
+        var users = this.props.users.map(function(user) {
+            var handleSelectUser = function(e) {
+                e.preventDefault();
+                this.props.onSelectUser(user);
+            }.bind(this);
+            return (
+                <li onClick={handleSelectUser}>{user.username}</li>
+            );
+        }.bind(this));
+        var isHiddenClass = this.props.isHidden ? ' hide' : '';
+        return (
+            <div className={'autocomplete-box' + isHiddenClass}>
+                <ul>
+                    {users}
+                </ul>
             </div>
         );
     }
