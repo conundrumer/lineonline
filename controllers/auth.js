@@ -1,8 +1,18 @@
 var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 var passport = require('passport');
-
 var User = require('../models/user');
+
+var crypto = require('crypto');
+var crypto_alg = 'aes-256-ctr';
+var crypto_password = 'delu';
+
+function hashPassword(password){
+    var cipher = crypto.createCipher(crypto_alg, crypto_password);
+    var crypted = cipher.update(password,'utf8','hex')
+    crypted += cipher.final('hex');
+    return crypted;
+}
 
 exports.loginRequired = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -117,7 +127,7 @@ exports.settings = function(req, res) {
 
     if(newPassword) {
         return req.user
-            .save({ password: newPassword }, {patch:true})
+            .save({ password: hashPassword(newPassword) }, {patch:true})
             .then(function() {
                 res.status(StatusTypes.noContent).send();
             })
@@ -129,6 +139,13 @@ exports.settings = function(req, res) {
     });
 };
 
+
+function decrypt(password){
+    var decipher = crypto.createDecipher(crypto_alg,crypto_password)
+    var dec = decipher.update(password,'hex','utf8')
+    dec += decipher.final('utf8');
+    return dec;
+}
 function isCorrectPassword(userModel, password) {
-    return userModel.get('password') === password;
+    return decrypt(userModel.get('password')) === password;
 }

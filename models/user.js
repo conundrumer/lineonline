@@ -56,18 +56,14 @@ var User = bookshelf.Model.extend({
     },
     // http://lollyrock.com/articles/nodejs-encryption/
     hashPassword: function() {
-        console.log("Hashing password 1. this.get('password') is:" + this.get('password'));
         var cipher = crypto.createCipher(crypto_alg, crypto_password);
         var crypted = cipher.update(this.get('password'),'utf8','hex')
         crypted += cipher.final('hex');
-        console.log("The crypted password is: " + crypted);
         this.set('password', crypted);
     },
-
     tracks: function(){
         return this.hasMany('Track', 'owner');
     },
-
     asUserProfile: function() {
         return toUserProfile(this);
     },
@@ -116,6 +112,7 @@ var User = bookshelf.Model.extend({
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
     }
+
 });
 
 module.exports = bookshelf.model('User', User);
