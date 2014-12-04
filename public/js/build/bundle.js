@@ -46109,10 +46109,12 @@ var AuthStore = Reflux.createStore({
             }.bind(this));
     },
     onSignup: function(register_data) {
+        console.log('registering!');
         request
             .post('/api/auth/register')
             .send(register_data)
             .end(function(err, res) {
+                console.log('GOT A RESPONSE FROM REGISTERING');
                 if (res.status === StatusTypes.content) {
                     console.log('user registered/logged in successfully');
                     this.data.currentUser = res.body;
