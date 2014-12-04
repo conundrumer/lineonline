@@ -99,7 +99,3 @@ exports.featuredTrack = function(req, res) {
             res.status(StatusTypes.ok).json(results);
         });
 };
-
-exports.settings = function(req, res) {
-    res.status(501).send();
-};

@@ -83,3 +83,7 @@ function statuslogin (status, req, res, next) {
 }
 
 exports.login = statuslogin.bind(null, 200);
+
+exports.settings = function(req, res) {
+    res.status(501).send();
+};

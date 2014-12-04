@@ -21,6 +21,10 @@ api.route('/auth')
 api.route('/auth/register')
     .post(auth.register);
 
+// settings
+api.route('/settings')
+    .put(auth.loginRequired, auth.settings);
+
 // users
 
 api.param('user_id', users.getByID);
@@ -118,10 +122,6 @@ api.route('/favorites')
 api.route('/favorites/:track_id')
     .put(favorites.addFavorite)
     .delete(favorites.removeFavorite);
-
-// settings
-api.route('/settings')
-    .put(auth.loginRequired, users.settings);
 
 module.exports = function (app, passport) {
     app.use('/api', api);
