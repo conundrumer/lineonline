@@ -90,11 +90,23 @@ var Track = bookshelf.Model.extend({
     owner: function(){
         return this.belongsTo('User', 'owner');
     },
+    invitations: function() {
+        return this.hasMany('Invitation', 'track');
+    },
+    collaborations: function() {
+        return this.hasMany('Collaboration', 'track');
+    },
+    favorites: function() {
+        return this.hasMany('Favorite', 'track');
+    },
     invitees: function() {
         return this.belongsToMany('User', 'invitations', 'track', 'invitee');
     },
     collaborators: function() {
         return this.belongsToMany('User', 'collaborations', 'track', 'collaborator');
+    },
+    favoriters: function() {
+        return this.belongsToMany('User', 'favorites', 'track', 'favoriter');
     },
     // representations
     asFullTrack: function(ownerSnippet) {
