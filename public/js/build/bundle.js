@@ -50765,39 +50765,39 @@ var ErrorModal = React.createClass({displayName: 'ErrorModal',
     }
 });
 
-function exampleConfirm() {
-    setTimeout(function() {
-        ErrorActions.throwError({
-            message: 'you confirmed! this error also has aconfirm callback but no cancel callback',
-            onConfirm: alert.bind(null,'okay carry on'),
-        });
-    }, 100);
-}
+// function exampleConfirm() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'you confirmed! this error also has aconfirm callback but no cancel callback',
+//             onConfirm: alert.bind(null,'okay carry on'),
+//         });
+//     }, 100);
+// }
 
-function exampleCancel() {
-    setTimeout(function() {
-        ErrorActions.throwError({
-            message: 'you canceled! if you clikc cancel you\'ll get and erro with no callbacks',
-            onCancel: exampleNone
-        });
-    }, 100);
-}
+// function exampleCancel() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'you canceled! if you clikc cancel you\'ll get and erro with no callbacks',
+//             onCancel: exampleNone
+//         });
+//     }, 100);
+// }
 
-function exampleNone() {
-    setTimeout(function() {
-        ErrorActions.throwError({
-            message: 'no callbacks for htis'
-        });
-    }, 100);
-}
+// function exampleNone() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'no callbacks for htis'
+//         });
+//     }, 100);
+// }
 
-setTimeout(function() {
-    ErrorActions.throwError({
-        message: 'example with both callbacsk',
-        onConfirm: exampleConfirm,
-        onCancel: exampleCancel
-    });
-}, 100);
+// setTimeout(function() {
+//     ErrorActions.throwError({
+//         message: 'example with both callbacsk',
+//         onConfirm: exampleConfirm,
+//         onCancel: exampleCancel
+//     });
+// }, 100);
 
 module.exports = ErrorModal;
 
@@ -52442,6 +52442,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
@@ -52520,6 +52521,9 @@ var Tile = React.createClass({displayName: 'Tile',
             return false;
         }
     },
+    doNothing: function() {
+        console.log('did nothing');
+    },
     handleAcceptInvitation: function(event) {
         event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
@@ -52527,31 +52531,36 @@ var Tile = React.createClass({displayName: 'Tile',
         // console.log(this.props.userId);
         // console.log('JOINING INVITATION');
         // console.log(event.target);
+        //
+        //
     },
     handleRejectInvitation: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to reject this invitation?');
-        if (c) {
-            console.log('rejecting!!!');
-            Actions.rejectInvitation(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to reject this invitation?',
+            onConfirm: function() { Actions.rejectInvitation(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
+        // if (c) {
+        //     console.log('rejecting!!!');
+        //     Actions.rejectInvitation(this.props.trackId);
+        // }
     },
     handleDeleteTrack: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to delete this track?');
-        if (c) {
-            console.log('deleting track');
-            console.log(this.props.trackId);
-            Actions.deleteTrack(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to delete this track?',
+            onConfirm: function() { Actions.deleteTrack(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handleLeaveCollaboration: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to leave this collaboration?');
-        if (c) {
-            console.log('leaving collab');
-            Actions.leaveCollaboration(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to leave this collaboration?',
+            onConfirm: function() { Actions.leaveCollaboration(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
@@ -52735,7 +52744,7 @@ var Tile = React.createClass({displayName: 'Tile',
 
 module.exports = Tile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 

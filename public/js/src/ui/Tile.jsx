@@ -8,6 +8,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
@@ -86,6 +87,9 @@ var Tile = React.createClass({
             return false;
         }
     },
+    doNothing: function() {
+        console.log('did nothing');
+    },
     handleAcceptInvitation: function(event) {
         event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
@@ -93,31 +97,36 @@ var Tile = React.createClass({
         // console.log(this.props.userId);
         // console.log('JOINING INVITATION');
         // console.log(event.target);
+        //
+        //
     },
     handleRejectInvitation: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to reject this invitation?');
-        if (c) {
-            console.log('rejecting!!!');
-            Actions.rejectInvitation(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to reject this invitation?',
+            onConfirm: function() { Actions.rejectInvitation(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
+        // if (c) {
+        //     console.log('rejecting!!!');
+        //     Actions.rejectInvitation(this.props.trackId);
+        // }
     },
     handleDeleteTrack: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to delete this track?');
-        if (c) {
-            console.log('deleting track');
-            console.log(this.props.trackId);
-            Actions.deleteTrack(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to delete this track?',
+            onConfirm: function() { Actions.deleteTrack(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handleLeaveCollaboration: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to leave this collaboration?');
-        if (c) {
-            console.log('leaving collab');
-            Actions.leaveCollaboration(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to leave this collaboration?',
+            onConfirm: function() { Actions.leaveCollaboration(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
