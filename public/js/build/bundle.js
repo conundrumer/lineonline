@@ -48813,7 +48813,12 @@ var Actions = Reflux.createActions([
     'updatePassword',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 
@@ -49721,6 +49726,70 @@ var FavoritesStore = Reflux.createStore({
 
 
 module.exports = FavoritesStore;
+
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js":[function(require,module,exports){
+var React = require('react/addons');
+var Reflux = require('reflux');
+var Actions = require('../actions');
+var request = require('superagent');
+var StatusTypes = require('status-types');
+
+var FeaturedStore = Reflux.createStore({
+    listenables: [Actions],
+    getDefaultData: function() {
+        this.data = {
+            featured: null
+        };
+        return this.data
+    },
+
+    onMakeFeatured: function(userId, trackId) {
+        request
+            .put('/api/users/' + userId + '/featured/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('made track featured!');
+                    Actions.getFeatured(userId);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onRemoveFeatured: function(userId, trackId) {
+        console.log('can\'t remove featured track yet');
+        // request
+        //     .del('/api/users/' + userId + '/featured/' + trackId)
+        //     .end(function(err, res) {
+        //         if (res.status === StatusTypes.noContent) {
+
+        //             return;
+        //         }
+        //         console.log('unknown status: ', res.status);
+        //     }.bind(this));
+    },
+
+    onGetFeatured: function(userId) {
+        console.log('trying to get featured');
+        request
+            .get('/api/users/' + userId + '/featured')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('whoooa got featured');
+                    this.data.featured = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
+});
+
+
+module.exports = FeaturedStore;
 
 },{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/gallery.js":[function(require,module,exports){
 var React = require('react/addons');
@@ -52138,12 +52207,14 @@ var Navigation = Router.Navigation;
 var CurrentPath = Router.CurrentPath;
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
+var FeaturedStore = require('../stores/featured');
 
 //UI Components
 var Icon = require('./Icon.jsx');
@@ -52153,6 +52224,7 @@ var Display = require('../linerider/Display.jsx');
 var Tile = React.createClass({displayName: 'Tile',
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
+        Reflux.listenTo(FeaturedStore, 'onDataChanged'),
         Navigation
     ],
     onDataChanged: function(newData) {
@@ -52164,18 +52236,20 @@ var Tile = React.createClass({displayName: 'Tile',
     },
     getInitialState: function() {
         return {
-            data: FavoritesStore.getDefaultData()
+            data: _.extend({}, FavoritesStore.getDefaultData(), FeaturedStore.getDefaultData())
         }
     },
     componentWillMount: function() {
         if (this.props.userId) {
             Actions.getFavorites();
+            Actions.getFeatured(this.props.userId);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
+            Actions.getFeatured(nextProps.userId);
         }
     },
     isInFavorites: function(trackId) {
@@ -52187,6 +52261,16 @@ var Tile = React.createClass({displayName: 'Tile',
             }
             return false;
         } else {
+            return false;
+        }
+    },
+    isFeatured: function(trackId) {
+        // console.log('in is featured ', trackId);
+        if (this.state.data.featured && this.state.data.featured.track_id === trackId) {
+            console.log('yep is featured ', this.state.data.featured.track_id);
+            return true;
+        } else {
+            console.log('nope not featured ', trackId);
             return false;
         }
     },
@@ -52238,6 +52322,16 @@ var Tile = React.createClass({displayName: 'Tile',
         console.log('attempting to remove fav...');
         Actions.removeFavorite(this.props.trackId);
     },
+    handleMakeFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to add featured...');
+        Actions.makeFeatured(this.props.userId, this.props.trackId);
+    },
+    handleRemoveFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to remove featured...');
+        Actions.removeFeatured(this.props.userId, this.props.trackId);
+    },
     render: function() {
         var tileBg = {
             background: '#fff'
@@ -52250,7 +52344,19 @@ var Tile = React.createClass({displayName: 'Tile',
         var favoritesHandler = this.isInFavorites(this.props.trackId) ? this.handleRemoveFavorite : this.handleAddFavorite;
         var favoritesClassName = this.isInFavorites(this.props.trackId) ? 'favorited' : 'unfavorited';
 
-        if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
+        var featuredHandler;
+        var featuredClassName;
+
+        if (this.props.extra === 'your-track') {
+            featuredHandler = this.isFeatured(this.props.trackId) ? this.handleRemoveFeatured : this.handleMakeFeatured;
+            featuredClassName = this.isFeatured(this.props.trackId) ? 'featured' : 'unfeatured';
+        }
+
+        // console.log(featuredHandler);
+        // console.log(featuredClassName);
+        // console.log(this.state.data.featured);
+
+        if (this.props.extra === 'your-track') {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52265,7 +52371,10 @@ var Tile = React.createClass({displayName: 'Tile',
                     }, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "heart"})
                     ), 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {
+                        className: 'tile-tool-link ' + featuredClassName, 
+                        onClick: featuredHandler
+                    }, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "bookmark"})
                     )
                 );
@@ -52352,7 +52461,7 @@ var Tile = React.createClass({displayName: 'Tile',
                 );
             button = null;
         }
-        console.log(this.props.scene);
+        // console.log(this.props.scene);
         return (
             React.createElement("div", {className: "gallery-row section group"}, 
                 React.createElement("article", {className: 'tile ' + this.props.col}, 
@@ -52384,7 +52493,7 @@ var Tile = React.createClass({displayName: 'Tile',
 
 module.exports = Tile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 

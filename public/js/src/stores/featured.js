@@ -40,10 +40,12 @@ var FeaturedStore = Reflux.createStore({
     },
 
     onGetFeatured: function(userId) {
+        console.log('trying to get featured');
         request
             .get('/api/users/' + userId + '/featured')
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
+                    console.log('whoooa got featured');
                     this.data.featured = res.body;
                     this.trigger(this.data);
                     return;

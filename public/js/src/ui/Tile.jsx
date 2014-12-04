@@ -4,12 +4,14 @@ var Navigation = Router.Navigation;
 var CurrentPath = Router.CurrentPath;
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
+var FeaturedStore = require('../stores/featured');
 
 //UI Components
 var Icon = require('./Icon.jsx');
@@ -19,6 +21,7 @@ var Display = require('../linerider/Display.jsx');
 var Tile = React.createClass({
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
+        Reflux.listenTo(FeaturedStore, 'onDataChanged'),
         Navigation
     ],
     onDataChanged: function(newData) {
@@ -30,18 +33,20 @@ var Tile = React.createClass({
     },
     getInitialState: function() {
         return {
-            data: FavoritesStore.getDefaultData()
+            data: _.extend({}, FavoritesStore.getDefaultData(), FeaturedStore.getDefaultData())
         }
     },
     componentWillMount: function() {
         if (this.props.userId) {
             Actions.getFavorites();
+            Actions.getFeatured(this.props.userId);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
+            Actions.getFeatured(nextProps.userId);
         }
     },
     isInFavorites: function(trackId) {
@@ -53,6 +58,16 @@ var Tile = React.createClass({
             }
             return false;
         } else {
+            return false;
+        }
+    },
+    isFeatured: function(trackId) {
+        // console.log('in is featured ', trackId);
+        if (this.state.data.featured && this.state.data.featured.track_id === trackId) {
+            console.log('yep is featured ', this.state.data.featured.track_id);
+            return true;
+        } else {
+            console.log('nope not featured ', trackId);
             return false;
         }
     },
@@ -104,6 +119,16 @@ var Tile = React.createClass({
         console.log('attempting to remove fav...');
         Actions.removeFavorite(this.props.trackId);
     },
+    handleMakeFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to add featured...');
+        Actions.makeFeatured(this.props.userId, this.props.trackId);
+    },
+    handleRemoveFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to remove featured...');
+        Actions.removeFeatured(this.props.userId, this.props.trackId);
+    },
     render: function() {
         var tileBg = {
             background: '#fff'
@@ -116,7 +141,19 @@ var Tile = React.createClass({
         var favoritesHandler = this.isInFavorites(this.props.trackId) ? this.handleRemoveFavorite : this.handleAddFavorite;
         var favoritesClassName = this.isInFavorites(this.props.trackId) ? 'favorited' : 'unfavorited';
 
-        if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
+        var featuredHandler;
+        var featuredClassName;
+
+        if (this.props.extra === 'your-track') {
+            featuredHandler = this.isFeatured(this.props.trackId) ? this.handleRemoveFeatured : this.handleMakeFeatured;
+            featuredClassName = this.isFeatured(this.props.trackId) ? 'featured' : 'unfeatured';
+        }
+
+        // console.log(featuredHandler);
+        // console.log(featuredClassName);
+        // console.log(this.state.data.featured);
+
+        if (this.props.extra === 'your-track') {
             links =
                 <div className='tile-tools'>
                     <div className='tile-tool-link'>
@@ -131,7 +168,10 @@ var Tile = React.createClass({
                     >
                         <Icon class='tile-tool-icon' icon='heart' />
                     </div>
-                    <div className='tile-tool-link'>
+                    <div
+                        className={'tile-tool-link ' + featuredClassName}
+                        onClick={featuredHandler}
+                    >
                         <Icon class='tile-tool-icon' icon='bookmark' />
                     </div>
                 </div>;
@@ -218,7 +258,7 @@ var Tile = React.createClass({
                 </div>;
             button = null;
         }
-        console.log(this.props.scene);
+        // console.log(this.props.scene);
         return (
             <div className='gallery-row section group'>
                 <article className={'tile ' + this.props.col}>
