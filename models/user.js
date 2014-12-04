@@ -12,6 +12,8 @@ function buildUserTable(table) {
     table.string('avatar_url', 100);
     table.string('about', 300);
     table.string('location', 100);
+    // figure out how to deal with migrating circular references
+    table.integer('featured_track');//.references('tracks.id');
 }
 
 // post body -> model

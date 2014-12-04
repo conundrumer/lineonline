@@ -48813,7 +48813,12 @@ var Actions = Reflux.createActions([
     'updatePassword',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 
@@ -49722,6 +49727,71 @@ var FavoritesStore = Reflux.createStore({
 
 module.exports = FavoritesStore;
 
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js":[function(require,module,exports){
+var React = require('react/addons');
+var Reflux = require('reflux');
+var Actions = require('../actions');
+var request = require('superagent');
+var StatusTypes = require('status-types');
+
+var FeaturedStore = Reflux.createStore({
+    listenables: [Actions],
+    getDefaultData: function() {
+        this.data = {
+            featured: null
+        };
+        return this.data
+    },
+
+    onMakeFeatured: function(userId, trackId) {
+        request
+            .put('/api/users/' + userId + '/featured/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    console.log('made track featured!');
+                    Actions.getFeatured(userId);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onRemoveFeatured: function(userId, trackId) {
+        console.log('can\'t remove featured track yet');
+        // request
+        //     .del('/api/users/' + userId + '/featured/' + trackId)
+        //     .end(function(err, res) {
+        //         if (res.status === StatusTypes.noContent) {
+
+        //             return;
+        //         }
+        //         console.log('unknown status: ', res.status);
+        //     }.bind(this));
+    },
+
+    onGetFeatured: function(userId) {
+        console.log('trying to get featured');
+        request
+            .get('/api/users/' + userId + '/featured')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('whoooa got featured');
+                    console.log(this.data);
+                    this.data.featured = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
+});
+
+
+module.exports = FeaturedStore;
+
 },{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/gallery.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
@@ -50029,25 +50099,21 @@ var ProfileStore = Reflux.createStore({
     },
 
     onGetFeaturedTrack: function(userId) {
-        // request
-        //     .get('/api/users/' + userId + '/featured')
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.profile = res.body;
-        //             console.log('got user featured track!!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.profileData.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
-
-        setTimeout(function() {
-            this.data.featuredTrack = {};
-            this.trigger(this.data);
-        }.bind(this));
+        console.log('trying to get featured track for profile');
+        request
+            .get('/api/users/' + userId + '/featured')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('GOT FEATURED TRACK FOR PROFILEEEE');
+                    this.data.featuredTrack = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     }
 
     // onGetCollections: function(userId) {
@@ -51046,7 +51112,6 @@ var Icon = require('./Icon.jsx');
 var MediaIcons = require('./MediaIcons.jsx');
 
 //Linerider
-var LineriderEditor = require('../linerider/Editor.jsx');
 var Display = require('../linerider/Display.jsx');
 
 var Playback = React.createClass({displayName: 'Playback',
@@ -51099,11 +51164,12 @@ var Playback = React.createClass({displayName: 'Playback',
 
 module.exports = Playback;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/track":"/Users/jingxiao/437/Team77/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/track":"/Users/jingxiao/437/Team77/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
@@ -51117,6 +51183,9 @@ var MediaIcons = require('./MediaIcons.jsx');
 var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
+
+//Linerider
+var Display = require('../linerider/Display.jsx');
 
 var Profile = React.createClass({displayName: 'Profile',
     mixins: [
@@ -51135,6 +51204,7 @@ var Profile = React.createClass({displayName: 'Profile',
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
     },
@@ -51142,6 +51212,7 @@ var Profile = React.createClass({displayName: 'Profile',
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
         }
@@ -51156,6 +51227,10 @@ var Profile = React.createClass({displayName: 'Profile',
         console.log('GETTING THE PROFILE OF ', id);
         console.log(this.state.data.profile);
         // var data = this.state.data;
+        if (this.state.data.featuredTrack) {
+            console.log('JKSDFJKLDSAFJLKDSAFLJKSADFLJKADSJLFKLASDFJKLDSAFJKDLSAJFDSKLAJFKLASJ');
+            console.log(this.state.data.featuredTrack);
+        }
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isProfile: true}, 
@@ -51177,37 +51252,10 @@ var Profile = React.createClass({displayName: 'Profile',
                             React.createElement("section", {className: "profile-main"}, 
                                  this.state.data.featuredTrack ?
                                     React.createElement(ProfileFeaturedTrack, {featuredTrack: this.state.data.featuredTrack})
-                                    :
-                                    React.createElement("article", {className: "profile-featured-track"}, 
-                                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
-                                        React.createElement(MediaIcons, null), 
-                                        React.createElement("aside", {className: "info"}, 
-                                            React.createElement("div", null, 
-                                                React.createElement("h3", null, "Sample Featured Track"), 
-                                                React.createElement("p", null, 
-                                                    "Sample description"
-                                                ), 
-                                                React.createElement("h3", null, "Owner"), 
-                                                React.createElement("p", null, 
-                                                    React.createElement(Link, {to: '/profile/' + id}, 
-                                                        "Sample Owner"
-                                                    )
-
-                                                ), 
-                                                React.createElement("h3", null, "Collaborators"), 
-                                                React.createElement("ul", null, 
-                                                    React.createElement("li", null, 
-                                                        React.createElement(Link, {to: '/profile/'+ id}, 
-                                                            "Sample Collaborator"
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    ), 
+                                    : null, 
                                 
                                  this.state.data.tracks && this.state.data.profile ?
-                                    React.createElement(ProfileTrackSnippets, {tracks: this.state.data.tracks, currentUser: this.props.currentUser, username: this.state.data.profile.username})
+                                    React.createElement(ProfileTrackSnippets, {tracks: this.state.data.tracks, userId: this.props.currentUser.user_id, username: this.state.data.profile.username})
                                     : null
                                 
                             )
@@ -51225,7 +51273,7 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
         var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 React.createElement("li", null, 
-                    React.createElement(Link, {to: '/profile/'+collaborator.id}, 
+                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
                         collaborator.username
                     )
                 )
@@ -51233,17 +51281,27 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
         });
         return (
             React.createElement("article", {className: "profile-featured-track"}, 
-                React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
+                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
+                    React.createElement("div", null, 
+                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
+                    )
+                ), 
                 React.createElement(MediaIcons, null), 
+                React.createElement(Display, {scene: this.props.featuredTrack.scene}), 
                 React.createElement("aside", {className: "info"}, 
                     React.createElement("div", null, 
                         React.createElement("h3", null, this.props.featuredTrack.title), 
-                        React.createElement("p", null, 
-                            this.props.featuredTrack.description
-                        ), 
+                        this.props.featuredTrack.description ?
+                            React.createElement("p", null, 
+                                this.props.featuredTrack.description
+                            )
+                            :
+                            React.createElement("p", null
+                            ), 
+                        
                         React.createElement("h3", null, "Owner"), 
                         React.createElement("p", null, 
-                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.id}, 
+                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
                                 this.props.featuredTrack.owner.username
                             )
 
@@ -51269,7 +51327,7 @@ var ProfileTrackSnippets = React.createClass({displayName: 'ProfileTrackSnippets
                             React.createElement("h3", {className: "collection-title"}, 
                                 this.props.username + '\'s tracks'
                             ), 
-                            React.createElement(TracksPreview, {userId: this.props.currentUser, tracks: this.props.tracks})
+                            React.createElement(TracksPreview, {userId: this.props.userId, tracks: this.props.tracks})
                         )
                         : null
                     
@@ -51383,7 +51441,7 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
@@ -52138,12 +52196,14 @@ var Navigation = Router.Navigation;
 var CurrentPath = Router.CurrentPath;
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
+var FeaturedStore = require('../stores/featured');
 
 //UI Components
 var Icon = require('./Icon.jsx');
@@ -52153,6 +52213,7 @@ var Display = require('../linerider/Display.jsx');
 var Tile = React.createClass({displayName: 'Tile',
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
+        Reflux.listenTo(FeaturedStore, 'onFeaturedChanged'),
         Navigation
     ],
     onDataChanged: function(newData) {
@@ -52162,20 +52223,40 @@ var Tile = React.createClass({displayName: 'Tile',
             });
         }
     },
+    onFeaturedChanged: function(newData) {
+        if (this.isMounted() && this.props.extra === 'your-track') {
+            this.setState({
+                featuredData: newData
+            });
+        }
+    },
     getInitialState: function() {
-        return {
-            data: FavoritesStore.getDefaultData()
+        if (this.props.extra === 'your-track') {
+            return {
+                data: FavoritesStore.getDefaultData(),
+                featuredData: FeaturedStore.getDefaultData()
+            }
+        } else {
+            return {
+                data: FavoritesStore.getDefaultData()
+            }
         }
     },
     componentWillMount: function() {
         if (this.props.userId) {
             Actions.getFavorites();
+            if (this.state.featuredData) {
+                Actions.getFeatured(this.props.userId);
+            }
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
+            if (this.state.featuredData) {
+                Actions.getFeatured(nextProps.userId);
+            }
         }
     },
     isInFavorites: function(trackId) {
@@ -52186,6 +52267,13 @@ var Tile = React.createClass({displayName: 'Tile',
                 }
             }
             return false;
+        } else {
+            return false;
+        }
+    },
+    isFeatured: function(trackId) {
+        if (this.state.featuredData && this.state.featuredData.featured && this.state.featuredData.featured.track_id === trackId) {
+            return true;
         } else {
             return false;
         }
@@ -52238,11 +52326,17 @@ var Tile = React.createClass({displayName: 'Tile',
         console.log('attempting to remove fav...');
         Actions.removeFavorite(this.props.trackId);
     },
+    handleMakeFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to add featured...');
+        Actions.makeFeatured(this.props.userId, this.props.trackId);
+    },
+    handleRemoveFeatured: function(event) {
+        event.preventDefault();
+        console.log('attempting to remove featured...');
+        Actions.removeFeatured(this.props.userId, this.props.trackId);
+    },
     render: function() {
-        var tileBg = {
-            background: '#fff'
-        };
-
         var previewIcon;
         var button;
         var links;
@@ -52250,7 +52344,19 @@ var Tile = React.createClass({displayName: 'Tile',
         var favoritesHandler = this.isInFavorites(this.props.trackId) ? this.handleRemoveFavorite : this.handleAddFavorite;
         var favoritesClassName = this.isInFavorites(this.props.trackId) ? 'favorited' : 'unfavorited';
 
-        if (this.props.extra === 'your-track' || this.props.extra === 'collaboration') {
+        var featuredHandler;
+        var featuredClassName;
+
+        if (this.props.extra === 'your-track') {
+            featuredHandler = this.isFeatured(this.props.trackId) ? this.handleRemoveFeatured : this.handleMakeFeatured;
+            featuredClassName = this.isFeatured(this.props.trackId) ? 'featured' : 'unfeatured';
+        }
+
+        // console.log(featuredHandler);
+        // console.log(featuredClassName);
+        // console.log(this.state.data.featured);
+
+        if (this.props.extra === 'your-track') {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52265,7 +52371,10 @@ var Tile = React.createClass({displayName: 'Tile',
                     }, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "heart"})
                     ), 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {
+                        className: 'tile-tool-link ' + featuredClassName, 
+                        onClick: featuredHandler
+                    }, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "bookmark"})
                     )
                 );
@@ -52352,11 +52461,11 @@ var Tile = React.createClass({displayName: 'Tile',
                 );
             button = null;
         }
-        console.log(this.props.scene);
+        // console.log(this.props.scene);
         return (
             React.createElement("div", {className: "gallery-row section group"}, 
                 React.createElement("article", {className: 'tile ' + this.props.col}, 
-                    React.createElement("div", {className: "preview", style: tileBg}, 
+                    React.createElement("div", {className: "preview"}, 
                         
                             this.props.scene ?
                             React.createElement(Display, {scene: this.props.scene, preview: true})
@@ -52384,7 +52493,7 @@ var Tile = React.createClass({displayName: 'Tile',
 
 module.exports = Tile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 

@@ -48,7 +48,8 @@ exports.collabRequired = function(req, res, next) {
                 return next();
             }
             res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.makeTrack = function(req, res) {
@@ -105,7 +106,8 @@ exports.getInvitations = function(req, res) {
                 return user.asUserSnippet();
             });
             res.status(StatusTypes.ok).json(invitees);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.invite = function(req, res) {
@@ -190,7 +192,8 @@ exports.removeCollaborator = function(req, res) {
         })
         .then(function() {
             res.status(StatusTypes.noContent).send();
-        });
+        })
+        .catch(console.error);
 };
 
 exports.search = function(req, res) {
@@ -211,5 +214,6 @@ exports.search = function(req, res) {
         })
         .then(function(results) {
             res.status(StatusTypes.ok).json(results);
-        });
+        })
+        .catch(console.error);
 };

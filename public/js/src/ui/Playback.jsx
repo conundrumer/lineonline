@@ -16,7 +16,6 @@ var Icon = require('./Icon.jsx');
 var MediaIcons = require('./MediaIcons.jsx');
 
 //Linerider
-var LineriderEditor = require('../linerider/Editor.jsx');
 var Display = require('../linerider/Display.jsx');
 
 var Playback = React.createClass({

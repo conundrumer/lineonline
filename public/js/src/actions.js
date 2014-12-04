@@ -64,7 +64,12 @@ var Actions = Reflux.createActions([
     'updatePassword',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 
