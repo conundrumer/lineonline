@@ -51112,7 +51112,6 @@ var Icon = require('./Icon.jsx');
 var MediaIcons = require('./MediaIcons.jsx');
 
 //Linerider
-var LineriderEditor = require('../linerider/Editor.jsx');
 var Display = require('../linerider/Display.jsx');
 
 var Playback = React.createClass({displayName: 'Playback',
@@ -51165,7 +51164,7 @@ var Playback = React.createClass({displayName: 'Playback',
 
 module.exports = Playback;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/track":"/Users/jingxiao/437/Team77/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/track":"/Users/jingxiao/437/Team77/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -51184,6 +51183,9 @@ var MediaIcons = require('./MediaIcons.jsx');
 var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
+
+//Linerider
+var Display = require('../linerider/Display.jsx');
 
 var Profile = React.createClass({displayName: 'Profile',
     mixins: [
@@ -51279,8 +51281,13 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
         });
         return (
             React.createElement("article", {className: "profile-featured-track"}, 
-                React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
+                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
+                    React.createElement("div", null, 
+                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
+                    )
+                ), 
                 React.createElement(MediaIcons, null), 
+                React.createElement(Display, {scene: this.props.featuredTrack.scene}), 
                 React.createElement("aside", {className: "info"}, 
                     React.createElement("div", null, 
                         React.createElement("h3", null, this.props.featuredTrack.title), 
@@ -51434,7 +51441,7 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
@@ -52330,10 +52337,6 @@ var Tile = React.createClass({displayName: 'Tile',
         Actions.removeFeatured(this.props.userId, this.props.trackId);
     },
     render: function() {
-        var tileBg = {
-            background: '#fff'
-        };
-
         var previewIcon;
         var button;
         var links;
@@ -52462,7 +52465,7 @@ var Tile = React.createClass({displayName: 'Tile',
         return (
             React.createElement("div", {className: "gallery-row section group"}, 
                 React.createElement("article", {className: 'tile ' + this.props.col}, 
-                    React.createElement("div", {className: "preview", style: tileBg}, 
+                    React.createElement("div", {className: "preview"}, 
                         
                             this.props.scene ?
                             React.createElement(Display, {scene: this.props.scene, preview: true})

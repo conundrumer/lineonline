@@ -145,10 +145,6 @@ var Tile = React.createClass({
         Actions.removeFeatured(this.props.userId, this.props.trackId);
     },
     render: function() {
-        var tileBg = {
-            background: '#fff'
-        };
-
         var previewIcon;
         var button;
         var links;
@@ -277,7 +273,7 @@ var Tile = React.createClass({
         return (
             <div className='gallery-row section group'>
                 <article className={'tile ' + this.props.col}>
-                    <div className='preview' style={tileBg}>
+                    <div className='preview'>
                         {
                             this.props.scene ?
                             <Display scene={this.props.scene} preview={true} />

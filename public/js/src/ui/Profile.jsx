@@ -17,6 +17,9 @@ var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
+//Linerider
+var Display = require('../linerider/Display.jsx');
+
 var Profile = React.createClass({
     mixins: [
         Reflux.listenTo(ProfileStore, 'onDataChanged')
@@ -111,8 +114,13 @@ var ProfileFeaturedTrack = React.createClass({
         });
         return (
             <article className='profile-featured-track'>
-                <Icon class='preview-icon' icon='fullscreen-enter' />
+                <Link to={'/track/' + this.props.featuredTrack.track_id}>
+                    <div>
+                        <Icon class='preview-icon' icon='fullscreen-enter' />
+                    </div>
+                </Link>
                 <MediaIcons />
+                <Display scene={this.props.featuredTrack.scene} />
                 <aside className='info'>
                     <div>
                         <h3>{this.props.featuredTrack.title}</h3>
