@@ -37,13 +37,15 @@ api.route('/users/:user_id/tracks')
 api.route('/users/:user_id/featured')
     .get(users.featuredTrack);
 
+api.route('/users/:user_id/featured/:track_id')
+    .put(auth.loginRequired, tracks.ownershipRequired, users.setFeaturedTrack);
 
 // profile
 api.route('/users/:user_id/profile')
     .get(users.getProfile);
 
 api.route('/profile')
-    .put(users.editProfile);
+    .put(auth.loginRequired, users.editProfile);
 
 // tracks
 
