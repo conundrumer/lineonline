@@ -13,7 +13,7 @@ var Actions = require('./actions');
 
 //Data Stores
 var AuthStore = require('./stores/auth');
-var ProfileStore = require('./stores/profile');
+var CurrentUserStore = require('./stores/current-user');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -69,7 +69,7 @@ var App = React.createClass({
 
 var Navbar = React.createClass({
     mixins: [
-        Reflux.listenTo(ProfileStore, 'onDataChanged')
+        Reflux.listenTo(CurrentUserStore, 'onDataChanged')
     ],
     onDataChanged: function(newData) {
         this.setState({
@@ -78,18 +78,18 @@ var Navbar = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.currentUser) {
-            Actions.getProfile(this.props.currentUser.user_id);
+            Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.currentUser !== nextProps.currentUser)
             && nextProps.currentUser) {
-            Actions.getProfile(nextProps.currentUser.user_id);
+            Actions.getCurrentProfile(nextProps.currentUser.user_id);
         }
     },
     getInitialState: function() {
         return {
-            data: ProfileStore.getDefaultData(),
+            data: CurrentUserStore.getDefaultData(),
             hidden: true
         };
     },

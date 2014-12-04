@@ -8,7 +8,9 @@ var GalleryStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            newTracks: null
+            newTracks: null,
+            hotTracks: null,
+            topTracks: null
         };
         return this.data
     },
@@ -18,9 +20,38 @@ var GalleryStore = Reflux.createStore({
             .get('/api/tracks')
             .query({ new: num })
             .end(function(err, res) {
-                console.log('got new tracks!!');
                 if (res.status === StatusTypes.ok) {
                     console.log('got new tracks');
+                    this.data.newTracks = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+    onGetHotTracks: function(num) {
+        console.log('attempting to get hot tracks');
+        request
+            .get('/api/tracks')
+            .query({ new: num })
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('got hot tracks');
+                    this.data.newTracks = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+    onGetTopTracks: function(num) {
+        console.log('attempting to get top tracks');
+        request
+            .get('/api/tracks')
+            .query({ new: num })
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('got top tracks');
                     this.data.newTracks = res.body;
                     this.trigger(this.data);
                     return;

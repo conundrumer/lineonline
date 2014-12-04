@@ -20,6 +20,8 @@ var Gallery = React.createClass({
         Reflux.listenTo(GalleryStore, 'onDataChanged')
     ],
     newTrackNum: 5,
+    hotTrackNum: 5,
+    topTrackNum: 5,
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -33,9 +35,13 @@ var Gallery = React.createClass({
     },
     componentWillMount: function() {
         Actions.getNewTracks(this.newTrackNum);
+        Actions.getHotTracks(this.hotTrackNum);
+        Actions.getTopTracks(this.topTrackNum);
     },
     componentWillReceiveProps: function(nextProps) {
         Actions.getNewTracks(this.newTrackNum);
+        Actions.getHotTracks(this.hotTrackNum);
+        Actions.getTopTracks(this.topTrackNum);
     },
     render: function() {
         // console.log(this.props.currentUser);

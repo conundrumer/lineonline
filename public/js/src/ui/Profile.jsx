@@ -51,6 +51,8 @@ var Profile = React.createClass({
     },
     render: function() {
         var id = this.props.params.profileId;
+        console.log('GETTING THE PROFILE OF ', id);
+        console.log(this.state.data.profile);
         // var data = this.state.data;
         return (
             <div className='main-content'>
