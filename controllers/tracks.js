@@ -192,3 +192,24 @@ exports.removeCollaborator = function(req, res) {
             res.status(StatusTypes.noContent).send();
         });
 };
+
+exports.search = function(req, res) {
+    if (!req.query.new) {
+        return res.status(StatusTypes.ok).json([]);
+    }
+    Track
+        .query(function(qb) {
+            qb
+                .orderBy('created_at', 'desc')
+                .limit(req.query.new);
+        })
+        .fetchAll()
+        .then(function(tracks) {
+            return Promise.map(tracks.models, function(track) {
+                return track.asTrackSnippet();
+            });
+        })
+        .then(function(results) {
+            res.status(StatusTypes.ok).json(results);
+        });
+};

@@ -60,3 +60,24 @@ exports.editProfile = function(req, res) {
         })
         .catch(console.error);
 };
+
+var MAX_RESULTS = 5;
+exports.search = function(req, res) {
+    if (!req.query.q) {
+        return res.status(StatusTypes.ok).json([]);
+    }
+    User
+        .query(function(qb) {
+            qb
+                .where('username', 'like', req.query.q + '%')
+                .orderBy('username', 'asc')
+                .limit(MAX_RESULTS);
+        })
+        .fetchAll()
+        .then(function(users) {
+            var results = users.models.map(function(user) {
+                return user.asUserSnippet();
+            });
+            res.status(StatusTypes.ok).json(results);
+        });
+};
