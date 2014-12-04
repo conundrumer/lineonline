@@ -14,6 +14,7 @@ var FavoritesStore = require('../stores/favorites');
 //UI Components
 var GalleryRow = require('./GalleryRow.jsx');
 var Icon = require('./Icon.jsx');
+var Display = require('../linerider/Display.jsx');
 
 // this.props.trackPreview
 var GalleryTile = React.createClass({
@@ -105,8 +106,7 @@ var GalleryTile = React.createClass({
     },
     render: function() {
         var tileBg = {
-            background: '#fff url("' + this.props.trackPreview + '") no-repeat center center',
-            backgroundSize: 'cover'
+            background: '#fff'
         };
 
         var previewIcon;
@@ -208,11 +208,15 @@ var GalleryTile = React.createClass({
                 </div>;
             button = null;
         }
-
         return (
             <GalleryRow>
                 <article className={'tile ' + this.props.col}>
                     <div className='preview' style={tileBg}>
+                        {
+                            this.props.scene ?
+                            <Display scene={this.props.scene} preview={true} />
+                            : null
+                        }
                         {previewIcon}
                         {links}
                     </div>

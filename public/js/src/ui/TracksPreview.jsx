@@ -66,6 +66,7 @@ var TracksCol = React.createClass({
                     col={this.props.col}
                     extra={this.props.extra}
                     trackPreview={trackPreview}
+                    scene={track.scene}
                 />
             );
         }.bind(this));
