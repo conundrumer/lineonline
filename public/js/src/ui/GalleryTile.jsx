@@ -120,6 +120,9 @@ var GalleryTile = React.createClass({
             links =
                 <div className='tile-tools'>
                     <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='info' />
+                    </div>
+                    <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
                     <div
@@ -135,6 +138,9 @@ var GalleryTile = React.createClass({
         } else {
             links =
                 <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='info' />
+                    </div>
                     <div className='tile-tool-link'>
                         <Icon class='tile-tool-icon' icon='link-intact' />
                     </div>
