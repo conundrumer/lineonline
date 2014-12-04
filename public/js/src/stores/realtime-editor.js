@@ -46,27 +46,26 @@ var RealtimeEditorStore = Reflux.createStore({
         this.socket = socket;
     },
     onEmitAddLine: function(data) {
-        if (this.socket) {
-            this.socket.emit('add', data);
-            this.pending();
-            this.socket.once('sync', this.synchronize.bind(this));
-        }
+        this.emitToServer('add', data);
     },
     onEmitRemoveLine: function(data) {
+        this.emitToServer('remove', data);
+    },
+    emitToServer: function(event, data) {
         if (this.socket) {
-            this.socket.emit('remove', data);
+            this.socket.emit(event, data);
             this.pending();
             this.socket.once('sync', this.synchronize.bind(this));
         }
     },
     pending: function() {
         this.sync++;
-        this.trigger(this.sync)
+        this.trigger(this.sync);
     },
     synchronize: function() {
         this.sync--;
         if (this.sync === 0) {
-            this.trigger(this.sync)
+            this.trigger(this.sync);
         }
     },
     onCloseEditorSession: function() {

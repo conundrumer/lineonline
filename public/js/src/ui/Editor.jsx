@@ -129,6 +129,12 @@ var Editor = React.createClass({
             alert('You must save your track before inviting anyone!');
         }
     },
+    handleNewTrack: function() {
+        Actions.newTrack();
+        if (this.getCurrentPath() !== '/editor'){
+            this.transitionTo('/editor');
+        }
+    },
     render: function() {
         var saveHandler, isNewTrack; //, sceneUpdateHandler;
         if (this.props.params.trackId) {
@@ -155,6 +161,7 @@ var Editor = React.createClass({
                         userID={this.props.currentUser && this.props.currentUser.user_id || 0}
                         isNewTrack={isNewTrack}
                         onSaveSetting={this.handleOpenModal}
+                        onNewTrack={this.handleNewTrack}
                         onAddLine={Actions.emitAddLine}
                         onRemoveLine={Actions.emitRemoveLine}
                     />

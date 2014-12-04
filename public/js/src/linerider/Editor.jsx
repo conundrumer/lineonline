@@ -69,7 +69,12 @@ var Editor = React.createClass({
     },
     onClear: function(e) {
         e.preventDefault();
-        Actions.newScene();
+        if (!this.props.isNewTrack ||
+            _.keys(this.state.scene.points).length === 0 ||
+            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            Actions.newScene();
+            this.props.onNewTrack();
+        }
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -162,7 +167,7 @@ var Editor = React.createClass({
                         onClick={this.onSaveSetting}
                         icon={ this.props.isNewTrack ? 'check' : 'cog' }
                         name={ this.props.isNewTrack ? 'Save' : 'Settings' } />
-                    <ToolButton onClick={this.onClear} icon='x' name='Clear' />
+                    <ToolButton onClick={this.onClear} icon='x' name='New' />
                 </div>
             </div>
         );
