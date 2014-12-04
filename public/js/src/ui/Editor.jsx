@@ -46,14 +46,18 @@ var Editor = React.createClass({
         }
     },
     getInitialState: function() {
+        var data = EditorStore.loadLocalTrack();
+
         return {
-            data: EditorStore.getDefaultData(),
+            data: data,
             isModalHidden: true
         }
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
             this.loadTrack(this.props.params.trackId);
+        } else {
+
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -84,8 +88,6 @@ var Editor = React.createClass({
             // load or switch tracks
             Actions.getFullTrack(trackId);
         }
-        // Actions.getCollaborators(trackId);
-        // Actions.getInvitees(trackId);
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
@@ -96,8 +98,6 @@ var Editor = React.createClass({
         });
 
         if (this.props.params.trackId) {
-            Actions.getCollaborators(this.props.params.trackId);
-            Actions.getInvitees(this.props.params.trackId);
         }
 
         if (this.state.isModalHidden) {
@@ -116,7 +116,6 @@ var Editor = React.createClass({
     handleCreateTrack: function(trackMetaData) {
         var unsavedTrackData = _.extend(this.state.data.track, trackMetaData)
         Actions.createTrack(unsavedTrackData);
-        // Actions.addInvitees(unsavedTrackData);
 
         console.log('creating a track!!!');
     },
@@ -133,6 +132,12 @@ var Editor = React.createClass({
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
             alert('You must save your track before inviting anyone!');
+        }
+    },
+    handleNewTrack: function() {
+        Actions.newTrack();
+        if (this.getCurrentPath() !== '/editor'){
+            this.transitionTo('/editor');
         }
     },
     render: function() {
@@ -160,7 +165,8 @@ var Editor = React.createClass({
                     <LineriderEditor
                         userID={this.props.currentUser && this.props.currentUser.user_id || 0}
                         isNewTrack={isNewTrack}
-                        onOpenModal={this.handleOpenModal}
+                        onSaveSetting={this.handleOpenModal}
+                        onNewTrack={this.handleNewTrack}
                         onAddLine={Actions.emitAddLine}
                         onRemoveLine={Actions.emitRemoveLine}
                     />

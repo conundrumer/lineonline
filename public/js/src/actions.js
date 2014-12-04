@@ -34,8 +34,6 @@ var Actions = Reflux.createActions([
     'addInvitee',
     'addInvitees',
     'addCollaborators',
-    'getInvitees',
-    'getCollaborators',
     'openEditorSession',
     'closeEditorSession',
     'emitAddLine',
