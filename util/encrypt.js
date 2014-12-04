@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 var crypto_alg = 'aes-256-ctr';
-var crypto_password = 'delu';
+var crypto_password = 'webappsisfun';
 
 // http://lollyrock.com/articles/nodejs-encryption/
 function encrypt(password){
