@@ -1,14 +1,15 @@
 var Promise = require('bluebird');
 var StatusTypes = require('status-types');
+var User = require('../models/user');
+var encrypt = require('encrypt');
 var passport = require('passport');
 
-var User = require('../models/user');
 
 exports.loginRequired = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.status(401).json({ message: 'Not logged in'});
+    res.status(StatusTypes.unauthorized).json({ message: 'Not logged in'});
 };
 
 exports.logout = function(req, res) {
@@ -17,7 +18,7 @@ exports.logout = function(req, res) {
 };
 
 exports.getCurrentUser = function(req, res) {
-    res.status(200).json(req.user.asUserSnippet());
+    res.status(StatusTypes.ok).json(req.user.asUserSnippet());
 };
 
 exports.register = function(req, res){
@@ -60,7 +61,7 @@ exports.register = function(req, res){
         return User
             .create(req.body)
             .then(function(){
-                statuslogin(201, req, res, console.error);
+                statuslogin(StatusTypes.content, req, res, console.error);
             });
     }).catch(console.error);
 };
@@ -71,7 +72,7 @@ function statuslogin (status, req, res, next) {
             return next(err);
         }
         if (!user) {
-            return res.status(401).send(info);
+            return res.status(StatusTypes.unauthorized).send(info);
         }
         req.logIn(user, function(err) {
             if (err) {
@@ -82,7 +83,7 @@ function statuslogin (status, req, res, next) {
     })(req, res, next);
 }
 
-exports.login = statuslogin.bind(null, 200);
+exports.login = statuslogin.bind(null, StatusTypes.ok);
 
 exports.settings = function(req, res) {
     var password = req.body.password;
@@ -117,7 +118,7 @@ exports.settings = function(req, res) {
 
     if(newPassword) {
         return req.user
-            .save({ password: newPassword }, {patch:true})
+            .save({ password: encrypt.encryptPassword(newPassword) }, {patch:true})
             .then(function() {
                 res.status(StatusTypes.noContent).send();
             })
@@ -130,5 +131,5 @@ exports.settings = function(req, res) {
 };
 
 function isCorrectPassword(userModel, password) {
-    return userModel.get('password') === password;
+    return userModel.get('password') === encrypt.encryptPassword(password);
 }

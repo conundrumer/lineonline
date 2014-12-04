@@ -3,6 +3,7 @@ var Track = require('./track');
 var Subscription = require('./subscription');
 var _ = require('underscore');
 var Promise = require('bluebird');
+var encrypt = require('../util/encrypt');
 
 function buildUserTable(table) {
     table.increments('id').primary();
@@ -50,10 +51,15 @@ function toUserProfile(model) {
 
 var User = bookshelf.Model.extend({
     tableName: 'users',
+    initialize: function() {
+        this.on('creating', this.hashPassword, this);
+    },
+    hashPassword: function() {
+        this.set('password', encrypt.encryptPassword(this.get('password')));
+    },
     tracks: function(){
         return this.hasMany('Track', 'owner');
     },
-
     asUserProfile: function() {
         return toUserProfile(this);
     },
@@ -101,7 +107,8 @@ var User = bookshelf.Model.extend({
     },
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
-    }
+    },
+
 });
 
 module.exports = bookshelf.model('User', User);
