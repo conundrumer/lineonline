@@ -119,6 +119,10 @@ api.route('/favorites/:track_id')
     .put(favorites.addFavorite)
     .delete(favorites.removeFavorite);
 
+// settings
+api.route('/settings')
+    .put(auth.loginRequired, users.settings);
+
 module.exports = function (app, passport) {
     app.use('/api', api);
 
