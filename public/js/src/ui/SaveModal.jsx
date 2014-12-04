@@ -1,8 +1,72 @@
 var React = require('react/addons');
 var _ = require('underscore');
+var ReactBacon = require('react-bacon');
+var request = require('superagent');
 
 //UI Components
 var Icon = require('./Icon.jsx');
+
+var DEBOUNCE_DELAY = 350; // in ms, amount to delay before continuing
+var InviteSearch = React.createClass({
+    mixins: [ReactBacon.BaconMixin],
+    getInitialState: function() {
+        return {
+            query: '',
+            selectedUser: null,
+            searchResults: []
+        };
+    },
+    componentWillMount: function() {
+        this.eventStream('inputChanged')
+            .map('.target.value')
+            .onValue(function(username) {
+                this.setState({
+                    query: username
+                });
+            }.bind(this));
+
+        this.eventStream('inputChanged')
+            .map('.target.value')
+            .debounce(DEBOUNCE_DELAY)
+            .onValue(function(username) {
+                request.get('/api/users?q=' + username)
+                    .end(function (err, res) {
+                        if (res.status === 200) {
+                            this.gotUsers(res.body);
+                            return;
+                        }
+                    console.log('could not query for user');
+                }.bind(this));
+            }.bind(this));
+    },
+    gotUsers: function(results) {
+        console.log('got users:', results.map(function(user) {
+            return user.username;
+        }));
+        this.setState({
+            searchResults: results
+        });
+        if (results[0] && results[0].username === this.state.query) {
+            this.setState({
+                selectedUser: results[0]
+            });
+        }
+    },
+    onInvite: function() {
+        console.log("inviting: ", this.state.selectedUser);
+        // this.props.onInvite(this.state.selectedUser);
+    },
+    render: function() {
+        return (
+            <div>
+                <input name='username' value={this.state.query} onChange={this.inputChanged} />
+                <button className='btn-submit' type='submit' onClick={this.onInvite}>
+                    Invite
+                </button>
+            </div>
+        );
+    }
+});
 
 var SaveModal = React.createClass({
     getInitialState: function() {
@@ -186,10 +250,7 @@ var SaveModal = React.createClass({
                             </div>
 
                         }
-                        <input ref='inviteeUsername' name='invitees' type='text' />
-                        <button className='btn-submit' type='submit' onClick={this.handleInvite}>
-                            Invite
-                        </button>
+                        <InviteSearch onInvite={this.handleInvite} />
                     </div>
                 </form>
                 <button className='btn-submit btn-save-modal' type='submit' onClick={this.handleFormSubmit}>
