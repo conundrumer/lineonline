@@ -51408,7 +51408,7 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
                     )
                 ), 
                 React.createElement(MediaIcons, null), 
-                React.createElement(Display, {scene: this.props.featuredTrack.scene}), 
+                React.createElement(Display, {scene: this.props.featuredTrack.scene, preview: true}), 
                 React.createElement("aside", {className: "info"}, 
                     React.createElement("div", null, 
                         React.createElement("h3", null, this.props.featuredTrack.title), 
