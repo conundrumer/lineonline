@@ -12,6 +12,7 @@ var Actions = Reflux.createActions([
     'getProfile',
     'getTrackSnippets',
     'getFeaturedTrack',
+    'getCollabSnippets',
     // 'getCollections',
 
     //home
