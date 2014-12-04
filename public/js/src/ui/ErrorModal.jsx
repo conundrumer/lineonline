@@ -14,14 +14,19 @@ var ErrorModal = React.createClass({
     },
     render: function() {
         return (
-            <div>
+            <div className='error-modal'>
                 { this.props.error.message }
                 {
                     this.props.error.onCancel ?
-                    <button onClick={this.onCancel}>Cancel</button>
-                    : null
+                    <div className='error-buttons'>
+                        <button className='btn-error btn-ok' onClick={this.onConfirm}>OK</button>
+                        <button className='btn-error btn-cancel' onClick={this.onCancel}>Cancel</button>
+                    </div>
+                    :
+                    <div className='error-buttons'>
+                        <button className='btn-error btn-error-full' onClick={this.onConfirm}>OK</button>
+                    </div>
                 }
-                <button onClick={this.onConfirm}>OK</button>
             </div>
         );
     }

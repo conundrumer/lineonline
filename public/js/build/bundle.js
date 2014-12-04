@@ -48335,6 +48335,7 @@ var Actions = require('./actions');
 //Data Stores
 var AuthStore = require('./stores/auth');
 var CurrentUserStore = require('./stores/current-user');
+var ErrorStore = require('./stores/error');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -48349,6 +48350,7 @@ var Settings = require('./ui/Settings.jsx');
 var Playback = require('./ui/Playback.jsx');
 var NotFound = require('./ui/NotFound.jsx');
 var Footer = require('./ui/Footer.jsx');
+var ErrorModal = require('./ui/ErrorModal.jsx');
 
 //linerider
 // when you refactor this file, relative paths are gonna get messed up
@@ -48356,8 +48358,14 @@ var LineriderEditor = require('./linerider/Editor.jsx');
 
 var App = React.createClass({displayName: 'App',
     mixins: [
-        Reflux.listenTo(AuthStore, 'onDataChanged')
+        Reflux.listenTo(AuthStore, 'onDataChanged'),
+        Reflux.listenTo(ErrorStore, 'onError')
     ],
+    onError: function(error) {
+        this.setState({
+            error: error
+        });
+    },
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -48365,7 +48373,8 @@ var App = React.createClass({displayName: 'App',
     },
     getInitialState: function() {
         return {
-            data: AuthStore.getDefaultData()
+            data: AuthStore.getDefaultData(),
+            error: null
         }
     },
     componentWillMount: function() {
@@ -48374,6 +48383,7 @@ var App = React.createClass({displayName: 'App',
     render: function() {
         return (
             React.createElement("div", {className: "container"}, 
+                 this.state.error ? React.createElement(ErrorModal, {error: this.state.error}) : null, 
                 React.createElement(Navbar, {currentUser: this.state.data.currentUser, errorMessages: this.state.data.errorMessages}), 
                 React.createElement(this.props.activeRouteHandler, {currentUser: this.state.data.currentUser})
             )
@@ -48744,7 +48754,17 @@ function doRender(target, callback) {
 
 module.exports = doRender;
 
-},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./ui/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx","./ui/Favorites.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions.js":[function(require,module,exports){
+},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./stores/error":"/Users/jingxiao/437/Team77/public/js/src/stores/error.js","./ui/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx","./ui/ErrorModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx","./ui/Favorites.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions-error.js":[function(require,module,exports){
+var Reflux = require('reflux');
+var ErrorActions = Reflux.createActions([
+    'throwError',
+    'throwUnknownStatus',
+    'acknowledge'
+]);
+
+module.exports = ErrorActions;
+
+},{"reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 // you can split this up
@@ -49325,6 +49345,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 
 var AuthStore = Reflux.createStore({
     listenables: [Actions],
@@ -49360,10 +49381,12 @@ var AuthStore = Reflux.createStore({
             .post('/api/auth')
             .send(login_data)
             .end(function(err, res) {
-                //not logged in, show error message/update ui?
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user failed to log in');
-                    this.data.errorMessages.login = res.body.message;
+                    // this.data.errorMessages.login = res.body.message;
+                    // ErrorActions.throwError({
+                    //     message: res.body.message
+                    // });
                     this.trigger(this.data);
                     return;
                 }
@@ -49376,7 +49399,7 @@ var AuthStore = Reflux.createStore({
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onLogout: function() {
@@ -49384,13 +49407,13 @@ var AuthStore = Reflux.createStore({
             .del('/api/auth')
             .end(function(err, res) {
                 //logged out, set current user to null/update ui/redirect to index
-                if (res.status === StatusTypes.noContent) {
+                if (res.status === StatusTypes.noContent || res.status === StatusTypes.unauthorized) {
                     console.log('user logged out successfully');
                     this.data.currentUser = null;
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onSignup: function(register_data) {
@@ -49410,18 +49433,21 @@ var AuthStore = Reflux.createStore({
                 if (res.status === StatusTypes.badRequest) {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
-                    this.data.errorMessages.signup = res.body.message;
+                    // ErrorActions.throwError({
+                    //     message: res.body.message
+                    // });
+                    // this.data.errorMessages.signup = res.body.message;
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     }
 });
 
 module.exports = AuthStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -49648,7 +49674,28 @@ var EditorStore = Reflux.createStore({
 
 module.exports = EditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/error.js":[function(require,module,exports){
+var Reflux = require('reflux');
+var ErrorActions = require('../actions-error');
+
+var ErrorStore = Reflux.createStore({
+    listenables: [ErrorActions],
+    onThrowError: function(error) {
+        this.trigger(error);
+    },
+    onThrowUnknownStatus: function(res){
+        ErrorActions.throwError({
+            message: res.status + res.body ? ': ' + res.body.message : ''
+        });
+    },
+    onAcknowledge: function() {
+        this.trigger(null);
+    }
+});
+
+module.exports =  ErrorStore;
+
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -50683,7 +50730,78 @@ var Editor = React.createClass({displayName: 'Editor',
 
 module.exports = Editor;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
+var ErrorActions = require('../actions-error');
+var React = require('react');
+
+var ErrorModal = React.createClass({displayName: 'ErrorModal',
+    onConfirm: function() {
+        if (this.props.error.onConfirm) {
+            this.props.error.onConfirm();
+        }
+        ErrorActions.acknowledge();
+    },
+    onCancel: function() {
+        this.props.error.onCancel();
+        ErrorActions.acknowledge();
+    },
+    render: function() {
+        return (
+            React.createElement("div", {className: "error-modal"}, 
+                 this.props.error.message, 
+                
+                    this.props.error.onCancel ?
+                    React.createElement("div", {className: "error-buttons"}, 
+                        React.createElement("button", {className: "btn-error btn-ok", onClick: this.onConfirm}, "OK"), 
+                        React.createElement("button", {className: "btn-error btn-cancel", onClick: this.onCancel}, "Cancel")
+                    )
+                    :
+                    React.createElement("div", {className: "error-buttons"}, 
+                        React.createElement("button", {className: "btn-error btn-error-full", onClick: this.onConfirm}, "OK")
+                    )
+                
+            )
+        );
+    }
+});
+
+function exampleConfirm() {
+    setTimeout(function() {
+        ErrorActions.throwError({
+            message: 'you confirmed! this error also has aconfirm callback but no cancel callback',
+            onConfirm: alert.bind(null,'okay carry on'),
+        });
+    }, 100);
+}
+
+function exampleCancel() {
+    setTimeout(function() {
+        ErrorActions.throwError({
+            message: 'you canceled! if you clikc cancel you\'ll get and erro with no callbacks',
+            onCancel: exampleNone
+        });
+    }, 100);
+}
+
+function exampleNone() {
+    setTimeout(function() {
+        ErrorActions.throwError({
+            message: 'no callbacks for htis'
+        });
+    }, 100);
+}
+
+setTimeout(function() {
+    ErrorActions.throwError({
+        message: 'example with both callbacsk',
+        onConfirm: exampleConfirm,
+        onCancel: exampleCancel
+    });
+}, 100);
+
+module.exports = ErrorModal;
+
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
