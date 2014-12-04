@@ -52,14 +52,18 @@ var InviteSearch = React.createClass({
             });
         }
     },
-    onInvite: function() {
+    onInvite: function(e) {
+        e.preventDefault();
         console.log("inviting: ", this.state.selectedUser);
-        // this.props.onInvite(this.state.selectedUser);
+        if (this.state.selectedUser) {
+            this.props.onInvite(this.state.selectedUser);
+            this.refs.inviteeUsername.getDOMNode().value = '';
+        }
     },
     render: function() {
         return (
             <div>
-                <input name='username' value={this.state.query} onChange={this.inputChanged} />
+                <input ref='inviteeUsername' autoComplete='off' type='text' name='username' value={this.state.query} onChange={this.inputChanged} />
                 <button className='btn-submit' type='submit' onClick={this.onInvite}>
                     Invite
                 </button>
@@ -113,34 +117,9 @@ var SaveModal = React.createClass({
 
         this.props.onSave(trackMetaData);
     },
-    handleInvite: function(e) {
-        e.preventDefault();
-
-        var userId = this.refs.inviteeUsername.getDOMNode().value.trim();
+    handleInvite: function(user) {
         var currInvitees = this.state.track.invitees;
-
-        var user = {
-            user_id: userId,
-            avatar_url: '../../images/sample_profile.png',
-            username: 'balasdfjkl',
-        };
-
-        if (userId !== '') { //&& valid
-
-            this.props.onInvite(user);
-
-            // this.setState({
-            //     track: _.extend(this.state.track, { invitees: _.union(currInvitees, [user]) })
-            // });
-            // console.log(this.state.track.invitees);
-        }
-
-        this.refs.inviteeUsername.getDOMNode().value = '';
-
-
-
-        // var username = this.refs.inviteeUsername.getDOMNode().value.trim();
-        // Actions.getUserFromUsername();
+        this.props.onInvite(user);
     },
     handleDeleteCollaborator: function(e) {
 
