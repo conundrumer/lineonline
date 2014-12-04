@@ -35,8 +35,7 @@ describe('changing user settings (email and password)', function() {
             .put('/settings')
             .send({
                 email: 'cathy@bat.com',
-                password: 'hat',
-                confirm_password: 'hat'
+                password: 'hat'
             })
             .expect(StatusTypes.noContent)
             .then(function() {
@@ -54,8 +53,8 @@ describe('changing user settings (email and password)', function() {
             .put('/settings')
             .send({
                 new_password: 'bat',
-                password: 'hat',
-                confirm_password: 'hat'
+                confirm_password: 'bat',
+                password: 'hat'
             })
             .expect(StatusTypes.noContent)
             .then(function() {
