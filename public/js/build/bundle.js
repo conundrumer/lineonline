@@ -45186,6 +45186,11 @@ var Navbar = React.createClass({displayName: 'Navbar',
         }
     },
     render: function() {
+        var bgSrc = this.state.data.profile ? this.state.data.profile.avatar_url : ''
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
+
         return (
             React.createElement("nav", {className: "navbar"}, 
                 React.createElement("ul", {className: "nav-list section group"}, 
@@ -45209,8 +45214,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
                     
                     this.props.currentUser && this.state.data.profile ?
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
-                            React.createElement("div", {className: "navlink", onClick: this.handleDropdownClick}, 
-                                React.createElement("img", {src: this.state.data.profile.avatar_url}), 
+                            React.createElement("div", {className: "navlink", style: avatarStyle, onClick: this.handleDropdownClick}, 
                                 React.createElement("span", {className: "hide"}, 
                                     "Profile"
                                 )
@@ -48035,10 +48039,13 @@ var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
 
 var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var profileAvatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             React.createElement("section", {className: "profile-sidebar"}, 
-                React.createElement("div", {className: "picture"}, 
-                    React.createElement("img", {src: this.props.avatarUrl})
+                React.createElement("div", {className: "picture", style: profileAvatarStyle}
                 ), 
                 React.createElement("div", {className: "info"}, 
                     React.createElement(ProfileContactDetail, {username: this.props.username, location: this.props.location, email: this.props.email}), 
@@ -48404,7 +48411,6 @@ var Settings = React.createClass({displayName: 'Settings',
         var profileData = {
             username: this.sanitizeTextData(this.state.data.profile.username),
             avatar_url: this.sanitizeTextData(this.state.data.profile.avatar_url),
-            email: this.sanitizeTextData(this.state.data.profile.email),
             location: this.sanitizeTextData(this.state.data.profile.location),
             about: this.sanitizeTextData(this.state.data.profile.about)
         }
@@ -48436,7 +48442,7 @@ var Settings = React.createClass({displayName: 'Settings',
                                     React.createElement("h2", null, "Profile Settings"), 
                                     React.createElement("form", {className: "form-settings form-settings-profile", onSubmit: this.handleSubmit}, 
                                         React.createElement("div", {className: "section group"}, 
-                                            React.createElement("div", {className: "field col span_6_of_12"}, 
+                                            React.createElement("div", {className: "field col span_12_of_12"}, 
                                                 React.createElement("label", {for: "username"}, 
                                                     "Username"
                                                 ), 
@@ -48445,17 +48451,6 @@ var Settings = React.createClass({displayName: 'Settings',
                                                     type: "text", 
                                                     value: this.state.data.profile.username, 
                                                     onChange: this.handleChange('username')}
-                                                )
-                                            ), 
-                                            React.createElement("div", {className: "field col span_6_of_12"}, 
-                                                React.createElement("label", {for: "email"}, 
-                                                    "Email"
-                                                ), 
-                                                React.createElement("input", {
-                                                    name: "email", 
-                                                    type: "email", 
-                                                    value: this.state.data.profile.email, 
-                                                    onChange: this.handleChange('email')}
                                                 )
                                             )
                                         ), 

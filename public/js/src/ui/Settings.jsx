@@ -52,7 +52,6 @@ var Settings = React.createClass({
         var profileData = {
             username: this.sanitizeTextData(this.state.data.profile.username),
             avatar_url: this.sanitizeTextData(this.state.data.profile.avatar_url),
-            email: this.sanitizeTextData(this.state.data.profile.email),
             location: this.sanitizeTextData(this.state.data.profile.location),
             about: this.sanitizeTextData(this.state.data.profile.about)
         }
@@ -84,7 +83,7 @@ var Settings = React.createClass({
                                     <h2>Profile Settings</h2>
                                     <form className='form-settings form-settings-profile' onSubmit={this.handleSubmit}>
                                         <div className='section group'>
-                                            <div className='field col span_6_of_12'>
+                                            <div className='field col span_12_of_12'>
                                                 <label for='username'>
                                                     Username
                                                 </label>
@@ -93,17 +92,6 @@ var Settings = React.createClass({
                                                     type='text'
                                                     value={this.state.data.profile.username}
                                                     onChange={this.handleChange('username')}
-                                                />
-                                            </div>
-                                            <div className='field col span_6_of_12'>
-                                                <label for='email'>
-                                                    Email
-                                                </label>
-                                                <input
-                                                    name='email'
-                                                    type='email'
-                                                    value={this.state.data.profile.email}
-                                                    onChange={this.handleChange('email')}
                                                 />
                                             </div>
                                         </div>
