@@ -8,7 +8,7 @@ var _ = require('underscore');
 var Actions = require('../actions');
 
 //Data Stores
-var ProfileStore = require('../stores/profile');
+var CurrentUserStore = require('../stores/current-user');
 
 //UI Components
 var PanelPadded = require('./PanelPadded.jsx');
@@ -16,7 +16,7 @@ var Footer = require('./Footer.jsx');
 
 var Settings = React.createClass({
     mixins: [
-        Reflux.listenTo(ProfileStore, 'onDataChanged')
+        Reflux.listenTo(CurrentUserStore, 'onDataChanged')
     ],
     onDataChanged: function(newData) {
         this.setState({
@@ -25,18 +25,18 @@ var Settings = React.createClass({
     },
     getInitialState: function() {
         return {
-            data: ProfileStore.getDefaultData()
+            data: CurrentUserStore.getDefaultData()
         }
     },
     componentWillMount: function() {
         if (this.props.currentUser) {
-            Actions.getProfile(this.props.currentUser.user_id);
+            Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.props.currentUser !== nextProps.currentUser
             && nextProps.currentUser) {
-            Actions.getProfile(nextProps.currentUser.user_id);
+            Actions.getCurrentProfile(nextProps.currentUser.user_id);
         }
     },
     sanitizeTextData: function(data) {
@@ -57,7 +57,7 @@ var Settings = React.createClass({
             about: this.sanitizeTextData(this.state.data.profile.about)
         }
         console.log(profileData);
-        Actions.updateProfile(this.props.currentUser.user_id, profileData);
+        Actions.updateCurrentProfile(this.props.currentUser.user_id, profileData);
     },
     handleChange: function(inputName) {
         return function(e) {

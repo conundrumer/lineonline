@@ -41,7 +41,10 @@ var Actions = Reflux.createActions([
     // 'getInvitee',
 
     //gallery
-    'getGallery',
+    // 'getGallery',
+    'getNewTracks',
+    'getHotTracks',
+    'getTopTracks',
 
     //favorites
     'getFavorites',
@@ -54,8 +57,9 @@ var Actions = Reflux.createActions([
     'removeSubscription',
 
     //settings
-    //see 'getProfile'
-    'updateProfile',
+    //current user
+    'getCurrentProfile',
+    'updateCurrentProfile',
 
     //playback
     'getTrack'

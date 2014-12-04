@@ -12,12 +12,11 @@ var Actions = require('../actions');
 var FavoritesStore = require('../stores/favorites');
 
 //UI Components
-var GalleryRow = require('./GalleryRow.jsx');
 var Icon = require('./Icon.jsx');
 var Display = require('../linerider/Display.jsx');
 
 // this.props.trackPreview
-var GalleryTile = React.createClass({
+var Tile = React.createClass({
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
         Navigation
@@ -135,6 +134,16 @@ var GalleryTile = React.createClass({
                         <Icon class='tile-tool-icon' icon='bookmark' />
                     </div>
                 </div>;
+        } else if (!this.props.userId) {
+            links =
+                <div className='tile-tools'>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='info' />
+                    </div>
+                    <div className='tile-tool-link'>
+                        <Icon class='tile-tool-icon' icon='link-intact' />
+                    </div>
+                </div>
         } else {
             links =
                 <div className='tile-tools'>
@@ -208,8 +217,9 @@ var GalleryTile = React.createClass({
                 </div>;
             button = null;
         }
+        console.log(this.props.scene);
         return (
-            <GalleryRow>
+            <div className='gallery-row section group'>
                 <article className={'tile ' + this.props.col}>
                     <div className='preview' style={tileBg}>
                         {
@@ -232,9 +242,9 @@ var GalleryTile = React.createClass({
                         {button}
                     </div>
                 </article>
-            </GalleryRow>
+            </div>
         );
     }
 });
 
-module.exports = GalleryTile;
+module.exports = Tile;

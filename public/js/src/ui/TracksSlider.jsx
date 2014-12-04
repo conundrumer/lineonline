@@ -1,7 +1,7 @@
 var React = require('react/addons');
 
 //UI Components
-var GalleryTile = require('./GalleryTile.jsx');
+var Tile = require('./Tile.jsx');
 
 var TracksSlider = React.createClass({
     render: function() {
@@ -9,15 +9,31 @@ var TracksSlider = React.createClass({
         return (
             <div className='col span_3_of_4'>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
+                    <Tile
+                        title='Track Title'
+                        description='Description 1 description blah blah blah'
+                        col='col-first'
+                        userId={this.props.userId}
+                    />
                 </div>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
+                    <Tile
+                        title='Track Title'
+                        description='Description 1 description blah blah blah'
+                        col='col-first'
+                        userId={this.props.userId}
+                    />
                 </div>
                 <div className='gallery-col col span_1_of_3'>
-                    <GalleryTile title='Track Title' description='Description 1 description blah blah blah' col='col-first' />
+                    <Tile
+                        title='Track Title'
+                        description='Description 1 description blah blah blah'
+                        col='col-first'
+                        userId={this.props.userId}
+                    />
                 </div>
             </div>
+
         );
     }
 });
