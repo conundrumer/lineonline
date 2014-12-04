@@ -84,8 +84,6 @@ var Editor = React.createClass({
             // load or switch tracks
             Actions.getFullTrack(trackId);
         }
-        // Actions.getCollaborators(trackId);
-        // Actions.getInvitees(trackId);
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
@@ -96,8 +94,6 @@ var Editor = React.createClass({
         });
 
         if (this.props.params.trackId) {
-            Actions.getCollaborators(this.props.params.trackId);
-            Actions.getInvitees(this.props.params.trackId);
         }
 
         if (this.state.isModalHidden) {
@@ -116,7 +112,6 @@ var Editor = React.createClass({
     handleCreateTrack: function(trackMetaData) {
         var unsavedTrackData = _.extend(this.state.data.track, trackMetaData)
         Actions.createTrack(unsavedTrackData);
-        // Actions.addInvitees(unsavedTrackData);
 
         console.log('creating a track!!!');
     },

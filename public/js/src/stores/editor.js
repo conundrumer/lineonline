@@ -78,7 +78,6 @@ var EditorStore = Reflux.createStore({
     },
 
     onCreateTrack: function(unsavedTrackData) {
-        console.log("onCreateTrack")
         request
             .post('/api/tracks/')
             .send(unsavedTrackData)
@@ -133,40 +132,7 @@ var EditorStore = Reflux.createStore({
                     }
                 }.bind(this))
         }.bind(this));
-    },
-
-    onGetInvitees: function(trackId) {
-        request
-            .get('/api/tracks/' + trackId + '/invitations/')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    this.data.track.invitees = res.body;
-                    this.trigger(this.data);
-                }
-            }.bind(this));
-    },
-
-    onGetCollaborators: function(trackId) {
-        request
-            .get('/api/tracks/' + trackId + '/collaborators/')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    this.data.track.collaborators = res.body;
-                    this.trigger(this.data);
-                }
-            }.bind(this))
     }
-
-
-    // onGetInvitee: function(userId) {
-    //     request
-    //         .get('/api/users/' + userId)
-    //         .end(function(err, res) {
-    //             if (res.status === StatusTypes.ok) {
-
-    //             }
-    //         }.bind(this));
-    // }
 });
 
 
