@@ -37,7 +37,7 @@ var GalleryStore = Reflux.createStore({
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     console.log('got hot tracks');
-                    this.data.newTracks = res.body;
+                    this.data.hotTracks = res.body;
                     this.trigger(this.data);
                     return;
                 }
@@ -52,7 +52,7 @@ var GalleryStore = Reflux.createStore({
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     console.log('got top tracks');
-                    this.data.newTracks = res.body;
+                    this.data.topTracks = res.body;
                     this.trigger(this.data);
                     return;
                 }
