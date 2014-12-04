@@ -4,6 +4,7 @@ var User = require('../models/user');
 var Track = require('../models/track');
 var Invitation = require('../models/invitation');
 var Collaboration = require('../models/collaboration');
+var _ = require('underscore');
 
 var ERRORS = {
     TRACK_NOT_FOUND: {
@@ -66,15 +67,6 @@ exports.makeTrack = function(req, res) {
         .catch(console.error);
 };
 
-exports.deleteTrack = function(req, res){
-    req.track
-        .destroy()
-        .then(function() {
-            return res.status(StatusTypes.noContent).send();
-        })
-        .catch(console.error);
-};
-
 exports.getTrack = function(req, res) {
     req.track
         .asFullTrack()
@@ -95,6 +87,28 @@ exports.editTrack = function(req, res) {
             res.status(StatusTypes.ok).json(fullTrack);
         })
         .catch(console.error);
+};
+
+exports.deleteTrack = function(req, res){
+    Promise.all([
+        req.track.invitations().fetch(),
+        req.track.collaborations().fetch(),
+        req.track.favorites().fetch()
+    ])
+    .then(function(results) {
+        return Promise.map(_.flatten(results.map(function(result) {
+            return result.models;
+        })), function (model) {
+            return model.destroy();
+        });
+    })
+    .then(function() {
+        return req.track.destroy();
+    })
+    .then(function() {
+        return res.status(StatusTypes.noContent).send();
+    })
+    .catch(console.error);
 };
 
 exports.getInvitations = function(req, res) {
