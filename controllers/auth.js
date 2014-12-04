@@ -14,7 +14,7 @@ exports.loginRequired = function (req, res, next) {
 
 exports.logout = function(req, res) {
     req.logout();
-    res.status(StatusTypes.noContent).send();
+    res.status(204).send();
 };
 
 exports.getCurrentUser = function(req, res) {
@@ -27,17 +27,17 @@ exports.register = function(req, res){
     var email = req.body.email;
 
     if (username === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Username required'});
         return;
     }
     if (password === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Password required'});
         return;
     }
     if (email === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Email required'});
         return;
     }
@@ -110,7 +110,7 @@ exports.settings = function(req, res) {
                 return req.user
                     .save({ email: newEmail }, {patch:true})
                     .then(function() {
-                        res.status(StatusTypes.noContent).send();
+                        res.status(204).send();
                     });
             })
             .catch(console.error);
@@ -120,7 +120,7 @@ exports.settings = function(req, res) {
         return req.user
             .save({ password: encrypt.encryptPassword(newPassword) }, {patch:true})
             .then(function() {
-                res.status(StatusTypes.noContent).send();
+                res.status(204).send();
             })
             .catch(console.error);
     }
