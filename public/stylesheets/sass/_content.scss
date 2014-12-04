@@ -541,8 +541,8 @@
                 position: relative;
                 margin-top: -6px;
                 border-radius: 100%;
-                background: url('../../images/sample_profile.png') no-repeat center center;
-                background-size: cover;
+                // background: url('../../images/sample_profile.png') no-repeat center center;
+                // background-size: cover;
                 display: block;
                 width: 40px;
                 height: 40px;
@@ -863,8 +863,7 @@
     }
 }
 
-.masthead,
-.playback {
+.masthead {
     background: #fff url('../../images/sample_masthead.png') no-repeat center center;
     background-size: cover;
 }
@@ -872,6 +871,7 @@
 .playback {
     position: relative;
     .media-icons {
+        z-index: 5;
         font-size: 20px;
         position: absolute;
         left: 25px;
@@ -892,6 +892,7 @@
         top: 20px;
         position: absolute;
         font-size: 20px;
+        z-index: 5;
         &:hover {
             cursor: pointer;
             color: $light-col;
@@ -1278,13 +1279,18 @@
     .info {
         margin: 10px 0 15px;
 
-        h3 {
+        .info-track-title {
+            @include transition(color 0.2s ease-in-out 0);
             font-weight: bold;
             font-size: 16px;
             line-height: 2;
+            &:hover {
+                color: $light-col;
+                cursor: pointer;
+            }
         }
 
-        p {
+        .info-track-description {
             font-style: italic;
             font-size: 13px;
             line-height: 1.8;

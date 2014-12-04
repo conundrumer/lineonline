@@ -1,5 +1,7 @@
 var React = require('react/addons');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
+var CurrentPath = Router.CurrentPath;
 var Link = Router.Link;
 var Reflux = require('reflux');
 
@@ -16,7 +18,8 @@ var Icon = require('./Icon.jsx');
 // this.props.trackPreview
 var GalleryTile = React.createClass({
     mixins: [
-        Reflux.listenTo(FavoritesStore, 'onDataChanged')
+        Reflux.listenTo(FavoritesStore, 'onDataChanged'),
+        Navigation
     ],
     onDataChanged: function(newData) {
         if (this.isMounted()) {
@@ -87,6 +90,7 @@ var GalleryTile = React.createClass({
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
+        this.transitionTo('/track/' + this.props.trackId);
     },
     handleAddFavorite: function(event) {
         event.preventDefault();
@@ -207,10 +211,12 @@ var GalleryTile = React.createClass({
                         {links}
                     </div>
                     <div className='info'>
-                        <h3>
-                            {this.props.title}
-                        </h3>
-                        <p>
+                        <Link to={'/track/' + this.props.trackId}>
+                            <h3 className='info-track-title'>
+                                {this.props.title}
+                            </h3>
+                        </Link>
+                        <p className='info-track-description'>
                             {this.props.description}
                         </p>
                         {button}

@@ -7,6 +7,7 @@ var PanelPadded = React.createClass({
             'panel': true,
             'masthead': this.props.isMasthead,
             'editor': this.props.isEditor,
+            'playback': this.props.isPlayback,
             'gallery': this.props.isGallery,
             'favorites': this.props.isFavorites,
             'settings': this.props.isSettings,
