@@ -10,7 +10,7 @@ var Actions = require('../actions');
 // var IndexStore = require('../stores/index');
 
 //UI Components
-var GalleryPreview = require('./GalleryPreview.jsx');
+var Gallery= require('./Gallery.jsx');
 var Panel = require('./Panel.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
@@ -27,7 +27,7 @@ var Index = React.createClass({
                 </Link>
                 <ScrollDivider link='#gallery-panel' />
                 <PanelPadded isGallery={true} id='gallery-panel'>
-                    <GalleryPreview />
+                    <Gallery currentUser={this.props.currentUser} isPreview={true} trackNum={2} />
                 </PanelPadded>
                 <Footer />
             </div>

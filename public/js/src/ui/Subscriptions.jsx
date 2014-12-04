@@ -59,7 +59,7 @@ var Subscriptions = React.createClass({
                             userId={sub.subscribee.user_id}
                             onUnsubscribe={this.handleUnsubscribe}
                         />
-                        <TracksSlider tracks={sub.track_snippets} />
+                        <TracksSlider userId={this.props.currentUser.user_id} tracks={sub.track_snippets} />
                     </div>
                 );
             }.bind(this));
