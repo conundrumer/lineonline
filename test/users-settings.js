@@ -25,7 +25,7 @@ var agent = {
     cathy: request.agent(url)
 };
 
-describe('changing user settings (email and password)', function() {
+describe('/settings: changing user settings (email and password)', function() {
     before(function() {
         return auth.login(agent.cathy, cathy);
     });
@@ -34,7 +34,7 @@ describe('changing user settings (email and password)', function() {
         agent.cathy
             .put('/settings')
             .send({
-                email: 'cathy@bat.com',
+                new_email: 'cathy@bat.com',
                 password: 'hat'
             })
             .expect(StatusTypes.noContent)
@@ -43,8 +43,9 @@ describe('changing user settings (email and password)', function() {
                 changedProfile.email = 'cathy@bat.com';
                 return agent.cathy
                     .get('/users/' + cathy.id + '/profile')
-                    .expect(StatusTypes.ok, changedProfile, done);
+                    .expect(StatusTypes.ok, changedProfile);
             })
+            .then(function(){done();})
             .catch(done);
     });
 
@@ -62,12 +63,12 @@ describe('changing user settings (email and password)', function() {
             })
             .then(function() {
                 return agent.cathy
-                    .get('/auth')
+                    .post('/auth')
                     .send({
                         username: 'cathy',
                         password: 'bat'
                     })
-                    .expect(StatusTypes.ok, cathy.user(), done);
+                    .expect(StatusTypes.ok, cathy.user());
             })
             .then(function(){done();})
             .catch(done);
