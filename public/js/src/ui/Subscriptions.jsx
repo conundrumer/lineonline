@@ -67,23 +67,20 @@ var Subscriptions = React.createClass({
 
         return (
             <div className='main-content'>
-                {this.props.currentUser && this.state.data.subscriptions
-                    && this.state.data.subscriptions.length > 0 ?
+                {this.props.currentUser && this.state.data.subscriptions ?
                     <div>
                         <PanelPadded isSubscriptions={true}>
-                            {subscriptionRow}
+                            {this.state.data.subscriptions.length > 0 ?
+                                subscriptionRow
+                                :
+                                <p className='message-panel message-panel-center'>
+                                    No subscriptions to show.
+                                </p>
+                            }
                         </PanelPadded>
                         <Footer />
                     </div>
-                    :
-                    <div>
-                        <PanelPadded isSubscriptions={true}>
-                            <p className='message-panel message-panel-center'>
-                                No subscriptions to show.
-                            </p>
-                        </PanelPadded>
-                        <Footer />
-                    </div>
+                    : null
                 }
             </div>
         );

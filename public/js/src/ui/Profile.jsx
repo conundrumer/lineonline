@@ -52,6 +52,7 @@ var Profile = React.createClass({
     render: function() {
         var id = this.props.params.profileId;
         // var data = this.state.data;
+        console.log(this.props.currentUser);
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
@@ -103,7 +104,7 @@ var Profile = React.createClass({
                                     </article>
                                 }
                                 { this.state.data.tracks && this.state.data.profile ?
-                                    <ProfileTrackSnippets tracks={this.state.data.tracks} username={this.state.data.profile.username} />
+                                    <ProfileTrackSnippets tracks={this.state.data.tracks} currentUser={this.props.currentUser} username={this.state.data.profile.username} />
                                     : null
                                 }
                             </section>
@@ -165,7 +166,7 @@ var ProfileTrackSnippets = React.createClass({
                             <h3 className='collection-title'>
                                 {this.props.username + '\'s tracks'}
                             </h3>
-                            <TracksPreview tracks={this.props.tracks} />
+                            <TracksPreview userId={this.props.currentUser} tracks={this.props.tracks} />
                         </div>
                         : null
                     }
