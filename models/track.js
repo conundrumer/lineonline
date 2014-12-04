@@ -14,6 +14,7 @@ function buildTrackTable(table) {
     table.float('preview_left');
     table.float('preview_bottom');
     table.float('preview_right');
+    table.timestamps();
 }
 
 // post body -> model

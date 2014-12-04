@@ -44,6 +44,9 @@ api.route('/profile')
 
 // tracks
 
+api.route('/tracks')
+    .get(tracks.search);
+
 api.param('track_id', tracks.getByID);
 
 api.route('/tracks')
