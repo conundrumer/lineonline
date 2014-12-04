@@ -6,6 +6,11 @@ var ErrorStore = Reflux.createStore({
     onThrowError: function(error) {
         this.trigger(error);
     },
+    onThrowUnknownStatus: function(res){
+        ErrorActions.throwError({
+            message: res.status + res.body ? ': ' + res.body.message : ''
+        });
+    },
     onAcknowledge: function() {
         this.trigger(null);
     }
