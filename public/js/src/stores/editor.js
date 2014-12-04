@@ -4,6 +4,7 @@ var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
 var LineRiderActions = require('../linerider/actions');
+var LocalEditorStore = require('../stores/local-editor');
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -21,7 +22,7 @@ var EditorStore = Reflux.createStore({
         };
 
         var EMPTY_TRACK = {
-            scene: EMPTY_SCENE,
+            scene: LocalEditorStore.getDefaultData() || EMPTY_SCENE,
             title: '',
             description: '',
             collaborators: [],
@@ -33,6 +34,11 @@ var EditorStore = Reflux.createStore({
             track: EMPTY_TRACK
         };
         return this.data
+    },
+    loadLocalTrack: function() {
+        var data = this.getDefaultData();
+        LineRiderActions.loadScene(data.track.scene);
+        return data;
     },
     onNewTrack: function() {
         this.data = this.getDefaultData();

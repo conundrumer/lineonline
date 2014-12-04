@@ -46,14 +46,18 @@ var Editor = React.createClass({
         }
     },
     getInitialState: function() {
+        var data = EditorStore.loadLocalTrack();
+
         return {
-            data: EditorStore.getDefaultData(),
+            data: data,
             isModalHidden: true
         }
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
             this.loadTrack(this.props.params.trackId);
+        } else {
+
         }
     },
     componentWillReceiveProps: function(nextProps) {

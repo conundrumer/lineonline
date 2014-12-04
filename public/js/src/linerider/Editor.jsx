@@ -34,9 +34,9 @@ var Editor = React.createClass({
     ],
     onSceneChanged: function(data, action) {
         if (action == 'add') {
-            this.props.onAddLine(data);
+            this.props.onAddLine(data, this.props.isNewTrack);
         } else if (action == 'remove') {
-            this.props.onRemoveLine(data);
+            this.props.onRemoveLine(data, this.props.isNewTrack);
         } else {
             this.setState({ scene: data });
         }

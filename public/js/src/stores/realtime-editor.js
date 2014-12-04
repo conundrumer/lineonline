@@ -45,11 +45,15 @@ var RealtimeEditorStore = Reflux.createStore({
         socket.on('remove', LineRiderActions.removeLine);
         this.socket = socket;
     },
-    onEmitAddLine: function(data) {
-        this.emitToServer('add', data);
+    onEmitAddLine: function(data, isNewTrack) {
+        if (!isNewTrack) {
+            this.emitToServer('add', data);
+        }
     },
-    onEmitRemoveLine: function(data) {
-        this.emitToServer('remove', data);
+    onEmitRemoveLine: function(data, isNewTrack) {
+        if (!isNewTrack) {
+            this.emitToServer('remove', data);
+        }
     },
     emitToServer: function(event, data) {
         if (this.socket) {
