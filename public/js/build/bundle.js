@@ -52055,6 +52055,7 @@ var Tile = React.createClass({displayName: 'Tile',
         var c = confirm('Are you sure you want to delete this track?');
         if (c) {
             console.log('deleting track');
+            console.log(this.props.trackId);
             Actions.deleteTrack(this.props.trackId);
         }
     },
