@@ -34,6 +34,9 @@ api.route('/users/:user_id')
 api.route('/users/:user_id/tracks')
     .get(users.getTracks);
 
+api.route('/users/:user_id/featured')
+    .get(users.featuredTrack);
+
 
 // profile
 api.route('/users/:user_id/profile')

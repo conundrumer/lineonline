@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var StatusTypes = require('status-types');
 
 var User = require('../models/user');
+var Track = require('../models/track');
 var Favorite = require('../models/favorite');
 
 var ERRORS = {
@@ -78,6 +79,23 @@ exports.search = function(req, res) {
             var results = users.models.map(function(user) {
                 return user.asUserSnippet();
             });
+            res.status(StatusTypes.ok).json(results);
+        });
+};
+
+exports.featuredTrack = function(req, res) {
+    Track
+        .query(function(qb) {
+            qb
+                .where('owner', req.params.user_id)
+                .orderBy('id', 'desc')
+                .limit(1);
+        })
+        .fetch()
+        .then(function(track) {
+            return track.asFullTrack();
+        })
+        .then(function(results) {
             res.status(StatusTypes.ok).json(results);
         });
 };
