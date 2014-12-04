@@ -7,7 +7,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var GalleryStore = require('../stores/gallery');
+var GalleryStore = require('../stores/gallery');
 
 //UI Components
 var Icon = require('./Icon.jsx');
@@ -16,7 +16,30 @@ var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
 var Gallery = React.createClass({
+    mixins: [
+        Reflux.listenTo(GalleryStore, 'onDataChanged')
+    ],
+    newTrackNum: 5,
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+
+    },
+    getInitialState: function() {
+        return {
+            data: GalleryStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        Actions.getNewTracks(this.newTrackNum);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        Actions.getNewTracks(this.newTrackNum);
+    },
     render: function() {
+        // console.log(this.props.currentUser);
+        console.log(this.state.data.newTracks);
         return (
             <div className='main-content'>
                 <PanelPadded isGallery={true}>
@@ -30,6 +53,11 @@ var Gallery = React.createClass({
         );
     }
 });
+
+
+
+
+
 
 var SearchBar = React.createClass({
     render: function() {

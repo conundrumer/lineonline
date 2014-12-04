@@ -119,20 +119,20 @@ var Navbar = React.createClass({
                             LineOnline
                         </Link>
                     </li>
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <Navlink title='Home' link='home' icon='home' />
                         : null
                     }
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <Navlink title='Editor' link='editor' icon='pencil' />
                         : null
                     }
                     <Navlink title='Gallery' link='gallery' icon='image' />
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <li className='nav-item col span_2_of_7'></li>
                         : <li className='nav-item col span_4_of_7'></li>
                     }
-                    {this.state.data.profile ?
+                    {this.props.currentUser && this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>
                             <div className='navlink' onClick={this.handleDropdownClick}>
                                 <img src={this.state.data.profile.avatar_url} />

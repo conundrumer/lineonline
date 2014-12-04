@@ -43,7 +43,8 @@ var Actions = Reflux.createActions([
     // 'getInvitee',
 
     //gallery
-    'getGallery',
+    // 'getGallery',
+    'getNewTracks',
 
     //favorites
     'getFavorites',
