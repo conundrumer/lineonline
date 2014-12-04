@@ -36,7 +36,6 @@ var GalleryTile = React.createClass({
         }
     },
     componentWillReceiveProps: function(nextProps) {
-        console.log(nextProps.userId);
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
