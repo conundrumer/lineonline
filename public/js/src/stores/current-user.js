@@ -30,7 +30,7 @@ var CurrentUserStore = Reflux.createStore({
             }.bind(this));
     },
 
-    onUpdateCurrentProfile: function(userId, userProfile) {
+    onUpdateCurrentProfile: function(userProfile) {
         request
             .put('/api/profile')
             .send(userProfile)
@@ -46,19 +46,32 @@ var CurrentUserStore = Reflux.createStore({
                 // }
                 console.log('unknown status: ', res.status);
             }.bind(this));
-
-
-            // .end(function(err, res) {
-            //     console.log(res);
-            //     if (res.status === StatusTypes.ok) {
-            //         console.log('UPDATING PROFIELEEE WOOHOO');
-            //         this.data.profile = res.body;
-            //         this.trigger(this.data);
-            //         return;
-            //     }
-            //     console.log('unknown status: ', res.status);
-            // }.bind(this));
     },
+
+    onUpdateEmail: function(userId, email) {
+        request
+            .put('/api/settings')
+            .send(email)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    Actions.getCurrentProfile(userId); //update email
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    },
+
+    onUpdatePassword: function(password) {
+        request
+            .put('/api/settings')
+            .send(password)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.noContent) {
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
 
 });
 
