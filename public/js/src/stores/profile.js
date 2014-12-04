@@ -33,7 +33,7 @@ var ProfileStore = Reflux.createStore({
 
     onUpdateProfile: function(userId, userProfile) {
         request
-            .put('/api/users/' + userId + '/profile')
+            .put('/api/profile')
             .send(userProfile)
             .end(function(err, res) {
                 console.log('ended');

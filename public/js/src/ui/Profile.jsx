@@ -52,7 +52,6 @@ var Profile = React.createClass({
     render: function() {
         var id = this.props.params.profileId;
         // var data = this.state.data;
-        console.log(this.props.currentUser);
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>

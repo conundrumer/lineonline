@@ -27,6 +27,9 @@ var GalleryPreview = React.createClass({
 var GalleryCol = React.createClass({
     render: function() {
         var trackPreview = '../../images/sample_masthead.png'; //track.preview
+        var trackId = 1;
+        var userId = 1;
+
         return (
             <div className='gallery-col col span_1_of_3'>
                 <GalleryHeader title={this.props.headerTitle} icon={this.props.headerIcon} />
@@ -35,12 +38,16 @@ var GalleryCol = React.createClass({
                     title='Track Title'
                     description='Description 1 description blah blah blah'
                     col={this.props.col}
+                    trackId={trackId}
+                    userId={userId}
                 />
                 <GalleryTile
                     trackPreview={trackPreview}
                     title='Track Title'
                     description='Description 2 description blah blah blah'
                     col={this.props.col}
+                    trackId={trackId}
+                    userId={userId}
                 />
             </div>
         );

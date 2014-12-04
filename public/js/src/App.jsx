@@ -13,6 +13,7 @@ var Actions = require('./actions');
 
 //Data Stores
 var AuthStore = require('./stores/auth');
+var ProfileStore = require('./stores/profile');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -24,6 +25,7 @@ var Profile = require('./ui/Profile.jsx');
 var Favorites = require('./ui/Favorites.jsx');
 var Subscriptions = require('./ui/Subscriptions.jsx');
 var Settings = require('./ui/Settings.jsx');
+var Playback = require('./ui/Playback.jsx');
 var NotFound = require('./ui/NotFound.jsx');
 var Footer = require('./ui/Footer.jsx');
 
@@ -66,8 +68,28 @@ var App = React.createClass({
 // blah = ['foo has bar', 'de has lu']
 
 var Navbar = React.createClass({
+    mixins: [
+        Reflux.listenTo(ProfileStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    componentWillMount: function() {
+        if (this.props.currentUser) {
+            Actions.getProfile(this.props.currentUser.user_id);
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if ((this.props.currentUser !== nextProps.currentUser)
+            && nextProps.currentUser) {
+            Actions.getProfile(nextProps.currentUser.user_id);
+        }
+    },
     getInitialState: function() {
         return {
+            data: ProfileStore.getDefaultData(),
             hidden: true
         };
     },
@@ -97,30 +119,30 @@ var Navbar = React.createClass({
                             LineOnline
                         </Link>
                     </li>
-                    {this.props.currentUser ?
+                    {this.state.data.profile ?
                         <Navlink title='Home' link='home' icon='home' />
                         : null
                     }
-                    {this.props.currentUser ?
+                    {this.state.data.profile ?
                         <Navlink title='Editor' link='editor' icon='pencil' />
                         : null
                     }
                     <Navlink title='Gallery' link='gallery' icon='image' />
-                    {this.props.currentUser ?
+                    {this.state.data.profile ?
                         <li className='nav-item col span_2_of_7'></li>
                         : <li className='nav-item col span_4_of_7'></li>
                     }
-                    {this.props.currentUser ?
+                    {this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>
                             <div className='navlink' onClick={this.handleDropdownClick}>
-                                <img src={this.props.currentUser.avatar_url} />
+                                <img src={this.state.data.profile.avatar_url} />
                                 <span className='hide'>
                                     Profile
                                 </span>
                             </div>
                             <Dropdown
-                                username={this.props.currentUser.username}
-                                id={this.props.currentUser.user_id}
+                                username={this.state.data.profile.username}
+                                id={this.state.data.profile.user_id}
                                 isHidden={this.state.hidden}
                             />
                         </li>
@@ -377,6 +399,7 @@ var routes = (
             <Route name='home' handler={Home} />
             <Route name='editor' handler={Editor} />
             <Route name='edit' path='/edit/:trackId' handler={Editor} />
+            <Route name='track' path='/track/:trackId' handler={Playback} />
             <Route name='gallery' handler={Gallery} />
             <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
