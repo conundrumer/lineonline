@@ -57,7 +57,10 @@ var Actions = Reflux.createActions([
 
     //settings
     //see 'getProfile'
-    'updateProfile'
+    'updateProfile',
+
+    //playback
+    'getTrack'
 
 ]);
 

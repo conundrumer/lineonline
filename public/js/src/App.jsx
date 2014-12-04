@@ -25,6 +25,7 @@ var Profile = require('./ui/Profile.jsx');
 var Favorites = require('./ui/Favorites.jsx');
 var Subscriptions = require('./ui/Subscriptions.jsx');
 var Settings = require('./ui/Settings.jsx');
+var Playback = require('./ui/Playback.jsx');
 var NotFound = require('./ui/NotFound.jsx');
 var Footer = require('./ui/Footer.jsx');
 
@@ -398,6 +399,7 @@ var routes = (
             <Route name='home' handler={Home} />
             <Route name='editor' handler={Editor} />
             <Route name='edit' path='/edit/:trackId' handler={Editor} />
+            <Route name='track' path='/track/:trackId' handler={Playback} />
             <Route name='gallery' handler={Gallery} />
             <Route name='profile' path='/profile/:profileId' handler={Profile} />
             <Route name='favorites' handler={Favorites} />
