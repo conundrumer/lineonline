@@ -60,9 +60,16 @@ var Actions = Reflux.createActions([
     //current user
     'getCurrentProfile',
     'updateCurrentProfile',
+    'updateEmail',
+    'updatePassword',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 

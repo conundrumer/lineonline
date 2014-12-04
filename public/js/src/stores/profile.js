@@ -50,25 +50,21 @@ var ProfileStore = Reflux.createStore({
     },
 
     onGetFeaturedTrack: function(userId) {
-        // request
-        //     .get('/api/users/' + userId + '/featured')
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.profile = res.body;
-        //             console.log('got user featured track!!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.profileData.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
-
-        setTimeout(function() {
-            this.data.featuredTrack = {};
-            this.trigger(this.data);
-        }.bind(this));
+        console.log('trying to get featured track for profile');
+        request
+            .get('/api/users/' + userId + '/featured')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('GOT FEATURED TRACK FOR PROFILEEEE');
+                    this.data.featuredTrack = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     }
 
     // onGetCollections: function(userId) {

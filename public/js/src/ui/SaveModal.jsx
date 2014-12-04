@@ -1,8 +1,127 @@
 var React = require('react/addons');
 var _ = require('underscore');
+var ReactBacon = require('react-bacon');
+var request = require('superagent');
 
 //UI Components
 var Icon = require('./Icon.jsx');
+
+var DEBOUNCE_DELAY = 350; // in ms, amount to delay before continuing
+var InviteSearch = React.createClass({
+    mixins: [ReactBacon.BaconMixin],
+    getInitialState: function() {
+        return {
+            query: '',
+            selectedUser: null,
+            searchResults: [],
+            isAutocompleteBoxHidden: true
+        };
+    },
+    componentWillMount: function() {
+        this.eventStream('inputChanged')
+            .map('.target.value')
+            .onValue(function(username) {
+                console.log(username);
+                this.setState({
+                    query: username
+                });
+            }.bind(this));
+
+        this.eventStream('inputChanged')
+            .map('.target.value')
+            .debounce(DEBOUNCE_DELAY)
+            .onValue(function(username) {
+                request.get('/api/users?q=' + username)
+                    .end(function (err, res) {
+                        if (res.status === 200) {
+                            this.gotUsers(res.body);
+                            return;
+                        }
+                    console.log('could not query for user');
+                }.bind(this));
+            }.bind(this));
+    },
+    gotUsers: function(results) {
+        if (results.length > 0) {
+            this.setState({
+                searchResults: results,
+                isAutocompleteBoxHidden: false
+            });
+        } else {
+            console.log('no users in search results');
+            this.setState({
+                selectedUser: null,
+                searchResults: results,
+                isAutocompleteBoxHidden: true
+            });
+        }
+        console.log('got users:', results.map(function(user) {
+            return user.username;
+        }));
+        if (results[0] && results[0].username === this.state.query) {
+            this.setState({
+                selectedUser: results[0],
+                isAutocompleteBoxHidden: true
+            });
+        }
+    },
+    onInvite: function(e) {
+        e.preventDefault();
+        if (this.state.selectedUser && this.state.selectedUser.username === this.state.query) {
+            this.props.onInvite(this.state.selectedUser);
+            this.setState({
+                query: '',
+                selectedUser: null,
+                isAutocompleteBoxHidden: true
+            });
+        }
+    },
+    handleSelectUser: function(user) {
+        this.setState({
+            query: user.username,
+            selectedUser: user
+        });
+
+        this.setState({
+            isAutocompleteBoxHidden: true
+        });
+    },
+    render: function() {
+        return (
+            <div>
+                <div className='invitee-search'>
+                    <input autoComplete='off' type='text' name='username' value={this.state.query} onChange={this.inputChanged} />
+                    <AutocompleteBox isHidden={this.state.isAutocompleteBoxHidden} onSelectUser={this.handleSelectUser} users={this.state.searchResults} />
+                </div>
+                <button className='btn-submit' type='submit' onClick={this.onInvite}>
+                    Invite
+                </button>
+            </div>
+        );
+    }
+});
+
+var AutocompleteBox = React.createClass({
+    render: function() {
+        var users = this.props.users.map(function(user) {
+            var handleSelectUser = function(e) {
+                e.preventDefault();
+                this.props.onSelectUser(user);
+            }.bind(this);
+            return (
+                <li onClick={handleSelectUser}>{user.username}</li>
+            );
+        }.bind(this));
+        var isHiddenClass = this.props.isHidden ? ' hide' : '';
+        return (
+            <div className={'autocomplete-box' + isHiddenClass}>
+                <ul>
+                    {users}
+                </ul>
+            </div>
+        );
+    }
+});
 
 var SaveModal = React.createClass({
     getInitialState: function() {
@@ -49,34 +168,9 @@ var SaveModal = React.createClass({
 
         this.props.onSave(trackMetaData);
     },
-    handleInvite: function(e) {
-        e.preventDefault();
-
-        var userId = this.refs.inviteeUsername.getDOMNode().value.trim();
+    handleInvite: function(user) {
         var currInvitees = this.state.track.invitees;
-
-        var user = {
-            user_id: userId,
-            avatar_url: '../../images/sample_profile.png',
-            username: 'balasdfjkl',
-        };
-
-        if (userId !== '') { //&& valid
-
-            this.props.onInvite(user);
-
-            // this.setState({
-            //     track: _.extend(this.state.track, { invitees: _.union(currInvitees, [user]) })
-            // });
-            // console.log(this.state.track.invitees);
-        }
-
-        this.refs.inviteeUsername.getDOMNode().value = '';
-
-
-
-        // var username = this.refs.inviteeUsername.getDOMNode().value.trim();
-        // Actions.getUserFromUsername();
+        this.props.onInvite(user);
     },
     handleDeleteCollaborator: function(e) {
 
@@ -186,10 +280,7 @@ var SaveModal = React.createClass({
                             </div>
 
                         }
-                        <input ref='inviteeUsername' name='invitees' type='text' />
-                        <button className='btn-submit' type='submit' onClick={this.handleInvite}>
-                            Invite
-                        </button>
+                        <InviteSearch onInvite={this.handleInvite} />
                     </div>
                 </form>
                 <button className='btn-submit btn-save-modal' type='submit' onClick={this.handleFormSubmit}>

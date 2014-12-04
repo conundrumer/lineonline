@@ -94,22 +94,43 @@ exports.search = function(req, res) {
                 return user.asUserSnippet();
             });
             res.status(StatusTypes.ok).json(results);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.featuredTrack = function(req, res) {
-    Track
-        .query(function(qb) {
-            qb
-                .where('owner', req.params.user_id)
-                .orderBy('id', 'desc')
-                .limit(1);
-        })
-        .fetch()
+    var track_id = req.user_model.get('featured_track');
+    var future_track;
+    if (track_id !== null) {
+        future_track = Track
+            .getByID(track_id);
+    } else {
+        future_track = Track
+            .query(function(qb) {
+                qb
+                    .where('owner', req.params.user_id)
+                    .orderBy('id', 'desc')
+                    .limit(1);
+            })
+            .fetch();
+    }
+    future_track
         .then(function(track) {
             return track.asFullTrack();
         })
         .then(function(results) {
             res.status(StatusTypes.ok).json(results);
-        });
+        })
+        .catch(console.error);
+};
+
+exports.setFeaturedTrack = function(req, res) {
+    req.user
+        .save({
+            featured_track: req.params.track_id
+        }, { patch: true })
+        .then(function() {
+            res.status(StatusTypes.noContent).send();
+        })
+        .catch(console.error);
 };

@@ -128,6 +128,7 @@ var Editor = React.createClass({
     },
     handleInvite: function(user) {
         if (this.props.params.trackId) {
+            console.log('adding invitee!');
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
             alert('You must save your track before inviting anyone!');
