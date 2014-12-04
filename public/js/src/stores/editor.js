@@ -58,8 +58,9 @@ var EditorStore = Reflux.createStore({
     },
 
     onUpdateTrack: function(updatedTrackData) {
-        console.log("onUpdateTrack", updatedTrackData.track_id)
         var trackId = updatedTrackData.track_id;
+        var metadata = _.extend(updatedTrackData, {});
+        delete metadata.scene;
         request
             .put('/api/tracks/' + trackId)
             .send(updatedTrackData)
