@@ -3,10 +3,7 @@
 
 module.exports = require('bookshelf')(require('knex')({
     client: 'pg',
-    connection: {
-        host: process.env.DATABASE_URL || 'localhost',
-        charset: 'utf8'
-    }
+    connection: process.env.DATABASE_URL
 })).plugin('registry');
 
 // module.exports = require('bookshelf')(require('knex')({
