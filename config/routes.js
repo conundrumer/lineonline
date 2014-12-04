@@ -21,6 +21,10 @@ api.route('/auth')
 api.route('/auth/register')
     .post(auth.register);
 
+// settings
+api.route('/settings')
+    .put(auth.loginRequired, auth.settings);
+
 // users
 
 api.param('user_id', users.getByID);
@@ -108,8 +112,8 @@ api.route('/subscriptions')
     .get(subscriptions.getSubscriptions);
 
 api.route('/subscriptions/:user_id')
-    .put(subscriptions.addSubscription)
-    .delete(subscriptions.deleteSubscription);
+    .put(users.noSelfReference, subscriptions.addSubscription)
+    .delete(users.noSelfReference, subscriptions.deleteSubscription);
 
 // favorites
 api.use('/favorites', auth.loginRequired);

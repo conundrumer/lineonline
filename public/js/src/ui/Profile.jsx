@@ -51,6 +51,8 @@ var Profile = React.createClass({
     },
     render: function() {
         var id = this.props.params.profileId;
+        console.log('GETTING THE PROFILE OF ', id);
+        console.log(this.state.data.profile);
         // var data = this.state.data;
         return (
             <div className='main-content'>
@@ -197,10 +199,13 @@ var ProfileCollections = React.createClass({
 
 var ProfileSidebar = React.createClass({
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var profileAvatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             <section className='profile-sidebar'>
-                <div className='picture'>
-                    <img src={this.props.avatarUrl} />
+                <div className='picture' style={profileAvatarStyle}>
                 </div>
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />

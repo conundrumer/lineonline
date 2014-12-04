@@ -13,7 +13,7 @@ var Actions = require('./actions');
 
 //Data Stores
 var AuthStore = require('./stores/auth');
-var ProfileStore = require('./stores/profile');
+var CurrentUserStore = require('./stores/current-user');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -69,7 +69,7 @@ var App = React.createClass({
 
 var Navbar = React.createClass({
     mixins: [
-        Reflux.listenTo(ProfileStore, 'onDataChanged')
+        Reflux.listenTo(CurrentUserStore, 'onDataChanged')
     ],
     onDataChanged: function(newData) {
         this.setState({
@@ -78,18 +78,18 @@ var Navbar = React.createClass({
     },
     componentWillMount: function() {
         if (this.props.currentUser) {
-            Actions.getProfile(this.props.currentUser.user_id);
+            Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.currentUser !== nextProps.currentUser)
             && nextProps.currentUser) {
-            Actions.getProfile(nextProps.currentUser.user_id);
+            Actions.getCurrentProfile(nextProps.currentUser.user_id);
         }
     },
     getInitialState: function() {
         return {
-            data: ProfileStore.getDefaultData(),
+            data: CurrentUserStore.getDefaultData(),
             hidden: true
         };
     },
@@ -111,6 +111,11 @@ var Navbar = React.createClass({
         }
     },
     render: function() {
+        var bgSrc = this.state.data.profile ? this.state.data.profile.avatar_url : ''
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
+
         return (
             <nav className='navbar'>
                 <ul className='nav-list section group'>
@@ -119,23 +124,22 @@ var Navbar = React.createClass({
                             LineOnline
                         </Link>
                     </li>
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <Navlink title='Home' link='home' icon='home' />
                         : null
                     }
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <Navlink title='Editor' link='editor' icon='pencil' />
                         : null
                     }
                     <Navlink title='Gallery' link='gallery' icon='image' />
-                    {this.state.data.profile ?
+                    {this.props.currentUser ?
                         <li className='nav-item col span_2_of_7'></li>
                         : <li className='nav-item col span_4_of_7'></li>
                     }
-                    {this.state.data.profile ?
+                    {this.props.currentUser && this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>
-                            <div className='navlink' onClick={this.handleDropdownClick}>
-                                <img src={this.state.data.profile.avatar_url} />
+                            <div className='navlink' style={avatarStyle} onClick={this.handleDropdownClick}>
                                 <span className='hide'>
                                     Profile
                                 </span>
