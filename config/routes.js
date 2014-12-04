@@ -106,8 +106,8 @@ api.route('/subscriptions')
     .get(subscriptions.getSubscriptions);
 
 api.route('/subscriptions/:user_id')
-    .put(subscriptions.addSubscription)
-    .delete(subscriptions.deleteSubscription);
+    .put(users.noSelfReference, subscriptions.addSubscription)
+    .delete(users.noSelfReference, subscriptions.deleteSubscription);
 
 // favorites
 api.use('/favorites', auth.loginRequired);
