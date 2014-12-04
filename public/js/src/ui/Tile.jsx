@@ -21,7 +21,7 @@ var Display = require('../linerider/Display.jsx');
 var Tile = React.createClass({
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
-        Reflux.listenTo(FeaturedStore, 'onDataChanged'),
+        Reflux.listenTo(FeaturedStore, 'onFeaturedChanged'),
         Navigation
     ],
     onDataChanged: function(newData) {
@@ -31,22 +31,40 @@ var Tile = React.createClass({
             });
         }
     },
+    onFeaturedChanged: function(newData) {
+        if (this.isMounted() && this.props.extra === 'your-track') {
+            this.setState({
+                featuredData: newData
+            });
+        }
+    },
     getInitialState: function() {
-        return {
-            data: _.extend({}, FavoritesStore.getDefaultData(), FeaturedStore.getDefaultData())
+        if (this.props.extra === 'your-track') {
+            return {
+                data: FavoritesStore.getDefaultData(),
+                featuredData: FeaturedStore.getDefaultData()
+            }
+        } else {
+            return {
+                data: FavoritesStore.getDefaultData()
+            }
         }
     },
     componentWillMount: function() {
         if (this.props.userId) {
             Actions.getFavorites();
-            Actions.getFeatured(this.props.userId);
+            if (this.state.featuredData) {
+                Actions.getFeatured(this.props.userId);
+            }
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
-            Actions.getFeatured(nextProps.userId);
+            if (this.state.featuredData) {
+                Actions.getFeatured(nextProps.userId);
+            }
         }
     },
     isInFavorites: function(trackId) {
@@ -62,12 +80,9 @@ var Tile = React.createClass({
         }
     },
     isFeatured: function(trackId) {
-        // console.log('in is featured ', trackId);
-        if (this.state.data.featured && this.state.data.featured.track_id === trackId) {
-            console.log('yep is featured ', this.state.data.featured.track_id);
+        if (this.state.featuredData && this.state.featuredData.featured && this.state.featuredData.featured.track_id === trackId) {
             return true;
         } else {
-            console.log('nope not featured ', trackId);
             return false;
         }
     },

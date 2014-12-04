@@ -2,6 +2,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
@@ -33,6 +34,7 @@ var Profile = React.createClass({
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
     },
@@ -40,6 +42,7 @@ var Profile = React.createClass({
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
         }
@@ -54,6 +57,10 @@ var Profile = React.createClass({
         console.log('GETTING THE PROFILE OF ', id);
         console.log(this.state.data.profile);
         // var data = this.state.data;
+        if (this.state.data.featuredTrack) {
+            console.log('JKSDFJKLDSAFJLKDSAFLJKSADFLJKADSJLFKLASDFJKLDSAFJKDLSAJFDSKLAJFKLASJ');
+            console.log(this.state.data.featuredTrack);
+        }
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
@@ -75,37 +82,10 @@ var Profile = React.createClass({
                             <section className='profile-main'>
                                 { this.state.data.featuredTrack ?
                                     <ProfileFeaturedTrack featuredTrack={this.state.data.featuredTrack} />
-                                    :
-                                    <article className='profile-featured-track'>
-                                        <Icon class='preview-icon' icon='fullscreen-enter' />
-                                        <MediaIcons />
-                                        <aside className='info'>
-                                            <div>
-                                                <h3>Sample Featured Track</h3>
-                                                <p>
-                                                    Sample description
-                                                </p>
-                                                <h3>Owner</h3>
-                                                <p>
-                                                    <Link to={'/profile/' + id}>
-                                                        Sample Owner
-                                                    </Link>
-
-                                                </p>
-                                                <h3>Collaborators</h3>
-                                                <ul>
-                                                    <li>
-                                                        <Link to={'/profile/'+ id}>
-                                                            Sample Collaborator
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </aside>
-                                    </article>
+                                    : null
                                 }
                                 { this.state.data.tracks && this.state.data.profile ?
-                                    <ProfileTrackSnippets tracks={this.state.data.tracks} currentUser={this.props.currentUser} username={this.state.data.profile.username} />
+                                    <ProfileTrackSnippets tracks={this.state.data.tracks} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
                                     : null
                                 }
                             </section>
@@ -123,7 +103,7 @@ var ProfileFeaturedTrack = React.createClass({
         var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 <li>
-                    <Link to={'/profile/'+collaborator.id}>
+                    <Link to={'/profile/' + collaborator.user_id}>
                         {collaborator.username}
                     </Link>
                 </li>
@@ -136,12 +116,17 @@ var ProfileFeaturedTrack = React.createClass({
                 <aside className='info'>
                     <div>
                         <h3>{this.props.featuredTrack.title}</h3>
-                        <p>
-                            {this.props.featuredTrack.description}
-                        </p>
+                        {this.props.featuredTrack.description ?
+                            <p>
+                                {this.props.featuredTrack.description}
+                            </p>
+                            :
+                            <p>
+                            </p>
+                        }
                         <h3>Owner</h3>
                         <p>
-                            <Link to={'/profile/' + this.props.featuredTrack.owner.id}>
+                            <Link to={'/profile/' + this.props.featuredTrack.owner.user_id}>
                                 {this.props.featuredTrack.owner.username}
                             </Link>
 
@@ -167,7 +152,7 @@ var ProfileTrackSnippets = React.createClass({
                             <h3 className='collection-title'>
                                 {this.props.username + '\'s tracks'}
                             </h3>
-                            <TracksPreview userId={this.props.currentUser} tracks={this.props.tracks} />
+                            <TracksPreview userId={this.props.userId} tracks={this.props.tracks} />
                         </div>
                         : null
                     }

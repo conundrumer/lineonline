@@ -46,6 +46,7 @@ var FeaturedStore = Reflux.createStore({
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     console.log('whoooa got featured');
+                    console.log(this.data);
                     this.data.featured = res.body;
                     this.trigger(this.data);
                     return;

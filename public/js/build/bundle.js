@@ -49776,6 +49776,7 @@ var FeaturedStore = Reflux.createStore({
             .end(function(err, res) {
                 if (res.status === StatusTypes.ok) {
                     console.log('whoooa got featured');
+                    console.log(this.data);
                     this.data.featured = res.body;
                     this.trigger(this.data);
                     return;
@@ -50098,25 +50099,21 @@ var ProfileStore = Reflux.createStore({
     },
 
     onGetFeaturedTrack: function(userId) {
-        // request
-        //     .get('/api/users/' + userId + '/featured')
-        //     .end(function(err, res) {
-        //         if (res.status === StatusTypes.ok) {
-        //             this.data.profile = res.body;
-        //             console.log('got user featured track!!!!');
-        //             this.trigger(this.data);
-        //             return;
-        //         }
-        //         // if (res.notFound) {
-        //         //     this.data.profileData.notFound = true
-        //         // }
-        //         console.log('unknown status: ', res.status);
-        //     }.bind(this));
-
-        setTimeout(function() {
-            this.data.featuredTrack = {};
-            this.trigger(this.data);
-        }.bind(this));
+        console.log('trying to get featured track for profile');
+        request
+            .get('/api/users/' + userId + '/featured')
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    console.log('GOT FEATURED TRACK FOR PROFILEEEE');
+                    this.data.featuredTrack = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                // if (res.notFound) {
+                //     this.data.notFound = true
+                // }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
     }
 
     // onGetCollections: function(userId) {
@@ -51173,6 +51170,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
@@ -51204,6 +51202,7 @@ var Profile = React.createClass({displayName: 'Profile',
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
     },
@@ -51211,6 +51210,7 @@ var Profile = React.createClass({displayName: 'Profile',
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
         }
@@ -51225,6 +51225,10 @@ var Profile = React.createClass({displayName: 'Profile',
         console.log('GETTING THE PROFILE OF ', id);
         console.log(this.state.data.profile);
         // var data = this.state.data;
+        if (this.state.data.featuredTrack) {
+            console.log('JKSDFJKLDSAFJLKDSAFLJKSADFLJKADSJLFKLASDFJKLDSAFJKDLSAJFDSKLAJFKLASJ');
+            console.log(this.state.data.featuredTrack);
+        }
         return (
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(PanelPadded, {isProfile: true}, 
@@ -51246,37 +51250,10 @@ var Profile = React.createClass({displayName: 'Profile',
                             React.createElement("section", {className: "profile-main"}, 
                                  this.state.data.featuredTrack ?
                                     React.createElement(ProfileFeaturedTrack, {featuredTrack: this.state.data.featuredTrack})
-                                    :
-                                    React.createElement("article", {className: "profile-featured-track"}, 
-                                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"}), 
-                                        React.createElement(MediaIcons, null), 
-                                        React.createElement("aside", {className: "info"}, 
-                                            React.createElement("div", null, 
-                                                React.createElement("h3", null, "Sample Featured Track"), 
-                                                React.createElement("p", null, 
-                                                    "Sample description"
-                                                ), 
-                                                React.createElement("h3", null, "Owner"), 
-                                                React.createElement("p", null, 
-                                                    React.createElement(Link, {to: '/profile/' + id}, 
-                                                        "Sample Owner"
-                                                    )
-
-                                                ), 
-                                                React.createElement("h3", null, "Collaborators"), 
-                                                React.createElement("ul", null, 
-                                                    React.createElement("li", null, 
-                                                        React.createElement(Link, {to: '/profile/'+ id}, 
-                                                            "Sample Collaborator"
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    ), 
+                                    : null, 
                                 
                                  this.state.data.tracks && this.state.data.profile ?
-                                    React.createElement(ProfileTrackSnippets, {tracks: this.state.data.tracks, currentUser: this.props.currentUser, username: this.state.data.profile.username})
+                                    React.createElement(ProfileTrackSnippets, {tracks: this.state.data.tracks, userId: this.props.currentUser.user_id, username: this.state.data.profile.username})
                                     : null
                                 
                             )
@@ -51294,7 +51271,7 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
         var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 React.createElement("li", null, 
-                    React.createElement(Link, {to: '/profile/'+collaborator.id}, 
+                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
                         collaborator.username
                     )
                 )
@@ -51307,12 +51284,17 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
                 React.createElement("aside", {className: "info"}, 
                     React.createElement("div", null, 
                         React.createElement("h3", null, this.props.featuredTrack.title), 
-                        React.createElement("p", null, 
-                            this.props.featuredTrack.description
-                        ), 
+                        this.props.featuredTrack.description ?
+                            React.createElement("p", null, 
+                                this.props.featuredTrack.description
+                            )
+                            :
+                            React.createElement("p", null
+                            ), 
+                        
                         React.createElement("h3", null, "Owner"), 
                         React.createElement("p", null, 
-                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.id}, 
+                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
                                 this.props.featuredTrack.owner.username
                             )
 
@@ -51338,7 +51320,7 @@ var ProfileTrackSnippets = React.createClass({displayName: 'ProfileTrackSnippets
                             React.createElement("h3", {className: "collection-title"}, 
                                 this.props.username + '\'s tracks'
                             ), 
-                            React.createElement(TracksPreview, {userId: this.props.currentUser, tracks: this.props.tracks})
+                            React.createElement(TracksPreview, {userId: this.props.userId, tracks: this.props.tracks})
                         )
                         : null
                     
@@ -51452,7 +51434,7 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
@@ -52224,7 +52206,7 @@ var Display = require('../linerider/Display.jsx');
 var Tile = React.createClass({displayName: 'Tile',
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
-        Reflux.listenTo(FeaturedStore, 'onDataChanged'),
+        Reflux.listenTo(FeaturedStore, 'onFeaturedChanged'),
         Navigation
     ],
     onDataChanged: function(newData) {
@@ -52234,22 +52216,40 @@ var Tile = React.createClass({displayName: 'Tile',
             });
         }
     },
+    onFeaturedChanged: function(newData) {
+        if (this.isMounted() && this.props.extra === 'your-track') {
+            this.setState({
+                featuredData: newData
+            });
+        }
+    },
     getInitialState: function() {
-        return {
-            data: _.extend({}, FavoritesStore.getDefaultData(), FeaturedStore.getDefaultData())
+        if (this.props.extra === 'your-track') {
+            return {
+                data: FavoritesStore.getDefaultData(),
+                featuredData: FeaturedStore.getDefaultData()
+            }
+        } else {
+            return {
+                data: FavoritesStore.getDefaultData()
+            }
         }
     },
     componentWillMount: function() {
         if (this.props.userId) {
             Actions.getFavorites();
-            Actions.getFeatured(this.props.userId);
+            if (this.state.featuredData) {
+                Actions.getFeatured(this.props.userId);
+            }
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if ((this.props.userId !== nextProps.userId)
             && nextProps.userId) {
             Actions.getFavorites();
-            Actions.getFeatured(nextProps.userId);
+            if (this.state.featuredData) {
+                Actions.getFeatured(nextProps.userId);
+            }
         }
     },
     isInFavorites: function(trackId) {
@@ -52265,12 +52265,9 @@ var Tile = React.createClass({displayName: 'Tile',
         }
     },
     isFeatured: function(trackId) {
-        // console.log('in is featured ', trackId);
-        if (this.state.data.featured && this.state.data.featured.track_id === trackId) {
-            console.log('yep is featured ', this.state.data.featured.track_id);
+        if (this.state.featuredData && this.state.featuredData.featured && this.state.featuredData.featured.track_id === trackId) {
             return true;
         } else {
-            console.log('nope not featured ', trackId);
             return false;
         }
     },
