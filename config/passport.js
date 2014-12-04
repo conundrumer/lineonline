@@ -1,16 +1,7 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
-var crypto = require('crypto');
-var crypto_alg = 'aes-256-ctr';
-var crypto_password = 'delu';
-
-function decrypt(password){
-    var decipher = crypto.createDecipher(crypto_alg,crypto_password)
-    var dec = decipher.update(password,'hex','utf8')
-    dec += decipher.final('utf8');
-    return dec;
-}
+var encrypt = require('encrypt');
 
 module.exports = function (passport, config) {
 
@@ -28,7 +19,6 @@ module.exports = function (passport, config) {
         });
     });
 
-
     // Use the LocalStrategy within Passport.
     passport.use(new LocalStrategy(
         function(username, password, done) {
@@ -36,10 +26,8 @@ module.exports = function (passport, config) {
                 if (model === null) {
                     return done(null, false, { message: 'Unknown user ' + username });
                 }
-                var dec = decrypt(model.get('password'));
-                console.log("The decrypted password is: " + dec);
-                if (dec != password) {
-                    console.log("the password was wrong???");
+                var enc = encrypt.encryptPassword(password);
+                if (model.get('password') != enc) {
                     return done(null, false, { message: 'Invalid password'});
                 }
                 return done(null, model);

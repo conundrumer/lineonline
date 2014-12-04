@@ -1,18 +1,9 @@
 var Promise = require('bluebird');
 var StatusTypes = require('status-types');
-var passport = require('passport');
 var User = require('../models/user');
+var encrypt = require('encrypt');
+var passport = require('passport');
 
-var crypto = require('crypto');
-var crypto_alg = 'aes-256-ctr';
-var crypto_password = 'delu';
-
-function hashPassword(password){
-    var cipher = crypto.createCipher(crypto_alg, crypto_password);
-    var crypted = cipher.update(password,'utf8','hex')
-    crypted += cipher.final('hex');
-    return crypted;
-}
 
 exports.loginRequired = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -23,7 +14,7 @@ exports.loginRequired = function (req, res, next) {
 
 exports.logout = function(req, res) {
     req.logout();
-    res.status(StatusTypes.noContent).send();
+    res.status(204).send();
 };
 
 exports.getCurrentUser = function(req, res) {
@@ -36,17 +27,17 @@ exports.register = function(req, res){
     var email = req.body.email;
 
     if (username === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Username required'});
         return;
     }
     if (password === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Password required'});
         return;
     }
     if (email === ''){
-        res.status(StatusTypes.badRequest)
+        res.status(400)
             .send({message:'Email required'});
         return;
     }
@@ -119,7 +110,7 @@ exports.settings = function(req, res) {
                 return req.user
                     .save({ email: newEmail }, {patch:true})
                     .then(function() {
-                        res.status(StatusTypes.noContent).send();
+                        res.status(204).send();
                     });
             })
             .catch(console.error);
@@ -127,9 +118,9 @@ exports.settings = function(req, res) {
 
     if(newPassword) {
         return req.user
-            .save({ password: hashPassword(newPassword) }, {patch:true})
+            .save({ password: encrypt.encryptPassword(newPassword) }, {patch:true})
             .then(function() {
-                res.status(StatusTypes.noContent).send();
+                res.status(204).send();
             })
             .catch(console.error);
     }
@@ -139,13 +130,6 @@ exports.settings = function(req, res) {
     });
 };
 
-
-function decrypt(password){
-    var decipher = crypto.createDecipher(crypto_alg,crypto_password)
-    var dec = decipher.update(password,'hex','utf8')
-    dec += decipher.final('utf8');
-    return dec;
-}
 function isCorrectPassword(userModel, password) {
-    return decrypt(userModel.get('password')) === password;
+    return userModel.get('password') === encrypt.encryptPassword(password);
 }

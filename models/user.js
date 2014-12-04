@@ -3,9 +3,7 @@ var Track = require('./track');
 var Subscription = require('./subscription');
 var _ = require('underscore');
 var Promise = require('bluebird');
-var crypto = require('crypto');
-var crypto_alg = 'aes-256-ctr';
-var crypto_password = 'delu';
+var encrypt = require('../util/encrypt');
 
 function buildUserTable(table) {
     table.increments('id').primary();
@@ -54,12 +52,8 @@ var User = bookshelf.Model.extend({
     initialize: function() {
         this.on('creating', this.hashPassword, this);
     },
-    // http://lollyrock.com/articles/nodejs-encryption/
     hashPassword: function() {
-        var cipher = crypto.createCipher(crypto_alg, crypto_password);
-        var crypted = cipher.update(this.get('password'),'utf8','hex')
-        crypted += cipher.final('hex');
-        this.set('password', crypted);
+        this.set('password', encrypt.encryptPassword(this.get('password')));
     },
     tracks: function(){
         return this.hasMany('Track', 'owner');
@@ -111,7 +105,7 @@ var User = bookshelf.Model.extend({
     },
     getByID: function (id) {
         return User.forge({id: id}).fetch({require: true});
-    }
+    },
 
 });
 
