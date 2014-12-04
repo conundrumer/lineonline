@@ -93,10 +93,13 @@ var SubscriptionPicture = React.createClass({
         this.props.onUnsubscribe(this.props.userId);
     },
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             <div className='col span_1_of_4 subscription-user'>
-                <div className='picture picture-subscription'>
-                    <img src={this.props.avatarUrl} />
+                <div className='picture picture-subscription' style={avatarStyle}>
                     <div onClick={this.handleUnsubscribe}>
                         <Icon class='unsubscribe-icon' icon='circle-x' />
                     </div>

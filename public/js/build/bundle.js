@@ -48781,8 +48781,6 @@ var Actions = Reflux.createActions([
     'addInvitee',
     'addInvitees',
     'addCollaborators',
-    'getInvitees',
-    'getCollaborators',
     'openEditorSession',
     'closeEditorSession',
     'emitAddLine',
@@ -48951,9 +48949,9 @@ var Editor = React.createClass({displayName: 'Editor',
     ],
     onSceneChanged: function(data, action) {
         if (action == 'add') {
-            this.props.onAddLine(data);
+            this.props.onAddLine(data, this.props.isNewTrack);
         } else if (action == 'remove') {
-            this.props.onRemoveLine(data);
+            this.props.onRemoveLine(data, this.props.isNewTrack);
         } else {
             this.setState({ scene: data });
         }
@@ -48986,7 +48984,12 @@ var Editor = React.createClass({displayName: 'Editor',
     },
     onClear: function(e) {
         e.preventDefault();
-        Actions.newScene();
+        if (!this.props.isNewTrack ||
+            _.keys(this.state.scene.points).length === 0 ||
+            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            Actions.newScene();
+            this.props.onNewTrack();
+        }
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -49048,7 +49051,31 @@ var Editor = React.createClass({displayName: 'Editor',
     },
     onSaveSetting: function(e) {
         e.preventDefault();
-        this.props.onOpenModal(this.state.scene);
+        var scene = this.state.scene;
+        var userID = this.props.userID;
+        _.keys(scene.points).forEach(function(id) {
+            if (id[0] === '0') {
+                var point = scene.points[id];
+                delete scene.points[id];
+                scene.points[userID + id.slice(1)] = point;
+            }
+        });
+        _.keys(scene.lines).forEach(function(id) {
+            if (id[0] === '0') {
+                var line = scene.lines[id];
+                delete scene.lines[id];
+                scene.lines[userID + id.slice(1)] = line;
+            }
+        });
+        _.values(scene.lines).forEach(function(line) {
+            if (line.p1[0] === '0') {
+                line.p1 = userID + line.p1.slice(1);
+            }
+            if (line.p2[0] === '0') {
+                line.p2 = userID + line.p2.slice(1);
+            }
+        });
+        this.props.onSaveSetting(scene);
     },
     render: function() {
         var drawingLine;
@@ -49079,7 +49106,7 @@ var Editor = React.createClass({displayName: 'Editor',
                         onClick: this.onSaveSetting, 
                         icon:  this.props.isNewTrack ? 'check' : 'cog', 
                         name:  this.props.isNewTrack ? 'Save' : 'Settings'}), 
-                    React.createElement(ToolButton, {onClick: this.onClear, icon: "x", name: "Clear"})
+                    React.createElement(ToolButton, {onClick: this.onClear, icon: "x", name: "New"})
                 )
             )
         );
@@ -49480,6 +49507,7 @@ var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
 var LineRiderActions = require('../linerider/actions');
+var LocalEditorStore = require('../stores/local-editor');
 
 var EditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -49497,7 +49525,7 @@ var EditorStore = Reflux.createStore({
         };
 
         var EMPTY_TRACK = {
-            scene: EMPTY_SCENE,
+            scene: LocalEditorStore.getDefaultData() || EMPTY_SCENE,
             title: '',
             description: '',
             collaborators: [],
@@ -49509,6 +49537,11 @@ var EditorStore = Reflux.createStore({
             track: EMPTY_TRACK
         };
         return this.data
+    },
+    loadLocalTrack: function() {
+        var data = this.getDefaultData();
+        LineRiderActions.loadScene(data.track.scene);
+        return data;
     },
     onNewTrack: function() {
         this.data = this.getDefaultData();
@@ -49534,8 +49567,9 @@ var EditorStore = Reflux.createStore({
     },
 
     onUpdateTrack: function(updatedTrackData) {
-        console.log("onUpdateTrack", updatedTrackData.track_id)
         var trackId = updatedTrackData.track_id;
+        var metadata = _.extend(updatedTrackData, {});
+        delete metadata.scene;
         request
             .put('/api/tracks/' + trackId)
             .send(updatedTrackData)
@@ -49553,7 +49587,6 @@ var EditorStore = Reflux.createStore({
     },
 
     onCreateTrack: function(unsavedTrackData) {
-        console.log("onCreateTrack")
         request
             .post('/api/tracks/')
             .send(unsavedTrackData)
@@ -49608,46 +49641,13 @@ var EditorStore = Reflux.createStore({
                     }
                 }.bind(this))
         }.bind(this));
-    },
-
-    onGetInvitees: function(trackId) {
-        request
-            .get('/api/tracks/' + trackId + '/invitations/')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    this.data.track.invitees = res.body;
-                    this.trigger(this.data);
-                }
-            }.bind(this));
-    },
-
-    onGetCollaborators: function(trackId) {
-        request
-            .get('/api/tracks/' + trackId + '/collaborators/')
-            .end(function(err, res) {
-                if (res.status === StatusTypes.ok) {
-                    this.data.track.collaborators = res.body;
-                    this.trigger(this.data);
-                }
-            }.bind(this))
     }
-
-
-    // onGetInvitee: function(userId) {
-    //     request
-    //         .get('/api/users/' + userId)
-    //         .end(function(err, res) {
-    //             if (res.status === StatusTypes.ok) {
-
-    //             }
-    //         }.bind(this));
-    // }
 });
 
 
 module.exports = EditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -50046,7 +50046,97 @@ var HomeStore = Reflux.createStore({
 
 module.exports = HomeStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js":[function(require,module,exports){
+var Reflux = require('reflux');
+var Actions = require('../actions');
+
+// subject to change
+var ENTITY = {
+    POINT: 0,
+    LINE: 1
+};
+
+var LocalEditorStore = Reflux.createStore({
+    listenables: [Actions],
+    getDefaultData: function() {
+        if (localStorage.unsaved_scene) {
+            try {
+                this.scene = JSON.parse(localStorage.unsaved_scene);
+            } catch (e) {
+                this.scene = {
+                    points:{},
+                    lines:{}
+                };
+                localStorage.unsaved_scene = JSON.stringify(this.scene);
+            }
+        } else {
+            this.scene = {
+                points:{},
+                lines:{}
+            };
+            localStorage.unsaved_scene = JSON.stringify(this.scene);
+        }
+        return this.scene;
+    },
+    setScene: function(scene) {
+        this.scene = scene;
+        localStorage.unsaved_scene = JSON.stringify(scene);
+    },
+    onNewTrack: function() {
+        this.setScene({
+            points:{},
+            lines:{}
+        });
+    },
+    onEmitAddLine: function(data, isNewTrack) {
+        if (isNewTrack) {
+            this.addLine(data);
+        }
+    },
+    onEmitRemoveLine: function(data, isNewTrack) {
+        if (isNewTrack) {
+            this.removeLine(data);
+        }
+    },
+    addLine: function(data) {
+        var scene = this.getDefaultData();
+        data.forEach(function (e) {
+            switch (e.type) {
+                case ENTITY.POINT:
+                    scene.points[e.id] = {
+                        x: e.x,
+                        y: e.y
+                    };
+                    break;
+                case ENTITY.LINE:
+                    scene.lines[e.id] = {
+                        p1: e.p1,
+                        p2: e.p2
+                    };
+                    break;
+            }
+        });
+        this.setScene(scene);
+    },
+    removeLine: function(data) {
+        var scene = this.getDefaultData();
+        data.forEach(function (e) {
+            switch (e.type) {
+                case ENTITY.POINT:
+                    delete scene.points[e.id];
+                    break;
+                case ENTITY.LINE:
+                    delete scene.lines[e.id];
+                    break;
+            }
+        });
+        this.setScene(scene);
+    }
+});
+
+module.exports = LocalEditorStore;
+
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -50180,28 +50270,31 @@ var RealtimeEditorStore = Reflux.createStore({
         socket.on('remove', LineRiderActions.removeLine);
         this.socket = socket;
     },
-    onEmitAddLine: function(data) {
-        if (this.socket) {
-            this.socket.emit('add', data);
-            this.pending();
-            this.socket.once('sync', this.synchronize.bind(this));
+    onEmitAddLine: function(data, isNewTrack) {
+        if (!isNewTrack) {
+            this.emitToServer('add', data);
         }
     },
-    onEmitRemoveLine: function(data) {
+    onEmitRemoveLine: function(data, isNewTrack) {
+        if (!isNewTrack) {
+            this.emitToServer('remove', data);
+        }
+    },
+    emitToServer: function(event, data) {
         if (this.socket) {
-            this.socket.emit('remove', data);
+            this.socket.emit(event, data);
             this.pending();
             this.socket.once('sync', this.synchronize.bind(this));
         }
     },
     pending: function() {
         this.sync++;
-        this.trigger(this.sync)
+        this.trigger(this.sync);
     },
     synchronize: function() {
         this.sync--;
         if (this.sync === 0) {
-            this.trigger(this.sync)
+            this.trigger(this.sync);
         }
     },
     onCloseEditorSession: function() {
@@ -50214,6 +50307,7 @@ var RealtimeEditorStore = Reflux.createStore({
 });
 
 module.exports = RealtimeEditorStore;
+
 },{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","socket.io-client":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
@@ -50437,14 +50531,18 @@ var Editor = React.createClass({displayName: 'Editor',
         }
     },
     getInitialState: function() {
+        var data = EditorStore.loadLocalTrack();
+
         return {
-            data: EditorStore.getDefaultData(),
+            data: data,
             isModalHidden: true
         }
     },
     componentWillMount: function() {
         if (this.props.params.trackId) {
             this.loadTrack(this.props.params.trackId);
+        } else {
+
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -50475,8 +50573,6 @@ var Editor = React.createClass({displayName: 'Editor',
             // load or switch tracks
             Actions.getFullTrack(trackId);
         }
-        // Actions.getCollaborators(trackId);
-        // Actions.getInvitees(trackId);
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
@@ -50487,8 +50583,6 @@ var Editor = React.createClass({displayName: 'Editor',
         });
 
         if (this.props.params.trackId) {
-            Actions.getCollaborators(this.props.params.trackId);
-            Actions.getInvitees(this.props.params.trackId);
         }
 
         if (this.state.isModalHidden) {
@@ -50507,7 +50601,6 @@ var Editor = React.createClass({displayName: 'Editor',
     handleCreateTrack: function(trackMetaData) {
         var unsavedTrackData = _.extend(this.state.data.track, trackMetaData)
         Actions.createTrack(unsavedTrackData);
-        // Actions.addInvitees(unsavedTrackData);
 
         console.log('creating a track!!!');
     },
@@ -50524,6 +50617,12 @@ var Editor = React.createClass({displayName: 'Editor',
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
             alert('You must save your track before inviting anyone!');
+        }
+    },
+    handleNewTrack: function() {
+        Actions.newTrack();
+        if (this.getCurrentPath() !== '/editor'){
+            this.transitionTo('/editor');
         }
     },
     render: function() {
@@ -50551,7 +50650,8 @@ var Editor = React.createClass({displayName: 'Editor',
                     React.createElement(LineriderEditor, {
                         userID: this.props.currentUser && this.props.currentUser.user_id || 0, 
                         isNewTrack: isNewTrack, 
-                        onOpenModal: this.handleOpenModal, 
+                        onSaveSetting: this.handleOpenModal, 
+                        onNewTrack: this.handleNewTrack, 
                         onAddLine: Actions.emitAddLine, 
                         onRemoveLine: Actions.emitRemoveLine}
                     ), 
@@ -52169,10 +52269,13 @@ var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
         this.props.onUnsubscribe(this.props.userId);
     },
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             React.createElement("div", {className: "col span_1_of_4 subscription-user"}, 
-                React.createElement("div", {className: "picture picture-subscription"}, 
-                    React.createElement("img", {src: this.props.avatarUrl}), 
+                React.createElement("div", {className: "picture picture-subscription", style: avatarStyle}, 
                     React.createElement("div", {onClick: this.handleUnsubscribe}, 
                         React.createElement(Icon, {class: "unsubscribe-icon", icon: "circle-x"})
                     )
