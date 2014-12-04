@@ -913,7 +913,7 @@
 .profile-featured-track {
     position: relative;
     .media-icons {
-        z-index: 5;
+        z-index: 1;
         font-size: 16px;
         position: absolute;
         left: 15px;
@@ -930,7 +930,7 @@
 
     .preview-icon {
         @include transition(color 0.2s ease-in-out 0);
-        z-index: 5;
+        z-index: 1;
         right: 200px + 12px;
         top: 12px;
         position: absolute;
@@ -945,7 +945,7 @@
     background: #fff;
     position: relative;
     .media-icons {
-        z-index: 5;
+        z-index: 1;
         font-size: 20px;
         position: absolute;
         left: 25px;
@@ -966,7 +966,7 @@
         top: 20px;
         position: absolute;
         font-size: 20px;
-        z-index: 5;
+        z-index: 1;
         &:hover {
             cursor: pointer;
             color: $light-col;
@@ -1152,7 +1152,7 @@
         .profile-featured-track {
             background: #fff;
             height: 350px;
-            margin-bottom: 20px;
+            margin-bottom: 50px;
             // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
             // background-size: cover;
             border: 1px solid $border-col;
@@ -1235,7 +1235,7 @@
 
         .profile-collections {
             // margin-top: 25px;
-            margin-top: 30px;
+            // margin-top: 30px;
 
            .track-collection {
                 // border: 1px solid $border-col;

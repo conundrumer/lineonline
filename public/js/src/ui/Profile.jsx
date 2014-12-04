@@ -37,6 +37,7 @@ var Profile = React.createClass({
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getCollabSnippets(this.props.params.profileId);
         Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
@@ -45,6 +46,7 @@ var Profile = React.createClass({
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getCollabSnippets(this.props.params.profileId);
             Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
@@ -57,11 +59,7 @@ var Profile = React.createClass({
     },
     render: function() {
         var id = this.props.params.profileId;
-        console.log('GETTING THE PROFILE OF ', id);
-        console.log(this.state.data.profile);
-        // var data = this.state.data;
         if (this.state.data.featuredTrack) {
-            console.log('JKSDFJKLDSAFJLKDSAFLJKSADFLJKADSJLFKLASDFJKLDSAFJKDLSAJFDSKLAJFKLASJ');
             console.log(this.state.data.featuredTrack);
         }
         return (
@@ -88,7 +86,11 @@ var Profile = React.createClass({
                                     : null
                                 }
                                 { this.state.data.tracks && this.state.data.profile ?
-                                    <ProfileTrackSnippets tracks={this.state.data.tracks} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
+                                    <ProfileTrackSnippets collectionTitle={this.state.data.profile.username + '\'s Tracks'} tracks={this.state.data.tracks} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
+                                    : null
+                                }
+                                { this.state.data.collaborations && this.state.data.profile ?
+                                    <ProfileTrackSnippets collectionTitle={this.state.data.profile.username + '\'s Collaborations'} tracks={this.state.data.collaborations} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
                                     : null
                                 }
                             </section>
@@ -158,7 +160,7 @@ var ProfileTrackSnippets = React.createClass({
                     {this.props.tracks.length > 0 ?
                         <div>
                             <h3 className='collection-title'>
-                                {this.props.username + '\'s tracks'}
+                                {this.props.collectionTitle}
                             </h3>
                             <TracksPreview userId={this.props.userId} tracks={this.props.tracks} />
                         </div>
