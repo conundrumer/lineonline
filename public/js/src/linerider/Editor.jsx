@@ -34,9 +34,9 @@ var Editor = React.createClass({
     ],
     onSceneChanged: function(data, action) {
         if (action == 'add') {
-            this.props.onAddLine(data);
+            this.props.onAddLine(data, this.props.isNewTrack);
         } else if (action == 'remove') {
-            this.props.onRemoveLine(data);
+            this.props.onRemoveLine(data, this.props.isNewTrack);
         } else {
             this.setState({ scene: data });
         }
@@ -69,7 +69,12 @@ var Editor = React.createClass({
     },
     onClear: function(e) {
         e.preventDefault();
-        Actions.newScene();
+        if (!this.props.isNewTrack ||
+            _.keys(this.state.scene.points).length === 0 ||
+            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            Actions.newScene();
+            this.props.onNewTrack();
+        }
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -131,7 +136,31 @@ var Editor = React.createClass({
     },
     onSaveSetting: function(e) {
         e.preventDefault();
-        this.props.onOpenModal(this.state.scene);
+        var scene = this.state.scene;
+        var userID = this.props.userID;
+        _.keys(scene.points).forEach(function(id) {
+            if (id[0] === '0') {
+                var point = scene.points[id];
+                delete scene.points[id];
+                scene.points[userID + id.slice(1)] = point;
+            }
+        });
+        _.keys(scene.lines).forEach(function(id) {
+            if (id[0] === '0') {
+                var line = scene.lines[id];
+                delete scene.lines[id];
+                scene.lines[userID + id.slice(1)] = line;
+            }
+        });
+        _.values(scene.lines).forEach(function(line) {
+            if (line.p1[0] === '0') {
+                line.p1 = userID + line.p1.slice(1);
+            }
+            if (line.p2[0] === '0') {
+                line.p2 = userID + line.p2.slice(1);
+            }
+        });
+        this.props.onSaveSetting(scene);
     },
     render: function() {
         var drawingLine;
@@ -162,7 +191,7 @@ var Editor = React.createClass({
                         onClick={this.onSaveSetting}
                         icon={ this.props.isNewTrack ? 'check' : 'cog' }
                         name={ this.props.isNewTrack ? 'Save' : 'Settings' } />
-                    <ToolButton onClick={this.onClear} icon='x' name='Clear' />
+                    <ToolButton onClick={this.onClear} icon='x' name='New' />
                 </div>
             </div>
         );

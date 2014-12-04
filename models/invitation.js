@@ -19,4 +19,4 @@ var Invitation = bookshelf.Model.extend({
     }
 });
 
-module.exports = Invitation;
+module.exports = bookshelf.model('Invitation', Invitation);

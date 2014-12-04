@@ -18,4 +18,4 @@ var Favorite = bookshelf.Model.extend({
     }
 });
 
-module.exports = Favorite;
+module.exports = bookshelf.model('Favorite', Favorite);

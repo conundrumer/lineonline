@@ -19,4 +19,4 @@ var Collaboration = bookshelf.Model.extend({
     }
 });
 
-module.exports = Collaboration;
+module.exports = bookshelf.model('Collaboration', Collaboration);

@@ -4,6 +4,7 @@ var User = require('../models/user');
 var Track = require('../models/track');
 var Invitation = require('../models/invitation');
 var Collaboration = require('../models/collaboration');
+var _ = require('underscore');
 
 var ERRORS = {
     TRACK_NOT_FOUND: {
@@ -48,7 +49,8 @@ exports.collabRequired = function(req, res, next) {
                 return next();
             }
             res.status(StatusTypes.unauthorized).json(ERRORS.NOT_AUTHORIZED);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.makeTrack = function(req, res) {
@@ -62,15 +64,6 @@ exports.makeTrack = function(req, res) {
         })
         .then(function(fullTrack) {
             res.status(201).json(fullTrack);
-        })
-        .catch(console.error);
-};
-
-exports.deleteTrack = function(req, res){
-    req.track
-        .destroy()
-        .then(function() {
-            return res.status(StatusTypes.noContent).send();
         })
         .catch(console.error);
 };
@@ -97,6 +90,28 @@ exports.editTrack = function(req, res) {
         .catch(console.error);
 };
 
+exports.deleteTrack = function(req, res){
+    Promise.all([
+        req.track.invitations().fetch(),
+        req.track.collaborations().fetch(),
+        req.track.favorites().fetch()
+    ])
+    .then(function(results) {
+        return Promise.map(_.flatten(results.map(function(result) {
+            return result.models;
+        })), function (model) {
+            return model.destroy();
+        });
+    })
+    .then(function() {
+        return req.track.destroy();
+    })
+    .then(function() {
+        return res.status(StatusTypes.noContent).send();
+    })
+    .catch(console.error);
+};
+
 exports.getInvitations = function(req, res) {
     req.track.invitees()
         .fetch()
@@ -105,7 +120,8 @@ exports.getInvitations = function(req, res) {
                 return user.asUserSnippet();
             });
             res.status(StatusTypes.ok).json(invitees);
-        });
+        })
+        .catch(console.error);
 };
 
 exports.invite = function(req, res) {
@@ -190,7 +206,8 @@ exports.removeCollaborator = function(req, res) {
         })
         .then(function() {
             res.status(StatusTypes.noContent).send();
-        });
+        })
+        .catch(console.error);
 };
 
 exports.search = function(req, res) {
@@ -211,5 +228,6 @@ exports.search = function(req, res) {
         })
         .then(function(results) {
             res.status(StatusTypes.ok).json(results);
-        });
+        })
+        .catch(console.error);
 };

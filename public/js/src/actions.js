@@ -12,6 +12,7 @@ var Actions = Reflux.createActions([
     'getProfile',
     'getTrackSnippets',
     'getFeaturedTrack',
+    'getCollabSnippets',
     // 'getCollections',
 
     //home
@@ -34,8 +35,6 @@ var Actions = Reflux.createActions([
     'addInvitee',
     'addInvitees',
     'addCollaborators',
-    'getInvitees',
-    'getCollaborators',
     'openEditorSession',
     'closeEditorSession',
     'emitAddLine',
@@ -62,9 +61,16 @@ var Actions = Reflux.createActions([
     //current user
     'getCurrentProfile',
     'updateCurrentProfile',
+    'updateEmail',
+    'updatePassword',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 

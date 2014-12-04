@@ -325,9 +325,6 @@
     }
 }
 
-.login-link,
-.subscribe-link,
-.unsubscribe-link,
 .tile-tool-link {
     @include transition(color 0.2s ease-in-out 0);
     color: $light-col;
@@ -336,12 +333,24 @@
         color: $linerider-red;
     }
 
-    &.favorited {
+    &.favorited,
+    &.featured {
         color: $linerider-red;
         &:hover {
             cursor: pointer;
             color: $light-col;
         }
+    }
+}
+
+.login-link,
+.subscribe-link,
+.unsubscribe-link {
+    @include transition(color 0.2s ease-in-out 0);
+    color: $linerider-red;
+    &:hover {
+        cursor: pointer;
+        color: $light-col;
     }
 }
 
@@ -613,7 +622,7 @@
     }
 }
 
-.profile-form {
+.profile-form, .email-form {
     margin-bottom: 30px;
 }
 
@@ -899,10 +908,44 @@
     background-size: cover;
 }
 
-.playback {
+
+
+.profile-featured-track {
     position: relative;
     .media-icons {
-        z-index: 5;
+        z-index: 1;
+        font-size: 16px;
+        position: absolute;
+        left: 15px;
+        bottom: 10px;
+        .media-icon {
+            @include transition(color 0.2s ease-in-out 0);
+            padding-right: 15px;
+            &:hover {
+                cursor: pointer;
+                color: $light-col;
+            }
+        }
+    }
+
+    .preview-icon {
+        @include transition(color 0.2s ease-in-out 0);
+        z-index: 1;
+        right: 200px + 12px;
+        top: 12px;
+        position: absolute;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
+}
+
+.playback {
+    background: #fff;
+    position: relative;
+    .media-icons {
+        z-index: 1;
         font-size: 20px;
         position: absolute;
         left: 25px;
@@ -923,7 +966,7 @@
         top: 20px;
         position: absolute;
         font-size: 20px;
-        z-index: 5;
+        z-index: 1;
         &:hover {
             cursor: pointer;
             color: $light-col;
@@ -1107,38 +1150,39 @@
 
 
         .profile-featured-track {
+            background: #fff;
             height: 350px;
-            margin-bottom: 20px;
-            background: #fff url('../../images/sample_masthead.png') no-repeat center center;
-            background-size: cover;
+            margin-bottom: 50px;
+            // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+            // background-size: cover;
             border: 1px solid $border-col;
             position: relative;
 
-            .media-icons {
-                font-size: 16px;
-                position: absolute;
-                left: 15px;
-                bottom: 10px;
-                .media-icon {
-                    @include transition(color 0.2s ease-in-out 0);
-                    padding-right: 15px;
-                    &:hover {
-                        cursor: pointer;
-                        color: $light-col;
-                    }
-                }
-            }
+            // .media-icons {
+            //     font-size: 16px;
+            //     position: absolute;
+            //     left: 15px;
+            //     bottom: 10px;
+            //     .media-icon {
+            //         @include transition(color 0.2s ease-in-out 0);
+            //         padding-right: 15px;
+            //         &:hover {
+            //             cursor: pointer;
+            //             color: $light-col;
+            //         }
+            //     }
+            // }
 
-            .preview-icon {
-                @include transition(color 0.2s ease-in-out 0);
-                right: 200px + 12px;
-                top: 12px;
-                position: absolute;
-                &:hover {
-                    cursor: pointer;
-                    color: $light-col;
-                }
-            }
+            // .preview-icon {
+            //     @include transition(color 0.2s ease-in-out 0);
+            //     right: 200px + 12px;
+            //     top: 12px;
+            //     position: absolute;
+            //     &:hover {
+            //         cursor: pointer;
+            //         color: $light-col;
+            //     }
+            // }
 
             .info {
                 opacity: 0.8;
@@ -1191,7 +1235,7 @@
 
         .profile-collections {
             // margin-top: 25px;
-            margin-top: 30px;
+            // margin-top: 30px;
 
            .track-collection {
                 // border: 1px solid $border-col;
@@ -1213,6 +1257,7 @@
                .tile {
                    .preview {
                        height: 175px;
+                       background: #fff;
                    }
                    padding-bottom: 5px;
                }

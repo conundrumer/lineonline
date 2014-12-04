@@ -21,6 +21,10 @@ api.route('/auth')
 api.route('/auth/register')
     .post(auth.register);
 
+// settings
+api.route('/settings')
+    .put(auth.loginRequired, auth.settings);
+
 // users
 
 api.param('user_id', users.getByID);
@@ -34,16 +38,21 @@ api.route('/users/:user_id')
 api.route('/users/:user_id/tracks')
     .get(users.getTracks);
 
+api.route('/users/:user_id/collaborations')
+    .get(users.getCollaborations);
+
 api.route('/users/:user_id/featured')
     .get(users.featuredTrack);
 
+api.route('/users/:user_id/featured/:track_id')
+    .put(auth.loginRequired, tracks.ownershipRequired, users.setFeaturedTrack);
 
 // profile
 api.route('/users/:user_id/profile')
     .get(users.getProfile);
 
 api.route('/profile')
-    .put(users.editProfile);
+    .put(auth.loginRequired, users.editProfile);
 
 // tracks
 

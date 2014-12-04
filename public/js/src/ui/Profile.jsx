@@ -2,6 +2,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
+var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
@@ -15,6 +16,9 @@ var MediaIcons = require('./MediaIcons.jsx');
 var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
+
+//Linerider
+var Display = require('../linerider/Display.jsx');
 
 var Profile = React.createClass({
     mixins: [
@@ -33,6 +37,8 @@ var Profile = React.createClass({
     componentWillMount: function() {
         Actions.getProfile(this.props.params.profileId);
         Actions.getTrackSnippets(this.props.params.profileId);
+        Actions.getCollabSnippets(this.props.params.profileId);
+        Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getFeaturedTrack(this.props.params.profileId);
         // Actions.getCollections(this.props.params.profileId);
     },
@@ -40,6 +46,8 @@ var Profile = React.createClass({
         if (this.props.params.profileId !== nextProps.params.profileId) {
             Actions.getProfile(nextProps.params.profileId);
             Actions.getTrackSnippets(nextProps.params.profileId);
+            Actions.getCollabSnippets(this.props.params.profileId);
+            Actions.getFeaturedTrack(nextProps.params.profileId);
             // Actions.getFeaturedTrack(this.props.params.profileId);
             // Actions.getCollections(nextProps.params.profileId);
         }
@@ -51,9 +59,9 @@ var Profile = React.createClass({
     },
     render: function() {
         var id = this.props.params.profileId;
-        console.log('GETTING THE PROFILE OF ', id);
-        console.log(this.state.data.profile);
-        // var data = this.state.data;
+        if (this.state.data.featuredTrack) {
+            console.log(this.state.data.featuredTrack);
+        }
         return (
             <div className='main-content'>
                 <PanelPadded isProfile={true}>
@@ -75,37 +83,14 @@ var Profile = React.createClass({
                             <section className='profile-main'>
                                 { this.state.data.featuredTrack ?
                                     <ProfileFeaturedTrack featuredTrack={this.state.data.featuredTrack} />
-                                    :
-                                    <article className='profile-featured-track'>
-                                        <Icon class='preview-icon' icon='fullscreen-enter' />
-                                        <MediaIcons />
-                                        <aside className='info'>
-                                            <div>
-                                                <h3>Sample Featured Track</h3>
-                                                <p>
-                                                    Sample description
-                                                </p>
-                                                <h3>Owner</h3>
-                                                <p>
-                                                    <Link to={'/profile/' + id}>
-                                                        Sample Owner
-                                                    </Link>
-
-                                                </p>
-                                                <h3>Collaborators</h3>
-                                                <ul>
-                                                    <li>
-                                                        <Link to={'/profile/'+ id}>
-                                                            Sample Collaborator
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </aside>
-                                    </article>
+                                    : null
                                 }
                                 { this.state.data.tracks && this.state.data.profile ?
-                                    <ProfileTrackSnippets tracks={this.state.data.tracks} currentUser={this.props.currentUser} username={this.state.data.profile.username} />
+                                    <ProfileTrackSnippets collectionTitle={this.state.data.profile.username + '\'s Tracks'} tracks={this.state.data.tracks} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
+                                    : null
+                                }
+                                { this.state.data.collaborations && this.state.data.profile ?
+                                    <ProfileTrackSnippets collectionTitle={this.state.data.profile.username + '\'s Collaborations'} tracks={this.state.data.collaborations} userId={this.props.currentUser.user_id} username={this.state.data.profile.username} />
                                     : null
                                 }
                             </section>
@@ -123,7 +108,7 @@ var ProfileFeaturedTrack = React.createClass({
         var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
                 <li>
-                    <Link to={'/profile/'+collaborator.id}>
+                    <Link to={'/profile/' + collaborator.user_id}>
                         {collaborator.username}
                     </Link>
                 </li>
@@ -131,17 +116,27 @@ var ProfileFeaturedTrack = React.createClass({
         });
         return (
             <article className='profile-featured-track'>
-                <Icon class='preview-icon' icon='fullscreen-enter' />
+                <Link to={'/track/' + this.props.featuredTrack.track_id}>
+                    <div>
+                        <Icon class='preview-icon' icon='fullscreen-enter' />
+                    </div>
+                </Link>
                 <MediaIcons />
+                <Display scene={this.props.featuredTrack.scene} />
                 <aside className='info'>
                     <div>
                         <h3>{this.props.featuredTrack.title}</h3>
-                        <p>
-                            {this.props.featuredTrack.description}
-                        </p>
+                        {this.props.featuredTrack.description ?
+                            <p>
+                                {this.props.featuredTrack.description}
+                            </p>
+                            :
+                            <p>
+                            </p>
+                        }
                         <h3>Owner</h3>
                         <p>
-                            <Link to={'/profile/' + this.props.featuredTrack.owner.id}>
+                            <Link to={'/profile/' + this.props.featuredTrack.owner.user_id}>
                                 {this.props.featuredTrack.owner.username}
                             </Link>
 
@@ -165,9 +160,9 @@ var ProfileTrackSnippets = React.createClass({
                     {this.props.tracks.length > 0 ?
                         <div>
                             <h3 className='collection-title'>
-                                {this.props.username + '\'s tracks'}
+                                {this.props.collectionTitle}
                             </h3>
-                            <TracksPreview userId={this.props.currentUser} tracks={this.props.tracks} />
+                            <TracksPreview userId={this.props.userId} tracks={this.props.tracks} />
                         </div>
                         : null
                     }
@@ -199,10 +194,13 @@ var ProfileCollections = React.createClass({
 
 var ProfileSidebar = React.createClass({
     render: function() {
+        var bgSrc = this.props.avatarUrl;
+        var profileAvatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
             <section className='profile-sidebar'>
-                <div className='picture'>
-                    <img src={this.props.avatarUrl} />
+                <div className='picture' style={profileAvatarStyle}>
                 </div>
                 <div className='info'>
                     <ProfileContactDetail username={this.props.username} location={this.props.location} email={this.props.email} />
