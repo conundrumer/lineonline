@@ -6,10 +6,21 @@ exports.addFavorite = function(req, res) {
     var user_id = req.user.id;
     var track_id = req.track.get('id');
 
-    Favorite
-        .create(user_id, track_id)
-        .then(function (fave){
-            res.status(StatusTypes.noContent).send();
+    var pending_favorite = Favorite
+        .forge({
+            favoriter: user_id,
+            track: track_id
+        });
+
+    pending_favorite
+        .fetch()
+        .then(function(existing_fav) {
+            if (existing_fav) {
+                return res.status(StatusTypes.noContent).send();
+            }
+            pending_favorite.save().then(function() {
+                res.status(StatusTypes.noContent).send();
+            });
         })
         .catch(console.error);
 };

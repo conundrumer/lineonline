@@ -3,14 +3,6 @@ var StatusTypes = require('status-types');
 var User = require('../models/user');
 var Subscription = require('../models/subscription');
 
-function Unauthorized(message) {
-    this.name = 'Unauthorized';
-    this.message = message || 'You are not authorized to do this.';
-}
-Unauthorized.prototype = new Error();
-Unauthorized.prototype.constructor = Unauthorized;
-
-
 exports.addSubscription = function(req, res) {
     var subscriber_id = req.user.id;
     var subscribee_id = req.user_model.id;
