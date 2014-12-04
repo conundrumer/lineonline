@@ -200,7 +200,7 @@ exports.search = function(req, res) {
     Track
         .query(function(qb) {
             qb
-                .orderBy('created_at', 'desc')
+                .orderBy('id', 'desc')
                 .limit(req.query.new);
         })
         .fetchAll()
