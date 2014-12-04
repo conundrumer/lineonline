@@ -159,7 +159,7 @@ var Editor = React.createClass({
                     <LineriderEditor
                         userID={this.props.currentUser && this.props.currentUser.user_id || 0}
                         isNewTrack={isNewTrack}
-                        onOpenModal={this.handleOpenModal}
+                        onSaveSetting={this.handleOpenModal}
                         onAddLine={Actions.emitAddLine}
                         onRemoveLine={Actions.emitRemoveLine}
                     />

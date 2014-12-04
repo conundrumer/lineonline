@@ -131,7 +131,7 @@ var Editor = React.createClass({
     },
     onSaveSetting: function(e) {
         e.preventDefault();
-        this.props.onOpenModal(this.state.scene);
+        this.props.onSaveSetting(this.state.scene);
     },
     render: function() {
         var drawingLine;
