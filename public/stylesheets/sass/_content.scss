@@ -325,9 +325,6 @@
     }
 }
 
-.login-link,
-.subscribe-link,
-.unsubscribe-link,
 .tile-tool-link {
     @include transition(color 0.2s ease-in-out 0);
     color: $light-col;
@@ -343,6 +340,17 @@
             cursor: pointer;
             color: $light-col;
         }
+    }
+}
+
+.login-link,
+.subscribe-link,
+.unsubscribe-link {
+    @include transition(color 0.2s ease-in-out 0);
+    color: $linerider-red;
+    &:hover {
+        cursor: pointer;
+        color: $light-col;
     }
 }
 
