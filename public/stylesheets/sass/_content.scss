@@ -305,7 +305,8 @@
         color: $linerider-red;
     }
 
-    &.favorited {
+    &.favorited,
+    &.featured {
         color: $linerider-red;
         &:hover {
             cursor: pointer;

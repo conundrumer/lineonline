@@ -60,7 +60,12 @@ var Actions = Reflux.createActions([
     'updateProfile',
 
     //playback
-    'getTrack'
+    'getTrack',
+
+    //featured
+    'makeFeatured',
+    'removeFeatured',
+    'getFeatured'
 
 ]);
 
