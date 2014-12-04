@@ -122,7 +122,7 @@ var ProfileFeaturedTrack = React.createClass({
                     </div>
                 </Link>
                 <MediaIcons />
-                <Display scene={this.props.featuredTrack.scene} />
+                <Display scene={this.props.featuredTrack.scene} preview={true} />
                 <aside className='info'>
                     <div>
                         <h3>{this.props.featuredTrack.title}</h3>
