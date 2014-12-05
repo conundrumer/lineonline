@@ -51284,6 +51284,8 @@ var Panel = require('./Panel.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
 var Footer = require('./Footer.jsx');
+var FeaturedTrack = require('./featured-track.jsx');
+
 // var Editor = require('./Editor.jsx');
 
 var Display = require('../linerider/Display.jsx');
@@ -51314,11 +51316,15 @@ var Index = React.createClass({displayName: 'Index',
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(Panel, {isMasthead: true, id: "masthead-panel"}, 
                     this.state.data.featuredTrack ?
+<<<<<<< HEAD
                         React.createElement("div", null, 
                             React.createElement("div", null, this.state.data.featuredTrack.title), 
                             React.createElement("div", null, "by ", this.state.data.featuredTrack.owner.username), 
                             React.createElement(Display, {scene: this.state.data.featuredTrack.scene})
                         )
+=======
+                        React.createElement(FeaturedTrack, {isGlobal: true, featuredTrack: this.state.data.featuredTrack})
+>>>>>>> masthead-change
                         : null
                     
                 ), 
@@ -51338,7 +51344,7 @@ var Index = React.createClass({displayName: 'Index',
 
 module.exports = Index;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/index":"/Users/jingxiao/437/Team77/public/js/src/stores/index.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/index":"/Users/jingxiao/437/Team77/public/js/src/stores/index.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
@@ -51536,6 +51542,7 @@ var MediaIcons = require('./MediaIcons.jsx');
 var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
+var ProfileFeaturedTrack = require('./featured-track.jsx')
 
 //Linerider
 var Display = require('../linerider/Display.jsx');
@@ -51618,55 +51625,6 @@ var Profile = React.createClass({displayName: 'Profile',
                     )
                 ), 
                 React.createElement(Footer, null)
-            )
-        );
-    }
-});
-
-var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
-    render: function() {
-        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
-            return (
-                React.createElement("li", null, 
-                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
-                        collaborator.username
-                    )
-                )
-            );
-        });
-        return (
-            React.createElement("article", {className: "profile-featured-track"}, 
-                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
-                    React.createElement("div", null, 
-                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
-                    )
-                ), 
-                React.createElement(MediaIcons, null), 
-                React.createElement(Display, {scene: this.props.featuredTrack.scene, preview: true}), 
-                React.createElement("aside", {className: "info"}, 
-                    React.createElement("div", null, 
-                        React.createElement("h3", null, this.props.featuredTrack.title), 
-                        this.props.featuredTrack.description ?
-                            React.createElement("p", null, 
-                                this.props.featuredTrack.description
-                            )
-                            :
-                            React.createElement("p", null
-                            ), 
-                        
-                        React.createElement("h3", null, "Owner"), 
-                        React.createElement("p", null, 
-                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
-                                this.props.featuredTrack.owner.username
-                            )
-
-                        ), 
-                        React.createElement("h3", null, "Collaborators"), 
-                        React.createElement("ul", null, 
-                            collaboratorListItems
-                        )
-                    )
-                )
             )
         );
     }
@@ -51796,7 +51754,7 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53049,7 +53007,89 @@ var TracksSlider = React.createClass({displayName: 'TracksSlider',
 
 module.exports = TracksSlider;
 
-},{"./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"util/status-types.js":[function(require,module,exports){
+},{"./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx":[function(require,module,exports){
+var React = require('react/addons');
+var Router = require('react-router');
+var Link = Router.Link;
+var Reflux = require('reflux');
+var _ = require('underscore');
+
+//Actions
+var Actions = require('../actions');
+
+//Data Stores
+var ProfileStore = require('../stores/profile');
+
+//UI Components
+var Icon = require('./Icon.jsx');
+var MediaIcons = require('./MediaIcons.jsx');
+var TracksPreview = require('./TracksPreview.jsx');
+var PanelPadded = require('./PanelPadded.jsx');
+var Footer = require('./Footer.jsx');
+var ProfileFeaturedTrack = require('./featured-track.jsx');
+
+//Linerider
+var Display = require('../linerider/Display.jsx');
+
+var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
+    render: function() {
+        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
+            return (
+                React.createElement("li", null, 
+                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
+                        collaborator.username
+                    )
+                )
+            );
+        });
+        var featuredName = this.props.isGlobal ? 'global-featured-track' : 'profile-featured-track';
+        return (
+            React.createElement("article", {className: featuredName}, 
+                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
+                    React.createElement("div", null, 
+                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
+                    )
+                ), 
+                React.createElement(MediaIcons, null), 
+                React.createElement(Display, {scene: this.props.featuredTrack.scene, preview: true}), 
+                React.createElement("aside", {className: "info"}, 
+                    React.createElement("div", null, 
+                        React.createElement("h3", null, this.props.featuredTrack.title), 
+                        this.props.featuredTrack.description ?
+                            React.createElement("p", null, 
+                                this.props.featuredTrack.description
+                            )
+                            :
+                            React.createElement("p", null
+                            ), 
+                        
+                        React.createElement("h3", null, "Owner"), 
+                        React.createElement("p", null, 
+                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
+                                this.props.featuredTrack.owner.username
+                            )
+
+                        ), 
+                        
+                            collaboratorListItems.length > 0 ?
+                            React.createElement("div", null, 
+                                React.createElement("h3", null, "Collaborators"), 
+                                React.createElement("ul", null, 
+                                    collaboratorListItems
+                                )
+                            )
+                            : null
+                        
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = ProfileFeaturedTrack;
+
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"util/status-types.js":[function(require,module,exports){
 var StatusTypes = {
     info: 100,
     ok: 200,
