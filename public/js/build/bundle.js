@@ -48459,14 +48459,11 @@ var Navbar = React.createClass({displayName: 'Navbar',
                         React.createElement(Navlink, {title: "Home", link: "home", icon: "home"})
                         : null, 
                     
-                    this.props.currentUser ?
-                        React.createElement(Navlink, {title: "Editor", link: "editor", icon: "pencil"})
-                        : null, 
-                    
+                    React.createElement(Navlink, {title: "Editor", link: "editor", icon: "pencil"}), 
                     React.createElement(Navlink, {title: "Gallery", link: "gallery", icon: "image"}), 
                     this.props.currentUser ?
                         React.createElement("li", {className: "nav-item col span_2_of_7"})
-                        : React.createElement("li", {className: "nav-item col span_4_of_7"}), 
+                        : React.createElement("li", {className: "nav-item col span_3_of_7"}), 
                     
                     this.props.currentUser && this.state.data.profile ?
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
@@ -48938,6 +48935,7 @@ var React = require('react/addons');
 var Reflux = require('reflux');
 
 var Actions = require('./actions');
+var ErrorActions = require('../actions-error');
 var sceneStore = require('./store');
 
 var Display = require('./Display.jsx');
@@ -49005,12 +49003,19 @@ var Editor = React.createClass({displayName: 'Editor',
     },
     onClear: function(e) {
         e.preventDefault();
+
         if (!this.props.isNewTrack ||
-            _.keys(this.state.scene.points).length === 0 ||
-            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            _.keys(this.state.scene.points).length === 0) {
             Actions.newScene();
             this.props.onNewTrack();
+        } else {
+            ErrorActions.throwError({
+                message: 'Unsaved changes. Are you sure you want to start a new track?',
+                onConfirm: function() { Actions.newScene(); this.props.onNewTrack(); }.bind(this),
+                onCancel: function() { console.log('did nothing'); }.bind(this)
+            });
         }
+
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -49149,7 +49154,7 @@ var ToolButton = React.createClass({displayName: 'ToolButton',
 
 module.exports = Editor;
 
-},{"../ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js":[function(require,module,exports){
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 var EditorActions = Reflux.createActions([

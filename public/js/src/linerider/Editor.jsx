@@ -2,6 +2,7 @@ var React = require('react/addons');
 var Reflux = require('reflux');
 
 var Actions = require('./actions');
+var ErrorActions = require('../actions-error');
 var sceneStore = require('./store');
 
 var Display = require('./Display.jsx');
@@ -69,12 +70,19 @@ var Editor = React.createClass({
     },
     onClear: function(e) {
         e.preventDefault();
+
         if (!this.props.isNewTrack ||
-            _.keys(this.state.scene.points).length === 0 ||
-            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            _.keys(this.state.scene.points).length === 0) {
             Actions.newScene();
             this.props.onNewTrack();
+        } else {
+            ErrorActions.throwError({
+                message: 'Unsaved changes. Are you sure you want to start a new track?',
+                onConfirm: function() { Actions.newScene(); this.props.onNewTrack(); }.bind(this),
+                onCancel: function() { console.log('did nothing'); }.bind(this)
+            });
         }
+
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
