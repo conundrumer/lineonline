@@ -15,6 +15,8 @@ var Panel = require('./Panel.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
 var Footer = require('./Footer.jsx');
+var FeaturedTrack = require('./featured-track.jsx');
+
 // var Editor = require('./Editor.jsx');
 
 var Display = require('../linerider/Display.jsx');
@@ -45,11 +47,7 @@ var Index = React.createClass({
             <div className='main-content'>
                 <Panel isMasthead={true} id='masthead-panel'>
                     {this.state.data.featuredTrack ?
-                        <div>
-                            <div>{this.state.data.featuredTrack.title}</div>
-                            <div>by {this.state.data.featuredTrack.owner.username}</div>
-                            <Display scene={this.state.data.featuredTrack.scene} />
-                        </div>
+                        <FeaturedTrack featuredTrack={this.state.data.featuredTrack} />
                         : null
                     }
                 </Panel>
