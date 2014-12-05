@@ -87,7 +87,7 @@ var Navbar = React.createClass({
         });
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
@@ -134,20 +134,20 @@ var Navbar = React.createClass({
                             LineOnline
                         </Link>
                     </li>
-                    {this.props.currentUser ?
+                    {this.props.currentUser.user_id ?
                         <Navlink title='Home' link='home' icon='home' />
                         : null
                     }
-                    {this.props.currentUser ?
+                    {this.props.currentUser.user_id ?
                         <Navlink title='Editor' link='editor' icon='pencil' />
                         : null
                     }
                     <Navlink title='Gallery' link='gallery' icon='image' />
-                    {this.props.currentUser ?
+                    {this.props.currentUser.user_id ?
                         <li className='nav-item col span_2_of_7'></li>
                         : <li className='nav-item col span_4_of_7'></li>
                     }
-                    {this.props.currentUser && this.state.data.profile ?
+                    {this.props.currentUser.user_id && this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>
                             <div className='navlink' style={avatarStyle} onClick={this.handleDropdownClick}>
                                 <span className='hide'>
