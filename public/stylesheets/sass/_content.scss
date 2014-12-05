@@ -1003,36 +1003,89 @@
 
 
 
-.profile-featured-track {
-    position: relative;
-    .media-icons {
-        z-index: 1;
-        font-size: 16px;
-        position: absolute;
-        left: 15px;
-        bottom: 10px;
-        .media-icon {
-            @include transition(color 0.2s ease-in-out 0);
-            padding-right: 15px;
-            &:hover {
-                cursor: pointer;
-                color: $light-col;
+        .profile-featured-track {
+            background: #fff;
+            height: 90vh;
+            margin-bottom: 50px;
+            // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+            // background-size: cover;
+            border: 1px solid $border-col;
+            position: relative;
+
+            .media-icons {
+                font-size: 16px;
+                position: absolute;
+                left: 15px;
+                bottom: 10px;
+                .media-icon {
+                    @include transition(color 0.2s ease-in-out 0);
+                    padding-right: 15px;
+                    &:hover {
+                        cursor: pointer;
+                        color: $light-col;
+                    }
+                }
+            }
+
+            .preview-icon {
+                @include transition(color 0.2s ease-in-out 0);
+                right: 200px + 12px;
+                top: 12px;
+                position: absolute;
+                &:hover {
+                    cursor: pointer;
+                    color: $light-col;
+                }
+            }
+
+            .info {
+                opacity: 0.8;
+                position: absolute;
+                right: 0;
+                top: 0;
+                background: #fff;
+                border-left: 1px solid $border-col;
+                height: 100%;
+                padding: 20px 20px;
+                width: 200px;
+
+                a {
+                    @include transition(color 0.2s ease-in-out 0);
+                    color: $linerider-red;
+                    &:hover {
+                        color: $light-col;
+                    }
+                }
+
+                h3 {
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    // line-height: 2.5;
+                }
+
+                p {
+                    margin-bottom: 20px;
+                }
+
+                ul, p {
+                    font-size: 13px;
+                    line-height: 1.4;
+                    font-style: italic;
+                    padding-top: 5px;
+                    li {
+                        margin-bottom: 3px;
+                        &:before {
+                            content: '•';
+                            padding-right: 7px;
+                        }
+
+                    }
+                }
+
+
             }
         }
-    }
-
-    .preview-icon {
-        @include transition(color 0.2s ease-in-out 0);
-        z-index: 1;
-        right: 200px + 12px;
-        top: 12px;
-        position: absolute;
-        &:hover {
-            cursor: pointer;
-            color: $light-col;
-        }
-    }
-}
 
 .playback {
     background: #fff;
