@@ -8,6 +8,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var EditorStore = require('../stores/editor');
@@ -91,6 +92,13 @@ var Editor = React.createClass({
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
+        var owner_id = this.state.data.track.owner && this.state.data.track.owner.user_id;
+        if (owner_id && this.props.currentUser.user_id !== owner_id) {
+            ErrorActions.throwError({
+                message: "You are not allowed to change this track."
+            });
+            return;
+        }
         var newData = this.state.data;
         newData.track.scene = scene;
         this.setState({
