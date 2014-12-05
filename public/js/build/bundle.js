@@ -52696,6 +52696,13 @@ var Tile = React.createClass({displayName: 'Tile',
         console.log('PLAYBACK MODEEEE');
         this.transitionTo('/track/' + this.props.trackId);
     },
+    handleInfoClick: function(event) {
+        event.preventDefault();
+        console.log(this.props.ownerId);
+        if (this.props.ownerId) {
+            this.transitionTo('/profile/' + this.props.ownerId);
+        }
+    },
     handleAddFavorite: function(event) {
         event.preventDefault();
         console.log('attempting to add fav...');
@@ -52740,7 +52747,7 @@ var Tile = React.createClass({displayName: 'Tile',
         if (this.props.extra === 'your-track') {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52762,7 +52769,7 @@ var Tile = React.createClass({displayName: 'Tile',
         } else if (!this.props.userId) {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52772,7 +52779,7 @@ var Tile = React.createClass({displayName: 'Tile',
         } else {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52896,6 +52903,7 @@ var TracksCol = React.createClass({displayName: 'TracksCol',
                     userId: this.props.userId, 
                     trackId: track.track_id, 
                     title: track.title, 
+                    ownerId: track.owner.user_id, 
                     description: track.description, 
                     col: this.props.col, 
                     extra: this.props.extra, 

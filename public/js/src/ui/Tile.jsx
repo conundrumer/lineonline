@@ -132,6 +132,13 @@ var Tile = React.createClass({
         console.log('PLAYBACK MODEEEE');
         this.transitionTo('/track/' + this.props.trackId);
     },
+    handleInfoClick: function(event) {
+        event.preventDefault();
+        console.log(this.props.ownerId);
+        if (this.props.ownerId) {
+            this.transitionTo('/profile/' + this.props.ownerId);
+        }
+    },
     handleAddFavorite: function(event) {
         event.preventDefault();
         console.log('attempting to add fav...');
@@ -176,7 +183,7 @@ var Tile = React.createClass({
         if (this.props.extra === 'your-track') {
             links =
                 <div className='tile-tools'>
-                    <div className='tile-tool-link'>
+                    <div className='tile-tool-link' onClick={this.handleInfoClick}>
                         <Icon class='tile-tool-icon' icon='info' />
                     </div>
                     <div className='tile-tool-link'>
@@ -198,7 +205,7 @@ var Tile = React.createClass({
         } else if (!this.props.userId) {
             links =
                 <div className='tile-tools'>
-                    <div className='tile-tool-link'>
+                    <div className='tile-tool-link' onClick={this.handleInfoClick}>
                         <Icon class='tile-tool-icon' icon='info' />
                     </div>
                     <div className='tile-tool-link'>
@@ -208,7 +215,7 @@ var Tile = React.createClass({
         } else {
             links =
                 <div className='tile-tools'>
-                    <div className='tile-tool-link'>
+                    <div className='tile-tool-link' onClick={this.handleInfoClick}>
                         <Icon class='tile-tool-icon' icon='info' />
                     </div>
                     <div className='tile-tool-link'>
