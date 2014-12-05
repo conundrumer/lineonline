@@ -14,6 +14,7 @@ var Actions = require('./actions');
 //Data Stores
 var AuthStore = require('./stores/auth');
 var CurrentUserStore = require('./stores/current-user');
+var ErrorStore = require('./stores/error');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -28,6 +29,7 @@ var Settings = require('./ui/Settings.jsx');
 var Playback = require('./ui/Playback.jsx');
 var NotFound = require('./ui/NotFound.jsx');
 var Footer = require('./ui/Footer.jsx');
+var ErrorModal = require('./ui/ErrorModal.jsx');
 
 //linerider
 // when you refactor this file, relative paths are gonna get messed up
@@ -35,8 +37,14 @@ var LineriderEditor = require('./linerider/Editor.jsx');
 
 var App = React.createClass({
     mixins: [
-        Reflux.listenTo(AuthStore, 'onDataChanged')
+        Reflux.listenTo(AuthStore, 'onDataChanged'),
+        Reflux.listenTo(ErrorStore, 'onError')
     ],
+    onError: function(error) {
+        this.setState({
+            error: error
+        });
+    },
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -44,7 +52,8 @@ var App = React.createClass({
     },
     getInitialState: function() {
         return {
-            data: AuthStore.getDefaultData()
+            data: AuthStore.getDefaultData(),
+            error: null
         }
     },
     componentWillMount: function() {
@@ -53,6 +62,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div className='container'>
+                { this.state.error ? <ErrorModal error={this.state.error} /> : null }
                 <Navbar currentUser={this.state.data.currentUser} errorMessages={this.state.data.errorMessages} />
                 <this.props.activeRouteHandler currentUser={this.state.data.currentUser} />
             </div>
@@ -128,14 +138,11 @@ var Navbar = React.createClass({
                         <Navlink title='Home' link='home' icon='home' />
                         : null
                     }
-                    {this.props.currentUser ?
-                        <Navlink title='Editor' link='editor' icon='pencil' />
-                        : null
-                    }
+                    <Navlink title='Editor' link='editor' icon='pencil' />
                     <Navlink title='Gallery' link='gallery' icon='image' />
                     {this.props.currentUser ?
                         <li className='nav-item col span_2_of_7'></li>
-                        : <li className='nav-item col span_4_of_7'></li>
+                        : <li className='nav-item col span_3_of_7'></li>
                     }
                     {this.props.currentUser && this.state.data.profile ?
                         <li className='nav-item nav-item-profile col span_1_of_7'>

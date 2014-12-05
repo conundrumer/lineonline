@@ -1,4 +1,6 @@
 var React = require('react/addons');
+var Router = require('react-router');
+var Link = Router.Link;
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
 var request = require('superagent');
@@ -193,13 +195,13 @@ var SaveModal = React.createClass({
     render: function() {
         var inviteeBubbles = this.state.track.invitees.map(function(invitee) {
             return (
-                <UserBubble imageSrc={invitee.avatar_url} />
+                <UserBubble userId={invitee.user_id} imageSrc={invitee.avatar_url} />
             );
         });
 
         var collaboratorBubbles = this.state.track.collaborators.map(function(collaborator) {
             return (
-                <UserBubble imageSrc={collaborator.avatar_url} />
+                <UserBubble userId={collaborator.user_id} imageSrc={collaborator.avatar_url} />
             );
         });
 
@@ -293,10 +295,15 @@ var SaveModal = React.createClass({
 
 var UserBubble = React.createClass({
     render: function() {
+        var bgSrc = this.props.imageSrc;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
-            <div className='user-img'>
-                <img src={this.props.imageSrc} />
-            </div>
+            <Link to={'/profile/' + this.props.userId}>
+                <div className='user-img' style={avatarStyle}>
+                </div>
+            </Link>
         );
     }
 });
