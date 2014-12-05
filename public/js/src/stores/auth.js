@@ -46,9 +46,9 @@ var AuthStore = Reflux.createStore({
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user failed to log in');
                     // this.data.errorMessages.login = res.body.message;
-                    // ErrorActions.throwError({
-                    //     message: res.body.message
-                    // });
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
                     this.trigger(this.data);
                     return;
                 }
@@ -97,9 +97,9 @@ var AuthStore = Reflux.createStore({
                 if (res.status === StatusTypes.badRequest) {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
-                    // ErrorActions.throwError({
-                    //     message: res.body.message
-                    // });
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
                     // this.data.errorMessages.signup = res.body.message;
                     this.trigger(this.data);
                     return;
