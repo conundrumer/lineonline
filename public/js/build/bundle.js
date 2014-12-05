@@ -50559,6 +50559,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var EditorStore = require('../stores/editor');
@@ -50682,7 +50683,9 @@ var Editor = React.createClass({displayName: 'Editor',
             console.log('adding invitee!');
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
-            alert('You must save your track before inviting anyone!');
+            ErrorActions.throwError({
+                message: 'You must save your track before inviting anyone!'
+            });
         }
     },
     handleNewTrack: function() {
@@ -50730,7 +50733,7 @@ var Editor = React.createClass({displayName: 'Editor',
 
 module.exports = Editor;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
 var ErrorActions = require('../actions-error');
 var React = require('react');
 

@@ -8,6 +8,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var EditorStore = require('../stores/editor');
@@ -131,7 +132,9 @@ var Editor = React.createClass({
             console.log('adding invitee!');
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
-            alert('You must save your track before inviting anyone!');
+            ErrorActions.throwError({
+                message: 'You must save your track before inviting anyone!'
+            });
         }
     },
     handleNewTrack: function() {
