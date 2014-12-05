@@ -32,8 +32,9 @@ var ProfileFeaturedTrack = React.createClass({
                 </li>
             );
         });
+        var featuredName = this.props.isGlobal ? 'global-featured-track' : 'profile-featured-track';
         return (
-            <article className='profile-featured-track'>
+            <article className={featuredName}>
                 <Link to={'/track/' + this.props.featuredTrack.track_id}>
                     <div>
                         <Icon class='preview-icon' icon='fullscreen-enter' />

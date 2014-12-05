@@ -47,7 +47,7 @@ var Index = React.createClass({
             <div className='main-content'>
                 <Panel isMasthead={true} id='masthead-panel'>
                     {this.state.data.featuredTrack ?
-                        <FeaturedTrack featuredTrack={this.state.data.featuredTrack} />
+                        <FeaturedTrack isGlobal={true} featuredTrack={this.state.data.featuredTrack} />
                         : null
                     }
                 </Panel>
