@@ -45,7 +45,11 @@ var Index = React.createClass({
             <div className='main-content'>
                 <Panel isMasthead={true} id='masthead-panel'>
                     {this.state.data.featuredTrack ?
-                        <Display scene={this.state.data.featuredTrack.scene} />
+                        <div>
+                            <div>{this.state.data.featuredTrack.title}</div>
+                            <div>by {this.state.data.featuredTrack.owner.username}</div>
+                            <Display scene={this.state.data.featuredTrack.scene} />
+                        </div>
                         : null
                     }
                 </Panel>
