@@ -1032,6 +1032,7 @@
                 right: 200px + 12px;
                 top: 12px;
                 position: absolute;
+                z-index: 10;
                 &:hover {
                     cursor: pointer;
                     color: $light-col;
