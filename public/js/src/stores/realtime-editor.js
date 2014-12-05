@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 var io = require('socket.io-client');
 var LineRiderActions = require('../linerider/actions');
 
@@ -19,6 +20,12 @@ var RealtimeEditorStore = Reflux.createStore({
                 }
                 if (res.status == StatusTypes.ok) {
                     this.connectSession(res.body.token);
+                    return;
+                }
+                if (res.status == StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: "You are not allowed to edit this track."
+                    });
                     return;
                 }
                 console.log('unknown status: ', res.status);

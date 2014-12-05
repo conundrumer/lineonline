@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
@@ -33,6 +34,10 @@ var Favorites = React.createClass({
     componentWillMount: function() {
         if (this.props.currentUser) {
             Actions.getFavorites();
+        } else {
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {

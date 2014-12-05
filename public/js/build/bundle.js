@@ -48335,6 +48335,7 @@ var Actions = require('./actions');
 //Data Stores
 var AuthStore = require('./stores/auth');
 var CurrentUserStore = require('./stores/current-user');
+var ErrorStore = require('./stores/error');
 
 //UI Components
 var Icon = require('./ui/Icon.jsx');
@@ -48349,6 +48350,7 @@ var Settings = require('./ui/Settings.jsx');
 var Playback = require('./ui/Playback.jsx');
 var NotFound = require('./ui/NotFound.jsx');
 var Footer = require('./ui/Footer.jsx');
+var ErrorModal = require('./ui/ErrorModal.jsx');
 
 //linerider
 // when you refactor this file, relative paths are gonna get messed up
@@ -48356,8 +48358,14 @@ var LineriderEditor = require('./linerider/Editor.jsx');
 
 var App = React.createClass({displayName: 'App',
     mixins: [
-        Reflux.listenTo(AuthStore, 'onDataChanged')
+        Reflux.listenTo(AuthStore, 'onDataChanged'),
+        Reflux.listenTo(ErrorStore, 'onError')
     ],
+    onError: function(error) {
+        this.setState({
+            error: error
+        });
+    },
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -48365,7 +48373,8 @@ var App = React.createClass({displayName: 'App',
     },
     getInitialState: function() {
         return {
-            data: AuthStore.getDefaultData()
+            data: AuthStore.getDefaultData(),
+            error: null
         }
     },
     componentWillMount: function() {
@@ -48374,6 +48383,7 @@ var App = React.createClass({displayName: 'App',
     render: function() {
         return (
             React.createElement("div", {className: "container"}, 
+                 this.state.error ? React.createElement(ErrorModal, {error: this.state.error}) : null, 
                 React.createElement(Navbar, {currentUser: this.state.data.currentUser, errorMessages: this.state.data.errorMessages}), 
                 React.createElement(this.props.activeRouteHandler, {currentUser: this.state.data.currentUser})
             )
@@ -48398,7 +48408,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
         });
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
@@ -48445,20 +48455,17 @@ var Navbar = React.createClass({displayName: 'Navbar',
                             "LineOnline"
                         )
                     ), 
-                    this.props.currentUser ?
+                    this.props.currentUser && this.props.currentUser.user_id ?
                         React.createElement(Navlink, {title: "Home", link: "home", icon: "home"})
                         : null, 
                     
-                    this.props.currentUser ?
-                        React.createElement(Navlink, {title: "Editor", link: "editor", icon: "pencil"})
-                        : null, 
-                    
+                    React.createElement(Navlink, {title: "Editor", link: "editor", icon: "pencil"}), 
                     React.createElement(Navlink, {title: "Gallery", link: "gallery", icon: "image"}), 
-                    this.props.currentUser ?
+                    this.props.currentUser && this.props.currentUser.user_id ?
                         React.createElement("li", {className: "nav-item col span_2_of_7"})
-                        : React.createElement("li", {className: "nav-item col span_4_of_7"}), 
+                        : React.createElement("li", {className: "nav-item col span_3_of_7"}), 
                     
-                    this.props.currentUser && this.state.data.profile ?
+                    this.props.currentUser && this.props.currentUser.user_id && this.state.data.profile ?
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
                             React.createElement("div", {className: "navlink", style: avatarStyle, onClick: this.handleDropdownClick}, 
                                 React.createElement("span", {className: "hide"}, 
@@ -48744,7 +48751,17 @@ function doRender(target, callback) {
 
 module.exports = doRender;
 
-},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./ui/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx","./ui/Favorites.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions.js":[function(require,module,exports){
+},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./stores/error":"/Users/jingxiao/437/Team77/public/js/src/stores/error.js","./ui/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx","./ui/ErrorModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx","./ui/Favorites.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions-error.js":[function(require,module,exports){
+var Reflux = require('reflux');
+var ErrorActions = Reflux.createActions([
+    'throwError',
+    'throwUnknownStatus',
+    'acknowledge'
+]);
+
+module.exports = ErrorActions;
+
+},{"reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 // you can split this up
@@ -48754,6 +48771,9 @@ var Actions = Reflux.createActions([
     'login',
     'logout',
     'signup',
+
+    //index
+    'getGlobalFeaturedTrack',
 
     //profile
     'getProfile',
@@ -48918,6 +48938,7 @@ var React = require('react/addons');
 var Reflux = require('reflux');
 
 var Actions = require('./actions');
+var ErrorActions = require('../actions-error');
 var sceneStore = require('./store');
 
 var Display = require('./Display.jsx');
@@ -48985,12 +49006,19 @@ var Editor = React.createClass({displayName: 'Editor',
     },
     onClear: function(e) {
         e.preventDefault();
+
         if (!this.props.isNewTrack ||
-            _.keys(this.state.scene.points).length === 0 ||
-            confirm('Unsaved changes. Are you sure you want to start a new track?')) {
+            _.keys(this.state.scene.points).length === 0) {
             Actions.newScene();
             this.props.onNewTrack();
+        } else {
+            ErrorActions.throwError({
+                message: 'Unsaved changes. Are you sure you want to start a new track?',
+                onConfirm: function() { Actions.newScene(); this.props.onNewTrack(); }.bind(this),
+                onCancel: function() { console.log('did nothing'); }.bind(this)
+            });
         }
+
     },
     // not sure how reliable it is in getting the right position
     // will refactor to use RxJS when editing gets more complex
@@ -49129,7 +49157,7 @@ var ToolButton = React.createClass({displayName: 'ToolButton',
 
 module.exports = Editor;
 
-},{"../ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js":[function(require,module,exports){
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 var EditorActions = Reflux.createActions([
@@ -49325,12 +49353,15 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 
 var AuthStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            currentUser: null,
+            currentUser: {
+                user_id: 0
+            },
             errorMessages: {
                 login: null,
                 signup: null
@@ -49345,7 +49376,9 @@ var AuthStore = Reflux.createStore({
                 //user not logged in, set current user to null/redirect to index
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user not logged in');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                 }
                 //user logged in, set current user to user
                 if (res.status === StatusTypes.ok) {
@@ -49360,10 +49393,12 @@ var AuthStore = Reflux.createStore({
             .post('/api/auth')
             .send(login_data)
             .end(function(err, res) {
-                //not logged in, show error message/update ui?
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user failed to log in');
-                    this.data.errorMessages.login = res.body.message;
+                    // this.data.errorMessages.login = res.body.message;
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
                     this.trigger(this.data);
                     return;
                 }
@@ -49376,7 +49411,7 @@ var AuthStore = Reflux.createStore({
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onLogout: function() {
@@ -49384,13 +49419,15 @@ var AuthStore = Reflux.createStore({
             .del('/api/auth')
             .end(function(err, res) {
                 //logged out, set current user to null/update ui/redirect to index
-                if (res.status === StatusTypes.noContent) {
+                if (res.status === StatusTypes.noContent || res.status === StatusTypes.unauthorized) {
                     console.log('user logged out successfully');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onSignup: function(register_data) {
@@ -49410,18 +49447,21 @@ var AuthStore = Reflux.createStore({
                 if (res.status === StatusTypes.badRequest) {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
-                    this.data.errorMessages.signup = res.body.message;
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
+                    // this.data.errorMessages.signup = res.body.message;
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     }
 });
 
 module.exports = AuthStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -49432,7 +49472,9 @@ var CurrentUserStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            profile: null
+            profile: {
+                user_id: 0
+            }
         };
         return this.data
     },
@@ -49648,12 +49690,34 @@ var EditorStore = Reflux.createStore({
 
 module.exports = EditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/error.js":[function(require,module,exports){
+var Reflux = require('reflux');
+var ErrorActions = require('../actions-error');
+
+var ErrorStore = Reflux.createStore({
+    listenables: [ErrorActions],
+    onThrowError: function(error) {
+        this.trigger(error);
+    },
+    onThrowUnknownStatus: function(res){
+        ErrorActions.throwError({
+            message: res.status + res.body ? ': ' + res.body.message : ''
+        });
+    },
+    onAcknowledge: function() {
+        this.trigger(null);
+    }
+});
+
+module.exports =  ErrorStore;
+
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 
 var FavoritesStore = Reflux.createStore({
     listenables: [Actions],
@@ -49683,6 +49747,11 @@ var FavoritesStore = Reflux.createStore({
                             console.log('unknown status: ', res.status);
                         }.bind(this));
                     return;
+                }
+                if (res.status === StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: 'You need to be logged in to favorite a track.'
+                    });
                 }
                 console.log('unknown status: ', res.status);
             }.bind(this));
@@ -49728,7 +49797,7 @@ var FavoritesStore = Reflux.createStore({
 
 module.exports = FavoritesStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -50047,7 +50116,41 @@ var HomeStore = Reflux.createStore({
 
 module.exports = HomeStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/index.js":[function(require,module,exports){
+var React = require('react/addons');
+var Reflux = require('reflux');
+var Actions = require('../actions');
+var request = require('superagent');
+var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
+
+var FavoritesStore = Reflux.createStore({
+    listenables: [Actions],
+    getDefaultData: function() {
+        this.data = {
+            featuredTrack: null
+        };
+        return this.data
+    },
+
+    onGetGlobalFeaturedTrack: function(trackId) {
+        request
+            .get('/api/tracks/' + trackId)
+            .end(function(err, res) {
+                if (res.status === StatusTypes.ok) {
+                    this.data.featuredTrack = res.body;
+                    this.trigger(this.data);
+                    return;
+                }
+                console.log('unknown status: ', res.status);
+            }.bind(this));
+    }
+});
+
+
+module.exports = FavoritesStore;
+
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var Actions = require('../actions');
 
@@ -50246,6 +50349,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 var io = require('socket.io-client');
 var LineRiderActions = require('../linerider/actions');
 
@@ -50263,6 +50367,12 @@ var RealtimeEditorStore = Reflux.createStore({
                 }
                 if (res.status == StatusTypes.ok) {
                     this.connectSession(res.body.token);
+                    return;
+                }
+                if (res.status == StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: "You are not allowed to edit this track."
+                    });
                     return;
                 }
                 console.log('unknown status: ', res.status);
@@ -50327,13 +50437,14 @@ var RealtimeEditorStore = Reflux.createStore({
 
 module.exports = RealtimeEditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","socket.io-client":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","socket.io-client":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
+var ErrorActions = require('../actions-error');
 
 var SubscriptionsStore = Reflux.createStore({
     listenables: [Actions],
@@ -50351,6 +50462,11 @@ var SubscriptionsStore = Reflux.createStore({
                 if (res.status === StatusTypes.noContent) {
                     console.log('subscribed to user');
                     return;
+                }
+                if (res.status === StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: 'You need to be logged in to subscribe to a user.'
+                    });
                 }
                 console.log('unknown status: ', res.status);
             }.bind(this));
@@ -50413,7 +50529,7 @@ var SubscriptionsStore = Reflux.createStore({
 
 module.exports = SubscriptionsStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/track.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/track.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -50512,6 +50628,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var EditorStore = require('../stores/editor');
@@ -50595,6 +50712,13 @@ var Editor = React.createClass({displayName: 'Editor',
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
+        var owner_id = this.state.data.track.owner && this.state.data.track.owner.user_id;
+        if (owner_id && this.props.currentUser.user_id !== owner_id) {
+            ErrorActions.throwError({
+                message: "You are not allowed to change this track."
+            });
+            return;
+        }
         var newData = this.state.data;
         newData.track.scene = scene;
         this.setState({
@@ -50635,7 +50759,9 @@ var Editor = React.createClass({displayName: 'Editor',
             console.log('adding invitee!');
             Actions.addInvitee(this.props.params.trackId, user);
         } else {
-            alert('You must save your track before inviting anyone!');
+            ErrorActions.throwError({
+                message: 'You must save your track before inviting anyone!'
+            });
         }
     },
     handleNewTrack: function() {
@@ -50683,7 +50809,78 @@ var Editor = React.createClass({displayName: 'Editor',
 
 module.exports = Editor;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
+var ErrorActions = require('../actions-error');
+var React = require('react');
+
+var ErrorModal = React.createClass({displayName: 'ErrorModal',
+    onConfirm: function() {
+        if (this.props.error.onConfirm) {
+            this.props.error.onConfirm();
+        }
+        ErrorActions.acknowledge();
+    },
+    onCancel: function() {
+        this.props.error.onCancel();
+        ErrorActions.acknowledge();
+    },
+    render: function() {
+        return (
+            React.createElement("div", {className: "error-modal"}, 
+                 this.props.error.message, 
+                
+                    this.props.error.onCancel ?
+                    React.createElement("div", {className: "error-buttons"}, 
+                        React.createElement("button", {className: "btn-error btn-ok", onClick: this.onConfirm}, "OK"), 
+                        React.createElement("button", {className: "btn-error btn-cancel", onClick: this.onCancel}, "Cancel")
+                    )
+                    :
+                    React.createElement("div", {className: "error-buttons"}, 
+                        React.createElement("button", {className: "btn-error btn-error-full", onClick: this.onConfirm}, "OK")
+                    )
+                
+            )
+        );
+    }
+});
+
+// function exampleConfirm() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'you confirmed! this error also has aconfirm callback but no cancel callback',
+//             onConfirm: alert.bind(null,'okay carry on'),
+//         });
+//     }, 100);
+// }
+
+// function exampleCancel() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'you canceled! if you clikc cancel you\'ll get and erro with no callbacks',
+//             onCancel: exampleNone
+//         });
+//     }, 100);
+// }
+
+// function exampleNone() {
+//     setTimeout(function() {
+//         ErrorActions.throwError({
+//             message: 'no callbacks for htis'
+//         });
+//     }, 100);
+// }
+
+// setTimeout(function() {
+//     ErrorActions.throwError({
+//         message: 'example with both callbacsk',
+//         onConfirm: exampleConfirm,
+//         onCancel: exampleCancel
+//     });
+// }, 100);
+
+module.exports = ErrorModal;
+
+},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -50691,6 +50888,7 @@ var Reflux = require('reflux');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
@@ -50719,6 +50917,10 @@ var Favorites = React.createClass({displayName: 'Favorites',
     componentWillMount: function() {
         if (this.props.currentUser) {
             Actions.getFavorites();
+        } else {
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -50755,7 +50957,7 @@ var Favorites = React.createClass({displayName: 'Favorites',
 
 module.exports = Favorites;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 var Footer = React.createClass({displayName: 'Footer',
@@ -50795,7 +50997,7 @@ var Gallery = React.createClass({displayName: 'Gallery',
     mixins: [
         Reflux.listenTo(GalleryStore, 'onDataChanged')
     ],
-    defaultTrackNum: 3,
+    defaultTrackNum: 30,
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -50840,7 +51042,6 @@ var Gallery = React.createClass({displayName: 'Gallery',
                     :
                     React.createElement("div", {className: "main-content"}, 
                         React.createElement(PanelPadded, {isGallery: true}, 
-                            React.createElement(SearchBar, null), 
                             React.createElement("div", {className: "section group"}, 
                                 React.createElement(GalleryPreview, {
                                     isPreview: false, 
@@ -51074,7 +51275,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var IndexStore = require('../stores/index');
+var IndexStore = require('../stores/index');
 
 //UI Components
 var Gallery= require('./Gallery.jsx');
@@ -51082,12 +51283,42 @@ var Panel = require('./Panel.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
 var Footer = require('./Footer.jsx');
+var FeaturedTrack = require('./featured-track.jsx');
+
+// var Editor = require('./Editor.jsx');
+
+var Display = require('../linerider/Display.jsx');
 
 var Index = React.createClass({displayName: 'Index',
+    trackId: 1,
+    mixins: [
+        Reflux.listenTo(IndexStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: IndexStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        Actions.getGlobalFeaturedTrack(this.trackId);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        Actions.getGlobalFeaturedTrack(this.trackId);
+    },
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
-                React.createElement(Panel, {isMasthead: true, id: "masthead-panel"}), 
+                React.createElement(Panel, {isMasthead: true, id: "masthead-panel"}, 
+                    this.state.data.featuredTrack ?
+                        React.createElement(FeaturedTrack, {isGlobal: true, featuredTrack: this.state.data.featuredTrack})
+                        : null
+                    
+                ), 
                 React.createElement(ScrollDivider, {link: "#editor-panel"}), 
                 React.createElement(Link, {to: 'editor'}, 
                     React.createElement(Panel, {id: "editor-panel"})
@@ -51104,7 +51335,7 @@ var Index = React.createClass({displayName: 'Index',
 
 module.exports = Index;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/index":"/Users/jingxiao/437/Team77/public/js/src/stores/index.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
@@ -51302,6 +51533,7 @@ var MediaIcons = require('./MediaIcons.jsx');
 var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
+var ProfileFeaturedTrack = require('./featured-track.jsx')
 
 //Linerider
 var Display = require('../linerider/Display.jsx');
@@ -51384,55 +51616,6 @@ var Profile = React.createClass({displayName: 'Profile',
                     )
                 ), 
                 React.createElement(Footer, null)
-            )
-        );
-    }
-});
-
-var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
-    render: function() {
-        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
-            return (
-                React.createElement("li", null, 
-                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
-                        collaborator.username
-                    )
-                )
-            );
-        });
-        return (
-            React.createElement("article", {className: "profile-featured-track"}, 
-                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
-                    React.createElement("div", null, 
-                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
-                    )
-                ), 
-                React.createElement(MediaIcons, null), 
-                React.createElement(Display, {scene: this.props.featuredTrack.scene, preview: true}), 
-                React.createElement("aside", {className: "info"}, 
-                    React.createElement("div", null, 
-                        React.createElement("h3", null, this.props.featuredTrack.title), 
-                        this.props.featuredTrack.description ?
-                            React.createElement("p", null, 
-                                this.props.featuredTrack.description
-                            )
-                            :
-                            React.createElement("p", null
-                            ), 
-                        
-                        React.createElement("h3", null, "Owner"), 
-                        React.createElement("p", null, 
-                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
-                                this.props.featuredTrack.owner.username
-                            )
-
-                        ), 
-                        React.createElement("h3", null, "Collaborators"), 
-                        React.createElement("ul", null, 
-                            collaboratorListItems
-                        )
-                    )
-                )
             )
         );
     }
@@ -51562,8 +51745,10 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
+var Router = require('react-router');
+var Link = Router.Link;
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
 var request = require('superagent');
@@ -51731,6 +51916,7 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
             tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim())
         };
 
+        this.props.onCloseModal();
         this.props.onSave(trackMetaData);
     },
     handleInvite: function(user) {
@@ -51758,13 +51944,13 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
     render: function() {
         var inviteeBubbles = this.state.track.invitees.map(function(invitee) {
             return (
-                React.createElement(UserBubble, {imageSrc: invitee.avatar_url})
+                React.createElement(UserBubble, {userId: invitee.user_id, imageSrc: invitee.avatar_url})
             );
         });
 
         var collaboratorBubbles = this.state.track.collaborators.map(function(collaborator) {
             return (
-                React.createElement(UserBubble, {imageSrc: collaborator.avatar_url})
+                React.createElement(UserBubble, {userId: collaborator.user_id, imageSrc: collaborator.avatar_url})
             );
         });
 
@@ -51858,9 +52044,14 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
 
 var UserBubble = React.createClass({displayName: 'UserBubble',
     render: function() {
+        var bgSrc = this.props.imageSrc;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
-            React.createElement("div", {className: "user-img"}, 
-                React.createElement("img", {src: this.props.imageSrc})
+            React.createElement(Link, {to: '/profile/' + this.props.userId}, 
+                React.createElement("div", {className: "user-img", style: avatarStyle}
+                )
             )
         );
     }
@@ -51868,7 +52059,7 @@ var UserBubble = React.createClass({displayName: 'UserBubble',
 
 module.exports = SaveModal;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
@@ -51897,6 +52088,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var CurrentUserStore = require('../stores/current-user');
@@ -51920,8 +52112,12 @@ var Settings = React.createClass({displayName: 'Settings',
         }
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
+        } else {
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -52194,7 +52390,7 @@ var Settings = React.createClass({displayName: 'Settings',
 
 module.exports = Settings;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -52202,6 +52398,7 @@ var Reflux = require('reflux');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var SubscriptionsStore = require('../stores/subscriptions');
@@ -52227,8 +52424,12 @@ var Subscriptions = React.createClass({displayName: 'Subscriptions',
         }
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getSubscriptions();
+        } else {
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -52313,7 +52514,7 @@ var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
 
 module.exports = Subscriptions;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/subscriptions":"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksSlider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksSlider.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Tile.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/subscriptions":"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksSlider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksSlider.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Tile.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -52324,6 +52525,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var FavoritesStore = require('../stores/favorites');
@@ -52402,6 +52604,9 @@ var Tile = React.createClass({displayName: 'Tile',
             return false;
         }
     },
+    doNothing: function() {
+        console.log('did nothing');
+    },
     handleAcceptInvitation: function(event) {
         event.preventDefault();
         Actions.acceptInvitation(this.props.trackId);
@@ -52409,35 +52614,47 @@ var Tile = React.createClass({displayName: 'Tile',
         // console.log(this.props.userId);
         // console.log('JOINING INVITATION');
         // console.log(event.target);
+        //
+        //
     },
     handleRejectInvitation: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to reject this invitation?');
-        if (c) {
-            console.log('rejecting!!!');
-            Actions.rejectInvitation(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to reject this invitation?',
+            onConfirm: function() { Actions.rejectInvitation(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
+        // if (c) {
+        //     console.log('rejecting!!!');
+        //     Actions.rejectInvitation(this.props.trackId);
+        // }
     },
     handleDeleteTrack: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to delete this track?');
-        if (c) {
-            console.log('deleting track');
-            console.log(this.props.trackId);
-            Actions.deleteTrack(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to delete this track?',
+            onConfirm: function() { Actions.deleteTrack(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handleLeaveCollaboration: function(event) {
         event.preventDefault();
-        var c = confirm('Are you sure you want to leave this collaboration?');
-        if (c) {
-            console.log('leaving collab');
-            Actions.leaveCollaboration(this.props.trackId);
-        }
+        ErrorActions.throwError({
+            message: 'Are you sure you want to leave this collaboration?',
+            onConfirm: function() { Actions.leaveCollaboration(this.props.trackId) }.bind(this),
+            onCancel: this.doNothing
+        });
     },
     handlePlayback: function(event) {
         console.log('PLAYBACK MODEEEE');
         this.transitionTo('/track/' + this.props.trackId);
+    },
+    handleInfoClick: function(event) {
+        event.preventDefault();
+        console.log(this.props.ownerId);
+        if (this.props.ownerId) {
+            this.transitionTo('/profile/' + this.props.ownerId);
+        }
     },
     handleAddFavorite: function(event) {
         event.preventDefault();
@@ -52483,7 +52700,7 @@ var Tile = React.createClass({displayName: 'Tile',
         if (this.props.extra === 'your-track') {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52505,7 +52722,7 @@ var Tile = React.createClass({displayName: 'Tile',
         } else if (!this.props.userId) {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52515,7 +52732,7 @@ var Tile = React.createClass({displayName: 'Tile',
         } else {
             links =
                 React.createElement("div", {className: "tile-tools"}, 
-                    React.createElement("div", {className: "tile-tool-link"}, 
+                    React.createElement("div", {className: "tile-tool-link", onClick: this.handleInfoClick}, 
                         React.createElement(Icon, {class: "tile-tool-icon", icon: "info"})
                     ), 
                     React.createElement("div", {className: "tile-tool-link"}, 
@@ -52617,7 +52834,7 @@ var Tile = React.createClass({displayName: 'Tile',
 
 module.exports = Tile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 
@@ -52639,6 +52856,7 @@ var TracksCol = React.createClass({displayName: 'TracksCol',
                     userId: this.props.userId, 
                     trackId: track.track_id, 
                     title: track.title, 
+                    ownerId: track.owner.user_id, 
                     description: track.description, 
                     col: this.props.col, 
                     extra: this.props.extra, 
@@ -52780,7 +52998,89 @@ var TracksSlider = React.createClass({displayName: 'TracksSlider',
 
 module.exports = TracksSlider;
 
-},{"./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"util/status-types.js":[function(require,module,exports){
+},{"./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx":[function(require,module,exports){
+var React = require('react/addons');
+var Router = require('react-router');
+var Link = Router.Link;
+var Reflux = require('reflux');
+var _ = require('underscore');
+
+//Actions
+var Actions = require('../actions');
+
+//Data Stores
+var ProfileStore = require('../stores/profile');
+
+//UI Components
+var Icon = require('./Icon.jsx');
+var MediaIcons = require('./MediaIcons.jsx');
+var TracksPreview = require('./TracksPreview.jsx');
+var PanelPadded = require('./PanelPadded.jsx');
+var Footer = require('./Footer.jsx');
+var ProfileFeaturedTrack = require('./featured-track.jsx');
+
+//Linerider
+var Display = require('../linerider/Display.jsx');
+
+var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
+    render: function() {
+        var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
+            return (
+                React.createElement("li", null, 
+                    React.createElement(Link, {to: '/profile/' + collaborator.user_id}, 
+                        collaborator.username
+                    )
+                )
+            );
+        });
+        var featuredName = this.props.isGlobal ? 'global-featured-track' : 'profile-featured-track';
+        return (
+            React.createElement("article", {className: featuredName}, 
+                React.createElement(Link, {to: '/track/' + this.props.featuredTrack.track_id}, 
+                    React.createElement("div", null, 
+                        React.createElement(Icon, {class: "preview-icon", icon: "fullscreen-enter"})
+                    )
+                ), 
+                React.createElement(MediaIcons, null), 
+                React.createElement(Display, {scene: this.props.featuredTrack.scene, preview: true}), 
+                React.createElement("aside", {className: "info"}, 
+                    React.createElement("div", null, 
+                        React.createElement("h3", null, this.props.featuredTrack.title), 
+                        this.props.featuredTrack.description ?
+                            React.createElement("p", null, 
+                                this.props.featuredTrack.description
+                            )
+                            :
+                            React.createElement("p", null
+                            ), 
+                        
+                        React.createElement("h3", null, "Owner"), 
+                        React.createElement("p", null, 
+                            React.createElement(Link, {to: '/profile/' + this.props.featuredTrack.owner.user_id}, 
+                                this.props.featuredTrack.owner.username
+                            )
+
+                        ), 
+                        
+                            collaboratorListItems.length > 0 ?
+                            React.createElement("div", null, 
+                                React.createElement("h3", null, "Collaborators"), 
+                                React.createElement("ul", null, 
+                                    collaboratorListItems
+                                )
+                            )
+                            : null
+                        
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = ProfileFeaturedTrack;
+
+},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"util/status-types.js":[function(require,module,exports){
 var StatusTypes = {
     info: 100,
     ok: 200,

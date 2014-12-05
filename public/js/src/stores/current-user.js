@@ -8,7 +8,9 @@ var CurrentUserStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            profile: null
+            profile: {
+                user_id: 0
+            }
         };
         return this.data
     },

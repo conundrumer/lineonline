@@ -3,12 +3,15 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 
 var AuthStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            currentUser: null,
+            currentUser: {
+                user_id: 0
+            },
             errorMessages: {
                 login: null,
                 signup: null
@@ -23,7 +26,9 @@ var AuthStore = Reflux.createStore({
                 //user not logged in, set current user to null/redirect to index
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user not logged in');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                 }
                 //user logged in, set current user to user
                 if (res.status === StatusTypes.ok) {
@@ -38,10 +43,12 @@ var AuthStore = Reflux.createStore({
             .post('/api/auth')
             .send(login_data)
             .end(function(err, res) {
-                //not logged in, show error message/update ui?
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user failed to log in');
-                    this.data.errorMessages.login = res.body.message;
+                    // this.data.errorMessages.login = res.body.message;
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
                     this.trigger(this.data);
                     return;
                 }
@@ -54,7 +61,7 @@ var AuthStore = Reflux.createStore({
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onLogout: function() {
@@ -62,13 +69,15 @@ var AuthStore = Reflux.createStore({
             .del('/api/auth')
             .end(function(err, res) {
                 //logged out, set current user to null/update ui/redirect to index
-                if (res.status === StatusTypes.noContent) {
+                if (res.status === StatusTypes.noContent || res.status === StatusTypes.unauthorized) {
                     console.log('user logged out successfully');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     },
     onSignup: function(register_data) {
@@ -88,11 +97,14 @@ var AuthStore = Reflux.createStore({
                 if (res.status === StatusTypes.badRequest) {
                     console.log('user failed to be registered');
                     console.log(res.body.message);
-                    this.data.errorMessages.signup = res.body.message;
+                    ErrorActions.throwError({
+                        message: res.body.message
+                    });
+                    // this.data.errorMessages.signup = res.body.message;
                     this.trigger(this.data);
                     return;
                 }
-                console.log('unknown status: ', res.status);
+                ErrorActions.throwUnknownStatus(res);
             }.bind(this));
     }
 });

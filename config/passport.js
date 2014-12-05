@@ -1,6 +1,7 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
+var encrypt = require('encrypt');
 
 module.exports = function (passport, config) {
 
@@ -18,7 +19,6 @@ module.exports = function (passport, config) {
         });
     });
 
-
     // Use the LocalStrategy within Passport.
     passport.use(new LocalStrategy(
         function(username, password, done) {
@@ -26,7 +26,8 @@ module.exports = function (passport, config) {
                 if (model === null) {
                     return done(null, false, { message: 'Unknown user ' + username });
                 }
-                if (model.get('password') != password) {
+                var enc = encrypt.encryptPassword(password);
+                if (model.get('password') != enc) {
                     return done(null, false, { message: 'Invalid password'});
                 }
                 return done(null, model);

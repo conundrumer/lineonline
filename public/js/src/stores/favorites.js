@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
+var ErrorActions = require('../actions-error');
 
 var FavoritesStore = Reflux.createStore({
     listenables: [Actions],
@@ -32,6 +33,11 @@ var FavoritesStore = Reflux.createStore({
                             console.log('unknown status: ', res.status);
                         }.bind(this));
                     return;
+                }
+                if (res.status === StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: 'You need to be logged in to favorite a track.'
+                    });
                 }
                 console.log('unknown status: ', res.status);
             }.bind(this));

@@ -19,6 +19,7 @@ var TracksCol = React.createClass({
                     userId={this.props.userId}
                     trackId={track.track_id}
                     title={track.title}
+                    ownerId={track.owner.user_id}
                     description={track.description}
                     col={this.props.col}
                     extra={this.props.extra}

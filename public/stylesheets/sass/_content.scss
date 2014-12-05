@@ -27,6 +27,98 @@
     }
 }
 
+.error-modal {
+    @include box-shadow($border-col 0 0 50px 2px);
+    border: 1px solid $border-col;
+    max-width: 300px;
+    width: 300px;
+    background: #fff;
+    margin: 0 auto;
+    // height: 150px;
+    z-index: 6;
+
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    right: 0;
+
+    top: 150px;
+    font-size: 13px;
+    padding: 20px 30px;
+    text-align: center;
+
+    .error-buttons {
+        // position: absolute;
+        // bottom: 20px;
+        // left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-error {
+        @include transition(color 0.2s ease-in-out 0);
+        border: 1px solid $border-col;
+        display: inline-block;
+        text-align: center;
+        background: #fff;
+        margin: 20px auto 0;
+        // width: 122px;
+        width: calc(50% - 7px);
+
+        text-transform: uppercase;
+        font-weight: bold;
+        height: 36px;
+
+        &.btn-ok {
+            margin-right: 7px;
+        }
+
+        &.btn-cancel {
+            margin-left: 7px;
+        }
+
+        &.btn-error-full {
+
+        }
+
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
+
+    // .btn-submit {
+    //     @include transition(color 0.2s ease-in-out 0);
+    //     // width: 100%;
+    //     border: 1px solid $border-col;
+    //     display: block;
+    //     text-align: center;
+    //     background: #fff;
+    //     margin: 30px auto 0;
+    //     width: 100%;
+
+    //     text-transform: uppercase;
+    //     font-weight: bold;
+    //     height: 36px;
+
+    //     &:hover {
+    //         cursor: pointer;
+    //         color: $light-col;
+    //     }
+
+    //     &.btn-save-modal {
+    //         position: absolute;
+    //         bottom: 0;
+    //         left: 0;
+    //         border: none;
+    //         border-top: 1px solid $border-col;
+    //         height: 50px;
+    //         font-size: 16px;
+    //     }
+
+    // }
+}
 
 .save-modal {
     @include box-shadow($border-col 0 0 50px 2px);
@@ -125,6 +217,7 @@
         margin: 0 auto;
         // background: red;
         .user-img {
+            @include transition(opacity 0.2s ease-in-out 0);
             border-radius: 100%;
             display: inline-block;
             width: 40px;
@@ -155,7 +248,7 @@
 
     .collab-preview-invitees {
         .user-img {
-            opacity: 0.4;
+            // opacity: 0.4;
         }
     }
 
@@ -536,7 +629,7 @@
     }
 
     // background-color: red;
-    z-index: 2;
+    z-index: 20;
     background: #fff;
     position: fixed;
     width: 100%;
@@ -904,16 +997,25 @@
 }
 
 .masthead {
-    background: #fff url('../../images/sample_masthead.png') no-repeat center center;
-    background-size: cover;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+    // background-size: cover;
 }
 
 
 
 .profile-featured-track {
+    background: #fff;
+    height: 350px;
+    margin-bottom: 50px;
+    // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+    // background-size: cover;
+    border: 1px solid $border-col;
     position: relative;
+
     .media-icons {
-        z-index: 1;
         font-size: 16px;
         position: absolute;
         left: 15px;
@@ -930,14 +1032,152 @@
 
     .preview-icon {
         @include transition(color 0.2s ease-in-out 0);
-        z-index: 1;
         right: 200px + 12px;
         top: 12px;
         position: absolute;
+        z-index: 10;
         &:hover {
             cursor: pointer;
             color: $light-col;
         }
+    }
+
+    .info {
+        opacity: 0.8;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #fff;
+        border-left: 1px solid $border-col;
+        height: 100%;
+        padding: 20px 20px;
+        width: 200px;
+
+        a {
+            @include transition(color 0.2s ease-in-out 0);
+            color: $linerider-red;
+            &:hover {
+                color: $light-col;
+            }
+        }
+
+        h3 {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.5;
+            // line-height: 2.5;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        ul, p {
+            font-size: 13px;
+            line-height: 1.4;
+            font-style: italic;
+            padding-top: 5px;
+            li {
+                margin-bottom: 3px;
+                &:before {
+                    content: '•';
+                    padding-right: 7px;
+                }
+
+            }
+        }
+
+
+    }
+}
+
+.global-featured-track {
+    background: #fff;
+    // min-height: 350px;
+    height: 100%;
+    // max-height: 100%;
+    margin-bottom: 50px;
+    // background: #fff url('../../images/sample_masthead.png') no-repeat center center;
+    // background-size: cover;
+    border: 1px solid $border-col;
+    border-top: none;
+    border-bottom: none;
+    position: relative;
+
+    .media-icons {
+        z-index: 1;
+        font-size: 20px;
+        position: absolute;
+        left: 25px;
+        bottom: 20px;
+        .media-icon {
+            @include transition(color 0.2s ease-in-out 0);
+            padding-right: 25px;
+            &:hover {
+                cursor: pointer;
+                color: $light-col;
+            }
+        }
+    }
+
+    .preview-icon {
+        @include transition(color 0.2s ease-in-out 0);
+        right: calc(18% + 15px);
+        top: 20px;
+        position: absolute;
+        font-size: 20px;
+        z-index: 1;
+        &:hover {
+            cursor: pointer;
+            color: $light-col;
+        }
+    }
+    .info {
+        opacity: 0.8;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #fff;
+        border-left: 1px solid $border-col;
+        height: 100%;
+        padding: 20px 20px;
+        width: 18%;
+
+        a {
+            @include transition(color 0.2s ease-in-out 0);
+            color: $linerider-red;
+            &:hover {
+                color: $light-col;
+            }
+        }
+
+        h3 {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.5;
+            // line-height: 2.5;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        ul, p {
+            font-size: 13px;
+            line-height: 1.4;
+            font-style: italic;
+            padding-top: 5px;
+            li {
+                margin-bottom: 3px;
+                &:before {
+                    content: '•';
+                    padding-right: 7px;
+                }
+
+            }
+        }
+
+
     }
 }
 
@@ -983,7 +1223,7 @@
 
 #editor-panel {
     position: relative;
-    background: #fff url('../../images/sample_editor.png') no-repeat top center;
+    background: #fff url('../../images/editor.png') no-repeat top center;
     background-size: 100% auto;//contain;
 }
 
