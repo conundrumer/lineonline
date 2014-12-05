@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var SubscriptionsStore = require('../stores/subscriptions');
@@ -30,8 +31,12 @@ var Subscriptions = React.createClass({
         }
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getSubscriptions();
+        } else {
+            ErrorActions.throwError({
+                message: 'You are not logged in.'
+            });
         }
     },
     componentWillReceiveProps: function(nextProps) {

@@ -6,6 +6,7 @@ var _ = require('underscore');
 
 //Actions
 var Actions = require('../actions');
+var ErrorActions = require('../actions-error');
 
 //Data Stores
 var CurrentUserStore = require('../stores/current-user');
@@ -29,8 +30,12 @@ var Settings = React.createClass({
         }
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
+        } else {
+            ErrorActions.throwError({
+                message: 'You are not logged in.'
+            });
         }
     },
     componentWillReceiveProps: function(nextProps) {

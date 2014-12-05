@@ -4,6 +4,7 @@ var Actions = require('../actions');
 var request = require('superagent');
 var StatusTypes = require('status-types');
 var _ = require('underscore');
+var ErrorActions = require('../actions-error');
 
 var SubscriptionsStore = Reflux.createStore({
     listenables: [Actions],
@@ -21,6 +22,11 @@ var SubscriptionsStore = Reflux.createStore({
                 if (res.status === StatusTypes.noContent) {
                     console.log('subscribed to user');
                     return;
+                }
+                if (res.status === StatusTypes.unauthorized) {
+                    ErrorActions.throwError({
+                        message: 'You need to be logged in to subscribe to a user.'
+                    });
                 }
                 console.log('unknown status: ', res.status);
             }.bind(this));

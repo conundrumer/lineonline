@@ -71,7 +71,9 @@ var AuthStore = Reflux.createStore({
                 //logged out, set current user to null/update ui/redirect to index
                 if (res.status === StatusTypes.noContent || res.status === StatusTypes.unauthorized) {
                     console.log('user logged out successfully');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                     this.trigger(this.data);
                     return;
                 }
