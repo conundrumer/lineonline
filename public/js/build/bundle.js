@@ -51314,7 +51314,11 @@ var Index = React.createClass({displayName: 'Index',
             React.createElement("div", {className: "main-content"}, 
                 React.createElement(Panel, {isMasthead: true, id: "masthead-panel"}, 
                     this.state.data.featuredTrack ?
-                        React.createElement(Display, {scene: this.state.data.featuredTrack.scene})
+                        React.createElement("div", null, 
+                            React.createElement("div", null, this.state.data.featuredTrack.title), 
+                            React.createElement("div", null, "by ", this.state.data.featuredTrack.owner.username), 
+                            React.createElement(Display, {scene: this.state.data.featuredTrack.scene})
+                        )
                         : null
                     
                 ), 
