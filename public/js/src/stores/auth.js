@@ -9,7 +9,9 @@ var AuthStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            currentUser: null,
+            currentUser: {
+                user_id: 0
+            },
             errorMessages: {
                 login: null,
                 signup: null
@@ -24,7 +26,9 @@ var AuthStore = Reflux.createStore({
                 //user not logged in, set current user to null/redirect to index
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user not logged in');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                 }
                 //user logged in, set current user to user
                 if (res.status === StatusTypes.ok) {
