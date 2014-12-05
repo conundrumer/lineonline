@@ -51284,6 +51284,7 @@ var Panel = require('./Panel.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
 var Footer = require('./Footer.jsx');
+// var Editor = require('./Editor.jsx');
 
 var Display = require('../linerider/Display.jsx');
 
