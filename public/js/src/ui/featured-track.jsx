@@ -59,10 +59,16 @@ var ProfileFeaturedTrack = React.createClass({
                             </Link>
 
                         </p>
-                        <h3>Collaborators</h3>
-                        <ul>
-                            {collaboratorListItems}
-                        </ul>
+                        {
+                            collaboratorListItems.length > 0 ?
+                            <div>
+                                <h3>Collaborators</h3>
+                                <ul>
+                                    {collaboratorListItems}
+                                </ul>
+                            </div>
+                            : null
+                        }
                     </div>
                 </aside>
             </article>
