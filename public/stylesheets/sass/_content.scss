@@ -217,6 +217,7 @@
         margin: 0 auto;
         // background: red;
         .user-img {
+            @include transition(opacity 0.2s ease-in-out 0);
             border-radius: 100%;
             display: inline-block;
             width: 40px;
@@ -247,7 +248,7 @@
 
     .collab-preview-invitees {
         .user-img {
-            opacity: 0.4;
+            // opacity: 0.4;
         }
     }
 

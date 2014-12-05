@@ -51685,6 +51685,8 @@ module.exports = Profile;
 
 },{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
+var Router = require('react-router');
+var Link = Router.Link;
 var _ = require('underscore');
 var ReactBacon = require('react-bacon');
 var request = require('superagent');
@@ -51879,13 +51881,13 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
     render: function() {
         var inviteeBubbles = this.state.track.invitees.map(function(invitee) {
             return (
-                React.createElement(UserBubble, {imageSrc: invitee.avatar_url})
+                React.createElement(UserBubble, {userId: invitee.user_id, imageSrc: invitee.avatar_url})
             );
         });
 
         var collaboratorBubbles = this.state.track.collaborators.map(function(collaborator) {
             return (
-                React.createElement(UserBubble, {imageSrc: collaborator.avatar_url})
+                React.createElement(UserBubble, {userId: collaborator.user_id, imageSrc: collaborator.avatar_url})
             );
         });
 
@@ -51984,7 +51986,9 @@ var UserBubble = React.createClass({displayName: 'UserBubble',
             background: 'url("' + bgSrc + '") center center / cover no-repeat'
         };
         return (
-            React.createElement("div", {className: "user-img", style: avatarStyle}
+            React.createElement(Link, {to: '/profile/' + this.props.userId}, 
+                React.createElement("div", {className: "user-img", style: avatarStyle}
+                )
             )
         );
     }
@@ -51992,7 +51996,7 @@ var UserBubble = React.createClass({displayName: 'UserBubble',
 
 module.exports = SaveModal;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
