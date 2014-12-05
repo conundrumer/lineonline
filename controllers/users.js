@@ -116,6 +116,9 @@ exports.featuredTrack = function(req, res) {
     }
     future_track
         .then(function(track) {
+            if (!track) {
+                return;
+            }
             return track.asFullTrack();
         })
         .then(function(results) {

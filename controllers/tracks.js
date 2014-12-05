@@ -107,6 +107,18 @@ exports.deleteTrack = function(req, res){
         return req.track.destroy();
     })
     .then(function() {
+        return User
+            .where({
+                featured_track: parseInt(req.params.track_id)
+            })
+            .fetchAll();
+    })
+    .then(function(users) {
+        return Promise.map(users.models, function(user) {
+            return user.save({ featured_track: null }, { patch: true });
+        });
+    })
+    .then(function() {
         return res.status(StatusTypes.noContent).send();
     })
     .catch(console.error);
