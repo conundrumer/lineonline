@@ -48408,7 +48408,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
         });
     },
     componentWillMount: function() {
-        if (this.props.currentUser) {
+        if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
         }
     },
@@ -48455,17 +48455,17 @@ var Navbar = React.createClass({displayName: 'Navbar',
                             "LineOnline"
                         )
                     ), 
-                    this.props.currentUser ?
+                    this.props.currentUser && this.props.currentUser.user_id ?
                         React.createElement(Navlink, {title: "Home", link: "home", icon: "home"})
                         : null, 
                     
                     React.createElement(Navlink, {title: "Editor", link: "editor", icon: "pencil"}), 
                     React.createElement(Navlink, {title: "Gallery", link: "gallery", icon: "image"}), 
-                    this.props.currentUser ?
+                    this.props.currentUser && this.props.currentUser.user_id ?
                         React.createElement("li", {className: "nav-item col span_2_of_7"})
                         : React.createElement("li", {className: "nav-item col span_3_of_7"}), 
                     
-                    this.props.currentUser && this.state.data.profile ?
+                    this.props.currentUser && this.props.currentUser.user_id && this.state.data.profile ?
                         React.createElement("li", {className: "nav-item nav-item-profile col span_1_of_7"}, 
                             React.createElement("div", {className: "navlink", style: avatarStyle, onClick: this.handleDropdownClick}, 
                                 React.createElement("span", {className: "hide"}, 
@@ -49356,7 +49356,9 @@ var AuthStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            currentUser: null,
+            currentUser: {
+                user_id: 0
+            },
             errorMessages: {
                 login: null,
                 signup: null
@@ -49371,7 +49373,9 @@ var AuthStore = Reflux.createStore({
                 //user not logged in, set current user to null/redirect to index
                 if (res.status === StatusTypes.unauthorized) {
                     console.log('user not logged in');
-                    this.data.currentUser = null;
+                    this.data.currentUser = {
+                        user_id: 0
+                    };
                 }
                 //user logged in, set current user to user
                 if (res.status === StatusTypes.ok) {
@@ -49463,7 +49467,9 @@ var CurrentUserStore = Reflux.createStore({
     listenables: [Actions],
     getDefaultData: function() {
         this.data = {
-            profile: null
+            profile: {
+                user_id: 0
+            }
         };
         return this.data
     },
