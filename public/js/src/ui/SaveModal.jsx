@@ -293,9 +293,12 @@ var SaveModal = React.createClass({
 
 var UserBubble = React.createClass({
     render: function() {
+        var bgSrc = this.props.imageSrc;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
-            <div className='user-img'>
-                <img src={this.props.imageSrc} />
+            <div className='user-img' style={avatarStyle}>
             </div>
         );
     }

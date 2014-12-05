@@ -51979,9 +51979,12 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
 
 var UserBubble = React.createClass({displayName: 'UserBubble',
     render: function() {
+        var bgSrc = this.props.imageSrc;
+        var avatarStyle = {
+            background: 'url("' + bgSrc + '") center center / cover no-repeat'
+        };
         return (
-            React.createElement("div", {className: "user-img"}, 
-                React.createElement("img", {src: this.props.imageSrc})
+            React.createElement("div", {className: "user-img", style: avatarStyle}
             )
         );
     }
