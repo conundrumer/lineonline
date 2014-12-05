@@ -50918,9 +50918,9 @@ var Favorites = React.createClass({displayName: 'Favorites',
         if (this.props.currentUser) {
             Actions.getFavorites();
         } else {
-            ErrorActions.throwError({
-                message: 'You are not logged in.'
-            });
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -51288,7 +51288,7 @@ var Footer = require('./Footer.jsx');
 var Display = require('../linerider/Display.jsx');
 
 var Index = React.createClass({displayName: 'Index',
-    trackId: 3,
+    trackId: 1,
     mixins: [
         Reflux.listenTo(IndexStore, 'onDataChanged')
     ],
@@ -52161,9 +52161,9 @@ var Settings = React.createClass({displayName: 'Settings',
         if (this.props.currentUser.user_id) {
             Actions.getCurrentProfile(this.props.currentUser.user_id);
         } else {
-            ErrorActions.throwError({
-                message: 'You are not logged in.'
-            });
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
@@ -52473,9 +52473,9 @@ var Subscriptions = React.createClass({displayName: 'Subscriptions',
         if (this.props.currentUser.user_id) {
             Actions.getSubscriptions();
         } else {
-            ErrorActions.throwError({
-                message: 'You are not logged in.'
-            });
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {

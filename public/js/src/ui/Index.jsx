@@ -19,7 +19,7 @@ var Footer = require('./Footer.jsx');
 var Display = require('../linerider/Display.jsx');
 
 var Index = React.createClass({
-    trackId: 3,
+    trackId: 1,
     mixins: [
         Reflux.listenTo(IndexStore, 'onDataChanged')
     ],
