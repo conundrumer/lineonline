@@ -19,7 +19,7 @@ var Gallery = React.createClass({
     mixins: [
         Reflux.listenTo(GalleryStore, 'onDataChanged')
     ],
-    defaultTrackNum: 3,
+    defaultTrackNum: 30,
     onDataChanged: function(newData) {
         this.setState({
             data: newData
@@ -64,7 +64,6 @@ var Gallery = React.createClass({
                     :
                     <div className='main-content'>
                         <PanelPadded isGallery={true}>
-                            <SearchBar />
                             <div className='section group'>
                                 <GalleryPreview
                                     isPreview={false}
