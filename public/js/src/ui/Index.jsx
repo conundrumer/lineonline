@@ -7,7 +7,7 @@ var Reflux = require('reflux');
 var Actions = require('../actions');
 
 //Data Stores
-// var IndexStore = require('../stores/index');
+var IndexStore = require('../stores/index');
 
 //UI Components
 var Gallery= require('./Gallery.jsx');
@@ -16,11 +16,38 @@ var PanelPadded = require('./PanelPadded.jsx');
 var ScrollDivider = require('./ScrollDivider.jsx');
 var Footer = require('./Footer.jsx');
 
+var Display = require('../linerider/Display.jsx');
+
 var Index = React.createClass({
+    trackId: 3,
+    mixins: [
+        Reflux.listenTo(IndexStore, 'onDataChanged')
+    ],
+    onDataChanged: function(newData) {
+        this.setState({
+            data: newData
+        });
+    },
+    getInitialState: function() {
+        return {
+            data: IndexStore.getDefaultData()
+        }
+    },
+    componentWillMount: function() {
+        Actions.getGlobalFeaturedTrack(this.trackId);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        Actions.getGlobalFeaturedTrack(this.trackId);
+    },
     render: function() {
         return (
             <div className='main-content'>
-                <Panel isMasthead={true} id='masthead-panel' />
+                <Panel isMasthead={true} id='masthead-panel'>
+                    {this.state.data.featuredTrack ?
+                        <Display scene={this.state.data.featuredTrack.scene} />
+                        : null
+                    }
+                </Panel>
                 <ScrollDivider link='#editor-panel' />
                 <Link to={'editor'}>
                     <Panel id='editor-panel' />

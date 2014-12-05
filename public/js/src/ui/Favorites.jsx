@@ -32,7 +32,7 @@ var Favorites = React.createClass({
         }
     },
     componentWillMount: function() {
-        if (this.props.currentUser.user_id) {
+        if (this.props.currentUser) {
             Actions.getFavorites();
         } else {
             ErrorActions.throwError({

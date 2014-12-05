@@ -8,6 +8,9 @@ var Actions = Reflux.createActions([
     'logout',
     'signup',
 
+    //index
+    'getGlobalFeaturedTrack',
+
     //profile
     'getProfile',
     'getTrackSnippets',
