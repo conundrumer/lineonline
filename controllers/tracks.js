@@ -109,7 +109,7 @@ exports.deleteTrack = function(req, res){
     .then(function() {
         return User
             .where({
-                featured_track: req.params.track_id
+                featured_track: parseInt(req.params.track_id)
             })
             .fetchAll();
     })
