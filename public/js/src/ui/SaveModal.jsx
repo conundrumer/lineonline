@@ -168,6 +168,7 @@ var SaveModal = React.createClass({
             tags: this.processTags(this.refs.trackTags.getDOMNode().value.trim())
         };
 
+        this.props.onCloseModal();
         this.props.onSave(trackMetaData);
     },
     handleInvite: function(user) {
