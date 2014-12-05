@@ -35,9 +35,9 @@ var Favorites = React.createClass({
         if (this.props.currentUser.user_id) {
             Actions.getFavorites();
         } else {
-            ErrorActions.throwError({
-                message: 'You are not logged in.'
-            });
+            // ErrorActions.throwError({
+            //     message: 'You are not logged in.'
+            // });
         }
     },
     componentWillReceiveProps: function(nextProps) {
