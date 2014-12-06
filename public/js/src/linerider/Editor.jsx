@@ -193,6 +193,6 @@ var ToolButton = React.createClass({
             </button>
         );
     }
-})
+});
 
 module.exports = Editor;

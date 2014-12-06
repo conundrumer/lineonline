@@ -9,32 +9,32 @@ var ENTITY = {
 
 var LocalEditorStore = Reflux.createStore({
     listenables: [Actions],
-    getDefaultData: function() {
-        if (localStorage.unsaved_scene) {
-            try {
-                this.scene = JSON.parse(localStorage.unsaved_scene);
-            } catch (e) {
-                this.scene = {
-                    points:{},
-                    lines:{}
-                };
-                localStorage.unsaved_scene = JSON.stringify(this.scene);
-            }
-        } else {
-            this.scene = {
+    getLocalTrackKey: function() {
+        return 'unsaved_scene';
+    },
+    getLocalScene: function() {
+        var scene;
+        try {
+            scene = JSON.parse(localStorage[this.getLocalTrackKey()]);
+        } catch (SyntaxError) {
+            // i don't know what to do here
+            console.log("couldn't parse local scene, clearing...");
+            scene = {
                 points:{},
                 lines:{}
             };
-            localStorage.unsaved_scene = JSON.stringify(this.scene);
+            this.setLocalScene(scene);
         }
-        return this.scene;
+        return scene;
     },
-    setScene: function(scene) {
-        this.scene = scene;
-        localStorage.unsaved_scene = JSON.stringify(scene);
+    setLocalScene: function(scene) {
+        localStorage[this.getLocalTrackKey()] = JSON.stringify(scene);
+    },
+    getDefaultData: function() {
+        return this.getLocalScene();
     },
     onNewTrack: function() {
-        this.setScene({
+        this.setLocalScene({
             points:{},
             lines:{}
         });
@@ -53,7 +53,7 @@ var LocalEditorStore = Reflux.createStore({
         }
     },
     addLine: function(data) {
-        var scene = this.getDefaultData();
+        var scene = this.getLocalScene();
         data.forEach(function (e) {
             switch (e.type) {
                 case ENTITY.POINT:
@@ -70,10 +70,10 @@ var LocalEditorStore = Reflux.createStore({
                     break;
             }
         });
-        this.setScene(scene);
+        this.setLocalScene(scene);
     },
     removeLine: function(data) {
-        var scene = this.getDefaultData();
+        var scene = this.getLocalScene();
         data.forEach(function (e) {
             switch (e.type) {
                 case ENTITY.POINT:
@@ -84,7 +84,7 @@ var LocalEditorStore = Reflux.createStore({
                     break;
             }
         });
-        this.setScene(scene);
+        this.setLocalScene(scene);
     }
 });
 
