@@ -99,6 +99,32 @@ var SceneStore = Reflux.createStore({
         this.next_line_id = getMaxID(scene.lines);
         this.trigger(scene, 'load scene');
     },
+    onSaveScene: function(user_id, cb) {
+        var scene = this.scene;
+        _.keys(scene.points).forEach(function(id) {
+            if (id[0] === '0') {
+                var point = scene.points[id];
+                delete scene.points[id];
+                scene.points[user_id + id.slice(1)] = point;
+            }
+        });
+        _.keys(scene.lines).forEach(function(id) {
+            if (id[0] === '0') {
+                var line = scene.lines[id];
+                delete scene.lines[id];
+                scene.lines[user_id + id.slice(1)] = line;
+            }
+        });
+        _.values(scene.lines).forEach(function(line) {
+            if (line.p1[0] === '0') {
+                line.p1 = user_id + line.p1.slice(1);
+            }
+            if (line.p2[0] === '0') {
+                line.p2 = user_id + line.p2.slice(1);
+            }
+        });
+        cb(scene);
+    },
     // editing functions
     // no snapping but stuff will get more complicated when that's implemented
     onDrawLine: function (id, p1, p2) {

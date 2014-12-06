@@ -144,31 +144,7 @@ var Editor = React.createClass({
     },
     onSaveSetting: function(e) {
         e.preventDefault();
-        var scene = this.state.scene;
-        var userID = this.props.userID;
-        _.keys(scene.points).forEach(function(id) {
-            if (id[0] === '0') {
-                var point = scene.points[id];
-                delete scene.points[id];
-                scene.points[userID + id.slice(1)] = point;
-            }
-        });
-        _.keys(scene.lines).forEach(function(id) {
-            if (id[0] === '0') {
-                var line = scene.lines[id];
-                delete scene.lines[id];
-                scene.lines[userID + id.slice(1)] = line;
-            }
-        });
-        _.values(scene.lines).forEach(function(line) {
-            if (line.p1[0] === '0') {
-                line.p1 = userID + line.p1.slice(1);
-            }
-            if (line.p2[0] === '0') {
-                line.p2 = userID + line.p2.slice(1);
-            }
-        });
-        this.props.onSaveSetting(scene);
+        Actions.saveScene(this.props.userID, this.props.onSaveSetting);
     },
     render: function() {
         var drawingLine;
