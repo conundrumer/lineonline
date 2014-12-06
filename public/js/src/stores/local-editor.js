@@ -39,6 +39,9 @@ var LocalEditorStore = Reflux.createStore({
             lines:{}
         });
     },
+    onCreateTrack: function() {
+        this.onNewTrack();
+    },
     onEmitAddLine: function(data, isNewTrack) {
         if (isNewTrack) {
             this.addLine(data);
