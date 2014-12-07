@@ -1,6 +1,15 @@
 var React = require('react/addons');
 var _ = require('underscore');
 
+var MIN_LINE_LENGTH = 2<<3; // >> // wow buggy syntax highlighting
+
+var LINE_WIDTH = 2;
+
+function distance(p1, p2) {
+    var dx = p1.x - p2.x;
+    var dy = p1.y - p2.y;
+    return Math.sqrt(dx*dx + dy*dy);
+}
 var Line = React.createClass({
     getDefaultProps: function() {
         return {
@@ -15,7 +24,7 @@ var Line = React.createClass({
                 x2={this.props.p2.x}
                 y2={this.props.p2.y}
                 stroke={this.props.color}
-                strokeWidth='4'
+                strokeWidth={LINE_WIDTH}
                 strokeLinecap='round'
             />
         );
@@ -57,6 +66,9 @@ var Display = React.createClass({
         } else {
             viewBox = this.props.viewBox;
         }
+        var drawingLineColor = ( this.props.drawingLine &&
+            distance(this.props.drawingLine.p1, this.props.drawingLine.p2) > MIN_LINE_LENGTH
+            ) ? 'black' : this.lineriderRed;
         return (
             <svg className='display-svg' viewBox={viewBox}>
                 { _.pairs(scene.lines).map(function(pair) {
@@ -70,7 +82,7 @@ var Display = React.createClass({
                     <Line key={-1}
                         p1={this.props.drawingLine.p1}
                         p2={this.props.drawingLine.p2}
-                        color={this.lineriderRed}
+                        color={drawingLineColor}
                     /> : null
                 }
             </svg>

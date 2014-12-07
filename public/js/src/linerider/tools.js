@@ -6,13 +6,13 @@ function distance(p1, p2) {
     var dy = p1.y - p2.y;
     return Math.sqrt(dx*dx + dy*dy);
 }
-var MIN_LINE_LENGTH = 2<<3;
+var MIN_LINE_LENGTH = 6;
 var ZOOM = {
     STRENGTH: Math.pow(2, 1/(2<<5)),
     MAX: 2<<4,
     MIN: 1/(2<<4)
 };
-var ERASER_RADIUS = 2<<2;
+var ERASER_RADIUS = 5;
 
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
