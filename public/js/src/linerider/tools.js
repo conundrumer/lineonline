@@ -6,13 +6,13 @@ function distance(p1, p2) {
     var dy = p1.y - p2.y;
     return Math.sqrt(dx*dx + dy*dy);
 }
-var MIN_LINE_LENGTH = 10;
+var MIN_LINE_LENGTH = 2<<3;
 var ZOOM = {
-    STRENGTH: 1 + 1/256,
-    MAX: 16,
-    MIN: 1/32
+    STRENGTH: Math.pow(2, 1/(2<<6)),
+    MAX: 2<<4,
+    MIN: 1/(2<<5)
 };
-var ERASER_RADIUS = 5;
+var ERASER_RADIUS = 2<<2;
 
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -170,7 +170,7 @@ var ToolsMixin = {
         });
     },
     eraser: function(start, moveStream) {
-        Actions.eraseLines(start);
+        Actions.eraseLines(start, ERASER_RADIUS / this.state.zoom);
 
         var stream = moveStream
             .map(this.toAbsolutePosition)

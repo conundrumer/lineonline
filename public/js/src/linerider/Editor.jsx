@@ -65,8 +65,6 @@ var Editor = React.createClass({
     },
     onResize: function() {
         var canvas = this.refs.canvas.getDOMNode();
-        console.log('width', canvas.clientWidth);
-        console.log('height', canvas.clientHeight);
         this.setState({
             width: canvas.clientWidth,
             height: canvas.clientHeight
@@ -83,14 +81,22 @@ var Editor = React.createClass({
     onClear: function(e) {
         e.preventDefault();
 
-        if (!this.props.isNewTrack ||
-            _.keys(this.state.scene.points).length === 0) {
+        var newTrack = function() {
             Actions.newScene();
             this.props.onNewTrack();
+            this.setState({
+                pan: { x: 0, y: 0 },
+                zoom: 1
+            });
+        }.bind(this);
+
+        if (!this.props.isNewTrack ||
+            _.keys(this.state.scene.points).length === 0) {
+            newTrack();
         } else {
             ErrorActions.throwError({
                 message: 'Unsaved changes. Are you sure you want to start a new track?',
-                onConfirm: function() { Actions.newScene(); this.props.onNewTrack(); }.bind(this),
+                onConfirm: newTrack,
                 onCancel: function() { console.log('did nothing'); }.bind(this)
             });
         }
