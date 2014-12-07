@@ -102,9 +102,6 @@ var Editor = React.createClass({
         }
 
     },
-    onToolBarMouseDown: function(e) {
-        e.stopPropagation();
-    },
     onSaveSetting: function(e) {
         e.preventDefault();
         Actions.saveScene(this.props.userID, this.props.onSaveSetting);
@@ -125,6 +122,23 @@ var Editor = React.createClass({
         if (!this.state.width || !this.state.height) return [0, 0, 0, 0];
         return [ this.getLeft(), this.getTop(), this.getWidth(), this.getHeight() ];
     },
+    getCursor: function() {
+        // TODO: custom cursors
+        switch (this.state.toolHandler) {
+            case this.pencil:
+                return 'alias';
+            case this.line:
+                return 'crosshair';
+            case this.eraser:
+                return 'cell';
+            case this.pan:
+                return 'move';
+            case this.zoom:
+                return 'zoom-in';
+            default:
+                return 'auto';
+        }
+    },
     render: function() {
         var drawingLine;
         var startPos = this.state.startPos;
@@ -136,14 +150,16 @@ var Editor = React.createClass({
             };
         }
         var viewBox = this.getViewBox();
+        var editorStyle = fullSize;
+        editorStyle.cursor = this.getCursor();
         return (
-            <div ref='canvas' onMouseDown={this.startTool} style={fullSize}>
+            <div ref='canvas' onMouseDown={this.startTool} style={editorStyle}>
                 <Display
                     drawingLine={drawingLine}
                     scene={this.state.scene}
                     viewBox={viewBox}
                 />
-                <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
+                <div className='toolbar'>
                     <ToolButton onClick={this.onToolClick(this.pencil)} icon='pencil' name='Pencil' />
                     <ToolButton onClick={this.onToolClick(this.line)} icon='minus' name='Line' />
                     <ToolButton onClick={this.onToolClick(this.eraser)} icon='delete' name='Erase' />
@@ -161,9 +177,13 @@ var Editor = React.createClass({
 });
 
 var ToolButton = React.createClass({
+    onMouseDown: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    },
     render: function() {
         return (
-            <button className='btn-toolbar' onClick={this.props.onClick}>
+            <button className='btn-toolbar' onMouseDown={this.onMouseDown} onClick={this.props.onClick}>
                 <Icon class='toolbar-icon' icon={this.props.icon} />
                 <span className='toolbar-title'>
                     {this.props.name}
