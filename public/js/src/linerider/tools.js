@@ -7,6 +7,16 @@ function distance(p1, p2) {
     return Math.sqrt(dx*dx + dy*dy);
 }
 var MIN_LINE_LENGTH = 10;
+var ZOOM = {
+    STRENGTH: 1 + 1/256,
+    MAX: 16,
+    MIN: 1/32
+};
+var ERASER_RADIUS = 5;
+
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+}
 
 var ToolsMixin = {
     startTool: function(e) {
@@ -16,11 +26,11 @@ var ToolsMixin = {
     componentWillMount: function() {
         this.mouseDown = Kefir.emitter();
         this.mouseMove = Kefir.fromEvent(window, 'mousemove')
-            .map(this.mouseCoords);
+            .map(this.toCoords);
         this.mouseUp = Kefir.fromEvent(window, 'mouseup')
-            .map(this.mouseCoords);
+            .map(this.toCoords);
         this.toolStream = this.mouseDown
-            .map(this.mouseCoords);
+            .map(this.toCoords);
 
         this.toolStream.onValue(this.onTool);
     },
@@ -50,17 +60,70 @@ var ToolsMixin = {
     },
     unsubscribeTool: function(){},
     // util
-    mouseCoords: function(e) {
+    toCoords: function(e) {
         e.preventDefault();
         var rect = this.refs.canvas.getDOMNode().getBoundingClientRect();
-        return this.getPosition(e.pageX - rect.left, e.pageY - rect.top);
+        return {
+            x: e.pageX - rect.left,
+            y: e.pageY - rect.top
+        };
+    },
+    toRelativePosition: function(offset) {
+        return {
+            x: offset.x / this.state.zoom,
+            y: offset.y / this.state.zoom
+        };
+    },
+    toAbsolutePosition: function(offset) {
+        return {
+            x: offset.x / this.state.zoom + this.getLeft(),
+            y: offset.y / this.state.zoom + this.getTop()
+        };
     },
     // tool definitions
+    pan: function(start, moveStream) {
+        start = this.toRelativePosition(start);
+        var pan = this.state.pan;
+
+        var stream = moveStream
+            .map(this.toRelativePosition)
+            .map(function(p) {
+                return {
+                    x: pan.x + (start.x - p.x),
+                    y: pan.y + (start.y - p.y)
+                };
+            });
+
+        this.subscribeTool({
+            stream: stream,
+            onValue: function(pan) {
+                this.setState({ pan: pan });
+            }
+        });
+    },
+    zoom: function(start, moveStream) {
+        var zoom = this.state.zoom;
+
+        var stream = moveStream
+            .map(function(p) {
+                var dz = Math.pow(ZOOM.STRENGTH, start.y - p.y);
+                return clamp(zoom * dz, ZOOM.MIN, ZOOM.MAX);
+            });
+
+        this.subscribeTool({
+            stream: stream,
+            onValue: function(zoom) {
+                this.setState({ zoom: zoom });
+            }
+        });
+    },
     pencil: function(start, moveStream) {
+        start = this.toAbsolutePosition(start);
         var setState = this.setState.bind(this);
         setState({ startPos: start });
 
         var stream = moveStream
+            .map(this.toAbsolutePosition)
             .withDefault(start)
             .tap(function(p) {
                 setState({ movePos: p });
@@ -85,18 +148,22 @@ var ToolsMixin = {
         });
     },
     line: function(start, moveStream) {
+        start = this.toAbsolutePosition(start);
         this.setState({ startPos: start });
         var end = start;
 
+        var stream = moveStream
+            .map(this.toAbsolutePosition);
+
         this.subscribeTool({
-            stream: moveStream,
+            stream: stream,
             onValue: function (p) {
                 this.setState({ movePos: p });
                 end = p;
             },
             onEnd: function () {
                 this.setState({ startPos: null, movePos: null });
-                if (distance(start, end) > MIN_LINE_LENGTH) {
+                if (distance(start, end) > MIN_LINE_LENGTH / this.state.zoom) {
                     Actions.drawLine(this.props.userID, start, end);
                 }
             }
@@ -106,13 +173,14 @@ var ToolsMixin = {
         Actions.eraseLines(start);
 
         var stream = moveStream
+            .map(this.toAbsolutePosition)
             .withDefault(start)
             .slidingWindow(2,2);
 
         this.subscribeTool({
             stream: stream,
             onValue: function (line) {
-                Actions.eraseLines(line[1]);
+                Actions.eraseLines(line[1], ERASER_RADIUS / this.state.zoom);
             }
         });
     }

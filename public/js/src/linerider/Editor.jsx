@@ -45,8 +45,8 @@ var Editor = React.createClass({
             scene: sceneStore.getDefaultData(),
             width: 0,
             height: 0,
-            pan: { x: 20, y: 20 },
-            zoom: 2,
+            pan: { x: 0, y: 0 },
+            zoom: 1,
             toolHandler: this.pencil,
             startPos: null,
             movePos: null
@@ -115,12 +115,6 @@ var Editor = React.createClass({
     getTop: function() {
         return this.state.pan.y - this.getHeight()/2;
     },
-    getPosition: function(offsetX, offsetY) {
-        return {
-            x: offsetX / this.state.zoom + this.getLeft(),
-            y: offsetY / this.state.zoom + this.getTop()
-        };
-    },
     getViewBox: function () {
         if (!this.state.width || !this.state.height) return [0, 0, 0, 0];
         return [ this.getLeft(), this.getTop(), this.getWidth(), this.getHeight() ];
@@ -147,6 +141,8 @@ var Editor = React.createClass({
                     <ToolButton onClick={this.onToolClick(this.pencil)} icon='pencil' name='Pencil' />
                     <ToolButton onClick={this.onToolClick(this.line)} icon='minus' name='Line' />
                     <ToolButton onClick={this.onToolClick(this.eraser)} icon='delete' name='Erase' />
+                    <ToolButton onClick={this.onToolClick(this.pan)} icon='move' name='Pan' />
+                    <ToolButton onClick={this.onToolClick(this.zoom)} icon='zoom-in' name='Zoom' />
                     <ToolButton
                         onClick={this.onSaveSetting}
                         icon={ this.props.isNewTrack ? 'check' : 'cog' }

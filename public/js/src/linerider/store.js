@@ -1,7 +1,6 @@
 var Reflux = require('reflux');
 var _ = require('underscore');
 var EditorActions = require('./actions');
-var ERASER_RADIUS = 5;
 
 // ugh i neeed to make a vector class
 function distance(p1, p2) {
@@ -141,14 +140,14 @@ var SceneStore = Reflux.createStore({
         this.trigger(scene);
         this.trigger(lineData(p1ID, p2ID, lineID, p1, p2), 'add');
     },
-    onEraseLines: function (pos) {
+    onEraseLines: function (pos, radius) {
         var scene = this.scene;
         var deletedLines = _.keys(scene.lines).filter(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];
             var p2 = scene.points[line.p2];
             // console.log(lineSegmentDistance(pos, {p1: p1, p2: p2}))
-            return lineSegmentDistance(pos, {p1: p1, p2: p2}) < ERASER_RADIUS;
+            return lineSegmentDistance(pos, {p1: p1, p2: p2}) < radius;
         }).map(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];
