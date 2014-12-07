@@ -1,15 +1,6 @@
 var React = require('react/addons');
 var _ = require('underscore');
 
-var fullSize = {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: 'red'
-};
-
 var Line = React.createClass({
     getDefaultProps: function() {
         return {
@@ -63,6 +54,8 @@ var Display = React.createClass({
         var points = _.values(scene.points);
         if (this.props.preview && points.length > 0) {
             viewBox = getViewBox(points).join(' ');
+        } else {
+            viewBox = this.props.viewBox;
         }
         return (
             <svg className='display-svg' viewBox={viewBox}>

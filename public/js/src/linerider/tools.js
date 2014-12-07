@@ -53,10 +53,7 @@ var ToolsMixin = {
     mouseCoords: function(e) {
         e.preventDefault();
         var rect = this.refs.canvas.getDOMNode().getBoundingClientRect();
-        return {
-            x: e.pageX - rect.left,
-            y: e.pageY - rect.top
-        };
+        return this.getPosition(e.pageX - rect.left, e.pageY - rect.top);
     },
     // tool definitions
     pencil: function(start, moveStream) {
