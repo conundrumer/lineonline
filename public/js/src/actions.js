@@ -31,6 +31,7 @@ var Actions = Reflux.createActions([
 
     //editor
     'newTrack',
+    'getUnsavedTrack',
     'getFullTrack',
     'getConversation',
     'updateTrack',

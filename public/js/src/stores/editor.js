@@ -45,6 +45,11 @@ var EditorStore = Reflux.createStore({
         this.trigger(this.data);
         LineRiderActions.newScene();
     },
+    onGetUnsavedTrack: function() {
+        this.data = this.getDefaultData();
+        this.trigger(this.data);
+        LineRiderActions.loadScene(this.data.track.scene);
+    },
     onGetFullTrack: function(trackId) {
         request
             .get('/api/tracks/' + trackId)

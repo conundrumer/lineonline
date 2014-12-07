@@ -74,9 +74,9 @@ var Editor = React.createClass({
                 this.loadTrack(nextProps.params.trackId);
                 this.setState({ isModalHidden: true });
             } else {
-                console.log('Switching to empty track');
+                console.log('Switching to empty or unsaved track');
                 Actions.closeEditorSession();
-                Actions.newTrack();
+                Actions.getUnsavedTrack();
                 this.setState({ isModalHidden: true });
             }
         }
@@ -151,8 +151,11 @@ var Editor = React.createClass({
         }
     },
     handleNewTrack: function() {
-        Actions.newTrack();
-        if (this.getCurrentPath() !== '/editor'){
+        if (this.getCurrentPath() === '/editor'){
+            Actions.newTrack();
+        }
+        else {
+            Actions.getUnsavedTrack();
             this.transitionTo('/editor');
         }
     },
