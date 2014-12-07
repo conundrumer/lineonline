@@ -8,9 +8,9 @@ function distance(p1, p2) {
 }
 var MIN_LINE_LENGTH = 2<<3;
 var ZOOM = {
-    STRENGTH: Math.pow(2, 1/(2<<6)),
+    STRENGTH: Math.pow(2, 1/(2<<5)),
     MAX: 2<<4,
-    MIN: 1/(2<<5)
+    MIN: 1/(2<<4)
 };
 var ERASER_RADIUS = 2<<2;
 
@@ -102,18 +102,24 @@ var ToolsMixin = {
         });
     },
     zoom: function(start, moveStream) {
-        var zoom = this.state.zoom;
+        var startPos = this.toAbsolutePosition(start);
+        var initPan = this.state.pan;
+        var initZoom = this.state.zoom;
 
         var stream = moveStream
             .map(function(p) {
                 var dz = Math.pow(ZOOM.STRENGTH, start.y - p.y);
-                return clamp(zoom * dz, ZOOM.MIN, ZOOM.MAX);
+                return clamp(initZoom * dz, ZOOM.MIN, ZOOM.MAX);
             });
 
         this.subscribeTool({
             stream: stream,
             onValue: function(zoom) {
-                this.setState({ zoom: zoom });
+                var pan = {
+                    x: startPos.x + (initPan.x - startPos.x) * initZoom / zoom,
+                    y: startPos.y + (initPan.y - startPos.y) * initZoom / zoom
+                };
+                this.setState({ pan: pan, zoom: zoom });
             }
         });
     },
