@@ -126,7 +126,7 @@ var Editor = React.createClass({
         // TODO: custom cursors
         switch (this.state.toolHandler) {
             case this.pencil:
-                return 'alias';
+                return 'default';
             case this.line:
                 return 'crosshair';
             case this.eraser:
