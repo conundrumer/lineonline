@@ -1,7 +1,6 @@
 var Reflux = require('reflux');
 var _ = require('underscore');
 var EditorActions = require('./actions');
-var ERASER_RADIUS = 5;
 
 // ugh i neeed to make a vector class
 function distance(p1, p2) {
@@ -99,6 +98,32 @@ var SceneStore = Reflux.createStore({
         this.next_line_id = getMaxID(scene.lines);
         this.trigger(scene, 'load scene');
     },
+    onSaveScene: function(user_id, cb) {
+        var scene = this.scene;
+        _.keys(scene.points).forEach(function(id) {
+            if (id[0] === '0') {
+                var point = scene.points[id];
+                delete scene.points[id];
+                scene.points[user_id + id.slice(1)] = point;
+            }
+        });
+        _.keys(scene.lines).forEach(function(id) {
+            if (id[0] === '0') {
+                var line = scene.lines[id];
+                delete scene.lines[id];
+                scene.lines[user_id + id.slice(1)] = line;
+            }
+        });
+        _.values(scene.lines).forEach(function(line) {
+            if (line.p1[0] === '0') {
+                line.p1 = user_id + line.p1.slice(1);
+            }
+            if (line.p2[0] === '0') {
+                line.p2 = user_id + line.p2.slice(1);
+            }
+        });
+        cb(scene);
+    },
     // editing functions
     // no snapping but stuff will get more complicated when that's implemented
     onDrawLine: function (id, p1, p2) {
@@ -115,14 +140,14 @@ var SceneStore = Reflux.createStore({
         this.trigger(scene);
         this.trigger(lineData(p1ID, p2ID, lineID, p1, p2), 'add');
     },
-    onEraseLines: function (pos) {
+    onEraseLines: function (pos, radius) {
         var scene = this.scene;
         var deletedLines = _.keys(scene.lines).filter(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];
             var p2 = scene.points[line.p2];
             // console.log(lineSegmentDistance(pos, {p1: p1, p2: p2}))
-            return lineSegmentDistance(pos, {p1: p1, p2: p2}) < ERASER_RADIUS;
+            return lineSegmentDistance(pos, {p1: p1, p2: p2}) < radius;
         }).map(function(id) {
             var line = scene.lines[id];
             var p1 = scene.points[line.p1];

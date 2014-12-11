@@ -74,9 +74,9 @@ var Editor = React.createClass({
                 this.loadTrack(nextProps.params.trackId);
                 this.setState({ isModalHidden: true });
             } else {
-                console.log('Switching to empty track');
+                console.log('Switching to empty or unsaved track');
                 Actions.closeEditorSession();
-                Actions.newTrack();
+                Actions.getUnsavedTrack();
                 this.setState({ isModalHidden: true });
             }
         }
@@ -92,6 +92,12 @@ var Editor = React.createClass({
         Actions.openEditorSession(trackId);
     },
     handleOpenModal: function(scene) {
+        if (this.props.currentUser.user_id === 0) {
+            ErrorActions.throwError({
+                message: "You need to be logged in to save this track to the server."
+            });
+            return;
+        }
         var owner_id = this.state.data.track.owner && this.state.data.track.owner.user_id;
         if (owner_id && this.props.currentUser.user_id !== owner_id) {
             ErrorActions.throwError({
@@ -145,8 +151,11 @@ var Editor = React.createClass({
         }
     },
     handleNewTrack: function() {
-        Actions.newTrack();
-        if (this.getCurrentPath() !== '/editor'){
+        if (this.getCurrentPath() === '/editor'){
+            Actions.newTrack();
+        }
+        else {
+            Actions.getUnsavedTrack();
             this.transitionTo('/editor');
         }
     },

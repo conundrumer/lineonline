@@ -1,5 +1,7 @@
 var React = require('react/addons');
 var Reflux = require('reflux');
+var Kefir = require('kefir');
+var _ = require('underscore');
 
 var Actions = require('./actions');
 var ErrorActions = require('../actions-error');
@@ -7,30 +9,25 @@ var sceneStore = require('./store');
 
 var Display = require('./Display.jsx');
 var Icon = require('../ui/Icon.jsx');
-var _ = require('underscore');
-
-var TOOL = {
-    LINE: 1,
-    ERASE: 2,
-    PENCIL: 3
-};
 
 var toolbarStyle = {
-    position: 'absolute',
-
+    position: 'absolute'
 };
 
-function distance(p1, p2) {
-    var dx = p1.x - p2.x;
-    var dy = p1.y - p2.y;
-    return Math.sqrt(dx*dx + dy*dy);
-}
+var fullSize = {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    background: 'white'
+};
 
-var MIN_LINE_LENGTH = 10;
+var RESIZE_THROTTLE = 200;
 
 var Editor = React.createClass({
-    navbarOffset: 70,
     mixins: [
+        require('./tools'),
         Reflux.listenTo(sceneStore, 'onSceneChanged')
     ],
     onSceneChanged: function(data, action) {
@@ -46,155 +43,128 @@ var Editor = React.createClass({
     getInitialState: function() {
         return {
             scene: sceneStore.getDefaultData(),
-            editState: TOOL.PENCIL,
+            width: 0,
+            height: 0,
+            pan: { x: 0, y: 0 },
+            zoom: 1,
+            toolHandler: this.pencil,
             startPos: null,
             movePos: null
         };
     },
     componentWillMount: function() {
+        this.resizeStream = Kefir.fromEvent(window, 'resize')
+            .throttle(RESIZE_THROTTLE)
+            .withDefault(0);
+    },
+    componentDidMount: function() {
+        this.resizeStream.onValue(this.onResize);
     },
     componentWillUnmount: function() {
-        window.removeEventListener('mousemove', this.onMouseMove);
-        window.removeEventListener('mouseup', this.onMouseUp);
+        this.resizeStream.offValue(this.onResize);
     },
-    componentWillReceiveProps: function(nextProps) {
+    onResize: function() {
+        var canvas = this.refs.canvas.getDOMNode();
+        this.setState({
+            width: canvas.clientWidth,
+            height: canvas.clientHeight
+        });
     },
-    // mouse handlers
-    onToolClick: function(editState) {
+    onToolClick: function(tool) {
         return function onClick(e) {
             e.preventDefault();
             this.setState({
-                editState: editState
+                toolHandler: tool
             });
         }.bind(this);
     },
     onClear: function(e) {
         e.preventDefault();
 
-        if (!this.props.isNewTrack ||
-            _.keys(this.state.scene.points).length === 0) {
+        var newTrack = function() {
             Actions.newScene();
             this.props.onNewTrack();
+            this.setState({
+                pan: { x: 0, y: 0 },
+                zoom: 1
+            });
+        }.bind(this);
+
+        if (!this.props.isNewTrack ||
+            _.keys(this.state.scene.points).length === 0) {
+            newTrack();
         } else {
             ErrorActions.throwError({
                 message: 'Unsaved changes. Are you sure you want to start a new track?',
-                onConfirm: function() { Actions.newScene(); this.props.onNewTrack(); }.bind(this),
+                onConfirm: newTrack,
                 onCancel: function() { console.log('did nothing'); }.bind(this)
             });
         }
 
     },
-    // not sure how reliable it is in getting the right position
-    // will refactor to use RxJS when editing gets more complex
-    onMouseDown: function(e) {
-        e.preventDefault();
-        window.addEventListener('mousemove', this.onMouseMove);
-        window.addEventListener('mouseup', this.onMouseUp);
-        var startPos = {
-            x: e.pageX,
-            y: e.pageY - this.navbarOffset
-        };
-        switch (this.state.editState) {
-            case TOOL.ERASE:
-                Actions.eraseLines(startPos);
-                break;
-        }
-        this.setState({ startPos: startPos });
-    },
-    onMouseMove: function(e) {
-        e.preventDefault();
-        var startPos = this.state.startPos;
-        var movePos = {
-            x: e.pageX,
-            y: e.pageY - this.navbarOffset
-        };
-        switch (this.state.editState) {
-            case TOOL.PENCIL:
-                if (distance(startPos, movePos) > MIN_LINE_LENGTH) {
-                    Actions.drawLine(this.props.userID, startPos, movePos);
-                    this.setState({ startPos: movePos });
-                }
-                break;
-            case TOOL.ERASE:
-                Actions.eraseLines(movePos);
-                break;
-        }
-        this.setState({ movePos: movePos });
-    },
-    onMouseUp: function(e) {
-        e.preventDefault();
-        window.removeEventListener('mousemove', this.onMouseMove);
-        window.removeEventListener('mouseup', this.onMouseUp);
-        var startPos = this.state.startPos;
-        var endPos = {
-            x: e.pageX,
-            y: e.pageY - this.navbarOffset
-        };
-        switch (this.state.editState) {
-            case TOOL.LINE:
-                if (distance(startPos, endPos) > MIN_LINE_LENGTH) {
-                    Actions.drawLine(this.props.userID, startPos, endPos);
-                }
-                break;
-        }
-        this.setState({ startPos: null, movePos: null });
-    },
-    onToolBarMouseDown: function(e) {
-        e.stopPropagation();
-    },
     onSaveSetting: function(e) {
         e.preventDefault();
-        var scene = this.state.scene;
-        var userID = this.props.userID;
-        _.keys(scene.points).forEach(function(id) {
-            if (id[0] === '0') {
-                var point = scene.points[id];
-                delete scene.points[id];
-                scene.points[userID + id.slice(1)] = point;
-            }
-        });
-        _.keys(scene.lines).forEach(function(id) {
-            if (id[0] === '0') {
-                var line = scene.lines[id];
-                delete scene.lines[id];
-                scene.lines[userID + id.slice(1)] = line;
-            }
-        });
-        _.values(scene.lines).forEach(function(line) {
-            if (line.p1[0] === '0') {
-                line.p1 = userID + line.p1.slice(1);
-            }
-            if (line.p2[0] === '0') {
-                line.p2 = userID + line.p2.slice(1);
-            }
-        });
-        this.props.onSaveSetting(scene);
+        Actions.saveScene(this.props.userID, this.props.onSaveSetting);
+    },
+    getWidth: function() {
+        return this.state.width / this.state.zoom;
+    },
+    getHeight: function() {
+        return this.state.height / this.state.zoom;
+    },
+    getLeft: function() {
+        return this.state.pan.x - this.getWidth()/2;
+    },
+    getTop: function() {
+        return this.state.pan.y - this.getHeight()/2;
+    },
+    getViewBox: function () {
+        if (!this.state.width || !this.state.height) return [0, 0, 0, 0];
+        return [ this.getLeft(), this.getTop(), this.getWidth(), this.getHeight() ];
+    },
+    getCursor: function() {
+        // TODO: custom cursors
+        switch (this.state.toolHandler) {
+            case this.pencil:
+                return 'alias';
+            case this.line:
+                return 'crosshair';
+            case this.eraser:
+                return 'cell';
+            case this.pan:
+                return 'move';
+            case this.zoom:
+                return 'zoom-in';
+            default:
+                return 'auto';
+        }
     },
     render: function() {
         var drawingLine;
         var startPos = this.state.startPos;
         var movePos = this.state.movePos;
-        switch (this.state.editState) {
-            case TOOL.LINE:
-            case TOOL.PENCIL:
-                if (startPos && movePos) {
-                    drawingLine = {
-                        p1: startPos,
-                        p2: movePos
-                    };
-                }
-                break;
+        if (startPos && movePos) {
+            drawingLine = {
+                p1: startPos,
+                p2: movePos
+            };
         }
+        var viewBox = this.getViewBox();
+        var editorStyle = fullSize;
+        editorStyle.cursor = this.getCursor();
         return (
-            <div onMouseDown={this.onMouseDown}>
+            <div ref='canvas' onMouseDown={this.startTool} style={editorStyle}>
                 <Display
                     drawingLine={drawingLine}
                     scene={this.state.scene}
+                    viewBox={viewBox}
                 />
-                <div onMouseDown={this.onToolBarMouseDown} className='toolbar'>
-                    <ToolButton onClick={this.onToolClick(TOOL.PENCIL)} icon='pencil' name='Pencil' />
-                    <ToolButton onClick={this.onToolClick(TOOL.LINE)} icon='minus' name='Line' />
-                    <ToolButton onClick={this.onToolClick(TOOL.ERASE)} icon='delete' name='Erase' />
+                <div className='toolbar'>
+                    <ToolButton onClick={this.onToolClick(this.pencil)} icon='pencil' name='Pencil' />
+                    <ToolButton onClick={this.onToolClick(this.line)} icon='minus' name='Line' />
+                    <ToolButton onClick={this.onToolClick(this.eraser)} icon='delete' name='Erase' />
+                    <ToolButton onClick={this.onToolClick(this.pan)} icon='move' name='Pan' />
+                    <ToolButton onClick={this.onToolClick(this.zoom)} icon='zoom-in' name='Zoom' />
                     <ToolButton
                         onClick={this.onSaveSetting}
                         icon={ this.props.isNewTrack ? 'check' : 'cog' }
@@ -207,9 +177,13 @@ var Editor = React.createClass({
 });
 
 var ToolButton = React.createClass({
+    onMouseDown: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    },
     render: function() {
         return (
-            <button className='btn-toolbar' onClick={this.props.onClick}>
+            <button className='btn-toolbar' onMouseDown={this.onMouseDown} onClick={this.props.onClick}>
                 <Icon class='toolbar-icon' icon={this.props.icon} />
                 <span className='toolbar-title'>
                     {this.props.name}
@@ -217,6 +191,6 @@ var ToolButton = React.createClass({
             </button>
         );
     }
-})
+});
 
 module.exports = Editor;
