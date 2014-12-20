@@ -51,6 +51,12 @@ var SceneStore = Reflux.createStore({
         _.keys(scene.lines).forEach(function(id) {
             if (id[0] === '0') {
                 var line = scene.lines[id];
+                if (line.pq.p[0] === '0') {
+                    line.pq.p = user_id + line.pq.p.slice(1);
+                }
+                if (line.pq.q[0] === '0') {
+                    line.pq.q = user_id + line.pq.q.slice(1);
+                }
                 delete scene.lines[id];
                 var new_id = user_id + id.slice(1);
                 line.id = new_id;
