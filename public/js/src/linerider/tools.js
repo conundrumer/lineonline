@@ -176,17 +176,17 @@ var ToolsMixin = {
         });
     },
     eraser: function(start, moveStream) {
+        start = this.toAbsolutePosition(start);
         Actions.eraseLines(start, ERASER_RADIUS / this.state.zoom);
 
         var stream = moveStream
             .map(this.toAbsolutePosition)
-            .withDefault(start)
-            .slidingWindow(2,2);
+            .withDefault(start);
 
         this.subscribeTool({
             stream: stream,
-            onValue: function (line) {
-                Actions.eraseLines(line[1], ERASER_RADIUS / this.state.zoom);
+            onValue: function (pos) {
+                Actions.eraseLines(pos, ERASER_RADIUS / this.state.zoom);
             }
         });
     }
