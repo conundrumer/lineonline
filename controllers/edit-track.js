@@ -1,4 +1,5 @@
 var Track = require('../models/track');
+var Line2D = require('line2d');
 var jwt = require('jsonwebtoken');
 var _ = require('underscore');
 var bookshelf = require('../db/bookshelf.dev');
@@ -21,44 +22,18 @@ exports.session = function(req, res) {
 var mutex = {};
 var mutexQueue = {};
 
-// subject to change
-var ENTITY = {
-    POINT: 0,
-    LINE: 1
-};
-
-function addEntities(entities, scene) {
-    entities.forEach(function (e) {
-        switch (e.type) {
-            case ENTITY.POINT:
-                scene.points[e.id] = {
-                    x: e.x,
-                    y: e.y
-                };
-                break;
-            case ENTITY.LINE:
-                scene.lines[e.id] = {
-                    p1: e.p1,
-                    p2: e.p2
-                };
-                break;
-        }
-    });
-    return scene;
+function addLine(lineData, scene) {
+    return Line2D.makeSceneFromJSON(scene)
+        .points.add(lineData.p)
+        .points.add(lineData.q)
+        .lines.add(lineData.line)
+        .toJSON();
 }
 
-function removeEntities(entities, scene) {
-    entities.forEach(function (e) {
-        switch (e.type) {
-            case ENTITY.POINT:
-                delete scene.points[e.id];
-                break;
-            case ENTITY.LINE:
-                delete scene.lines[e.id];
-                break;
-        }
-    });
-    return scene;
+function eraseLines(lines, scene) {
+    return Line2D.makeSceneFromJSON(scene)
+        .lines.erase(lines)
+        .toJSON();
 }
 
 function updateScene(updateFn, socket, entities) {
@@ -105,19 +80,19 @@ exports.onConnection = function(io, socket) {
     }
 
     // TODO: use memory stores instead of write heavy db
-    socket.on('add', function (entities) {
-        socket.broadcast.to(room).emit('add', entities);
+    socket.on('add', function (data) {
+        socket.broadcast.to(room).emit('add', data);
         if (!mutex[room]) {
-            return updateScene(addEntities, socket, entities);
+            return updateScene(addLine, socket, data);
         }
-        mutexQueue[room].push(updateScene.bind(null, addEntities, socket, entities));
+        mutexQueue[room].push(updateScene.bind(null, addLine, socket, data));
     });
 
-    socket.on('remove', function (entities) {
-        socket.broadcast.to(room).emit('remove', entities);
+    socket.on('remove', function (data) {
+        socket.broadcast.to(room).emit('remove', data);
         if (!mutex[room]) {
-            return updateScene(removeEntities, socket, entities);
+            return updateScene(eraseLines, socket, data);
         }
-        mutexQueue[room].push(updateScene.bind(null, removeEntities, socket, entities));
+        mutexQueue[room].push(updateScene.bind(null, eraseLines, socket, data));
     });
 };
