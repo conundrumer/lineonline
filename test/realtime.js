@@ -130,11 +130,11 @@ describe('Realtime editing: A user', function () {
         var edited_track = cow.full_tracks()[0];
         edited_track.scene = {
             points: {
-                '3_0': { x: 0, y: 0 },
-                '3_1': { x: 480, y: 360 }
+                '3_0': {id: '3_0', pos: { x: 0, y: 0 }},
+                '3_1': {id: '3_1', pos: { x: 480, y: 360 }}
             },
             lines: {
-                '3_0': { p1: '3_0', p2: '3_1' }
+                '3_0': {id: '3_0', pq: { p: '3_0', q: '3_1' }}
             }
         };
         agent.bob
@@ -157,35 +157,35 @@ describe('Realtime editing: A user', function () {
 
     it('should be able to remove a line, where the other user receives the update', function (done) {
         new Promise.all([
-            expectEvent(socket.bob, 'remove', lines.bob[0]),
+            expectEvent(socket.bob, 'remove', [lines.bob[0].line.id]),
             expectEvent(socket.cow, 'sync')
         ]).then(function(){done();});
 
-        socket.cow.emit('remove', lines.bob[0]);
+        socket.cow.emit('remove', [lines.bob[0].line.id]);
     });
 
     it('should be able to remove a line, while the other user is adding a line', function (done) {
         new Promise.all([
             expectEvent(socket.cow, 'add', lines.bob[1]),
-            expectEvent(socket.bob, 'remove', lines.cow[0]),
+            expectEvent(socket.bob, 'remove', [lines.cow[0].line.id]),
             expectEvent(socket.cow, 'sync'),
             expectEvent(socket.bob, 'sync')
         ]).then(function(){done();});
 
         socket.bob.emit('add', lines.bob[1]);
-        socket.cow.emit('remove', lines.cow[0]);
+        socket.cow.emit('remove', [lines.cow[0].line.id]);
     });
 
     it('should be able to remove a line, while the other user removes it at the same time', function (done) {
         new Promise.all([
-            expectEvent(socket.cow, 'remove', lines.cow[1]),
-            expectEvent(socket.bob, 'remove', lines.cow[1]),
+            expectEvent(socket.cow, 'remove', [lines.cow[1].line.id]),
+            expectEvent(socket.bob, 'remove', [lines.cow[1].line.id]),
             expectEvent(socket.cow, 'sync'),
             expectEvent(socket.bob, 'sync')
         ]).then(function(){done();});
 
-        socket.bob.emit('remove', lines.cow[1]);
-        socket.cow.emit('remove', lines.cow[1]);
+        socket.bob.emit('remove', [lines.cow[1].line.id]);
+        socket.cow.emit('remove', [lines.cow[1].line.id]);
     });
 
     it('should be able to get track updated by additions and deletions (get: /tracks/:track_id)', function(done) {
@@ -193,11 +193,11 @@ describe('Realtime editing: A user', function () {
         var edited_track = cow.full_tracks()[0];
         edited_track.scene = {
             points: {
-                '2_2': { x: 40, y: 60 },
-                '2_3': { x: 60, y: 40 }
+                '2_2': {id: '2_2', pos: { x: 40, y: 60 }},
+                '2_3': {id: '2_3', pos: { x: 60, y: 40 }}
             },
             lines: {
-                '2_1': { p1: '2_2', p2: '2_3' }
+                '2_1': {id: '2_1', pq: { p: '2_2', q: '2_3' }}
             }
         };
         agent.bob

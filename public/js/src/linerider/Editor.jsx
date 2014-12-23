@@ -156,7 +156,7 @@ var Editor = React.createClass({
             <div ref='canvas' onMouseDown={this.startTool} style={editorStyle}>
                 <Display
                     drawingLine={drawingLine}
-                    scene={this.state.scene}
+                    scene={this.state.scene.toJSON()}
                     viewBox={viewBox}
                 />
                 <div className='toolbar'>

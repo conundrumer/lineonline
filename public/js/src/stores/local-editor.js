@@ -1,11 +1,20 @@
 var Reflux = require('reflux');
 var Actions = require('../actions');
+var Line2D = require('line2d');
 
-// subject to change
-var ENTITY = {
-    POINT: 0,
-    LINE: 1
-};
+function addLine(lineData, scene) {
+    return Line2D.makeSceneFromJSON(scene)
+        .points.add(lineData.p)
+        .points.add(lineData.q)
+        .lines.add(lineData.line)
+        .toJSON();
+}
+
+function eraseLines(lines, scene) {
+    return Line2D.makeSceneFromJSON(scene)
+        .lines.erase(lines)
+        .toJSON();
+}
 
 var LocalEditorStore = Reflux.createStore({
     listenables: [Actions],
@@ -54,36 +63,12 @@ var LocalEditorStore = Reflux.createStore({
     },
     addLine: function(data) {
         var scene = this.getLocalScene();
-        data.forEach(function (e) {
-            switch (e.type) {
-                case ENTITY.POINT:
-                    scene.points[e.id] = {
-                        x: e.x,
-                        y: e.y
-                    };
-                    break;
-                case ENTITY.LINE:
-                    scene.lines[e.id] = {
-                        p1: e.p1,
-                        p2: e.p2
-                    };
-                    break;
-            }
-        });
+        scene = addLine(data, scene);
         this.setLocalScene(scene);
     },
     removeLine: function(data) {
         var scene = this.getLocalScene();
-        data.forEach(function (e) {
-            switch (e.type) {
-                case ENTITY.POINT:
-                    delete scene.points[e.id];
-                    break;
-                case ENTITY.LINE:
-                    delete scene.lines[e.id];
-                    break;
-            }
-        });
+        scene = eraseLines(data, scene);
         this.setLocalScene(scene);
     }
 });

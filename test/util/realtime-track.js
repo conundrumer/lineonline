@@ -1,34 +1,12 @@
-
-// subject to change
-var ENTITY = {
-    POINT: 0,
-    LINE: 1
-};
-
-function point(id, x, y) {
+var Line2D = require('line2d');
+var P = Line2D.toPoint;
+var L = Line2D.toLine;
+function lineData(pid1, pid2, lid, x1, y1, x2, y2) {
     return {
-        type: ENTITY.POINT,
-        id: id,
-        x: x,
-        y: y
+        line: L([lid, [pid1, pid2]]),
+        p: P([pid1, [x1, y1]]),
+        q: P([pid2, [x2, y2]])
     };
-}
-
-function linee(id, p1, p2) {
-    return {
-        type: ENTITY.LINE,
-        id: id,
-        p1: p1,
-        p2: p2
-    };
-}
-
-function lineData(p1, p2, line_id, x1, y1, x2, y2) {
-    return [
-        point(p1, x1, y1),
-        point(p2, x2, y2),
-        linee(line_id, p1, p2),
-    ];
 }
 
 function makeLineData(user_id) {
@@ -36,10 +14,10 @@ function makeLineData(user_id) {
     var points = 0;
     var lines = 0;
     return function(x1, y1, x2, y2) {
-        var p1 = id + points;
-        var p2 = id + (points+1);
+        var p = id + points;
+        var q = id + (points+1);
         var line_id =  id + lines;
-        var data = lineData(p1, p2, line_id, x1, y1, x2, y2);
+        var data = lineData(p, q, line_id, x1, y1, x2, y2);
         points += 2;
         lines += 1;
         return data;

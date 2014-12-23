@@ -32,9 +32,15 @@ var Line = React.createClass({
 });
 
 function getViewBox(points) {
-    var box = points.map(function(p) {
+    console.log('points', points)
+    var box = points
+    .map(function(p) {
+        return p.pos;
+    })
+    .map(function(p) {
         return [p.x, p.y, p.x, p.y];
-    }).reduce(function (a, b) {
+    })
+    .reduce(function (a, b) {
         return [
             Math.min(a[0], b[0]),
             Math.min(a[1], b[1]),
@@ -71,11 +77,11 @@ var Display = React.createClass({
             ) ? 'black' : this.lineriderRed;
         return (
             <svg className='display-svg' viewBox={viewBox}>
-                { _.pairs(scene.lines).map(function(pair) {
-                    var key = pair[0];
-                    var points = pair[1];
-                    var p1 = scene.points[points.p1];
-                    var p2 = scene.points[points.p2];
+                { _.values(scene.lines).map(function(line) {
+                    var key = line.id;
+                    var pq = line.pq;
+                    var p1 = scene.points[pq.p].pos;
+                    var p2 = scene.points[pq.q].pos;
                     return <Line key={key} p1={p1} p2={p2} />;
                 }.bind(this)) }
                 { this.props.drawingLine ?
