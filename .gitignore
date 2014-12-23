@@ -74,5 +74,5 @@ Thumbs.db
 ######################
 .sass-cache
 node_modules
-#public/js/build
+public/js/build
 
