@@ -79,7 +79,7 @@ var LINEONLINE = {
 
 require('./App.jsx')(document.body, LINEONLINE.init.bind(LINEONLINE));
 
-},{"./App.jsx":"/Users/jingxiao/437/Team77/public/js/src/App.jsx","jquery":"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
+},{"./App.jsx":"/Users/jingxiao/lineonline/public/js/src/App.jsx","jquery":"/Users/jingxiao/lineonline/node_modules/jquery/dist/jquery.js","jquery-smooth-scroll":"/Users/jingxiao/lineonline/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js"}],"./public/js/src/util.js":[function(require,module,exports){
 //bind polyfill from MDN
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (oThis) {
@@ -105,7 +105,7 @@ if (!Function.prototype.bind) {
   };
 }
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -457,7 +457,7 @@ function base64Write (buf, string, offset, length) {
 }
 
 function utf16leWrite (buf, string, offset, length) {
-  var charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
+  var charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length, 2)
   return charsWritten
 }
 
@@ -1141,7 +1141,8 @@ function base64ToBytes (str) {
   return base64.toByteArray(str)
 }
 
-function blitBuffer (src, dst, offset, length) {
+function blitBuffer (src, dst, offset, length, unitSize) {
+  if (unitSize) length -= length % unitSize;
   for (var i = 0; i < length; i++) {
     if ((i + offset >= dst.length) || (i >= src.length))
       break
@@ -1158,7 +1159,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","ieee754":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","is-array":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js"}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js":[function(require,module,exports){
+},{"base64-js":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","ieee754":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","is-array":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js"}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js":[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1280,7 +1281,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js":[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -1366,7 +1367,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js":[function(require,module,exports){
 
 /**
  * isArray
@@ -1401,7 +1402,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1704,7 +1705,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1792,7 +1793,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/jquery-smooth-scroll/jquery.smooth-scroll.js":[function(require,module,exports){
 /*!
  * jQuery Smooth Scroll - v1.5.4 - 2014-11-17
  * https://github.com/kswedberg/jquery-smooth-scroll
@@ -2063,9 +2064,9 @@ process.chdir = function (dir) {
 }));
 
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
- * jQuery JavaScript Library v2.1.1
+ * jQuery JavaScript Library v2.1.3
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -2075,19 +2076,19 @@ process.chdir = function (dir) {
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-05-01T17:11Z
+ * Date: 2014-12-18T15:11Z
  */
 
 (function( global, factory ) {
 
 	if ( typeof module === "object" && typeof module.exports === "object" ) {
-		// For CommonJS and CommonJS-like environments where a proper window is present,
-		// execute the factory and get jQuery
-		// For environments that do not inherently posses a window with a document
-		// (such as Node.js), expose a jQuery-making factory as module.exports
-		// This accentuates the need for the creation of a real window
+		// For CommonJS and CommonJS-like environments where a proper `window`
+		// is present, execute the factory and get jQuery.
+		// For environments that do not have a `window` with a `document`
+		// (such as Node.js), expose a factory as module.exports.
+		// This accentuates the need for the creation of a real `window`.
 		// e.g. var jQuery = require("jquery")(window);
-		// See ticket #14549 for more info
+		// See ticket #14549 for more info.
 		module.exports = global.document ?
 			factory( global, true ) :
 			function( w ) {
@@ -2103,10 +2104,10 @@ process.chdir = function (dir) {
 // Pass this if window is not defined yet
 }(typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
 
-// Can't do this because several apps including ASP.NET trace
+// Support: Firefox 18+
+// Can't be in strict mode, several libs including ASP.NET trace
 // the stack via arguments.caller.callee and Firefox dies if
 // you try to trace through "use strict" call chains. (#13335)
-// Support: Firefox 18+
 //
 
 var arr = [];
@@ -2133,7 +2134,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.1",
+	version = "2.1.3",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -2251,7 +2252,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	if ( typeof target === "boolean" ) {
 		deep = target;
 
-		// skip the boolean and the target
+		// Skip the boolean and the target
 		target = arguments[ i ] || {};
 		i++;
 	}
@@ -2261,7 +2262,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 		target = {};
 	}
 
-	// extend jQuery itself if only one argument is passed
+	// Extend jQuery itself if only one argument is passed
 	if ( i === length ) {
 		target = this;
 		i--;
@@ -2318,9 +2319,6 @@ jQuery.extend({
 
 	noop: function() {},
 
-	// See test/unit/core.js for details concerning isFunction.
-	// Since version 1.3, DOM methods and functions like alert
-	// aren't supported. They return false on IE (#2968).
 	isFunction: function( obj ) {
 		return jQuery.type(obj) === "function";
 	},
@@ -2335,7 +2333,8 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
+		// adding 1 corrects loss of precision from parseFloat (#15100)
+		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -2369,7 +2368,7 @@ jQuery.extend({
 		if ( obj == null ) {
 			return obj + "";
 		}
-		// Support: Android < 4.0, iOS < 6 (functionish RegExp)
+		// Support: Android<4.0, iOS<6 (functionish RegExp)
 		return typeof obj === "object" || typeof obj === "function" ?
 			class2type[ toString.call(obj) ] || "object" :
 			typeof obj;
@@ -2399,6 +2398,7 @@ jQuery.extend({
 	},
 
 	// Convert dashed to camelCase; used by the css and data modules
+	// Support: IE9-11+
 	// Microsoft forgot to hump their vendor prefix (#9572)
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
@@ -2614,14 +2614,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.19
+ * Sizzle CSS Selector Engine v2.2.0-pre
  * http://sizzlejs.com/
  *
- * Copyright 2013 jQuery Foundation, Inc. and other contributors
+ * Copyright 2008, 2014 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-04-18
+ * Date: 2014-12-16
  */
 (function( window ) {
 
@@ -2648,7 +2648,7 @@ var i,
 	contains,
 
 	// Instance-specific data
-	expando = "sizzle" + -(new Date()),
+	expando = "sizzle" + 1 * new Date(),
 	preferredDoc = window.document,
 	dirruns = 0,
 	done = 0,
@@ -2663,7 +2663,6 @@ var i,
 	},
 
 	// General-purpose constants
-	strundefined = typeof undefined,
 	MAX_NEGATIVE = 1 << 31,
 
 	// Instance methods
@@ -2673,12 +2672,13 @@ var i,
 	push_native = arr.push,
 	push = arr.push,
 	slice = arr.slice,
-	// Use a stripped-down indexOf if we can't use a native one
-	indexOf = arr.indexOf || function( elem ) {
+	// Use a stripped-down indexOf as it's faster than native
+	// http://jsperf.com/thor-indexof-vs-for/5
+	indexOf = function( list, elem ) {
 		var i = 0,
-			len = this.length;
+			len = list.length;
 		for ( ; i < len; i++ ) {
-			if ( this[i] === elem ) {
+			if ( list[i] === elem ) {
 				return i;
 			}
 		}
@@ -2718,6 +2718,7 @@ var i,
 		")\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
+	rwhitespace = new RegExp( whitespace + "+", "g" ),
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
 
 	rcomma = new RegExp( "^" + whitespace + "*," + whitespace + "*" ),
@@ -2769,6 +2770,14 @@ var i,
 				String.fromCharCode( high + 0x10000 ) :
 				// Supplemental Plane codepoint (surrogate pair)
 				String.fromCharCode( high >> 10 | 0xD800, high & 0x3FF | 0xDC00 );
+	},
+
+	// Used for iframes
+	// See setDocument()
+	// Removing the function wrapper causes a "Permission Denied"
+	// error in IE
+	unloadHandler = function() {
+		setDocument();
 	};
 
 // Optimize for push.apply( _, NodeList )
@@ -2811,19 +2820,18 @@ function Sizzle( selector, context, results, seed ) {
 
 	context = context || document;
 	results = results || [];
+	nodeType = context.nodeType;
 
-	if ( !selector || typeof selector !== "string" ) {
+	if ( typeof selector !== "string" || !selector ||
+		nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
+
 		return results;
 	}
 
-	if ( (nodeType = context.nodeType) !== 1 && nodeType !== 9 ) {
-		return [];
-	}
+	if ( !seed && documentIsHTML ) {
 
-	if ( documentIsHTML && !seed ) {
-
-		// Shortcuts
-		if ( (match = rquickExpr.exec( selector )) ) {
+		// Try to shortcut find operations when possible (e.g., not under DocumentFragment)
+		if ( nodeType !== 11 && (match = rquickExpr.exec( selector )) ) {
 			// Speed-up: Sizzle("#ID")
 			if ( (m = match[1]) ) {
 				if ( nodeType === 9 ) {
@@ -2855,7 +2863,7 @@ function Sizzle( selector, context, results, seed ) {
 				return results;
 
 			// Speed-up: Sizzle(".CLASS")
-			} else if ( (m = match[3]) && support.getElementsByClassName && context.getElementsByClassName ) {
+			} else if ( (m = match[3]) && support.getElementsByClassName ) {
 				push.apply( results, context.getElementsByClassName( m ) );
 				return results;
 			}
@@ -2865,7 +2873,7 @@ function Sizzle( selector, context, results, seed ) {
 		if ( support.qsa && (!rbuggyQSA || !rbuggyQSA.test( selector )) ) {
 			nid = old = expando;
 			newContext = context;
-			newSelector = nodeType === 9 && selector;
+			newSelector = nodeType !== 1 && selector;
 
 			// qSA works strangely on Element-rooted queries
 			// We can work around this by specifying an extra ID on the root
@@ -3052,7 +3060,7 @@ function createPositionalPseudo( fn ) {
  * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
  */
 function testContext( context ) {
-	return context && typeof context.getElementsByTagName !== strundefined && context;
+	return context && typeof context.getElementsByTagName !== "undefined" && context;
 }
 
 // Expose support vars for convenience
@@ -3076,9 +3084,8 @@ isXML = Sizzle.isXML = function( elem ) {
  * @returns {Object} Returns the current document
  */
 setDocument = Sizzle.setDocument = function( node ) {
-	var hasCompare,
-		doc = node ? node.ownerDocument || node : preferredDoc,
-		parent = doc.defaultView;
+	var hasCompare, parent,
+		doc = node ? node.ownerDocument || node : preferredDoc;
 
 	// If no document and documentElement is available, return
 	if ( doc === document || doc.nodeType !== 9 || !doc.documentElement ) {
@@ -3088,9 +3095,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Set our document
 	document = doc;
 	docElem = doc.documentElement;
-
-	// Support tests
-	documentIsHTML = !isXML( doc );
+	parent = doc.defaultView;
 
 	// Support: IE>8
 	// If iframe document is assigned to "document" variable and if iframe has been reloaded,
@@ -3099,21 +3104,22 @@ setDocument = Sizzle.setDocument = function( node ) {
 	if ( parent && parent !== parent.top ) {
 		// IE11 does not have attachEvent, so all must suffer
 		if ( parent.addEventListener ) {
-			parent.addEventListener( "unload", function() {
-				setDocument();
-			}, false );
+			parent.addEventListener( "unload", unloadHandler, false );
 		} else if ( parent.attachEvent ) {
-			parent.attachEvent( "onunload", function() {
-				setDocument();
-			});
+			parent.attachEvent( "onunload", unloadHandler );
 		}
 	}
+
+	/* Support tests
+	---------------------------------------------------------------------- */
+	documentIsHTML = !isXML( doc );
 
 	/* Attributes
 	---------------------------------------------------------------------- */
 
 	// Support: IE<8
-	// Verify that getAttribute really returns attributes and not properties (excepting IE8 booleans)
+	// Verify that getAttribute really returns attributes and not properties
+	// (excepting IE8 booleans)
 	support.attributes = assert(function( div ) {
 		div.className = "i";
 		return !div.getAttribute("className");
@@ -3128,17 +3134,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 		return !div.getElementsByTagName("*").length;
 	});
 
-	// Check if getElementsByClassName can be trusted
-	support.getElementsByClassName = rnative.test( doc.getElementsByClassName ) && assert(function( div ) {
-		div.innerHTML = "<div class='a'></div><div class='a i'></div>";
-
-		// Support: Safari<4
-		// Catch class over-caching
-		div.firstChild.className = "i";
-		// Support: Opera<10
-		// Catch gEBCN failure to find non-leading classes
-		return div.getElementsByClassName("i").length === 2;
-	});
+	// Support: IE<9
+	support.getElementsByClassName = rnative.test( doc.getElementsByClassName );
 
 	// Support: IE<10
 	// Check if getElementById returns elements by name
@@ -3152,7 +3149,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// ID find and filter
 	if ( support.getById ) {
 		Expr.find["ID"] = function( id, context ) {
-			if ( typeof context.getElementById !== strundefined && documentIsHTML ) {
+			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
@@ -3173,7 +3170,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		Expr.filter["ID"] =  function( id ) {
 			var attrId = id.replace( runescape, funescape );
 			return function( elem ) {
-				var node = typeof elem.getAttributeNode !== strundefined && elem.getAttributeNode("id");
+				var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
 				return node && node.value === attrId;
 			};
 		};
@@ -3182,14 +3179,20 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Tag
 	Expr.find["TAG"] = support.getElementsByTagName ?
 		function( tag, context ) {
-			if ( typeof context.getElementsByTagName !== strundefined ) {
+			if ( typeof context.getElementsByTagName !== "undefined" ) {
 				return context.getElementsByTagName( tag );
+
+			// DocumentFragment nodes don't have gEBTN
+			} else if ( support.qsa ) {
+				return context.querySelectorAll( tag );
 			}
 		} :
+
 		function( tag, context ) {
 			var elem,
 				tmp = [],
 				i = 0,
+				// By happy coincidence, a (broken) gEBTN appears on DocumentFragment nodes too
 				results = context.getElementsByTagName( tag );
 
 			// Filter out possible comments
@@ -3207,7 +3210,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Class
 	Expr.find["CLASS"] = support.getElementsByClassName && function( className, context ) {
-		if ( typeof context.getElementsByClassName !== strundefined && documentIsHTML ) {
+		if ( documentIsHTML ) {
 			return context.getElementsByClassName( className );
 		}
 	};
@@ -3236,13 +3239,15 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
+			docElem.appendChild( div ).innerHTML = "<a id='" + expando + "'></a>" +
+				"<select id='" + expando + "-\f]' msallowcapture=''>" +
+				"<option selected=''></option></select>";
 
 			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
 			// The test attribute must be unknown in Opera but "safe" for WinRT
 			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
-			if ( div.querySelectorAll("[msallowclip^='']").length ) {
+			if ( div.querySelectorAll("[msallowcapture^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -3252,11 +3257,23 @@ setDocument = Sizzle.setDocument = function( node ) {
 				rbuggyQSA.push( "\\[" + whitespace + "*(?:value|" + booleans + ")" );
 			}
 
+			// Support: Chrome<29, Android<4.2+, Safari<7.0+, iOS<7.0+, PhantomJS<1.9.7+
+			if ( !div.querySelectorAll( "[id~=" + expando + "-]" ).length ) {
+				rbuggyQSA.push("~=");
+			}
+
 			// Webkit/Opera - :checked should return selected option elements
 			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
 			// IE8 throws error here and will not see later tests
 			if ( !div.querySelectorAll(":checked").length ) {
 				rbuggyQSA.push(":checked");
+			}
+
+			// Support: Safari 8+, iOS 8+
+			// https://bugs.webkit.org/show_bug.cgi?id=136851
+			// In-page `selector#id sibing-combinator selector` fails
+			if ( !div.querySelectorAll( "a#" + expando + "+*" ).length ) {
+				rbuggyQSA.push(".#.+[+~]");
 			}
 		});
 
@@ -3374,7 +3391,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 			// Maintain original order
 			return sortInput ?
-				( indexOf.call( sortInput, a ) - indexOf.call( sortInput, b ) ) :
+				( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :
 				0;
 		}
 
@@ -3401,7 +3418,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				aup ? -1 :
 				bup ? 1 :
 				sortInput ?
-				( indexOf.call( sortInput, a ) - indexOf.call( sortInput, b ) ) :
+				( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :
 				0;
 
 		// If the nodes are siblings, we can do a quick check
@@ -3464,7 +3481,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 					elem.document && elem.document.nodeType !== 11 ) {
 				return ret;
 			}
-		} catch(e) {}
+		} catch (e) {}
 	}
 
 	return Sizzle( expr, document, null, [ elem ] ).length > 0;
@@ -3683,7 +3700,7 @@ Expr = Sizzle.selectors = {
 			return pattern ||
 				(pattern = new RegExp( "(^|" + whitespace + ")" + className + "(" + whitespace + "|$)" )) &&
 				classCache( className, function( elem ) {
-					return pattern.test( typeof elem.className === "string" && elem.className || typeof elem.getAttribute !== strundefined && elem.getAttribute("class") || "" );
+					return pattern.test( typeof elem.className === "string" && elem.className || typeof elem.getAttribute !== "undefined" && elem.getAttribute("class") || "" );
 				});
 		},
 
@@ -3705,7 +3722,7 @@ Expr = Sizzle.selectors = {
 					operator === "^=" ? check && result.indexOf( check ) === 0 :
 					operator === "*=" ? check && result.indexOf( check ) > -1 :
 					operator === "$=" ? check && result.slice( -check.length ) === check :
-					operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
+					operator === "~=" ? ( " " + result.replace( rwhitespace, " " ) + " " ).indexOf( check ) > -1 :
 					operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
 					false;
 			};
@@ -3825,7 +3842,7 @@ Expr = Sizzle.selectors = {
 							matched = fn( seed, argument ),
 							i = matched.length;
 						while ( i-- ) {
-							idx = indexOf.call( seed, matched[i] );
+							idx = indexOf( seed, matched[i] );
 							seed[ idx ] = !( matches[ idx ] = matched[i] );
 						}
 					}) :
@@ -3864,6 +3881,8 @@ Expr = Sizzle.selectors = {
 				function( elem, context, xml ) {
 					input[0] = elem;
 					matcher( input, null, xml, results );
+					// Don't keep the element (issue #299)
+					input[0] = null;
 					return !results.pop();
 				};
 		}),
@@ -3875,6 +3894,7 @@ Expr = Sizzle.selectors = {
 		}),
 
 		"contains": markFunction(function( text ) {
+			text = text.replace( runescape, funescape );
 			return function( elem ) {
 				return ( elem.textContent || elem.innerText || getText( elem ) ).indexOf( text ) > -1;
 			};
@@ -4296,7 +4316,7 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 				i = matcherOut.length;
 				while ( i-- ) {
 					if ( (elem = matcherOut[i]) &&
-						(temp = postFinder ? indexOf.call( seed, elem ) : preMap[i]) > -1 ) {
+						(temp = postFinder ? indexOf( seed, elem ) : preMap[i]) > -1 ) {
 
 						seed[temp] = !(results[temp] = elem);
 					}
@@ -4331,13 +4351,16 @@ function matcherFromTokens( tokens ) {
 			return elem === checkContext;
 		}, implicitRelative, true ),
 		matchAnyContext = addCombinator( function( elem ) {
-			return indexOf.call( checkContext, elem ) > -1;
+			return indexOf( checkContext, elem ) > -1;
 		}, implicitRelative, true ),
 		matchers = [ function( elem, context, xml ) {
-			return ( !leadingRelative && ( xml || context !== outermostContext ) ) || (
+			var ret = ( !leadingRelative && ( xml || context !== outermostContext ) ) || (
 				(checkContext = context).nodeType ?
 					matchContext( elem, context, xml ) :
 					matchAnyContext( elem, context, xml ) );
+			// Avoid hanging onto element (issue #299)
+			checkContext = null;
+			return ret;
 		} ];
 
 	for ( ; i < len; i++ ) {
@@ -4587,7 +4610,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 // Sort stability
 support.sortStable = expando.split("").sort( sortOrder ).join("") === expando;
 
-// Support: Chrome<14
+// Support: Chrome 14-35+
 // Always assume duplicates if they aren't passed to the comparison function
 support.detectDuplicates = !!hasDuplicate;
 
@@ -4796,7 +4819,7 @@ var rootjQuery,
 				if ( match[1] ) {
 					context = context instanceof jQuery ? context[0] : context;
 
-					// scripts is true for back-compat
+					// Option to run scripts is true for back-compat
 					// Intentionally let the error be thrown if parseHTML is not present
 					jQuery.merge( this, jQuery.parseHTML(
 						match[1],
@@ -4824,8 +4847,8 @@ var rootjQuery,
 				} else {
 					elem = document.getElementById( match[2] );
 
-					// Check parentNode to catch when Blackberry 4.6 returns
-					// nodes that are no longer in the document #6963
+					// Support: Blackberry 4.6
+					// gEBID returns nodes no longer in the document (#6963)
 					if ( elem && elem.parentNode ) {
 						// Inject the element directly into the jQuery object
 						this.length = 1;
@@ -4878,7 +4901,7 @@ rootjQuery = jQuery( document );
 
 
 var rparentsprev = /^(?:parents|prev(?:Until|All))/,
-	// methods guaranteed to produce a unique set when starting from a unique set
+	// Methods guaranteed to produce a unique set when starting from a unique set
 	guaranteedUnique = {
 		children: true,
 		contents: true,
@@ -4958,8 +4981,7 @@ jQuery.fn.extend({
 		return this.pushStack( matched.length > 1 ? jQuery.unique( matched ) : matched );
 	},
 
-	// Determine the position of an element within
-	// the matched set of elements
+	// Determine the position of an element within the set
 	index: function( elem ) {
 
 		// No argument, return index in parent
@@ -4967,7 +4989,7 @@ jQuery.fn.extend({
 			return ( this[ 0 ] && this[ 0 ].parentNode ) ? this.first().prevAll().length : -1;
 		}
 
-		// index in selector
+		// Index in selector
 		if ( typeof elem === "string" ) {
 			return indexOf.call( jQuery( elem ), this[ 0 ] );
 		}
@@ -5383,7 +5405,7 @@ jQuery.extend({
 
 			progressValues, progressContexts, resolveContexts;
 
-		// add listeners to Deferred subordinates; treat others as resolved
+		// Add listeners to Deferred subordinates; treat others as resolved
 		if ( length > 1 ) {
 			progressValues = new Array( length );
 			progressContexts = new Array( length );
@@ -5400,7 +5422,7 @@ jQuery.extend({
 			}
 		}
 
-		// if we're not waiting on anything, resolve the master
+		// If we're not waiting on anything, resolve the master
 		if ( !remaining ) {
 			deferred.resolveWith( resolveContexts, resolveValues );
 		}
@@ -5479,7 +5501,7 @@ jQuery.ready.promise = function( obj ) {
 		readyList = jQuery.Deferred();
 
 		// Catch cases where $(document).ready() is called after the browser event has already occurred.
-		// we once tried to use readyState "interactive" here, but it caused issues like the one
+		// We once tried to use readyState "interactive" here, but it caused issues like the one
 		// discovered by ChrisS here: http://bugs.jquery.com/ticket/12282#comment:15
 		if ( document.readyState === "complete" ) {
 			// Handle it asynchronously to allow scripts the opportunity to delay ready
@@ -5573,7 +5595,7 @@ jQuery.acceptData = function( owner ) {
 
 
 function Data() {
-	// Support: Android < 4,
+	// Support: Android<4,
 	// Old WebKit does not have Object.preventExtensions/freeze method,
 	// return new empty object instead with no [[set]] accessor
 	Object.defineProperty( this.cache = {}, 0, {
@@ -5582,7 +5604,7 @@ function Data() {
 		}
 	});
 
-	this.expando = jQuery.expando + Math.random();
+	this.expando = jQuery.expando + Data.uid++;
 }
 
 Data.uid = 1;
@@ -5610,7 +5632,7 @@ Data.prototype = {
 				descriptor[ this.expando ] = { value: unlock };
 				Object.defineProperties( owner, descriptor );
 
-			// Support: Android < 4
+			// Support: Android<4
 			// Fallback to a less secure definition
 			} catch ( e ) {
 				descriptor[ this.expando ] = unlock;
@@ -5750,17 +5772,16 @@ var data_user = new Data();
 
 
 
-/*
-	Implementation Summary
+//	Implementation Summary
+//
+//	1. Enforce API surface and semantic compatibility with 1.9.x branch
+//	2. Improve the module's maintainability by reducing the storage
+//		paths to a single mechanism.
+//	3. Use the same single mechanism to support "private" and "user" data.
+//	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
+//	5. Avoid exposing implementation details on user objects (eg. expando properties)
+//	6. Provide a clear path for implementation upgrade to WeakMap in 2014
 
-	1. Enforce API surface and semantic compatibility with 1.9.x branch
-	2. Improve the module's maintainability by reducing the storage
-		paths to a single mechanism.
-	3. Use the same single mechanism to support "private" and "user" data.
-	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
-	5. Avoid exposing implementation details on user objects (eg. expando properties)
-	6. Provide a clear path for implementation upgrade to WeakMap in 2014
-*/
 var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
 	rmultiDash = /([A-Z])/g;
 
@@ -5965,7 +5986,7 @@ jQuery.extend({
 				queue.unshift( "inprogress" );
 			}
 
-			// clear up the last queue stop function
+			// Clear up the last queue stop function
 			delete hooks.stop;
 			fn.call( elem, next, hooks );
 		}
@@ -5975,7 +5996,7 @@ jQuery.extend({
 		}
 	},
 
-	// not intended for public consumption - generates a queueHooks object, or returns the current one
+	// Not public - generate a queueHooks object, or return the current one
 	_queueHooks: function( elem, type ) {
 		var key = type + "queueHooks";
 		return data_priv.get( elem, key ) || data_priv.access( elem, key, {
@@ -6005,7 +6026,7 @@ jQuery.fn.extend({
 			this.each(function() {
 				var queue = jQuery.queue( this, type, data );
 
-				// ensure a hooks for this queue
+				// Ensure a hooks for this queue
 				jQuery._queueHooks( this, type );
 
 				if ( type === "fx" && queue[0] !== "inprogress" ) {
@@ -6072,21 +6093,22 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 		div = fragment.appendChild( document.createElement( "div" ) ),
 		input = document.createElement( "input" );
 
-	// #11217 - WebKit loses check when the name is after the checked attribute
+	// Support: Safari<=5.1
+	// Check state lost if the name is set (#11217)
 	// Support: Windows Web Apps (WWA)
-	// `name` and `type` need .setAttribute for WWA
+	// `name` and `type` must use .setAttribute for WWA (#14901)
 	input.setAttribute( "type", "radio" );
 	input.setAttribute( "checked", "checked" );
 	input.setAttribute( "name", "t" );
 
 	div.appendChild( input );
 
-	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
-	// old WebKit doesn't clone checked state correctly in fragments
+	// Support: Safari<=5.1, Android<4.2
+	// Older WebKit doesn't clone checked state correctly in fragments
 	support.checkClone = div.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
+	// Support: IE<=11+
 	// Make sure textarea (and checkbox) defaultValue is properly cloned
-	// Support: IE9-IE11+
 	div.innerHTML = "<textarea>x</textarea>";
 	support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 })();
@@ -6464,8 +6486,8 @@ jQuery.event = {
 			j = 0;
 			while ( (handleObj = matched.handlers[ j++ ]) && !event.isImmediatePropagationStopped() ) {
 
-				// Triggered event must either 1) have no namespace, or
-				// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
+				// Triggered event must either 1) have no namespace, or 2) have namespace(s)
+				// a subset or equal to those in the bound event (both can have no namespace).
 				if ( !event.namespace_re || event.namespace_re.test( handleObj.namespace ) ) {
 
 					event.handleObj = handleObj;
@@ -6615,7 +6637,7 @@ jQuery.event = {
 			event.target = document;
 		}
 
-		// Support: Safari 6.0+, Chrome < 28
+		// Support: Safari 6.0+, Chrome<28
 		// Target should not be a text node (#504, #13143)
 		if ( event.target.nodeType === 3 ) {
 			event.target = event.target.parentNode;
@@ -6720,7 +6742,7 @@ jQuery.Event = function( src, props ) {
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
 				src.defaultPrevented === undefined &&
-				// Support: Android < 4.0
+				// Support: Android<4.0
 				src.returnValue === false ?
 			returnTrue :
 			returnFalse;
@@ -6810,8 +6832,8 @@ jQuery.each({
 	};
 });
 
-// Create "bubbling" focus and blur events
 // Support: Firefox, Chrome, Safari
+// Create "bubbling" focus and blur events
 if ( !support.focusinBubbles ) {
 	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
 
@@ -6964,7 +6986,7 @@ var
 	// We have to close these tags to support XHTML (#13200)
 	wrapMap = {
 
-		// Support: IE 9
+		// Support: IE9
 		option: [ 1, "<select multiple='multiple'>", "</select>" ],
 
 		thead: [ 1, "<table>", "</table>" ],
@@ -6975,7 +6997,7 @@ var
 		_default: [ 0, "", "" ]
 	};
 
-// Support: IE 9
+// Support: IE9
 wrapMap.optgroup = wrapMap.option;
 
 wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
@@ -7065,7 +7087,7 @@ function getAll( context, tag ) {
 		ret;
 }
 
-// Support: IE >= 9
+// Fix IE bugs, see support tests
 function fixInput( src, dest ) {
 	var nodeName = dest.nodeName.toLowerCase();
 
@@ -7085,8 +7107,7 @@ jQuery.extend({
 			clone = elem.cloneNode( true ),
 			inPage = jQuery.contains( elem.ownerDocument, elem );
 
-		// Support: IE >= 9
-		// Fix Cloning issues
+		// Fix IE cloning issues
 		if ( !support.noCloneChecked && ( elem.nodeType === 1 || elem.nodeType === 11 ) &&
 				!jQuery.isXMLDoc( elem ) ) {
 
@@ -7137,8 +7158,8 @@ jQuery.extend({
 
 				// Add nodes directly
 				if ( jQuery.type( elem ) === "object" ) {
-					// Support: QtWebKit
-					// jQuery.merge because push.apply(_, arraylike) throws
+					// Support: QtWebKit, PhantomJS
+					// push.apply(_, arraylike) throws on ancient WebKit
 					jQuery.merge( nodes, elem.nodeType ? [ elem ] : elem );
 
 				// Convert non-html into a text node
@@ -7160,15 +7181,14 @@ jQuery.extend({
 						tmp = tmp.lastChild;
 					}
 
-					// Support: QtWebKit
-					// jQuery.merge because push.apply(_, arraylike) throws
+					// Support: QtWebKit, PhantomJS
+					// push.apply(_, arraylike) throws on ancient WebKit
 					jQuery.merge( nodes, tmp.childNodes );
 
 					// Remember the top-level container
 					tmp = fragment.firstChild;
 
-					// Fixes #12346
-					// Support: Webkit, IE
+					// Ensure the created nodes are orphaned (#12392)
 					tmp.textContent = "";
 				}
 			}
@@ -7530,7 +7550,7 @@ function actualDisplay( name, doc ) {
 		// getDefaultComputedStyle might be reliably used only on attached element
 		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
 
-			// Use of this method is a temporary fix (more like optmization) until something better comes along,
+			// Use of this method is a temporary fix (more like optimization) until something better comes along,
 			// since it was removed from specification and supported only in FF
 			style.display : jQuery.css( elem[ 0 ], "display" );
 
@@ -7580,7 +7600,14 @@ var rmargin = (/^margin/);
 var rnumnonpx = new RegExp( "^(" + pnum + ")(?!px)[a-z%]+$", "i" );
 
 var getStyles = function( elem ) {
-		return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
+		// Support: IE<=11+, Firefox<=30+ (#15098, #14150)
+		// IE throws on elements created in popups
+		// FF meanwhile throws on frame elements through "defaultView.getComputedStyle"
+		if ( elem.ownerDocument.defaultView.opener ) {
+			return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
+		}
+
+		return window.getComputedStyle( elem, null );
 	};
 
 
@@ -7592,7 +7619,7 @@ function curCSS( elem, name, computed ) {
 	computed = computed || getStyles( elem );
 
 	// Support: IE9
-	// getPropertyValue is only needed for .css('filter') in IE9, see #12537
+	// getPropertyValue is only needed for .css('filter') (#12537)
 	if ( computed ) {
 		ret = computed.getPropertyValue( name ) || computed[ name ];
 	}
@@ -7638,15 +7665,13 @@ function addGetHookIf( conditionFn, hookFn ) {
 	return {
 		get: function() {
 			if ( conditionFn() ) {
-				// Hook not needed (or it's not possible to use it due to missing dependency),
-				// remove it.
-				// Since there are no other hooks for marginRight, remove the whole object.
+				// Hook not needed (or it's not possible to use it due
+				// to missing dependency), remove it.
 				delete this.get;
 				return;
 			}
 
 			// Hook needed; redefine it so that the support test is not executed again.
-
 			return (this.get = hookFn).apply( this, arguments );
 		}
 	};
@@ -7663,6 +7688,8 @@ function addGetHookIf( conditionFn, hookFn ) {
 		return;
 	}
 
+	// Support: IE9-11+
+	// Style of cloned element affects source element cloned (#8908)
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
@@ -7695,6 +7722,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 	if ( window.getComputedStyle ) {
 		jQuery.extend( support, {
 			pixelPosition: function() {
+
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
 				// No need to check if the test was already performed, though.
@@ -7708,6 +7736,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 				return boxSizingReliableVal;
 			},
 			reliableMarginRight: function() {
+
 				// Support: Android 2.3
 				// Check if div with explicit width and no margin-right incorrectly
 				// gets computed margin-right based on width of container. (#3333)
@@ -7729,6 +7758,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
+				div.removeChild( marginDiv );
 
 				return ret;
 			}
@@ -7760,8 +7790,8 @@ jQuery.swap = function( elem, options, callback, args ) {
 
 
 var
-	// swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
-	// see here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
+	// Swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
+	// See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
 	rdisplayswap = /^(none|table(?!-c[ea]).+)/,
 	rnumsplit = new RegExp( "^(" + pnum + ")(.*)$", "i" ),
 	rrelNum = new RegExp( "^([+-])=(" + pnum + ")", "i" ),
@@ -7774,15 +7804,15 @@ var
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
 
-// return a css property mapped to a potentially vendor prefixed property
+// Return a css property mapped to a potentially vendor prefixed property
 function vendorPropName( style, name ) {
 
-	// shortcut for names that are not vendor prefixed
+	// Shortcut for names that are not vendor prefixed
 	if ( name in style ) {
 		return name;
 	}
 
-	// check for vendor prefixed names
+	// Check for vendor prefixed names
 	var capName = name[0].toUpperCase() + name.slice(1),
 		origName = name,
 		i = cssPrefixes.length;
@@ -7815,7 +7845,7 @@ function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
 		val = 0;
 
 	for ( ; i < 4; i += 2 ) {
-		// both box models exclude margin, so add it if we want it
+		// Both box models exclude margin, so add it if we want it
 		if ( extra === "margin" ) {
 			val += jQuery.css( elem, extra + cssExpand[ i ], true, styles );
 		}
@@ -7826,15 +7856,15 @@ function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
 				val -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
 			}
 
-			// at this point, extra isn't border nor margin, so remove border
+			// At this point, extra isn't border nor margin, so remove border
 			if ( extra !== "margin" ) {
 				val -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 		} else {
-			// at this point, extra isn't content, so add padding
+			// At this point, extra isn't content, so add padding
 			val += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
 
-			// at this point, extra isn't content nor padding, so add border
+			// At this point, extra isn't content nor padding, so add border
 			if ( extra !== "padding" ) {
 				val += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
@@ -7852,7 +7882,7 @@ function getWidthOrHeight( elem, name, extra ) {
 		styles = getStyles( elem ),
 		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
 
-	// some non-html elements return undefined for offsetWidth, so check for null/undefined
+	// Some non-html elements return undefined for offsetWidth, so check for null/undefined
 	// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
 	// MathML - https://bugzilla.mozilla.org/show_bug.cgi?id=491668
 	if ( val <= 0 || val == null ) {
@@ -7867,7 +7897,7 @@ function getWidthOrHeight( elem, name, extra ) {
 			return val;
 		}
 
-		// we need the check for style in case a browser which returns unreliable values
+		// Check for style in case a browser which returns unreliable values
 		// for getComputedStyle silently falls back to the reliable elem.style
 		valueIsBorderBox = isBorderBox &&
 			( support.boxSizingReliable() || val === elem.style[ name ] );
@@ -7876,7 +7906,7 @@ function getWidthOrHeight( elem, name, extra ) {
 		val = parseFloat( val ) || 0;
 	}
 
-	// use the active box-sizing model to add/subtract irrelevant styles
+	// Use the active box-sizing model to add/subtract irrelevant styles
 	return ( val +
 		augmentWidthOrHeight(
 			elem,
@@ -7940,12 +7970,14 @@ function showHide( elements, show ) {
 }
 
 jQuery.extend({
+
 	// Add in style property hooks for overriding the default
 	// behavior of getting and setting a style property
 	cssHooks: {
 		opacity: {
 			get: function( elem, computed ) {
 				if ( computed ) {
+
 					// We should always get a number back from opacity
 					var ret = curCSS( elem, "opacity" );
 					return ret === "" ? "1" : ret;
@@ -7973,12 +8005,12 @@ jQuery.extend({
 	// Add in properties whose names you wish to fix before
 	// setting or getting the value
 	cssProps: {
-		// normalize float css property
 		"float": "cssFloat"
 	},
 
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
+
 		// Don't set styles on text and comment nodes
 		if ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {
 			return;
@@ -7991,33 +8023,32 @@ jQuery.extend({
 
 		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( style, origName ) );
 
-		// gets hook for the prefixed version
-		// followed by the unprefixed version
+		// Gets hook for the prefixed version, then unprefixed version
 		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
 
 		// Check if we're setting a value
 		if ( value !== undefined ) {
 			type = typeof value;
 
-			// convert relative number strings (+= or -=) to relative numbers. #7345
+			// Convert "+=" or "-=" to relative numbers (#7345)
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
 				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
 				// Fixes bug #9237
 				type = "number";
 			}
 
-			// Make sure that null and NaN values aren't set. See: #7116
+			// Make sure that null and NaN values aren't set (#7116)
 			if ( value == null || value !== value ) {
 				return;
 			}
 
-			// If a number was passed in, add 'px' to the (except for certain CSS properties)
+			// If a number, add 'px' to the (except for certain CSS properties)
 			if ( type === "number" && !jQuery.cssNumber[ origName ] ) {
 				value += "px";
 			}
 
-			// Fixes #8908, it can be done more correctly by specifying setters in cssHooks,
-			// but it would mean to define eight (for every problematic property) identical functions
+			// Support: IE9-11+
+			// background-* props affect original clone's values
 			if ( !support.clearCloneStyle && value === "" && name.indexOf( "background" ) === 0 ) {
 				style[ name ] = "inherit";
 			}
@@ -8045,8 +8076,7 @@ jQuery.extend({
 		// Make sure that we're working with the right name
 		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( elem.style, origName ) );
 
-		// gets hook for the prefixed version
-		// followed by the unprefixed version
+		// Try prefixed name followed by the unprefixed name
 		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
 
 		// If a hook was provided get the computed value from there
@@ -8059,12 +8089,12 @@ jQuery.extend({
 			val = curCSS( elem, name, styles );
 		}
 
-		//convert "normal" to computed value
+		// Convert "normal" to computed value
 		if ( val === "normal" && name in cssNormalTransform ) {
 			val = cssNormalTransform[ name ];
 		}
 
-		// Return, converting to number if forced or a qualifier was provided and val looks numeric
+		// Make numeric if forced or a qualifier was provided and val looks numeric
 		if ( extra === "" || extra ) {
 			num = parseFloat( val );
 			return extra === true || jQuery.isNumeric( num ) ? num || 0 : val;
@@ -8077,8 +8107,9 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 	jQuery.cssHooks[ name ] = {
 		get: function( elem, computed, extra ) {
 			if ( computed ) {
-				// certain elements can have dimension info if we invisibly show them
-				// however, it must have a current display style that would benefit from this
+
+				// Certain elements can have dimension info if we invisibly show them
+				// but it must have a current display style that would benefit
 				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
@@ -8106,8 +8137,6 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 jQuery.cssHooks.marginRight = addGetHookIf( support.reliableMarginRight,
 	function( elem, computed ) {
 		if ( computed ) {
-			// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-			// Work around by temporarily setting element display to inline-block
 			return jQuery.swap( elem, { "display": "inline-block" },
 				curCSS, [ elem, "marginRight" ] );
 		}
@@ -8125,7 +8154,7 @@ jQuery.each({
 			var i = 0,
 				expanded = {},
 
-				// assumes a single number if not a string
+				// Assumes a single number if not a string
 				parts = typeof value === "string" ? value.split(" ") : [ value ];
 
 			for ( ; i < 4; i++ ) {
@@ -8248,17 +8277,18 @@ Tween.propHooks = {
 				return tween.elem[ tween.prop ];
 			}
 
-			// passing an empty string as a 3rd parameter to .css will automatically
-			// attempt a parseFloat and fallback to a string if the parse fails
-			// so, simple values such as "10px" are parsed to Float.
-			// complex values such as "rotate(1rad)" are returned as is.
+			// Passing an empty string as a 3rd parameter to .css will automatically
+			// attempt a parseFloat and fallback to a string if the parse fails.
+			// Simple values such as "10px" are parsed to Float;
+			// complex values such as "rotate(1rad)" are returned as-is.
 			result = jQuery.css( tween.elem, tween.prop, "" );
 			// Empty strings, null, undefined and "auto" are converted to 0.
 			return !result || result === "auto" ? 0 : result;
 		},
 		set: function( tween ) {
-			// use step hook for back compat - use cssHook if its there - use .style if its
-			// available and use plain properties where available
+			// Use step hook for back compat.
+			// Use cssHook if its there.
+			// Use .style if available and use plain properties where available.
 			if ( jQuery.fx.step[ tween.prop ] ) {
 				jQuery.fx.step[ tween.prop ]( tween );
 			} else if ( tween.elem.style && ( tween.elem.style[ jQuery.cssProps[ tween.prop ] ] != null || jQuery.cssHooks[ tween.prop ] ) ) {
@@ -8272,7 +8302,6 @@ Tween.propHooks = {
 
 // Support: IE9
 // Panic based approach to setting things on disconnected nodes
-
 Tween.propHooks.scrollTop = Tween.propHooks.scrollLeft = {
 	set: function( tween ) {
 		if ( tween.elem.nodeType && tween.elem.parentNode ) {
@@ -8328,16 +8357,16 @@ var
 				start = +target || 1;
 
 				do {
-					// If previous iteration zeroed out, double until we get *something*
-					// Use a string for doubling factor so we don't accidentally see scale as unchanged below
+					// If previous iteration zeroed out, double until we get *something*.
+					// Use string for doubling so we don't accidentally see scale as unchanged below
 					scale = scale || ".5";
 
 					// Adjust and apply
 					start = start / scale;
 					jQuery.style( tween.elem, prop, start + unit );
 
-				// Update scale, tolerating zero or NaN from tween.cur()
-				// And breaking the loop if scale is unchanged or perfect, or if we've just had enough
+				// Update scale, tolerating zero or NaN from tween.cur(),
+				// break the loop if scale is unchanged or perfect, or if we've just had enough
 				} while ( scale !== (scale = tween.cur() / target) && scale !== 1 && --maxIterations );
 			}
 
@@ -8369,8 +8398,8 @@ function genFx( type, includeWidth ) {
 		i = 0,
 		attrs = { height: type };
 
-	// if we include width, step value is 1 to do all cssExpand values,
-	// if we don't include width, step value is 2 to skip over Left and Right
+	// If we include width, step value is 1 to do all cssExpand values,
+	// otherwise step value is 2 to skip over Left and Right
 	includeWidth = includeWidth ? 1 : 0;
 	for ( ; i < 4 ; i += 2 - includeWidth ) {
 		which = cssExpand[ i ];
@@ -8392,7 +8421,7 @@ function createTween( value, prop, animation ) {
 	for ( ; index < length; index++ ) {
 		if ( (tween = collection[ index ].call( animation, prop, value )) ) {
 
-			// we're done with this property
+			// We're done with this property
 			return tween;
 		}
 	}
@@ -8407,7 +8436,7 @@ function defaultPrefilter( elem, props, opts ) {
 		hidden = elem.nodeType && isHidden( elem ),
 		dataShow = data_priv.get( elem, "fxshow" );
 
-	// handle queue: false promises
+	// Handle queue: false promises
 	if ( !opts.queue ) {
 		hooks = jQuery._queueHooks( elem, "fx" );
 		if ( hooks.unqueued == null ) {
@@ -8422,8 +8451,7 @@ function defaultPrefilter( elem, props, opts ) {
 		hooks.unqueued++;
 
 		anim.always(function() {
-			// doing this makes sure that the complete handler will be called
-			// before this completes
+			// Ensure the complete handler is called before this completes
 			anim.always(function() {
 				hooks.unqueued--;
 				if ( !jQuery.queue( elem, "fx" ).length ) {
@@ -8433,7 +8461,7 @@ function defaultPrefilter( elem, props, opts ) {
 		});
 	}
 
-	// height/width overflow pass
+	// Height/width overflow pass
 	if ( elem.nodeType === 1 && ( "height" in props || "width" in props ) ) {
 		// Make sure that nothing sneaks out
 		// Record all 3 overflow attributes because IE9-10 do not
@@ -8495,7 +8523,7 @@ function defaultPrefilter( elem, props, opts ) {
 			dataShow = data_priv.access( elem, "fxshow", {} );
 		}
 
-		// store state if its toggle - enables .stop().toggle() to "reverse"
+		// Store state if its toggle - enables .stop().toggle() to "reverse"
 		if ( toggle ) {
 			dataShow.hidden = !hidden;
 		}
@@ -8555,8 +8583,8 @@ function propFilter( props, specialEasing ) {
 			value = hooks.expand( value );
 			delete props[ name ];
 
-			// not quite $.extend, this wont overwrite keys already present.
-			// also - reusing 'index' from above because we have the correct "name"
+			// Not quite $.extend, this won't overwrite existing keys.
+			// Reusing 'index' because we have the correct "name"
 			for ( index in value ) {
 				if ( !( index in props ) ) {
 					props[ index ] = value[ index ];
@@ -8575,7 +8603,7 @@ function Animation( elem, properties, options ) {
 		index = 0,
 		length = animationPrefilters.length,
 		deferred = jQuery.Deferred().always( function() {
-			// don't match elem in the :animated selector
+			// Don't match elem in the :animated selector
 			delete tick.elem;
 		}),
 		tick = function() {
@@ -8584,7 +8612,8 @@ function Animation( elem, properties, options ) {
 			}
 			var currentTime = fxNow || createFxNow(),
 				remaining = Math.max( 0, animation.startTime + animation.duration - currentTime ),
-				// archaic crash bug won't allow us to use 1 - ( 0.5 || 0 ) (#12497)
+				// Support: Android 2.3
+				// Archaic crash bug won't allow us to use `1 - ( 0.5 || 0 )` (#12497)
 				temp = remaining / animation.duration || 0,
 				percent = 1 - temp,
 				index = 0,
@@ -8620,7 +8649,7 @@ function Animation( elem, properties, options ) {
 			},
 			stop: function( gotoEnd ) {
 				var index = 0,
-					// if we are going to the end, we want to run all the tweens
+					// If we are going to the end, we want to run all the tweens
 					// otherwise we skip this part
 					length = gotoEnd ? animation.tweens.length : 0;
 				if ( stopped ) {
@@ -8631,8 +8660,7 @@ function Animation( elem, properties, options ) {
 					animation.tweens[ index ].run( 1 );
 				}
 
-				// resolve when we played the last frame
-				// otherwise, reject
+				// Resolve when we played the last frame; otherwise, reject
 				if ( gotoEnd ) {
 					deferred.resolveWith( elem, [ animation, gotoEnd ] );
 				} else {
@@ -8714,7 +8742,7 @@ jQuery.speed = function( speed, easing, fn ) {
 	opt.duration = jQuery.fx.off ? 0 : typeof opt.duration === "number" ? opt.duration :
 		opt.duration in jQuery.fx.speeds ? jQuery.fx.speeds[ opt.duration ] : jQuery.fx.speeds._default;
 
-	// normalize opt.queue - true/undefined/null -> "fx"
+	// Normalize opt.queue - true/undefined/null -> "fx"
 	if ( opt.queue == null || opt.queue === true ) {
 		opt.queue = "fx";
 	}
@@ -8738,10 +8766,10 @@ jQuery.speed = function( speed, easing, fn ) {
 jQuery.fn.extend({
 	fadeTo: function( speed, to, easing, callback ) {
 
-		// show any hidden elements after setting opacity to 0
+		// Show any hidden elements after setting opacity to 0
 		return this.filter( isHidden ).css( "opacity", 0 ).show()
 
-			// animate to the value specified
+			// Animate to the value specified
 			.end().animate({ opacity: to }, speed, easing, callback );
 	},
 	animate: function( prop, speed, easing, callback ) {
@@ -8804,9 +8832,9 @@ jQuery.fn.extend({
 				}
 			}
 
-			// start the next in the queue if the last step wasn't forced
-			// timers currently will call their complete callbacks, which will dequeue
-			// but only if they were gotoEnd
+			// Start the next in the queue if the last step wasn't forced.
+			// Timers currently will call their complete callbacks, which
+			// will dequeue but only if they were gotoEnd.
 			if ( dequeue || !gotoEnd ) {
 				jQuery.dequeue( this, type );
 			}
@@ -8824,17 +8852,17 @@ jQuery.fn.extend({
 				timers = jQuery.timers,
 				length = queue ? queue.length : 0;
 
-			// enable finishing flag on private data
+			// Enable finishing flag on private data
 			data.finish = true;
 
-			// empty the queue first
+			// Empty the queue first
 			jQuery.queue( this, type, [] );
 
 			if ( hooks && hooks.stop ) {
 				hooks.stop.call( this, true );
 			}
 
-			// look for any active animations, and finish them
+			// Look for any active animations, and finish them
 			for ( index = timers.length; index--; ) {
 				if ( timers[ index ].elem === this && timers[ index ].queue === type ) {
 					timers[ index ].anim.stop( true );
@@ -8842,14 +8870,14 @@ jQuery.fn.extend({
 				}
 			}
 
-			// look for any animations in the old queue and finish them
+			// Look for any animations in the old queue and finish them
 			for ( index = 0; index < length; index++ ) {
 				if ( queue[ index ] && queue[ index ].finish ) {
 					queue[ index ].finish.call( this );
 				}
 			}
 
-			// turn off finishing flag
+			// Turn off finishing flag
 			delete data.finish;
 		});
 	}
@@ -8952,21 +8980,21 @@ jQuery.fn.delay = function( time, type ) {
 
 	input.type = "checkbox";
 
-	// Support: iOS 5.1, Android 4.x, Android 2.3
-	// Check the default checkbox/radio value ("" on old WebKit; "on" elsewhere)
+	// Support: iOS<=5.1, Android<=4.2+
+	// Default value for a checkbox should be "on"
 	support.checkOn = input.value !== "";
 
-	// Must access the parent to make an option select properly
-	// Support: IE9, IE10
+	// Support: IE<=11+
+	// Must access selectedIndex to make default options select
 	support.optSelected = opt.selected;
 
-	// Make sure that the options inside disabled selects aren't marked as disabled
-	// (WebKit marks them as disabled)
+	// Support: Android<=2.3
+	// Options inside disabled selects are incorrectly marked as disabled
 	select.disabled = true;
 	support.optDisabled = !opt.disabled;
 
-	// Check if an input maintains its value after becoming a radio
-	// Support: IE9, IE10
+	// Support: IE<=11+
+	// An input loses its value after becoming a radio
 	input = document.createElement( "input" );
 	input.value = "t";
 	input.type = "radio";
@@ -9063,8 +9091,6 @@ jQuery.extend({
 			set: function( elem, value ) {
 				if ( !support.radioValue && value === "radio" &&
 					jQuery.nodeName( elem, "input" ) ) {
-					// Setting the type on a radio button after the value resets the value in IE6-9
-					// Reset value to default in case type is set after value during creation
 					var val = elem.value;
 					elem.setAttribute( "type", value );
 					if ( val ) {
@@ -9134,7 +9160,7 @@ jQuery.extend({
 		var ret, hooks, notxml,
 			nType = elem.nodeType;
 
-		// don't get/set properties on text, comment and attribute nodes
+		// Don't get/set properties on text, comment and attribute nodes
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
@@ -9170,8 +9196,6 @@ jQuery.extend({
 	}
 });
 
-// Support: IE9+
-// Selectedness for an option in an optgroup can be inaccurate
 if ( !support.optSelected ) {
 	jQuery.propHooks.selected = {
 		get: function( elem ) {
@@ -9279,7 +9303,7 @@ jQuery.fn.extend({
 						}
 					}
 
-					// only assign if different to avoid unneeded rendering.
+					// Only assign if different to avoid unneeded rendering.
 					finalValue = value ? jQuery.trim( cur ) : "";
 					if ( elem.className !== finalValue ) {
 						elem.className = finalValue;
@@ -9306,14 +9330,14 @@ jQuery.fn.extend({
 
 		return this.each(function() {
 			if ( type === "string" ) {
-				// toggle individual class names
+				// Toggle individual class names
 				var className,
 					i = 0,
 					self = jQuery( this ),
 					classNames = value.match( rnotwhite ) || [];
 
 				while ( (className = classNames[ i++ ]) ) {
-					// check each className given, space separated list
+					// Check each className given, space separated list
 					if ( self.hasClass( className ) ) {
 						self.removeClass( className );
 					} else {
@@ -9328,7 +9352,7 @@ jQuery.fn.extend({
 					data_priv.set( this, "__className__", this.className );
 				}
 
-				// If the element has a class name or if we're passed "false",
+				// If the element has a class name or if we're passed `false`,
 				// then remove the whole classname (if there was one, the above saved it).
 				// Otherwise bring back whatever was previously saved (if anything),
 				// falling back to the empty string if nothing was stored.
@@ -9372,9 +9396,9 @@ jQuery.fn.extend({
 				ret = elem.value;
 
 				return typeof ret === "string" ?
-					// handle most common string cases
+					// Handle most common string cases
 					ret.replace(rreturn, "") :
-					// handle cases where value is null/undef or number
+					// Handle cases where value is null/undef or number
 					ret == null ? "" : ret;
 			}
 
@@ -9482,7 +9506,7 @@ jQuery.extend({
 					}
 				}
 
-				// force browsers to behave consistently when non-matching value is set
+				// Force browsers to behave consistently when non-matching value is set
 				if ( !optionSet ) {
 					elem.selectedIndex = -1;
 				}
@@ -9503,8 +9527,6 @@ jQuery.each([ "radio", "checkbox" ], function() {
 	};
 	if ( !support.checkOn ) {
 		jQuery.valHooks[ this ].get = function( elem ) {
-			// Support: Webkit
-			// "" is returned instead of "on" if a value isn't specified
 			return elem.getAttribute("value") === null ? "on" : elem.value;
 		};
 	}
@@ -9586,10 +9608,6 @@ jQuery.parseXML = function( data ) {
 
 
 var
-	// Document location
-	ajaxLocParts,
-	ajaxLocation,
-
 	rhash = /#.*$/,
 	rts = /([?&])_=[^&]*/,
 	rheaders = /^(.*?):[ \t]*([^\r\n]*)$/mg,
@@ -9618,22 +9636,13 @@ var
 	transports = {},
 
 	// Avoid comment-prolog char sequence (#10098); must appease lint and evade compression
-	allTypes = "*/".concat("*");
+	allTypes = "*/".concat( "*" ),
 
-// #8138, IE may throw an exception when accessing
-// a field from window.location if document.domain has been set
-try {
-	ajaxLocation = location.href;
-} catch( e ) {
-	// Use the href attribute of an A element
-	// since IE will modify it given document.location
-	ajaxLocation = document.createElement( "a" );
-	ajaxLocation.href = "";
-	ajaxLocation = ajaxLocation.href;
-}
+	// Document location
+	ajaxLocation = window.location.href,
 
-// Segment location into parts
-ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
+	// Segment location into parts
+	ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
 
 // Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
 function addToPrefiltersOrTransports( structure ) {
@@ -10112,7 +10121,8 @@ jQuery.extend({
 		}
 
 		// We can fire global events as of now if asked to
-		fireGlobals = s.global;
+		// Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)
+		fireGlobals = jQuery.event && s.global;
 
 		// Watch for a new set of requests
 		if ( fireGlobals && jQuery.active++ === 0 ) {
@@ -10185,7 +10195,7 @@ jQuery.extend({
 			return jqXHR.abort();
 		}
 
-		// aborting is no longer a cancellation
+		// Aborting is no longer a cancellation
 		strAbort = "abort";
 
 		// Install callbacks on deferreds
@@ -10297,8 +10307,7 @@ jQuery.extend({
 					isSuccess = !error;
 				}
 			} else {
-				// We extract error from statusText
-				// then normalize statusText and status for non-aborts
+				// Extract error from statusText and normalize for non-aborts
 				error = statusText;
 				if ( status || !statusText ) {
 					statusText = "error";
@@ -10354,7 +10363,7 @@ jQuery.extend({
 
 jQuery.each( [ "get", "post" ], function( i, method ) {
 	jQuery[ method ] = function( url, data, callback, type ) {
-		// shift arguments if data argument was omitted
+		// Shift arguments if data argument was omitted
 		if ( jQuery.isFunction( data ) ) {
 			type = type || callback;
 			callback = data;
@@ -10368,13 +10377,6 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 			data: data,
 			success: callback
 		});
-	};
-});
-
-// Attach a bunch of functions for handling common AJAX events
-jQuery.each( [ "ajaxStart", "ajaxStop", "ajaxComplete", "ajaxError", "ajaxSuccess", "ajaxSend" ], function( i, type ) {
-	jQuery.fn[ type ] = function( fn ) {
-		return this.on( type, fn );
 	};
 });
 
@@ -10595,8 +10597,9 @@ var xhrId = 0,
 
 // Support: IE9
 // Open requests must be manually aborted on unload (#5280)
-if ( window.ActiveXObject ) {
-	jQuery( window ).on( "unload", function() {
+// See https://support.microsoft.com/kb/2856746 for more info
+if ( window.attachEvent ) {
+	window.attachEvent( "onunload", function() {
 		for ( var key in xhrCallbacks ) {
 			xhrCallbacks[ key ]();
 		}
@@ -10949,6 +10952,16 @@ jQuery.fn.load = function( url, params, callback ) {
 
 
 
+// Attach a bunch of functions for handling common AJAX events
+jQuery.each( [ "ajaxStart", "ajaxStop", "ajaxComplete", "ajaxError", "ajaxSuccess", "ajaxSend" ], function( i, type ) {
+	jQuery.fn[ type ] = function( fn ) {
+		return this.on( type, fn );
+	};
+});
+
+
+
+
 jQuery.expr.filters.animated = function( elem ) {
 	return jQuery.grep(jQuery.timers, function( fn ) {
 		return elem === fn.elem;
@@ -10985,7 +10998,8 @@ jQuery.offset = {
 		calculatePosition = ( position === "absolute" || position === "fixed" ) &&
 			( curCSSTop + curCSSLeft ).indexOf("auto") > -1;
 
-		// Need to be able to calculate position if either top or left is auto and position is either absolute or fixed
+		// Need to be able to calculate position if either
+		// top or left is auto and position is either absolute or fixed
 		if ( calculatePosition ) {
 			curPosition = curElem.position();
 			curTop = curPosition.top;
@@ -11042,8 +11056,8 @@ jQuery.fn.extend({
 			return box;
 		}
 
+		// Support: BlackBerry 5, iOS 3 (original iPhone)
 		// If we don't have gBCR, just use 0,0 rather than error
-		// BlackBerry 5, iOS 3 (original iPhone)
 		if ( typeof elem.getBoundingClientRect !== strundefined ) {
 			box = elem.getBoundingClientRect();
 		}
@@ -11065,7 +11079,7 @@ jQuery.fn.extend({
 
 		// Fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is its only offset parent
 		if ( jQuery.css( elem, "position" ) === "fixed" ) {
-			// We assume that getBoundingClientRect is available when computed position is fixed
+			// Assume getBoundingClientRect is there when computed position is fixed
 			offset = elem.getBoundingClientRect();
 
 		} else {
@@ -11128,16 +11142,18 @@ jQuery.each( { scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function( 
 	};
 });
 
+// Support: Safari<7+, Chrome<37+
 // Add the top/left cssHooks using jQuery.fn.position
 // Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
-// getComputedStyle returns percent when specified for top/left/bottom/right
-// rather than make the css module depend on the offset module, we just check for it here
+// Blink bug: https://code.google.com/p/chromium/issues/detail?id=229280
+// getComputedStyle returns percent when specified for top/left/bottom/right;
+// rather than make the css module depend on the offset module, just check for it here
 jQuery.each( [ "top", "left" ], function( i, prop ) {
 	jQuery.cssHooks[ prop ] = addGetHookIf( support.pixelPosition,
 		function( elem, computed ) {
 			if ( computed ) {
 				computed = curCSS( elem, prop );
-				// if curCSS returns percentage, fallback to offset
+				// If curCSS returns percentage, fallback to offset
 				return rnumnonpx.test( computed ) ?
 					jQuery( elem ).position()[ prop ] + "px" :
 					computed;
@@ -11150,7 +11166,7 @@ jQuery.each( [ "top", "left" ], function( i, prop ) {
 // Create innerHeight, innerWidth, height, width, outerHeight and outerWidth methods
 jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 	jQuery.each( { padding: "inner" + name, content: type, "": "outer" + name }, function( defaultExtra, funcName ) {
-		// margin is only for outerHeight, outerWidth
+		// Margin is only for outerHeight, outerWidth
 		jQuery.fn[ funcName ] = function( margin, value ) {
 			var chainable = arguments.length && ( defaultExtra || typeof margin !== "boolean" ),
 				extra = defaultExtra || ( margin === true || value === true ? "margin" : "border" );
@@ -11241,8 +11257,8 @@ jQuery.noConflict = function( deep ) {
 	return jQuery;
 };
 
-// Expose jQuery and $ identifiers, even in
-// AMD (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
+// Expose jQuery and $ identifiers, even in AMD
+// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 // and CommonJS for browser emulators (#13566)
 if ( typeof noGlobal === strundefined ) {
 	window.jQuery = window.$ = jQuery;
@@ -11255,7 +11271,7 @@ return jQuery;
 
 }));
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/kefir/dist/kefir.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/kefir/dist/kefir.js":[function(require,module,exports){
 /*! Kefir.js v0.4.1
  *  https://github.com/pozadi/kefir
  */
@@ -13725,10 +13741,10 @@ withTwoSources('skipWhileBy', {
   }
 
 }(this));
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-bacon/node_modules/baconjs/dist/Bacon.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-bacon/node_modules/baconjs/dist/Bacon.js":[function(require,module,exports){
 (function (global){
 (function() {
-  var Bacon, BufferingSource, Bus, CompositeUnsubscribe, ConsumingSource, Desc, Dispatcher, End, Error, Event, EventStream, Exception, Initial, Next, None, Observable, Property, PropertyDispatcher, Some, Source, UpdateBarrier, addPropertyInitValueToStream, assert, assertArray, assertEventStream, assertFunction, assertNoArguments, assertString, cloneArray, compositeUnsubscribe, containsDuplicateDeps, convertArgsToFunction, describe, end, eventIdCounter, findDeps, flatMap_, former, idCounter, initial, isArray, isFieldKey, isFunction, isObservable, latter, liftCallback, makeFunction, makeFunctionArgs, makeFunction_, makeObservable, makeSpawner, next, nop, partiallyApplied, recursionDepth, registerObs, spys, toCombinator, toEvent, toFieldExtractor, toFieldKey, toOption, toSimpleExtractor, withDescription, withMethodCallSupport, _, _ref,
+  var Bacon, BufferingSource, Bus, CompositeUnsubscribe, ConsumingSource, Desc, Dispatcher, End, Error, Event, EventStream, Exception, Initial, Next, None, Observable, Property, PropertyDispatcher, Some, Source, UpdateBarrier, addPropertyInitValueToStream, assert, assertArray, assertEventStream, assertFunction, assertNoArguments, assertObservable, assertString, cloneArray, compositeUnsubscribe, constantToFunction, containsDuplicateDeps, convertArgsToFunction, describe, end, eventIdCounter, findDeps, flatMap_, former, idCounter, initial, isArray, isFieldKey, isFunction, isObservable, latter, liftCallback, makeFunction, makeFunctionArgs, makeFunction_, makeObservable, makeSpawner, next, nop, partiallyApplied, recursionDepth, registerObs, spys, toCombinator, toEvent, toFieldExtractor, toFieldKey, toOption, toSimpleExtractor, withDescription, withMethodCallSupport, _, _ref,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -13740,7 +13756,7 @@ withTwoSources('skipWhileBy', {
     }
   };
 
-  Bacon.version = '0.7.37';
+  Bacon.version = '0.7.41';
 
   Exception = (typeof global !== "undefined" && global !== null ? global : this).Error;
 
@@ -13990,24 +14006,34 @@ withTwoSources('skipWhileBy', {
   Bacon.fromArray = function(values) {
     var i;
     assertArray(values);
-    i = 0;
-    return new EventStream(describe(Bacon, "fromArray", values), function(sink) {
-      var reply, unsubd, value;
-      unsubd = false;
-      reply = Bacon.more;
-      while ((reply !== Bacon.noMore) && !unsubd) {
-        if (i >= values.length) {
-          sink(end());
-          reply = Bacon.noMore;
-        } else {
-          value = values[i++];
-          reply = sink(toEvent(value));
-        }
-      }
-      return function() {
-        return unsubd = true;
-      };
-    });
+    if (!values.length) {
+      return withDescription(Bacon, "fromArray", values, Bacon.never());
+    } else {
+      i = 0;
+      return new EventStream(describe(Bacon, "fromArray", values), function(sink) {
+        var push, reply, unsubd;
+        unsubd = false;
+        reply = Bacon.more;
+        push = function() {
+          var value;
+          if ((reply !== Bacon.noMore) && !unsubd) {
+            value = values[i++];
+            reply = sink(toEvent(value));
+            if (reply !== Bacon.noMore) {
+              if (i === values.length) {
+                return sink(end());
+              } else {
+                return UpdateBarrier.afterTransaction(push);
+              }
+            }
+          }
+        };
+        push();
+        return function() {
+          return unsubd = true;
+        };
+      });
+    }
   };
 
   Bacon.mergeAll = function() {
@@ -15460,7 +15486,7 @@ withTwoSources('skipWhileBy', {
     };
 
     Dispatcher.prototype.pushToSubscriptions = function(event) {
-      var reply, sub, tmp, _i, _len;
+      var e, reply, sub, tmp, _i, _len;
       try {
         tmp = this.subscriptions;
         for (_i = 0, _len = tmp.length; _i < _len; _i++) {
@@ -15472,8 +15498,10 @@ withTwoSources('skipWhileBy', {
         }
         return true;
       } catch (_error) {
+        e = _error;
+        this.pushing = false;
         this.queue = [];
-        return false;
+        throw e;
       }
     };
 
@@ -15601,13 +15629,7 @@ withTwoSources('skipWhileBy', {
           return this.maybeSubSource(sink, reply);
         } else {
           UpdateBarrier.inTransaction(void 0, this, (function() {
-            return reply = (function() {
-              try {
-                return sink(initial(this.current.get().value()));
-              } catch (_error) {
-                return Bacon.more;
-              }
-            }).call(this);
+            return reply = sink(initial(this.current.get().value()));
           }), []);
           return this.maybeSubSource(sink, reply);
         }
@@ -15690,6 +15712,7 @@ withTwoSources('skipWhileBy', {
 
     Bus.prototype.plug = function(input) {
       var sub;
+      assertObservable(input);
       if (this.ended) {
         return;
       }
@@ -15919,11 +15942,9 @@ withTwoSources('skipWhileBy', {
       patterns[i] = arguments[i];
       patterns[i + 1] = arguments[i + 1];
       patSources = _.toArray(arguments[i]);
-      f = arguments[i + 1];
+      f = constantToFunction(arguments[i + 1]);
       pat = {
-        f: (isFunction(f) ? f : (function() {
-          return f;
-        })),
+        f: f,
         ixs: []
       };
       triggerFound = false;
@@ -16380,16 +16401,19 @@ withTwoSources('skipWhileBy', {
         return f.apply(context, args);
       } else {
         rootEvent = event;
-        result = f.apply(context, args);
-        flush();
-        rootEvent = void 0;
-        while (aftersIndex < afters.length) {
-          after = afters[aftersIndex];
-          aftersIndex++;
-          after();
+        try {
+          result = f.apply(context, args);
+          flush();
+        } finally {
+          rootEvent = void 0;
+          while (aftersIndex < afters.length) {
+            after = afters[aftersIndex];
+            aftersIndex++;
+            after();
+          }
+          aftersIndex = 0;
+          afters = [];
         }
-        aftersIndex = 0;
-        afters = [];
         return result;
       }
     };
@@ -16429,7 +16453,8 @@ withTwoSources('skipWhileBy', {
       hasWaiters: hasWaiters,
       inTransaction: inTransaction,
       currentEventId: currentEventId,
-      wrappedSubscribe: wrappedSubscribe
+      wrappedSubscribe: wrappedSubscribe,
+      afterTransaction: afterTransaction
     };
   })();
 
@@ -16492,6 +16517,12 @@ withTwoSources('skipWhileBy', {
   assertEventStream = function(event) {
     if (!(event instanceof EventStream)) {
       throw new Exception("not an EventStream : " + event);
+    }
+  };
+
+  assertObservable = function(event) {
+    if (!(event instanceof Observable)) {
+      throw new Exception("not an Observable : " + event);
     }
   };
 
@@ -16566,6 +16597,14 @@ withTwoSources('skipWhileBy', {
 
   makeFunction = function(f, args) {
     return makeFunction_.apply(null, [f].concat(__slice.call(args)));
+  };
+
+  constantToFunction = function(f) {
+    if (isFunction(f)) {
+      return f;
+    } else {
+      return _.always(f);
+    }
   };
 
   makeObservable = function(x) {
@@ -16868,7 +16907,7 @@ withTwoSources('skipWhileBy', {
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-bacon/src/react-bacon.js":[function(require,module,exports){
 var Bacon = require('baconjs');
 
 module.exports.BaconMixin = ((function(){
@@ -16971,7 +17010,7 @@ module.exports.BaconMixin = ((function(){
   });
 })());
 
-},{"baconjs":"/Users/jingxiao/437/Team77/node_modules/react-bacon/node_modules/baconjs/dist/Bacon.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/actions/LocationActions.js":[function(require,module,exports){
+},{"baconjs":"/Users/jingxiao/lineonline/node_modules/react-bacon/node_modules/baconjs/dist/Bacon.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/actions/LocationActions.js":[function(require,module,exports){
 /**
  * Actions that modify the URL.
  */
@@ -16996,7 +17035,7 @@ var LocationActions = {
 
 module.exports = LocationActions;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 
 /**
@@ -17025,7 +17064,7 @@ var ImitateBrowserBehavior = {
 
 module.exports = ImitateBrowserBehavior;
 
-},{"../actions/LocationActions":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/actions/LocationActions.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/Users/jingxiao/lineonline/node_modules/react-router/modules/actions/LocationActions.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js":[function(require,module,exports){
 /**
  * A scroll behavior that always scrolls to the top of the page
  * after a transition.
@@ -17040,7 +17079,7 @@ var ScrollToTopBehavior = {
 
 module.exports = ScrollToTopBehavior;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/DefaultRoute.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/DefaultRoute.js":[function(require,module,exports){
 var objectAssign = require('react/lib/Object.assign');
 var Route = require('./Route');
 
@@ -17061,7 +17100,7 @@ function DefaultRoute(props) {
 
 module.exports = DefaultRoute;
 
-},{"./Route":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js","react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Link.js":[function(require,module,exports){
+},{"./Route":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js","react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Link.js":[function(require,module,exports){
 var React = require('react');
 var classSet = require('react/lib/cx');
 var objectAssign = require('react/lib/Object.assign');
@@ -17170,7 +17209,7 @@ var Link = React.createClass({
 
 module.exports = Link;
 
-},{"../mixins/ActiveState":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ActiveState.js","../mixins/Navigation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/Navigation.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","react/lib/cx":"/Users/jingxiao/437/Team77/node_modules/react/lib/cx.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/NotFoundRoute.js":[function(require,module,exports){
+},{"../mixins/ActiveState":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ActiveState.js","../mixins/Navigation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/Navigation.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","react/lib/cx":"/Users/jingxiao/lineonline/node_modules/react/lib/cx.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/NotFoundRoute.js":[function(require,module,exports){
 var objectAssign = require('react/lib/Object.assign');
 var Route = require('./Route');
 
@@ -17192,7 +17231,7 @@ function NotFoundRoute(props) {
 
 module.exports = NotFoundRoute;
 
-},{"./Route":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js","react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Redirect.js":[function(require,module,exports){
+},{"./Route":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js","react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Redirect.js":[function(require,module,exports){
 var React = require('react');
 var Route = require('./Route');
 
@@ -17224,7 +17263,7 @@ function Redirect(props) {
 
 module.exports = Redirect;
 
-},{"./Route":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js":[function(require,module,exports){
+},{"./Route":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js":[function(require,module,exports){
 var React = require('react');
 var withoutProperties = require('../utils/withoutProperties');
 
@@ -17317,7 +17356,7 @@ var Route = React.createClass({
 
 module.exports = Route;
 
-},{"../utils/withoutProperties":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/withoutProperties.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Routes.js":[function(require,module,exports){
+},{"../utils/withoutProperties":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/withoutProperties.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Routes.js":[function(require,module,exports){
 var React = require('react');
 var warning = require('react/lib/warning');
 var invariant = require('react/lib/invariant');
@@ -17888,7 +17927,7 @@ var Routes = React.createClass({
 
 module.exports = Routes;
 
-},{"../locations/HashLocation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/HashLocation.js","../mixins/ActiveContext":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ActiveContext.js","../mixins/LocationContext":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/LocationContext.js","../mixins/RouteContext":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/RouteContext.js","../mixins/ScrollContext":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ScrollContext.js","../utils/Path":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Path.js","../utils/Redirect":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Redirect.js","../utils/Transition":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Transition.js","../utils/reversedArray":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/reversedArray.js","./Route":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","react/lib/warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js":[function(require,module,exports){
+},{"../locations/HashLocation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/HashLocation.js","../mixins/ActiveContext":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ActiveContext.js","../mixins/LocationContext":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/LocationContext.js","../mixins/RouteContext":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/RouteContext.js","../mixins/ScrollContext":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ScrollContext.js","../utils/Path":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Path.js","../utils/Redirect":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Redirect.js","../utils/Transition":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Transition.js","../utils/reversedArray":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/reversedArray.js","./Route":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","react/lib/warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js":[function(require,module,exports){
 exports.DefaultRoute = require('./components/DefaultRoute');
 exports.Link = require('./components/Link');
 exports.NotFoundRoute = require('./components/NotFoundRoute');
@@ -17903,7 +17942,7 @@ exports.Navigation = require('./mixins/Navigation');
 exports.renderRoutesToString = require('./utils/ServerRendering').renderRoutesToString;
 exports.renderRoutesToStaticMarkup = require('./utils/ServerRendering').renderRoutesToStaticMarkup;
 
-},{"./components/DefaultRoute":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/DefaultRoute.js","./components/Link":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Link.js","./components/NotFoundRoute":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/NotFoundRoute.js","./components/Redirect":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Redirect.js","./components/Route":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Route.js","./components/Routes":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/components/Routes.js","./mixins/ActiveState":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ActiveState.js","./mixins/CurrentPath":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/CurrentPath.js","./mixins/Navigation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/Navigation.js","./utils/ServerRendering":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/ServerRendering.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/HashLocation.js":[function(require,module,exports){
+},{"./components/DefaultRoute":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/DefaultRoute.js","./components/Link":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Link.js","./components/NotFoundRoute":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/NotFoundRoute.js","./components/Redirect":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Redirect.js","./components/Route":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Route.js","./components/Routes":"/Users/jingxiao/lineonline/node_modules/react-router/modules/components/Routes.js","./mixins/ActiveState":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ActiveState.js","./mixins/CurrentPath":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/CurrentPath.js","./mixins/Navigation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/Navigation.js","./utils/ServerRendering":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/ServerRendering.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/HashLocation.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 var getWindowPath = require('../utils/getWindowPath');
 
@@ -17994,7 +18033,7 @@ var HashLocation = {
 
 module.exports = HashLocation;
 
-},{"../actions/LocationActions":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/actions/LocationActions.js","../utils/getWindowPath":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/HistoryLocation.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/Users/jingxiao/lineonline/node_modules/react-router/modules/actions/LocationActions.js","../utils/getWindowPath":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/HistoryLocation.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 var getWindowPath = require('../utils/getWindowPath');
 
@@ -18062,7 +18101,7 @@ var HistoryLocation = {
 
 module.exports = HistoryLocation;
 
-},{"../actions/LocationActions":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/actions/LocationActions.js","../utils/getWindowPath":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/RefreshLocation.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/Users/jingxiao/lineonline/node_modules/react-router/modules/actions/LocationActions.js","../utils/getWindowPath":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/RefreshLocation.js":[function(require,module,exports){
 var getWindowPath = require('../utils/getWindowPath');
 
 /**
@@ -18094,7 +18133,7 @@ var RefreshLocation = {
 
 module.exports = RefreshLocation;
 
-},{"../utils/getWindowPath":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ActiveContext.js":[function(require,module,exports){
+},{"../utils/getWindowPath":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/getWindowPath.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ActiveContext.js":[function(require,module,exports){
 var React = require('react');
 var objectAssign = require('react/lib/Object.assign');
 
@@ -18165,7 +18204,7 @@ var ActiveContext = {
 
 module.exports = ActiveContext;
 
-},{"react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ActiveState.js":[function(require,module,exports){
+},{"react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ActiveState.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -18228,7 +18267,7 @@ var ActiveState = {
 
 module.exports = ActiveState;
 
-},{"react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/CurrentPath.js":[function(require,module,exports){
+},{"react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/CurrentPath.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -18262,7 +18301,7 @@ var CurrentPath = {
 
 module.exports = CurrentPath;
 
-},{"react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/LocationContext.js":[function(require,module,exports){
+},{"react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/LocationContext.js":[function(require,module,exports){
 var React = require('react');
 var invariant = require('react/lib/invariant');
 var canUseDOM = require('react/lib/ExecutionEnvironment').canUseDOM;
@@ -18364,7 +18403,7 @@ var LocationContext = {
 
 module.exports = LocationContext;
 
-},{"../locations/HashLocation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/HashLocation.js","../locations/HistoryLocation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/HistoryLocation.js","../locations/RefreshLocation":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/locations/RefreshLocation.js","../stores/PathStore":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/stores/PathStore.js","../utils/supportsHistory":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/supportsHistory.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/Navigation.js":[function(require,module,exports){
+},{"../locations/HashLocation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/HashLocation.js","../locations/HistoryLocation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/HistoryLocation.js","../locations/RefreshLocation":"/Users/jingxiao/lineonline/node_modules/react-router/modules/locations/RefreshLocation.js","../stores/PathStore":"/Users/jingxiao/lineonline/node_modules/react-router/modules/stores/PathStore.js","../utils/supportsHistory":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/supportsHistory.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/Navigation.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -18423,7 +18462,7 @@ var Navigation = {
 
 module.exports = Navigation;
 
-},{"react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/RouteContext.js":[function(require,module,exports){
+},{"react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/RouteContext.js":[function(require,module,exports){
 var React = require('react');
 var invariant = require('react/lib/invariant');
 var Path = require('../utils/Path');
@@ -18595,7 +18634,7 @@ var RouteContext = {
 
 module.exports = RouteContext;
 
-},{"../utils/Path":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Path.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/mixins/ScrollContext.js":[function(require,module,exports){
+},{"../utils/Path":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Path.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/mixins/ScrollContext.js":[function(require,module,exports){
 var React = require('react');
 var invariant = require('react/lib/invariant');
 var canUseDOM = require('react/lib/ExecutionEnvironment').canUseDOM;
@@ -18712,7 +18751,7 @@ var ScrollContext = {
 
 module.exports = ScrollContext;
 
-},{"../behaviors/ImitateBrowserBehavior":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","../behaviors/ScrollToTopBehavior":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/stores/PathStore.js":[function(require,module,exports){
+},{"../behaviors/ImitateBrowserBehavior":"/Users/jingxiao/lineonline/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","../behaviors/ScrollToTopBehavior":"/Users/jingxiao/lineonline/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/stores/PathStore.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var EventEmitter = require('events').EventEmitter;
 var LocationActions = require('../actions/LocationActions');
@@ -18803,7 +18842,7 @@ var PathStore = {
 
 module.exports = PathStore;
 
-},{"../actions/LocationActions":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/actions/LocationActions.js","events":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/events/events.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Path.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/Users/jingxiao/lineonline/node_modules/react-router/modules/actions/LocationActions.js","events":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/events/events.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Path.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var merge = require('qs/lib/utils').merge;
 var qs = require('qs');
@@ -18981,7 +19020,7 @@ var Path = {
 
 module.exports = Path;
 
-},{"qs":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/index.js","qs/lib/utils":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/utils.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Promise.js":[function(require,module,exports){
+},{"qs":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/index.js","qs/lib/utils":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/utils.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Promise.js":[function(require,module,exports){
 var Promise = require('when/lib/Promise');
 
 // TODO: Use process.env.NODE_ENV check + envify to enable
@@ -18989,7 +19028,7 @@ var Promise = require('when/lib/Promise');
 
 module.exports = Promise;
 
-},{"when/lib/Promise":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Promise.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Redirect.js":[function(require,module,exports){
+},{"when/lib/Promise":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Promise.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Redirect.js":[function(require,module,exports){
 /**
  * Encapsulates a redirect to the given route.
  */
@@ -19001,7 +19040,7 @@ function Redirect(to, params, query) {
 
 module.exports = Redirect;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/ServerRendering.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/ServerRendering.js":[function(require,module,exports){
 var ReactElement = require('react/lib/ReactElement');
 var ReactInstanceHandles = require('react/lib/ReactInstanceHandles');
 var ReactMarkupChecksum = require('react/lib/ReactMarkupChecksum');
@@ -19111,7 +19150,7 @@ module.exports = {
   renderRoutesToStaticMarkup: renderRoutesToStaticMarkup
 };
 
-},{"react/lib/Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","react/lib/ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","react/lib/ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","react/lib/ReactMarkupChecksum":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMarkupChecksum.js","react/lib/ReactServerRenderingTransaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactServerRenderingTransaction.js","react/lib/cloneWithProps":"/Users/jingxiao/437/Team77/node_modules/react/lib/cloneWithProps.js","react/lib/instantiateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js","react/lib/invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Transition.js":[function(require,module,exports){
+},{"react/lib/Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","react/lib/ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","react/lib/ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","react/lib/ReactMarkupChecksum":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMarkupChecksum.js","react/lib/ReactServerRenderingTransaction":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactServerRenderingTransaction.js","react/lib/cloneWithProps":"/Users/jingxiao/lineonline/node_modules/react/lib/cloneWithProps.js","react/lib/instantiateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js","react/lib/invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Transition.js":[function(require,module,exports){
 var Promise = require('./Promise');
 var Redirect = require('./Redirect');
 
@@ -19147,7 +19186,7 @@ Transition.prototype.retry = function () {
 
 module.exports = Transition;
 
-},{"./Promise":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Promise.js","./Redirect":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/Redirect.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/getWindowPath.js":[function(require,module,exports){
+},{"./Promise":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Promise.js","./Redirect":"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/Redirect.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/getWindowPath.js":[function(require,module,exports){
 /**
  * Returns the current URL path from `window.location`, including query string
  */
@@ -19157,14 +19196,14 @@ function getWindowPath() {
 
 module.exports = getWindowPath;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/reversedArray.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/reversedArray.js":[function(require,module,exports){
 function reversedArray(array) {
   return array.slice(0).reverse();
 }
 
 module.exports = reversedArray;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/supportsHistory.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/supportsHistory.js":[function(require,module,exports){
 function supportsHistory() {
   /*! taken from modernizr
    * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
@@ -19182,7 +19221,7 @@ function supportsHistory() {
 
 module.exports = supportsHistory;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/modules/utils/withoutProperties.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/modules/utils/withoutProperties.js":[function(require,module,exports){
 function withoutProperties(object, properties) {
   var result = {};
 
@@ -19196,10 +19235,10 @@ function withoutProperties(object, properties) {
 
 module.exports = withoutProperties;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/index.js":[function(require,module,exports){
 module.exports = require('./lib');
 
-},{"./lib":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/index.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/index.js":[function(require,module,exports){
+},{"./lib":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/index.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/index.js":[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -19216,7 +19255,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/parse.js","./stringify":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/stringify.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/parse.js":[function(require,module,exports){
+},{"./parse":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/parse.js","./stringify":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/stringify.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/parse.js":[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -19372,7 +19411,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/stringify.js":[function(require,module,exports){
+},{"./utils":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/stringify.js":[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -19432,7 +19471,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/qs/lib/utils.js":[function(require,module,exports){
+},{"./utils":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/qs/lib/utils.js":[function(require,module,exports){
 (function (Buffer){
 // Load modules
 
@@ -19575,7 +19614,7 @@ exports.isBuffer = function (obj) {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/buffer/index.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Promise.js":[function(require,module,exports){
+},{"buffer":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/buffer/index.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Promise.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -19594,7 +19633,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Scheduler.js","./async":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/async.js","./makePromise":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/makePromise.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Queue.js":[function(require,module,exports){
+},{"./Scheduler":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Scheduler.js","./async":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/async.js","./makePromise":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/makePromise.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Queue.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -19666,7 +19705,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Scheduler.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Scheduler.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -19750,7 +19789,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"./Queue":"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/Queue.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/async.js":[function(require,module,exports){
+},{"./Queue":"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/Queue.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/async.js":[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -19825,7 +19864,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react-router/node_modules/when/lib/makePromise.js":[function(require,module,exports){
+},{"_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react-router/node_modules/when/lib/makePromise.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -20623,10 +20662,10 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/addons.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/addons.js":[function(require,module,exports){
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactWithAddons.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
+},{"./lib/ReactWithAddons":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactWithAddons.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -20653,7 +20692,7 @@ var AutoFocusMixin = {
 
 module.exports = AutoFocusMixin;
 
-},{"./focusNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/focusNode.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
+},{"./focusNode":"/Users/jingxiao/lineonline/node_modules/react/lib/focusNode.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -20875,7 +20914,7 @@ var BeforeInputEventPlugin = {
 
 module.exports = BeforeInputEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSCore.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/CSSCore.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -20987,7 +21026,7 @@ var CSSCore = {
 module.exports = CSSCore;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21006,7 +21045,6 @@ module.exports = CSSCore;
  */
 var isUnitlessNumber = {
   columnCount: true,
-  fillOpacity: true,
   flex: true,
   flexGrow: true,
   flexShrink: true,
@@ -21018,7 +21056,11 @@ var isUnitlessNumber = {
   orphans: true,
   widows: true,
   zIndex: true,
-  zoom: true
+  zoom: true,
+
+  // SVG-related properties
+  fillOpacity: true,
+  strokeOpacity: true
 };
 
 /**
@@ -21103,7 +21145,7 @@ var CSSProperty = {
 
 module.exports = CSSProperty;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -21238,7 +21280,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./CSSProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSProperty.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./camelizeStyleName":"/Users/jingxiao/437/Team77/node_modules/react/lib/camelizeStyleName.js","./dangerousStyleValue":"/Users/jingxiao/437/Team77/node_modules/react/lib/dangerousStyleValue.js","./hyphenateStyleName":"/Users/jingxiao/437/Team77/node_modules/react/lib/hyphenateStyleName.js","./memoizeStringOnly":"/Users/jingxiao/437/Team77/node_modules/react/lib/memoizeStringOnly.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
+},{"./CSSProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/CSSProperty.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./camelizeStyleName":"/Users/jingxiao/lineonline/node_modules/react/lib/camelizeStyleName.js","./dangerousStyleValue":"/Users/jingxiao/lineonline/node_modules/react/lib/dangerousStyleValue.js","./hyphenateStyleName":"/Users/jingxiao/lineonline/node_modules/react/lib/hyphenateStyleName.js","./memoizeStringOnly":"/Users/jingxiao/lineonline/node_modules/react/lib/memoizeStringOnly.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -21338,7 +21380,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 module.exports = CallbackQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21720,7 +21762,7 @@ var ChangeEventPlugin = {
 
 module.exports = ChangeEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js","./isEventSupported":"/Users/jingxiao/437/Team77/node_modules/react/lib/isEventSupported.js","./isTextInputElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/isTextInputElement.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js","./isEventSupported":"/Users/jingxiao/lineonline/node_modules/react/lib/isEventSupported.js","./isTextInputElement":"/Users/jingxiao/lineonline/node_modules/react/lib/isTextInputElement.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21745,7 +21787,7 @@ var ClientReactRootIndex = {
 
 module.exports = ClientReactRootIndex;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/CompositionEventPlugin.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/CompositionEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22004,7 +22046,7 @@ var CompositionEventPlugin = {
 
 module.exports = CompositionEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./ReactInputSelection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInputSelection.js","./SyntheticCompositionEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticCompositionEvent.js","./getTextContentAccessor":"/Users/jingxiao/437/Team77/node_modules/react/lib/getTextContentAccessor.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./ReactInputSelection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInputSelection.js","./SyntheticCompositionEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticCompositionEvent.js","./getTextContentAccessor":"/Users/jingxiao/lineonline/node_modules/react/lib/getTextContentAccessor.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22179,7 +22221,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 }).call(this,require('_process'))
-},{"./Danger":"/Users/jingxiao/437/Team77/node_modules/react/lib/Danger.js","./ReactMultiChildUpdateTypes":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./getTextContentAccessor":"/Users/jingxiao/437/Team77/node_modules/react/lib/getTextContentAccessor.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
+},{"./Danger":"/Users/jingxiao/lineonline/node_modules/react/lib/Danger.js","./ReactMultiChildUpdateTypes":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./getTextContentAccessor":"/Users/jingxiao/lineonline/node_modules/react/lib/getTextContentAccessor.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22478,7 +22520,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22675,7 +22717,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./escapeTextForBrowser":"/Users/jingxiao/437/Team77/node_modules/react/lib/escapeTextForBrowser.js","./memoizeStringOnly":"/Users/jingxiao/437/Team77/node_modules/react/lib/memoizeStringOnly.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/Danger.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./escapeTextForBrowser":"/Users/jingxiao/lineonline/node_modules/react/lib/escapeTextForBrowser.js","./memoizeStringOnly":"/Users/jingxiao/lineonline/node_modules/react/lib/memoizeStringOnly.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/Danger.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22861,7 +22903,7 @@ var Danger = {
 module.exports = Danger;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./createNodesFromMarkup":"/Users/jingxiao/437/Team77/node_modules/react/lib/createNodesFromMarkup.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js","./getMarkupWrap":"/Users/jingxiao/437/Team77/node_modules/react/lib/getMarkupWrap.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./createNodesFromMarkup":"/Users/jingxiao/lineonline/node_modules/react/lib/createNodesFromMarkup.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js","./getMarkupWrap":"/Users/jingxiao/lineonline/node_modules/react/lib/getMarkupWrap.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22901,7 +22943,7 @@ var DefaultEventPluginOrder = [
 
 module.exports = DefaultEventPluginOrder;
 
-},{"./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
+},{"./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23041,7 +23083,7 @@ var EnterLeaveEventPlugin = {
 
 module.exports = EnterLeaveEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./SyntheticMouseEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticMouseEvent.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./SyntheticMouseEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticMouseEvent.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23113,7 +23155,7 @@ var EventConstants = {
 
 module.exports = EventConstants;
 
-},{"./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventListener.js":[function(require,module,exports){
+},{"./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventListener.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014 Facebook, Inc.
@@ -23203,7 +23245,7 @@ var EventListener = {
 module.exports = EventListener;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
+},{"./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23479,7 +23521,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginRegistry.js","./EventPluginUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginUtils.js","./accumulateInto":"/Users/jingxiao/437/Team77/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/437/Team77/node_modules/react/lib/forEachAccumulated.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
+},{"./EventPluginRegistry":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginRegistry.js","./EventPluginUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginUtils.js","./accumulateInto":"/Users/jingxiao/lineonline/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/lineonline/node_modules/react/lib/forEachAccumulated.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23759,7 +23801,7 @@ var EventPluginRegistry = {
 module.exports = EventPluginRegistry;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23980,7 +24022,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -24122,7 +24164,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js","./accumulateInto":"/Users/jingxiao/437/Team77/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/437/Team77/node_modules/react/lib/forEachAccumulated.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js","./accumulateInto":"/Users/jingxiao/lineonline/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/lineonline/node_modules/react/lib/forEachAccumulated.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24167,7 +24209,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24258,7 +24300,11 @@ var HTMLDOMPropertyConfig = {
     draggable: null,
     encType: null,
     form: MUST_USE_ATTRIBUTE,
+    formAction: MUST_USE_ATTRIBUTE,
+    formEncType: MUST_USE_ATTRIBUTE,
+    formMethod: MUST_USE_ATTRIBUTE,
     formNoValidate: HAS_BOOLEAN_VALUE,
+    formTarget: MUST_USE_ATTRIBUTE,
     frameBorder: MUST_USE_ATTRIBUTE,
     height: MUST_USE_ATTRIBUTE,
     hidden: MUST_USE_ATTRIBUTE | HAS_BOOLEAN_VALUE,
@@ -24273,6 +24319,8 @@ var HTMLDOMPropertyConfig = {
     list: MUST_USE_ATTRIBUTE,
     loop: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
     manifest: MUST_USE_ATTRIBUTE,
+    marginHeight: null,
+    marginWidth: null,
     max: null,
     maxLength: MUST_USE_ATTRIBUTE,
     media: MUST_USE_ATTRIBUTE,
@@ -24353,7 +24401,7 @@ var HTMLDOMPropertyConfig = {
 
 module.exports = HTMLDOMPropertyConfig;
 
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedStateMixin.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedStateMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24394,7 +24442,7 @@ var LinkedStateMixin = {
 
 module.exports = LinkedStateMixin;
 
-},{"./ReactLink":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLink.js","./ReactStateSetters":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactStateSetters.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
+},{"./ReactLink":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLink.js","./ReactStateSetters":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactStateSetters.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -24550,7 +24598,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 }).call(this,require('_process'))
-},{"./ReactPropTypes":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypes.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
+},{"./ReactPropTypes":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypes.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -24600,7 +24648,7 @@ var LocalEventTrapMixin = {
 module.exports = LocalEventTrapMixin;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./accumulateInto":"/Users/jingxiao/437/Team77/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/437/Team77/node_modules/react/lib/forEachAccumulated.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./accumulateInto":"/Users/jingxiao/lineonline/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/Users/jingxiao/lineonline/node_modules/react/lib/forEachAccumulated.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24658,7 +24706,7 @@ var MobileSafariClickEventPlugin = {
 
 module.exports = MobileSafariClickEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -24705,7 +24753,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -24821,7 +24869,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/React.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -25004,12 +25052,12 @@ if ("production" !== process.env.NODE_ENV) {
 
 // Version exists only in the open-source version of React, not in Facebook's
 // internal version.
-React.version = '0.12.1';
+React.version = '0.12.2';
 
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./EventPluginUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginUtils.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactChildren":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactChildren.js","./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactContext":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactDOMComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMComponent.js","./ReactDefaultInjection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultInjection.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElementValidator.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./ReactPropTypes":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypes.js","./ReactServerRendering":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactServerRendering.js","./ReactTextComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTextComponent.js","./deprecated":"/Users/jingxiao/437/Team77/node_modules/react/lib/deprecated.js","./onlyChild":"/Users/jingxiao/437/Team77/node_modules/react/lib/onlyChild.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
+},{"./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./EventPluginUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginUtils.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactChildren":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactChildren.js","./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactContext":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactDOMComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMComponent.js","./ReactDefaultInjection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultInjection.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElementValidator.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./ReactPropTypes":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypes.js","./ReactServerRendering":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactServerRendering.js","./ReactTextComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTextComponent.js","./deprecated":"/Users/jingxiao/lineonline/node_modules/react/lib/deprecated.js","./onlyChild":"/Users/jingxiao/lineonline/node_modules/react/lib/onlyChild.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -25052,7 +25100,7 @@ var ReactBrowserComponentMixin = {
 module.exports = ReactBrowserComponentMixin;
 
 }).call(this,require('_process'))
-},{"./ReactEmptyComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEmptyComponent.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
+},{"./ReactEmptyComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEmptyComponent.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25407,7 +25455,7 @@ var ReactBrowserEventEmitter = assign({}, ReactEventEmitterMixin, {
 
 module.exports = ReactBrowserEventEmitter;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/Users/jingxiao/437/Team77/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/Users/jingxiao/437/Team77/node_modules/react/lib/isEventSupported.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCSSTransitionGroup.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/Users/jingxiao/lineonline/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/Users/jingxiao/lineonline/node_modules/react/lib/isEventSupported.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCSSTransitionGroup.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25474,7 +25522,7 @@ var ReactCSSTransitionGroup = React.createClass({
 
 module.exports = ReactCSSTransitionGroup;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js","./ReactCSSTransitionGroupChild":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCSSTransitionGroupChild.js","./ReactTransitionGroup":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionGroup.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCSSTransitionGroupChild.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js","./ReactCSSTransitionGroupChild":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCSSTransitionGroupChild.js","./ReactTransitionGroup":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionGroup.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCSSTransitionGroupChild.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -25609,7 +25657,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 module.exports = ReactCSSTransitionGroupChild;
 
 }).call(this,require('_process'))
-},{"./CSSCore":"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSCore.js","./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js","./ReactTransitionEvents":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionEvents.js","./onlyChild":"/Users/jingxiao/437/Team77/node_modules/react/lib/onlyChild.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
+},{"./CSSCore":"/Users/jingxiao/lineonline/node_modules/react/lib/CSSCore.js","./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js","./ReactTransitionEvents":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionEvents.js","./onlyChild":"/Users/jingxiao/lineonline/node_modules/react/lib/onlyChild.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -25759,7 +25807,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 }).call(this,require('_process'))
-},{"./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./traverseAllChildren":"/Users/jingxiao/437/Team77/node_modules/react/lib/traverseAllChildren.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
+},{"./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./traverseAllChildren":"/Users/jingxiao/lineonline/node_modules/react/lib/traverseAllChildren.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -26202,7 +26250,7 @@ var ReactComponent = {
 module.exports = ReactComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactOwner.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactOwner.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -26324,7 +26372,7 @@ var ReactComponentBrowserEnvironment = {
 module.exports = ReactComponentBrowserEnvironment;
 
 }).call(this,require('_process'))
-},{"./ReactDOMIDOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMIDOperations.js","./ReactMarkupChecksum":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMarkupChecksum.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./ReactReconcileTransaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactReconcileTransaction.js","./getReactRootElementInContainer":"/Users/jingxiao/437/Team77/node_modules/react/lib/getReactRootElementInContainer.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./setInnerHTML":"/Users/jingxiao/437/Team77/node_modules/react/lib/setInnerHTML.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":[function(require,module,exports){
+},{"./ReactDOMIDOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMIDOperations.js","./ReactMarkupChecksum":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMarkupChecksum.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./ReactReconcileTransaction":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactReconcileTransaction.js","./getReactRootElementInContainer":"/Users/jingxiao/lineonline/node_modules/react/lib/getReactRootElementInContainer.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./setInnerHTML":"/Users/jingxiao/lineonline/node_modules/react/lib/setInnerHTML.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponentWithPureRenderMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26373,7 +26421,7 @@ var ReactComponentWithPureRenderMixin = {
 
 module.exports = ReactComponentWithPureRenderMixin;
 
-},{"./shallowEqual":"/Users/jingxiao/437/Team77/node_modules/react/lib/shallowEqual.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
+},{"./shallowEqual":"/Users/jingxiao/lineonline/node_modules/react/lib/shallowEqual.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27813,7 +27861,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactContext":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElementValidator.js","./ReactEmptyComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEmptyComponent.js","./ReactErrorUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactErrorUtils.js","./ReactLegacyElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js","./ReactOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactOwner.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./ReactPropTransferer":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTransferer.js","./ReactPropTypeLocationNames":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocationNames.js","./ReactPropTypeLocations":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocations.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./instantiateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","./mapObject":"/Users/jingxiao/437/Team77/node_modules/react/lib/mapObject.js","./monitorCodeUse":"/Users/jingxiao/437/Team77/node_modules/react/lib/monitorCodeUse.js","./shouldUpdateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactContext":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElementValidator.js","./ReactEmptyComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEmptyComponent.js","./ReactErrorUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactErrorUtils.js","./ReactLegacyElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js","./ReactOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactOwner.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./ReactPropTransferer":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTransferer.js","./ReactPropTypeLocationNames":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocationNames.js","./ReactPropTypeLocations":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocations.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./instantiateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","./mapObject":"/Users/jingxiao/lineonline/node_modules/react/lib/mapObject.js","./monitorCodeUse":"/Users/jingxiao/lineonline/node_modules/react/lib/monitorCodeUse.js","./shouldUpdateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27875,7 +27923,7 @@ var ReactContext = {
 
 module.exports = ReactContext;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27909,7 +27957,7 @@ var ReactCurrentOwner = {
 
 module.exports = ReactCurrentOwner;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28092,7 +28140,7 @@ var ReactDOM = mapObject({
 module.exports = ReactDOM;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElementValidator.js","./ReactLegacyElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js","./mapObject":"/Users/jingxiao/437/Team77/node_modules/react/lib/mapObject.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElementValidator.js","./ReactLegacyElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js","./mapObject":"/Users/jingxiao/lineonline/node_modules/react/lib/mapObject.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28157,7 +28205,7 @@ var ReactDOMButton = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMButton;
 
-},{"./AutoFocusMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/AutoFocusMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/AutoFocusMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28644,7 +28692,7 @@ assign(
 module.exports = ReactDOMComponent;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSPropertyOperations.js","./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./escapeTextForBrowser":"/Users/jingxiao/437/Team77/node_modules/react/lib/escapeTextForBrowser.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./isEventSupported":"/Users/jingxiao/437/Team77/node_modules/react/lib/isEventSupported.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","./monitorCodeUse":"/Users/jingxiao/437/Team77/node_modules/react/lib/monitorCodeUse.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
+},{"./CSSPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/CSSPropertyOperations.js","./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./escapeTextForBrowser":"/Users/jingxiao/lineonline/node_modules/react/lib/escapeTextForBrowser.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./isEventSupported":"/Users/jingxiao/lineonline/node_modules/react/lib/isEventSupported.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","./monitorCodeUse":"/Users/jingxiao/lineonline/node_modules/react/lib/monitorCodeUse.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28694,7 +28742,7 @@ var ReactDOMForm = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMForm;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28880,7 +28928,7 @@ var ReactDOMIDOperations = {
 module.exports = ReactDOMIDOperations;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSPropertyOperations.js","./DOMChildrenOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMChildrenOperations.js","./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./setInnerHTML":"/Users/jingxiao/437/Team77/node_modules/react/lib/setInnerHTML.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
+},{"./CSSPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/CSSPropertyOperations.js","./DOMChildrenOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMChildrenOperations.js","./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./setInnerHTML":"/Users/jingxiao/lineonline/node_modules/react/lib/setInnerHTML.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28928,7 +28976,7 @@ var ReactDOMImg = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMImg;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29106,7 +29154,7 @@ var ReactDOMInput = ReactCompositeComponent.createClass({
 module.exports = ReactDOMInput;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29159,7 +29207,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 module.exports = ReactDOMOption;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29343,7 +29391,7 @@ var ReactDOMSelect = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMSelect;
 
-},{"./AutoFocusMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/AutoFocusMixin.js","./LinkedValueUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/AutoFocusMixin.js","./LinkedValueUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29552,7 +29600,7 @@ var ReactDOMSelection = {
 
 module.exports = ReactDOMSelection;
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./getNodeForCharacterOffset":"/Users/jingxiao/437/Team77/node_modules/react/lib/getNodeForCharacterOffset.js","./getTextContentAccessor":"/Users/jingxiao/437/Team77/node_modules/react/lib/getTextContentAccessor.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./getNodeForCharacterOffset":"/Users/jingxiao/lineonline/node_modules/react/lib/getNodeForCharacterOffset.js","./getTextContentAccessor":"/Users/jingxiao/lineonline/node_modules/react/lib/getTextContentAccessor.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29693,7 +29741,7 @@ var ReactDOMTextarea = ReactCompositeComponent.createClass({
 module.exports = ReactDOMTextarea;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOM.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29766,7 +29814,7 @@ var ReactDefaultBatchingStrategy = {
 
 module.exports = ReactDefaultBatchingStrategy;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./Transaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/Transaction.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./Transaction":"/Users/jingxiao/lineonline/node_modules/react/lib/Transaction.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29895,7 +29943,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/BeforeInputEventPlugin.js","./ChangeEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ChangeEventPlugin.js","./ClientReactRootIndex":"/Users/jingxiao/437/Team77/node_modules/react/lib/ClientReactRootIndex.js","./CompositionEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/CompositionEventPlugin.js","./DefaultEventPluginOrder":"/Users/jingxiao/437/Team77/node_modules/react/lib/DefaultEventPluginOrder.js","./EnterLeaveEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/EnterLeaveEventPlugin.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./HTMLDOMPropertyConfig":"/Users/jingxiao/437/Team77/node_modules/react/lib/HTMLDOMPropertyConfig.js","./MobileSafariClickEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/MobileSafariClickEventPlugin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactComponentBrowserEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponentBrowserEnvironment.js","./ReactDOMButton":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMButton.js","./ReactDOMComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMComponent.js","./ReactDOMForm":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMForm.js","./ReactDOMImg":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMImg.js","./ReactDOMInput":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMInput.js","./ReactDOMOption":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMOption.js","./ReactDOMSelect":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMSelect.js","./ReactDOMTextarea":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMTextarea.js","./ReactDefaultBatchingStrategy":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultBatchingStrategy.js","./ReactDefaultPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultPerf.js","./ReactEventListener":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEventListener.js","./ReactInjection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInjection.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./SVGDOMPropertyConfig":"/Users/jingxiao/437/Team77/node_modules/react/lib/SVGDOMPropertyConfig.js","./SelectEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/SelectEventPlugin.js","./ServerReactRootIndex":"/Users/jingxiao/437/Team77/node_modules/react/lib/ServerReactRootIndex.js","./SimpleEventPlugin":"/Users/jingxiao/437/Team77/node_modules/react/lib/SimpleEventPlugin.js","./createFullPageComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/createFullPageComponent.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
+},{"./BeforeInputEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/BeforeInputEventPlugin.js","./ChangeEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/ChangeEventPlugin.js","./ClientReactRootIndex":"/Users/jingxiao/lineonline/node_modules/react/lib/ClientReactRootIndex.js","./CompositionEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/CompositionEventPlugin.js","./DefaultEventPluginOrder":"/Users/jingxiao/lineonline/node_modules/react/lib/DefaultEventPluginOrder.js","./EnterLeaveEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/EnterLeaveEventPlugin.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./HTMLDOMPropertyConfig":"/Users/jingxiao/lineonline/node_modules/react/lib/HTMLDOMPropertyConfig.js","./MobileSafariClickEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/MobileSafariClickEventPlugin.js","./ReactBrowserComponentMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactComponentBrowserEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponentBrowserEnvironment.js","./ReactDOMButton":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMButton.js","./ReactDOMComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMComponent.js","./ReactDOMForm":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMForm.js","./ReactDOMImg":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMImg.js","./ReactDOMInput":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMInput.js","./ReactDOMOption":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMOption.js","./ReactDOMSelect":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMSelect.js","./ReactDOMTextarea":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMTextarea.js","./ReactDefaultBatchingStrategy":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultBatchingStrategy.js","./ReactDefaultPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultPerf.js","./ReactEventListener":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEventListener.js","./ReactInjection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInjection.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./SVGDOMPropertyConfig":"/Users/jingxiao/lineonline/node_modules/react/lib/SVGDOMPropertyConfig.js","./SelectEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/SelectEventPlugin.js","./ServerReactRootIndex":"/Users/jingxiao/lineonline/node_modules/react/lib/ServerReactRootIndex.js","./SimpleEventPlugin":"/Users/jingxiao/lineonline/node_modules/react/lib/SimpleEventPlugin.js","./createFullPageComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/createFullPageComponent.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30155,7 +30203,7 @@ var ReactDefaultPerf = {
 
 module.exports = ReactDefaultPerf;
 
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./ReactDefaultPerfAnalysis":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultPerfAnalysis.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./performanceNow":"/Users/jingxiao/437/Team77/node_modules/react/lib/performanceNow.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./ReactDefaultPerfAnalysis":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultPerfAnalysis.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./performanceNow":"/Users/jingxiao/lineonline/node_modules/react/lib/performanceNow.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30361,7 +30409,7 @@ var ReactDefaultPerfAnalysis = {
 
 module.exports = ReactDefaultPerfAnalysis;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -30539,7 +30587,7 @@ ReactElement.createElement = function(type, config, children) {
   }
 
   // Resolve default props
-  if (type.defaultProps) {
+  if (type && type.defaultProps) {
     var defaultProps = type.defaultProps;
     for (propName in defaultProps) {
       if (typeof props[propName] === 'undefined') {
@@ -30607,7 +30655,8 @@ ReactElement.isValidElement = function(object) {
 module.exports = ReactElement;
 
 }).call(this,require('_process'))
-},{"./ReactContext":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
+},{"./ReactContext":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -30633,6 +30682,7 @@ var ReactPropTypeLocations = require("./ReactPropTypeLocations");
 var ReactCurrentOwner = require("./ReactCurrentOwner");
 
 var monitorCodeUse = require("./monitorCodeUse");
+var warning = require("./warning");
 
 /**
  * Warn if there's no key explicitly set on dynamic arrays of children or
@@ -30830,6 +30880,15 @@ function checkPropTypes(componentName, propTypes, props, location) {
 var ReactElementValidator = {
 
   createElement: function(type, props, children) {
+    // We warn in this case but don't throw. We expect the element creation to
+    // succeed and there will likely be errors in render.
+    ("production" !== process.env.NODE_ENV ? warning(
+      type != null,
+      'React.createElement: type should not be null or undefined. It should ' +
+        'be a string (for DOM elements) or a ReactClass (for composite ' +
+        'components).'
+    ) : null);
+
     var element = ReactElement.createElement.apply(this, arguments);
 
     // The result can be nullish if a mock or a custom function is used.
@@ -30842,22 +30901,24 @@ var ReactElementValidator = {
       validateChildKeys(arguments[i], type);
     }
 
-    var name = type.displayName;
-    if (type.propTypes) {
-      checkPropTypes(
-        name,
-        type.propTypes,
-        element.props,
-        ReactPropTypeLocations.prop
-      );
-    }
-    if (type.contextTypes) {
-      checkPropTypes(
-        name,
-        type.contextTypes,
-        element._context,
-        ReactPropTypeLocations.context
-      );
+    if (type) {
+      var name = type.displayName;
+      if (type.propTypes) {
+        checkPropTypes(
+          name,
+          type.propTypes,
+          element.props,
+          ReactPropTypeLocations.prop
+        );
+      }
+      if (type.contextTypes) {
+        checkPropTypes(
+          name,
+          type.contextTypes,
+          element._context,
+          ReactPropTypeLocations.context
+        );
+      }
     }
     return element;
   },
@@ -30875,7 +30936,8 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 
-},{"./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocations":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocations.js","./monitorCodeUse":"/Users/jingxiao/437/Team77/node_modules/react/lib/monitorCodeUse.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocations":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocations.js","./monitorCodeUse":"/Users/jingxiao/lineonline/node_modules/react/lib/monitorCodeUse.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -30952,7 +31014,7 @@ var ReactEmptyComponent = {
 module.exports = ReactEmptyComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30984,7 +31046,7 @@ var ReactErrorUtils = {
 
 module.exports = ReactErrorUtils;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31034,7 +31096,7 @@ var ReactEventEmitterMixin = {
 
 module.exports = ReactEventEmitterMixin;
 
-},{"./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
+},{"./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31218,7 +31280,7 @@ var ReactEventListener = {
 
 module.exports = ReactEventListener;
 
-},{"./EventListener":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventListener.js","./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./getEventTarget":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventTarget.js","./getUnboundedScrollPosition":"/Users/jingxiao/437/Team77/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
+},{"./EventListener":"/Users/jingxiao/lineonline/node_modules/react/lib/EventListener.js","./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./getEventTarget":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventTarget.js","./getUnboundedScrollPosition":"/Users/jingxiao/lineonline/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31258,7 +31320,7 @@ var ReactInjection = {
 
 module.exports = ReactInjection;
 
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactEmptyComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEmptyComponent.js","./ReactNativeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactNativeComponent.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./ReactRootIndex":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactRootIndex.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactEmptyComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEmptyComponent.js","./ReactNativeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactNativeComponent.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./ReactRootIndex":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactRootIndex.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31394,7 +31456,7 @@ var ReactInputSelection = {
 
 module.exports = ReactInputSelection;
 
-},{"./ReactDOMSelection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDOMSelection.js","./containsNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/containsNode.js","./focusNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/focusNode.js","./getActiveElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/getActiveElement.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
+},{"./ReactDOMSelection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDOMSelection.js","./containsNode":"/Users/jingxiao/lineonline/node_modules/react/lib/containsNode.js","./focusNode":"/Users/jingxiao/lineonline/node_modules/react/lib/focusNode.js","./getActiveElement":"/Users/jingxiao/lineonline/node_modules/react/lib/getActiveElement.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31729,7 +31791,7 @@ var ReactInstanceHandles = {
 module.exports = ReactInstanceHandles;
 
 }).call(this,require('_process'))
-},{"./ReactRootIndex":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactRootIndex.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js":[function(require,module,exports){
+},{"./ReactRootIndex":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactRootIndex.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -31976,7 +32038,7 @@ ReactLegacyElementFactory._isLegacyCallWarningEnabled = true;
 module.exports = ReactLegacyElementFactory;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./monitorCodeUse":"/Users/jingxiao/437/Team77/node_modules/react/lib/monitorCodeUse.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLink.js":[function(require,module,exports){
+},{"./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./monitorCodeUse":"/Users/jingxiao/lineonline/node_modules/react/lib/monitorCodeUse.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLink.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32049,7 +32111,7 @@ ReactLink.PropTypes = {
 
 module.exports = ReactLink;
 
-},{"./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
+},{"./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32097,7 +32159,7 @@ var ReactMarkupChecksum = {
 
 module.exports = ReactMarkupChecksum;
 
-},{"./adler32":"/Users/jingxiao/437/Team77/node_modules/react/lib/adler32.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
+},{"./adler32":"/Users/jingxiao/lineonline/node_modules/react/lib/adler32.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32795,7 +32857,7 @@ ReactMount.renderComponent = deprecated(
 module.exports = ReactMount;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./containsNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/containsNode.js","./deprecated":"/Users/jingxiao/437/Team77/node_modules/react/lib/deprecated.js","./getReactRootElementInContainer":"/Users/jingxiao/437/Team77/node_modules/react/lib/getReactRootElementInContainer.js","./instantiateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./shouldUpdateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./containsNode":"/Users/jingxiao/lineonline/node_modules/react/lib/containsNode.js","./deprecated":"/Users/jingxiao/lineonline/node_modules/react/lib/deprecated.js","./getReactRootElementInContainer":"/Users/jingxiao/lineonline/node_modules/react/lib/getReactRootElementInContainer.js","./instantiateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./shouldUpdateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33223,7 +33285,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 
-},{"./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactMultiChildUpdateTypes":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./flattenChildren":"/Users/jingxiao/437/Team77/node_modules/react/lib/flattenChildren.js","./instantiateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js","./shouldUpdateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
+},{"./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactMultiChildUpdateTypes":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./flattenChildren":"/Users/jingxiao/lineonline/node_modules/react/lib/flattenChildren.js","./instantiateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js","./shouldUpdateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33256,7 +33318,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 
 module.exports = ReactMultiChildUpdateTypes;
 
-},{"./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
+},{"./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -33323,13 +33385,13 @@ function createInstanceForTag(tag, props, parentType) {
 
 var ReactNativeComponent = {
   createInstanceForTag: createInstanceForTag,
-  injection: ReactNativeComponentInjection,
+  injection: ReactNativeComponentInjection
 };
 
 module.exports = ReactNativeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33485,7 +33547,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 }).call(this,require('_process'))
-},{"./emptyObject":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyObject.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
+},{"./emptyObject":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyObject.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33569,7 +33631,7 @@ function _noMeasure(objName, fnName, func) {
 module.exports = ReactPerf;
 
 }).call(this,require('_process'))
-},{"_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTransferer.js":[function(require,module,exports){
+},{"_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTransferer.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33736,7 +33798,7 @@ var ReactPropTransferer = {
 module.exports = ReactPropTransferer;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./joinClasses":"/Users/jingxiao/437/Team77/node_modules/react/lib/joinClasses.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./joinClasses":"/Users/jingxiao/lineonline/node_modules/react/lib/joinClasses.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33764,7 +33826,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactPropTypeLocationNames;
 
 }).call(this,require('_process'))
-},{"_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
+},{"_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33788,7 +33850,7 @@ var ReactPropTypeLocations = keyMirror({
 
 module.exports = ReactPropTypeLocations;
 
-},{"./keyMirror":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
+},{"./keyMirror":"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34142,7 +34204,7 @@ function getPreciseType(propValue) {
 
 module.exports = ReactPropTypes;
 
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocationNames":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTypeLocationNames.js","./deprecated":"/Users/jingxiao/437/Team77/node_modules/react/lib/deprecated.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocationNames":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTypeLocationNames.js","./deprecated":"/Users/jingxiao/lineonline/node_modules/react/lib/deprecated.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34198,7 +34260,7 @@ PooledClass.addPoolingTo(ReactPutListenerQueue);
 
 module.exports = ReactPutListenerQueue;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34374,7 +34436,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
 
-},{"./CallbackQueue":"/Users/jingxiao/437/Team77/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactInputSelection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInputSelection.js","./ReactPutListenerQueue":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/Transaction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
+},{"./CallbackQueue":"/Users/jingxiao/lineonline/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactInputSelection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInputSelection.js","./ReactPutListenerQueue":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/Users/jingxiao/lineonline/node_modules/react/lib/Transaction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34405,7 +34467,7 @@ var ReactRootIndex = {
 
 module.exports = ReactRootIndex;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -34485,7 +34547,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./ReactMarkupChecksum":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMarkupChecksum.js","./ReactServerRenderingTransaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactServerRenderingTransaction.js","./instantiateReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./ReactMarkupChecksum":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMarkupChecksum.js","./ReactServerRenderingTransaction":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactServerRenderingTransaction.js","./instantiateReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -34598,7 +34660,7 @@ PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
 
-},{"./CallbackQueue":"/Users/jingxiao/437/Team77/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./ReactPutListenerQueue":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/Transaction.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactStateSetters.js":[function(require,module,exports){
+},{"./CallbackQueue":"/Users/jingxiao/lineonline/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./ReactPutListenerQueue":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/Users/jingxiao/lineonline/node_modules/react/lib/Transaction.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactStateSetters.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34704,7 +34766,7 @@ ReactStateSetters.Mixin = {
 
 module.exports = ReactStateSetters;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTestUtils.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTestUtils.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34938,7 +35000,7 @@ var ReactTestUtils = {
   mockComponent: function(module, mockTagName) {
     mockTagName = mockTagName || module.mockTagName || "div";
 
-    var ConvenienceConstructor = React.createClass({displayName: 'ConvenienceConstructor',
+    var ConvenienceConstructor = React.createClass({displayName: "ConvenienceConstructor",
       render: function() {
         return React.createElement(
           mockTagName,
@@ -35116,7 +35178,7 @@ for (eventType in topLevelTypes) {
 
 module.exports = ReactTestUtils;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js","./ReactBrowserEventEmitter":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactMount":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactMount.js","./ReactTextComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTextComponent.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTextComponent.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js","./ReactBrowserEventEmitter":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactMount":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactMount.js","./ReactTextComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTextComponent.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTextComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35222,7 +35284,7 @@ ReactTextComponentFactory.type = ReactTextComponent;
 
 module.exports = ReactTextComponentFactory;
 
-},{"./DOMPropertyOperations":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponent.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/Users/jingxiao/437/Team77/node_modules/react/lib/escapeTextForBrowser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionChildMapping.js":[function(require,module,exports){
+},{"./DOMPropertyOperations":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponent.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/Users/jingxiao/lineonline/node_modules/react/lib/escapeTextForBrowser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionChildMapping.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35323,7 +35385,7 @@ var ReactTransitionChildMapping = {
 
 module.exports = ReactTransitionChildMapping;
 
-},{"./ReactChildren":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactChildren.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionEvents.js":[function(require,module,exports){
+},{"./ReactChildren":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactChildren.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionEvents.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35434,7 +35496,7 @@ var ReactTransitionEvents = {
 
 module.exports = ReactTransitionEvents;
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionGroup.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionGroup.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35623,7 +35685,7 @@ var ReactTransitionGroup = React.createClass({
 
 module.exports = ReactTransitionGroup;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js","./ReactTransitionChildMapping":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionChildMapping.js","./cloneWithProps":"/Users/jingxiao/437/Team77/node_modules/react/lib/cloneWithProps.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js","./ReactTransitionChildMapping":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionChildMapping.js","./cloneWithProps":"/Users/jingxiao/lineonline/node_modules/react/lib/cloneWithProps.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -35913,7 +35975,7 @@ var ReactUpdates = {
 module.exports = ReactUpdates;
 
 }).call(this,require('_process'))
-},{"./CallbackQueue":"/Users/jingxiao/437/Team77/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./ReactCurrentOwner":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCurrentOwner.js","./ReactPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPerf.js","./Transaction":"/Users/jingxiao/437/Team77/node_modules/react/lib/Transaction.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactWithAddons.js":[function(require,module,exports){
+},{"./CallbackQueue":"/Users/jingxiao/lineonline/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./ReactCurrentOwner":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCurrentOwner.js","./ReactPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPerf.js","./Transaction":"/Users/jingxiao/lineonline/node_modules/react/lib/Transaction.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ReactWithAddons.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -35967,7 +36029,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/LinkedStateMixin.js","./React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js","./ReactCSSTransitionGroup":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCSSTransitionGroup.js","./ReactComponentWithPureRenderMixin":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactComponentWithPureRenderMixin.js","./ReactDefaultPerf":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactDefaultPerf.js","./ReactTestUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTestUtils.js","./ReactTransitionGroup":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTransitionGroup.js","./ReactUpdates":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactUpdates.js","./cloneWithProps":"/Users/jingxiao/437/Team77/node_modules/react/lib/cloneWithProps.js","./cx":"/Users/jingxiao/437/Team77/node_modules/react/lib/cx.js","./update":"/Users/jingxiao/437/Team77/node_modules/react/lib/update.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
+},{"./LinkedStateMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/LinkedStateMixin.js","./React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js","./ReactCSSTransitionGroup":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCSSTransitionGroup.js","./ReactComponentWithPureRenderMixin":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactComponentWithPureRenderMixin.js","./ReactDefaultPerf":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactDefaultPerf.js","./ReactTestUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTestUtils.js","./ReactTransitionGroup":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTransitionGroup.js","./ReactUpdates":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactUpdates.js","./cloneWithProps":"/Users/jingxiao/lineonline/node_modules/react/lib/cloneWithProps.js","./cx":"/Users/jingxiao/lineonline/node_modules/react/lib/cx.js","./update":"/Users/jingxiao/lineonline/node_modules/react/lib/update.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36059,7 +36121,7 @@ var SVGDOMPropertyConfig = {
 
 module.exports = SVGDOMPropertyConfig;
 
-},{"./DOMProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/DOMProperty.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
+},{"./DOMProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/DOMProperty.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36254,7 +36316,7 @@ var SelectEventPlugin = {
 
 module.exports = SelectEventPlugin;
 
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./ReactInputSelection":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInputSelection.js","./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js","./getActiveElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/getActiveElement.js","./isTextInputElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/isTextInputElement.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","./shallowEqual":"/Users/jingxiao/437/Team77/node_modules/react/lib/shallowEqual.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./ReactInputSelection":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInputSelection.js","./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js","./getActiveElement":"/Users/jingxiao/lineonline/node_modules/react/lib/getActiveElement.js","./isTextInputElement":"/Users/jingxiao/lineonline/node_modules/react/lib/isTextInputElement.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","./shallowEqual":"/Users/jingxiao/lineonline/node_modules/react/lib/shallowEqual.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36285,7 +36347,7 @@ var ServerReactRootIndex = {
 
 module.exports = ServerReactRootIndex;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -36713,7 +36775,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventConstants.js","./EventPluginUtils":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPluginUtils.js","./EventPropagators":"/Users/jingxiao/437/Team77/node_modules/react/lib/EventPropagators.js","./SyntheticClipboardEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticClipboardEvent.js","./SyntheticDragEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticDragEvent.js","./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js","./SyntheticFocusEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticFocusEvent.js","./SyntheticKeyboardEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticKeyboardEvent.js","./SyntheticMouseEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticMouseEvent.js","./SyntheticTouchEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticTouchEvent.js","./SyntheticUIEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js","./SyntheticWheelEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticWheelEvent.js","./getEventCharCode":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventCharCode.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/jingxiao/lineonline/node_modules/react/lib/EventConstants.js","./EventPluginUtils":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPluginUtils.js","./EventPropagators":"/Users/jingxiao/lineonline/node_modules/react/lib/EventPropagators.js","./SyntheticClipboardEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticClipboardEvent.js","./SyntheticDragEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticDragEvent.js","./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js","./SyntheticFocusEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticFocusEvent.js","./SyntheticKeyboardEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticKeyboardEvent.js","./SyntheticMouseEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticMouseEvent.js","./SyntheticTouchEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticTouchEvent.js","./SyntheticUIEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js","./SyntheticWheelEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticWheelEvent.js","./getEventCharCode":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventCharCode.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36759,7 +36821,7 @@ SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 module.exports = SyntheticClipboardEvent;
 
 
-},{"./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36805,7 +36867,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticCompositionEvent;
 
 
-},{"./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36844,7 +36906,7 @@ SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
 
-},{"./SyntheticMouseEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticMouseEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticMouseEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37002,7 +37064,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
 
 module.exports = SyntheticEvent;
 
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/437/Team77/node_modules/react/lib/PooledClass.js","./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js","./getEventTarget":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventTarget.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./PooledClass":"/Users/jingxiao/lineonline/node_modules/react/lib/PooledClass.js","./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js","./getEventTarget":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventTarget.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37041,7 +37103,7 @@ SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
 
-},{"./SyntheticUIEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -37088,7 +37150,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticInputEvent;
 
 
-},{"./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37175,7 +37237,7 @@ SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
 
-},{"./SyntheticUIEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js","./getEventCharCode":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventCharCode.js","./getEventKey":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventKey.js","./getEventModifierState":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js","./getEventCharCode":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventCharCode.js","./getEventKey":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventKey.js","./getEventModifierState":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37258,7 +37320,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
 
-},{"./SyntheticUIEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js","./ViewportMetrics":"/Users/jingxiao/437/Team77/node_modules/react/lib/ViewportMetrics.js","./getEventModifierState":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js","./ViewportMetrics":"/Users/jingxiao/lineonline/node_modules/react/lib/ViewportMetrics.js","./getEventModifierState":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37306,7 +37368,7 @@ SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
 
-},{"./SyntheticUIEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js","./getEventModifierState":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js","./getEventModifierState":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventModifierState.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37368,7 +37430,7 @@ SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
 
-},{"./SyntheticEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticEvent.js","./getEventTarget":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventTarget.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticEvent.js","./getEventTarget":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventTarget.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37429,7 +37491,7 @@ SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
 
-},{"./SyntheticMouseEvent":"/Users/jingxiao/437/Team77/node_modules/react/lib/SyntheticMouseEvent.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/Transaction.js":[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/Users/jingxiao/lineonline/node_modules/react/lib/SyntheticMouseEvent.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/Transaction.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -37670,7 +37732,7 @@ var Transaction = {
 module.exports = Transaction;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37702,7 +37764,7 @@ var ViewportMetrics = {
 
 module.exports = ViewportMetrics;
 
-},{"./getUnboundedScrollPosition":"/Users/jingxiao/437/Team77/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
+},{"./getUnboundedScrollPosition":"/Users/jingxiao/lineonline/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -37768,7 +37830,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/adler32.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/adler32.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37802,7 +37864,7 @@ function adler32(data) {
 
 module.exports = adler32;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/camelize.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/camelize.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37834,7 +37896,7 @@ function camelize(string) {
 
 module.exports = camelize;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -37876,7 +37938,7 @@ function camelizeStyleName(string) {
 
 module.exports = camelizeStyleName;
 
-},{"./camelize":"/Users/jingxiao/437/Team77/node_modules/react/lib/camelize.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/cloneWithProps.js":[function(require,module,exports){
+},{"./camelize":"/Users/jingxiao/lineonline/node_modules/react/lib/camelize.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/cloneWithProps.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -37935,7 +37997,7 @@ function cloneWithProps(child, props) {
 module.exports = cloneWithProps;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactPropTransferer":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactPropTransferer.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/containsNode.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactPropTransferer":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactPropTransferer.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/containsNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37979,7 +38041,7 @@ function containsNode(outerNode, innerNode) {
 
 module.exports = containsNode;
 
-},{"./isTextNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/isTextNode.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
+},{"./isTextNode":"/Users/jingxiao/lineonline/node_modules/react/lib/isTextNode.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38065,7 +38127,7 @@ function createArrayFrom(obj) {
 
 module.exports = createArrayFrom;
 
-},{"./toArray":"/Users/jingxiao/437/Team77/node_modules/react/lib/toArray.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
+},{"./toArray":"/Users/jingxiao/lineonline/node_modules/react/lib/toArray.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38126,7 +38188,7 @@ function createFullPageComponent(tag) {
 module.exports = createFullPageComponent;
 
 }).call(this,require('_process'))
-},{"./ReactCompositeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactCompositeComponent.js","./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
+},{"./ReactCompositeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactCompositeComponent.js","./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38216,7 +38278,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./createArrayFrom":"/Users/jingxiao/437/Team77/node_modules/react/lib/createArrayFrom.js","./getMarkupWrap":"/Users/jingxiao/437/Team77/node_modules/react/lib/getMarkupWrap.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/cx.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./createArrayFrom":"/Users/jingxiao/lineonline/node_modules/react/lib/createArrayFrom.js","./getMarkupWrap":"/Users/jingxiao/lineonline/node_modules/react/lib/getMarkupWrap.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/cx.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38255,7 +38317,7 @@ function cx(classNames) {
 
 module.exports = cx;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38313,7 +38375,7 @@ function dangerousStyleValue(name, value) {
 
 module.exports = dangerousStyleValue;
 
-},{"./CSSProperty":"/Users/jingxiao/437/Team77/node_modules/react/lib/CSSProperty.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/deprecated.js":[function(require,module,exports){
+},{"./CSSProperty":"/Users/jingxiao/lineonline/node_modules/react/lib/CSSProperty.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/deprecated.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38364,7 +38426,7 @@ function deprecated(namespace, oldName, newName, ctx, fn) {
 module.exports = deprecated;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38398,7 +38460,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38422,7 +38484,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = emptyObject;
 
 }).call(this,require('_process'))
-},{"_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/escapeTextForBrowser.js":[function(require,module,exports){
+},{"_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/escapeTextForBrowser.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38463,7 +38525,7 @@ function escapeTextForBrowser(text) {
 
 module.exports = escapeTextForBrowser;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38532,7 +38594,7 @@ function flattenChildren(children) {
 module.exports = flattenChildren;
 
 }).call(this,require('_process'))
-},{"./ReactTextComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactTextComponent.js","./traverseAllChildren":"/Users/jingxiao/437/Team77/node_modules/react/lib/traverseAllChildren.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/focusNode.js":[function(require,module,exports){
+},{"./ReactTextComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactTextComponent.js","./traverseAllChildren":"/Users/jingxiao/lineonline/node_modules/react/lib/traverseAllChildren.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/focusNode.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -38561,7 +38623,7 @@ function focusNode(node) {
 
 module.exports = focusNode;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38592,7 +38654,7 @@ var forEachAccumulated = function(arr, cb, scope) {
 
 module.exports = forEachAccumulated;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38621,7 +38683,7 @@ function getActiveElement() /*?DOMElement*/ {
 
 module.exports = getActiveElement;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38673,7 +38735,7 @@ function getEventCharCode(nativeEvent) {
 
 module.exports = getEventCharCode;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38778,7 +38840,7 @@ function getEventKey(nativeEvent) {
 
 module.exports = getEventKey;
 
-},{"./getEventCharCode":"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventCharCode.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
+},{"./getEventCharCode":"/Users/jingxiao/lineonline/node_modules/react/lib/getEventCharCode.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -38825,7 +38887,7 @@ function getEventModifierState(nativeEvent) {
 
 module.exports = getEventModifierState;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38856,7 +38918,7 @@ function getEventTarget(nativeEvent) {
 
 module.exports = getEventTarget;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38973,7 +39035,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39048,7 +39110,7 @@ function getNodeForCharacterOffset(root, offset) {
 
 module.exports = getNodeForCharacterOffset;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39083,7 +39145,7 @@ function getReactRootElementInContainer(container) {
 
 module.exports = getReactRootElementInContainer;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39120,7 +39182,7 @@ function getTextContentAccessor() {
 
 module.exports = getTextContentAccessor;
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39160,7 +39222,7 @@ function getUnboundedScrollPosition(scrollable) {
 
 module.exports = getUnboundedScrollPosition;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39193,7 +39255,7 @@ function hyphenate(string) {
 
 module.exports = hyphenate;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39234,7 +39296,7 @@ function hyphenateStyleName(string) {
 
 module.exports = hyphenateStyleName;
 
-},{"./hyphenate":"/Users/jingxiao/437/Team77/node_modules/react/lib/hyphenate.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
+},{"./hyphenate":"/Users/jingxiao/lineonline/node_modules/react/lib/hyphenate.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39348,7 +39410,7 @@ function instantiateReactComponent(element, parentCompositeType) {
 module.exports = instantiateReactComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactEmptyComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactEmptyComponent.js","./ReactLegacyElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactLegacyElement.js","./ReactNativeComponent":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactNativeComponent.js","./warning":"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactEmptyComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactEmptyComponent.js","./ReactLegacyElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactLegacyElement.js","./ReactNativeComponent":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactNativeComponent.js","./warning":"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39405,7 +39467,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
+},{"_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39470,7 +39532,7 @@ function isEventSupported(eventNameSuffix, capture) {
 
 module.exports = isEventSupported;
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/isNode.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/isNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39498,7 +39560,7 @@ function isNode(object) {
 
 module.exports = isNode;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39542,7 +39604,7 @@ function isTextInputElement(elem) {
 
 module.exports = isTextInputElement;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39567,7 +39629,7 @@ function isTextNode(object) {
 
 module.exports = isTextNode;
 
-},{"./isNode":"/Users/jingxiao/437/Team77/node_modules/react/lib/isNode.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/joinClasses.js":[function(require,module,exports){
+},{"./isNode":"/Users/jingxiao/lineonline/node_modules/react/lib/isNode.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/joinClasses.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39608,7 +39670,7 @@ function joinClasses(className/*, ... */) {
 
 module.exports = joinClasses;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39663,7 +39725,7 @@ var keyMirror = function(obj) {
 module.exports = keyMirror;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39699,7 +39761,7 @@ var keyOf = function(oneKeyObj) {
 
 module.exports = keyOf;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/mapObject.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/mapObject.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39752,7 +39814,7 @@ function mapObject(object, callback, context) {
 
 module.exports = mapObject;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39786,7 +39848,7 @@ function memoizeStringOnly(callback) {
 
 module.exports = memoizeStringOnly;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -39820,7 +39882,7 @@ function monitorCodeUse(eventName, data) {
 module.exports = monitorCodeUse;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39860,7 +39922,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/performance.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/performance.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39888,7 +39950,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = performance || {};
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39916,7 +39978,7 @@ var performanceNow = performance.now.bind(performance);
 
 module.exports = performanceNow;
 
-},{"./performance":"/Users/jingxiao/437/Team77/node_modules/react/lib/performance.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
+},{"./performance":"/Users/jingxiao/lineonline/node_modules/react/lib/performance.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39994,7 +40056,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = setInnerHTML;
 
-},{"./ExecutionEnvironment":"/Users/jingxiao/437/Team77/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/Users/jingxiao/lineonline/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40038,7 +40100,7 @@ function shallowEqual(objA, objB) {
 
 module.exports = shallowEqual;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40076,7 +40138,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 
 module.exports = shouldUpdateReactComponent;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/react/lib/toArray.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/react/lib/toArray.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -40148,7 +40210,7 @@ function toArray(obj) {
 module.exports = toArray;
 
 }).call(this,require('_process'))
-},{"./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
+},{"./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -40331,7 +40393,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/437/Team77/node_modules/react/lib/ReactInstanceHandles.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/update.js":[function(require,module,exports){
+},{"./ReactElement":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/Users/jingxiao/lineonline/node_modules/react/lib/ReactInstanceHandles.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/update.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -40499,7 +40561,7 @@ function update(value, spec) {
 module.exports = update;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/Users/jingxiao/437/Team77/node_modules/react/lib/Object.assign.js","./invariant":"/Users/jingxiao/437/Team77/node_modules/react/lib/invariant.js","./keyOf":"/Users/jingxiao/437/Team77/node_modules/react/lib/keyOf.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/lib/warning.js":[function(require,module,exports){
+},{"./Object.assign":"/Users/jingxiao/lineonline/node_modules/react/lib/Object.assign.js","./invariant":"/Users/jingxiao/lineonline/node_modules/react/lib/invariant.js","./keyOf":"/Users/jingxiao/lineonline/node_modules/react/lib/keyOf.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/lib/warning.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -40544,10 +40606,10 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":"/Users/jingxiao/437/Team77/node_modules/react/lib/emptyFunction.js","_process":"/Users/jingxiao/437/Team77/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/react/react.js":[function(require,module,exports){
+},{"./emptyFunction":"/Users/jingxiao/lineonline/node_modules/react/lib/emptyFunction.js","_process":"/Users/jingxiao/lineonline/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jingxiao/lineonline/node_modules/react/react.js":[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":"/Users/jingxiao/437/Team77/node_modules/react/lib/React.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/node_modules/eventemitter3/index.js":[function(require,module,exports){
+},{"./lib/React":"/Users/jingxiao/lineonline/node_modules/react/lib/React.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/node_modules/eventemitter3/index.js":[function(require,module,exports){
 'use strict';
 
 /**
@@ -40778,7 +40840,7 @@ EventEmitter.EventEmitter3 = EventEmitter;
 //
 module.exports = EventEmitter;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/ActionMethods.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/reflux/src/ActionMethods.js":[function(require,module,exports){
 /**
  * A module of methods that you want to include in all actions.
  * This module is consumed by `createAction`.
@@ -40786,7 +40848,7 @@ module.exports = EventEmitter;
 module.exports = {
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/Keep.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/reflux/src/Keep.js":[function(require,module,exports){
 exports.createdStores = [];
 
 exports.createdActions = [];
@@ -40800,7 +40862,7 @@ exports.reset = function() {
     }
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/ListenerMethods.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/reflux/src/ListenerMethods.js":[function(require,module,exports){
 var _ = require('./utils'),
     maker = require('./joins').instanceJoinCreator;
 
@@ -40975,10 +41037,10 @@ module.exports = {
      * @param {Function|String} callback The method to call when all publishers have emitted
      * @returns {Object} A subscription obj where `stop` is an unsub function and `listenable` is an array of listenables
      */
-    joinStrict: maker("strict"),
+    joinStrict: maker("strict")
 };
 
-},{"./joins":"/Users/jingxiao/437/Team77/node_modules/reflux/src/joins.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/ListenerMixin.js":[function(require,module,exports){
+},{"./joins":"/Users/jingxiao/lineonline/node_modules/reflux/src/joins.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/ListenerMixin.js":[function(require,module,exports){
 var _ = require('./utils'),
     ListenerMethods = require('./ListenerMethods');
 
@@ -40997,7 +41059,7 @@ module.exports = _.extend({
 
 }, ListenerMethods);
 
-},{"./ListenerMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/ListenerMethods.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/PublisherMethods.js":[function(require,module,exports){
+},{"./ListenerMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/ListenerMethods.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/PublisherMethods.js":[function(require,module,exports){
 var _ = require('./utils');
 
 /**
@@ -41064,7 +41126,7 @@ module.exports = {
     }
 };
 
-},{"./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/StoreMethods.js":[function(require,module,exports){
+},{"./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/StoreMethods.js":[function(require,module,exports){
 /**
  * A module of methods that you want to include in all stores.
  * This module is consumed by `createStore`.
@@ -41072,7 +41134,7 @@ module.exports = {
 module.exports = {
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/bindMethods.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/reflux/src/bindMethods.js":[function(require,module,exports){
 module.exports = function(store, definition) {
   for (var name in definition) {
     var property = definition[name];
@@ -41087,7 +41149,7 @@ module.exports = function(store, definition) {
   return store;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/connect.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/reflux/src/connect.js":[function(require,module,exports){
 var Reflux = require('../src'),
     _ = require('./utils');
 
@@ -41103,19 +41165,7 @@ module.exports = function(listenable,key){
             }
         },
         componentDidMount: function(){
-            var warned = false;
-            for(var m in Reflux.ListenerMethods){
-                if (this[m] && typeof console && typeof console.warn === "function" && !warned ){
-                    console.warn(
-                        "Component using Reflux.connect already had property '"+m+"'. "+
-                        "Either you had your own property with that name which was now overridden, "+
-                        "or you combined connect with ListenerMixin which is unnecessary as connect "+
-                        "will include the ListenerMixin methods automatically."
-                    );
-                    warned = true;
-                }
-                this[m] = Reflux.ListenerMethods[m];
-            }
+            _.extend(this,Reflux.ListenerMethods);
             var me = this, cb = (key === undefined ? this.setState : function(v){me.setState(_.object([key],[v]));});
             this.listenTo(listenable,cb);
         },
@@ -41123,7 +41173,7 @@ module.exports = function(listenable,key){
     };
 };
 
-},{"../src":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/createAction.js":[function(require,module,exports){
+},{"../src":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/createAction.js":[function(require,module,exports){
 var _ = require('./utils'),
     Reflux = require('../src'),
     Keep = require('./Keep'),
@@ -41174,7 +41224,7 @@ module.exports = function(definition) {
 
 };
 
-},{"../src":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","./Keep":"/Users/jingxiao/437/Team77/node_modules/reflux/src/Keep.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/createStore.js":[function(require,module,exports){
+},{"../src":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","./Keep":"/Users/jingxiao/lineonline/node_modules/reflux/src/Keep.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/createStore.js":[function(require,module,exports){
 var _ = require('./utils'),
     Reflux = require('../src'),
     Keep = require('./Keep'),
@@ -41234,7 +41284,7 @@ module.exports = function(definition) {
     return store;
 };
 
-},{"../src":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","./Keep":"/Users/jingxiao/437/Team77/node_modules/reflux/src/Keep.js","./bindMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/bindMethods.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js":[function(require,module,exports){
+},{"../src":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","./Keep":"/Users/jingxiao/lineonline/node_modules/reflux/src/Keep.js","./bindMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/bindMethods.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js":[function(require,module,exports){
 exports.ActionMethods = require('./ActionMethods');
 
 exports.ListenerMethods = require('./ListenerMethods');
@@ -41313,7 +41363,7 @@ if (!Function.prototype.bind) {
   );
 }
 
-},{"./ActionMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/ActionMethods.js","./Keep":"/Users/jingxiao/437/Team77/node_modules/reflux/src/Keep.js","./ListenerMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/ListenerMethods.js","./ListenerMixin":"/Users/jingxiao/437/Team77/node_modules/reflux/src/ListenerMixin.js","./PublisherMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/PublisherMethods.js","./StoreMethods":"/Users/jingxiao/437/Team77/node_modules/reflux/src/StoreMethods.js","./connect":"/Users/jingxiao/437/Team77/node_modules/reflux/src/connect.js","./createAction":"/Users/jingxiao/437/Team77/node_modules/reflux/src/createAction.js","./createStore":"/Users/jingxiao/437/Team77/node_modules/reflux/src/createStore.js","./joins":"/Users/jingxiao/437/Team77/node_modules/reflux/src/joins.js","./listenTo":"/Users/jingxiao/437/Team77/node_modules/reflux/src/listenTo.js","./listenToMany":"/Users/jingxiao/437/Team77/node_modules/reflux/src/listenToMany.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/joins.js":[function(require,module,exports){
+},{"./ActionMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/ActionMethods.js","./Keep":"/Users/jingxiao/lineonline/node_modules/reflux/src/Keep.js","./ListenerMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/ListenerMethods.js","./ListenerMixin":"/Users/jingxiao/lineonline/node_modules/reflux/src/ListenerMixin.js","./PublisherMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/PublisherMethods.js","./StoreMethods":"/Users/jingxiao/lineonline/node_modules/reflux/src/StoreMethods.js","./connect":"/Users/jingxiao/lineonline/node_modules/reflux/src/connect.js","./createAction":"/Users/jingxiao/lineonline/node_modules/reflux/src/createAction.js","./createStore":"/Users/jingxiao/lineonline/node_modules/reflux/src/createStore.js","./joins":"/Users/jingxiao/lineonline/node_modules/reflux/src/joins.js","./listenTo":"/Users/jingxiao/lineonline/node_modules/reflux/src/listenTo.js","./listenToMany":"/Users/jingxiao/lineonline/node_modules/reflux/src/listenToMany.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/joins.js":[function(require,module,exports){
 /**
  * Internal module used to create static and instance join methods
  */
@@ -41421,7 +41471,7 @@ function emitIfAllListenablesEmitted(join) {
     reset(join);
 }
 
-},{"./createStore":"/Users/jingxiao/437/Team77/node_modules/reflux/src/createStore.js","./utils":"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/listenTo.js":[function(require,module,exports){
+},{"./createStore":"/Users/jingxiao/lineonline/node_modules/reflux/src/createStore.js","./utils":"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/listenTo.js":[function(require,module,exports){
 var Reflux = require('../src');
 
 
@@ -41459,7 +41509,7 @@ module.exports = function(listenable,callback,initial){
     };
 };
 
-},{"../src":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/listenToMany.js":[function(require,module,exports){
+},{"../src":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/listenToMany.js":[function(require,module,exports){
 var Reflux = require('../src');
 
 /**
@@ -41494,7 +41544,7 @@ module.exports = function(listenables){
     };
 };
 
-},{"../src":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/node_modules/reflux/src/utils.js":[function(require,module,exports){
+},{"../src":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/node_modules/reflux/src/utils.js":[function(require,module,exports){
 /*
  * isObject, extend, isFunction, isArguments are taken from undescore/lodash in
  * order to remove the dependency
@@ -41551,11 +41601,11 @@ exports.throwIf = function(val,msg){
     }
 };
 
-},{"eventemitter3":"/Users/jingxiao/437/Team77/node_modules/reflux/node_modules/eventemitter3/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/index.js":[function(require,module,exports){
+},{"eventemitter3":"/Users/jingxiao/lineonline/node_modules/reflux/node_modules/eventemitter3/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/index.js":[function(require,module,exports){
 
 module.exports = require('./lib/');
 
-},{"./lib/":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/index.js":[function(require,module,exports){
+},{"./lib/":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -41644,7 +41694,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/manager.js","./socket":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/socket.js","./url":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/url.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js","socket.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/manager.js":[function(require,module,exports){
+},{"./manager":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/manager.js","./socket":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/socket.js","./url":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/url.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js","socket.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/manager.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -42119,7 +42169,7 @@ Manager.prototype.onreconnect = function(){
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/on.js","./socket":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/socket.js","./url":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/url.js","component-bind":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-client":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/index.js","indexof":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/indexof/index.js","object-component":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/object-component/index.js","socket.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/on.js":[function(require,module,exports){
+},{"./on":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/on.js","./socket":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/socket.js","./url":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/url.js","component-bind":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-client":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/index.js","indexof":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/indexof/index.js","object-component":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/object-component/index.js","socket.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/on.js":[function(require,module,exports){
 
 /**
  * Module exports.
@@ -42145,7 +42195,7 @@ function on(obj, ev, fn) {
   };
 }
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/socket.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/socket.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -42531,7 +42581,7 @@ Socket.prototype.disconnect = function(){
   return this;
 };
 
-},{"./on":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/on.js","component-bind":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js","has-binary":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/index.js","socket.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/index.js","to-array":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/to-array/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/lib/url.js":[function(require,module,exports){
+},{"./on":"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/on.js","component-bind":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js","has-binary":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/index.js","socket.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/index.js","to-array":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/to-array/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/lib/url.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -42608,7 +42658,7 @@ function url(uri, loc){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js","parseuri":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/parseuri/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-bind/index.js":[function(require,module,exports){
+},{"debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js","parseuri":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/parseuri/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-bind/index.js":[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -42633,7 +42683,7 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js":[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -42799,7 +42849,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js":[function(require,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -42938,11 +42988,11 @@ try {
   if (window.localStorage) debug.enable(localStorage.debug);
 } catch(e){}
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/index.js":[function(require,module,exports){
 
 module.exports =  require('./lib/');
 
-},{"./lib/":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js":[function(require,module,exports){
+},{"./lib/":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js":[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -42954,7 +43004,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js","engine.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js":[function(require,module,exports){
+},{"./socket":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js","engine.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -43641,7 +43691,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./transport":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","./transports":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js","component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","indexof":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/indexof/index.js","parsejson":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js","parseqs":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","parseuri":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js":[function(require,module,exports){
+},{"./transport":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","./transports":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js","component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","indexof":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/indexof/index.js","parsejson":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js","parseqs":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","parseuri":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -43793,7 +43843,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","engine.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports){
+},{"component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","engine.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies
@@ -43850,7 +43900,7 @@ function polling(opts){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling-jsonp":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js","./polling-xhr":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js","./websocket":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js","xmlhttprequest":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js":[function(require,module,exports){
+},{"./polling-jsonp":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js","./polling-xhr":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js","./websocket":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js","xmlhttprequest":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -44087,7 +44137,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js":[function(require,module,exports){
+},{"./polling":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js":[function(require,module,exports){
 (function (global){
 /**
  * Module requirements.
@@ -44442,7 +44492,7 @@ function unloadHandler() {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","component-inherit":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","xmlhttprequest":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js":[function(require,module,exports){
+},{"./polling":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","component-inherit":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","xmlhttprequest":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -44689,7 +44739,7 @@ Polling.prototype.uri = function(){
   return schema + '://' + this.hostname + port + this.path + query;
 };
 
-},{"../transport":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","xmlhttprequest":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports){
+},{"../transport":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","xmlhttprequest":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -44920,7 +44970,7 @@ WS.prototype.check = function(){
   return !!WebSocket && !('__initialize' in WebSocket && this.name === WS.prototype.name);
 };
 
-},{"../transport":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","ws":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js":[function(require,module,exports){
+},{"../transport":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js","engine.io-parser":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","ws":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js":[function(require,module,exports){
 // browser shim for xmlhttprequest module
 var hasCORS = require('has-cors');
 
@@ -44958,7 +45008,7 @@ module.exports = function(opts) {
   }
 }
 
-},{"has-cors":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js":[function(require,module,exports){
+},{"has-cors":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js":[function(require,module,exports){
 
 module.exports = function(a, b){
   var fn = function(){};
@@ -44966,7 +45016,7 @@ module.exports = function(a, b){
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/browser.js":[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -45115,7 +45165,7 @@ function load() {
 
 exports.enable(load());
 
-},{"./debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/debug.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/debug.js":[function(require,module,exports){
+},{"./debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/debug.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/debug.js":[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -45314,7 +45364,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/node_modules/ms/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/node_modules/ms/index.js":[function(require,module,exports){
+},{"ms":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/node_modules/ms/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/debug/node_modules/ms/index.js":[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -45427,7 +45477,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -45997,7 +46047,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./keys":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js","after":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js","arraybuffer.slice":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js","base64-arraybuffer":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js","blob":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js","utf8":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js":[function(require,module,exports){
+},{"./keys":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js","after":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js","arraybuffer.slice":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js","base64-arraybuffer":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js","blob":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js","utf8":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js":[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -46018,7 +46068,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js":[function(require,module,exports){
 module.exports = after
 
 function after(count, callback, err_cb) {
@@ -46048,7 +46098,7 @@ function after(count, callback, err_cb) {
 
 function noop() {}
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js":[function(require,module,exports){
 /**
  * An abstraction for slicing an arraybuffer even when
  * ArrayBuffer.prototype.slice is not supported
@@ -46079,7 +46129,7 @@ module.exports = function(arraybuffer, start, end) {
   return result.buffer;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js":[function(require,module,exports){
 /*
  * base64-arraybuffer
  * https://github.com/niklasvh/base64-arraybuffer
@@ -46140,7 +46190,7 @@ module.exports = function(arraybuffer, start, end) {
   };
 })("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Create a blob builder even when vendor prefixes exist
@@ -46193,7 +46243,7 @@ module.exports = (function() {
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js":[function(require,module,exports){
 (function (global){
 /*! http://mths.be/utf8js v2.0.0 by @mathias */
 ;(function(root) {
@@ -46436,7 +46486,7 @@ module.exports = (function() {
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -46461,7 +46511,7 @@ try {
   module.exports = false;
 }
 
-},{"global":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js":[function(require,module,exports){
+},{"global":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js":[function(require,module,exports){
 
 /**
  * Returns `this`. Execute this without a "context" (i.e. without it being
@@ -46471,7 +46521,7 @@ try {
 
 module.exports = (function () { return this; })();
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js":[function(require,module,exports){
 (function (global){
 /**
  * JSON parse.
@@ -46506,7 +46556,7 @@ module.exports = function parsejson(data) {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js":[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -46545,7 +46595,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -46586,7 +46636,7 @@ module.exports = function parseuri(str) {
     return uri;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -46631,7 +46681,7 @@ function ws(uri, protocols, opts) {
 
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/index.js":[function(require,module,exports){
 (function (global){
 
 /*
@@ -46693,12 +46743,12 @@ function hasBinary(data) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"isarray":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":[function(require,module,exports){
+},{"isarray":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/indexof/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/indexof/index.js":[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -46709,7 +46759,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/object-component/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/object-component/index.js":[function(require,module,exports){
 
 /**
  * HOP ref.
@@ -46794,7 +46844,7 @@ exports.length = function(obj){
 exports.isEmpty = function(obj){
   return 0 == exports.length(obj);
 };
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -46821,7 +46871,7 @@ module.exports = function parseuri(str) {
   return uri;
 };
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports){
 (function (global){
 /*global Blob,File*/
 
@@ -46966,7 +47016,7 @@ exports.removeBlobs = function(data, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./is-buffer":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","isarray":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/index.js":[function(require,module,exports){
+},{"./is-buffer":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","isarray":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -47364,7 +47414,7 @@ function error(data){
   };
 }
 
-},{"./binary":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js","./is-buffer":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","component-emitter":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/debug/debug.js","isarray":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js","json3":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports){
+},{"./binary":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js","./is-buffer":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","component-emitter":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/debug/debug.js","isarray":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js","json3":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports){
 (function (global){
 
 module.exports = isBuf;
@@ -47381,9 +47431,9 @@ function isBuf(obj) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js":[function(require,module,exports){
-module.exports=require("/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js")
-},{"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js":[function(require,module,exports){
+module.exports=require("/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js")
+},{"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js":[function(require,module,exports){
 /*! JSON v3.2.6 | http://bestiejs.github.io/json3 | Copyright 2012-2013, Kit Cambridge | http://kit.mit-license.org */
 ;(function (window) {
   // Convenience aliases.
@@ -48246,7 +48296,7 @@ module.exports=require("/Users/jingxiao/437/Team77/node_modules/socket.io-client
   }
 }(this));
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/to-array/index.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/to-array/index.js":[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -48261,7 +48311,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -49344,9 +49394,9 @@ request.put = function(url, data, fn){
 
 module.exports = request;
 
-},{"emitter":"/Users/jingxiao/437/Team77/node_modules/superagent/node_modules/component-emitter/index.js","reduce":"/Users/jingxiao/437/Team77/node_modules/superagent/node_modules/reduce-component/index.js"}],"/Users/jingxiao/437/Team77/node_modules/superagent/node_modules/component-emitter/index.js":[function(require,module,exports){
-module.exports=require("/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js")
-},{"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/node_modules/component-emitter/index.js"}],"/Users/jingxiao/437/Team77/node_modules/superagent/node_modules/reduce-component/index.js":[function(require,module,exports){
+},{"emitter":"/Users/jingxiao/lineonline/node_modules/superagent/node_modules/component-emitter/index.js","reduce":"/Users/jingxiao/lineonline/node_modules/superagent/node_modules/reduce-component/index.js"}],"/Users/jingxiao/lineonline/node_modules/superagent/node_modules/component-emitter/index.js":[function(require,module,exports){
+module.exports=require("/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js")
+},{"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js":"/Users/jingxiao/lineonline/node_modules/socket.io-client/node_modules/component-emitter/index.js"}],"/Users/jingxiao/lineonline/node_modules/superagent/node_modules/reduce-component/index.js":[function(require,module,exports){
 
 /**
  * Reduce `arr` with `fn`.
@@ -49371,7 +49421,7 @@ module.exports = function(arr, fn, initial){
   
   return curr;
 };
-},{}],"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -50788,7 +50838,7 @@ module.exports = function(arr, fn, initial){
   }
 }.call(this));
 
-},{}],"/Users/jingxiao/437/Team77/public/js/src/App.jsx":[function(require,module,exports){
+},{}],"/Users/jingxiao/lineonline/public/js/src/App.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -50826,7 +50876,7 @@ var ErrorModal = require('./ui/ErrorModal.jsx');
 // when you refactor this file, relative paths are gonna get messed up
 var LineriderEditor = require('./linerider/Editor.jsx');
 
-var App = React.createClass({displayName: 'App',
+var App = React.createClass({displayName: "App",
     mixins: [
         Reflux.listenTo(AuthStore, 'onDataChanged'),
         Reflux.listenTo(ErrorStore, 'onError')
@@ -50868,7 +50918,7 @@ var App = React.createClass({displayName: 'App',
 // Object.keys(o) = ['foo', 'de']
 // blah = ['foo has bar', 'de has lu']
 
-var Navbar = React.createClass({displayName: 'Navbar',
+var Navbar = React.createClass({displayName: "Navbar",
     mixins: [
         Reflux.listenTo(CurrentUserStore, 'onDataChanged')
     ],
@@ -50972,15 +51022,15 @@ var Navbar = React.createClass({displayName: 'Navbar',
 });
 
 
-var Icon = React.createClass({displayName: 'Icon',
+var Icon = React.createClass({displayName: "Icon",
     render: function() {
         return (
-            React.createElement("span", {className: this.props.class + ' oi', 'data-glyph': this.props.icon, title: this.props.icon, 'aria-hidden': "true"})
+            React.createElement("span", {className: this.props.class + ' oi', "data-glyph": this.props.icon, title: this.props.icon, "aria-hidden": "true"})
         );
     }
 });
 
-var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
+var DropdownLogin = React.createClass({displayName: "DropdownLogin",
     getInitialState: function() {
         return {
             signup: true,
@@ -51119,7 +51169,7 @@ var DropdownLogin = React.createClass({displayName: 'DropdownLogin',
     }
 });
 
-var Dropdown = React.createClass({displayName: 'Dropdown',
+var Dropdown = React.createClass({displayName: "Dropdown",
     mixins: [
         Navigation,
     ],
@@ -51164,7 +51214,7 @@ var Dropdown = React.createClass({displayName: 'Dropdown',
     }
 });
 
-var DropdownItem = React.createClass({displayName: 'DropdownItem',
+var DropdownItem = React.createClass({displayName: "DropdownItem",
     render: function() {
         return (
             React.createElement(Link, {to: this.props.link, className: "dropdown-link", onClick: this.props.clickHandler}, 
@@ -51179,7 +51229,7 @@ var DropdownItem = React.createClass({displayName: 'DropdownItem',
     }
 });
 
-var Navlink = React.createClass({displayName: 'Navlink',
+var Navlink = React.createClass({displayName: "Navlink",
     render: function() {
         return (
             React.createElement("li", {className: "nav-item col span_1_of_7"}, 
@@ -51221,7 +51271,7 @@ function doRender(target, callback) {
 
 module.exports = doRender;
 
-},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./stores/error":"/Users/jingxiao/437/Team77/public/js/src/stores/error.js","./ui/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx","./ui/ErrorModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx","./ui/Favorites.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions-error.js":[function(require,module,exports){
+},{"./actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","./linerider/Editor.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Editor.jsx","./stores/auth":"/Users/jingxiao/lineonline/public/js/src/stores/auth.js","./stores/current-user":"/Users/jingxiao/lineonline/public/js/src/stores/current-user.js","./stores/error":"/Users/jingxiao/lineonline/public/js/src/stores/error.js","./ui/Editor.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Editor.jsx","./ui/ErrorModal.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/ErrorModal.jsx","./ui/Favorites.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Favorites.jsx","./ui/Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./ui/Gallery.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Gallery.jsx","./ui/Home.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Home.jsx","./ui/Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./ui/Index.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Index.jsx","./ui/NotFound.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/NotFound.jsx","./ui/Playback.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Playback.jsx","./ui/Profile.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Profile.jsx","./ui/Settings.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Settings.jsx","./ui/Subscriptions.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Subscriptions.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/actions-error.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var ErrorActions = Reflux.createActions([
     'throwError',
@@ -51231,7 +51281,7 @@ var ErrorActions = Reflux.createActions([
 
 module.exports = ErrorActions;
 
-},{"reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/actions.js":[function(require,module,exports){
+},{"reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 // you can split this up
@@ -51314,7 +51364,7 @@ var Actions = Reflux.createActions([
 
 module.exports = Actions;
 
-},{"reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx":[function(require,module,exports){
+},{"reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('underscore');
 
@@ -51327,7 +51377,7 @@ function distance(p1, p2) {
     var dy = p1.y - p2.y;
     return Math.sqrt(dx*dx + dy*dy);
 }
-var Line = React.createClass({displayName: 'Line',
+var Line = React.createClass({displayName: "Line",
     getDefaultProps: function() {
         return {
             color: 'black'
@@ -51372,7 +51422,7 @@ function getViewBox(points) {
     ];
 }
 
-var Display = React.createClass({displayName: 'Display',
+var Display = React.createClass({displayName: "Display",
     lineriderRed: '#D62525',
     render: function() {
         var scene = this.props.scene;
@@ -51409,7 +51459,7 @@ var Display = React.createClass({displayName: 'Display',
 
 module.exports = Display;
 
-},{"react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx":[function(require,module,exports){
+},{"react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/linerider/Editor.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Kefir = require('kefir');
@@ -51437,7 +51487,7 @@ var fullSize = {
 
 var RESIZE_THROTTLE = 200;
 
-var Editor = React.createClass({displayName: 'Editor',
+var Editor = React.createClass({displayName: "Editor",
     mixins: [
         require('./tools'),
         Reflux.listenTo(sceneStore, 'onSceneChanged')
@@ -51588,7 +51638,7 @@ var Editor = React.createClass({displayName: 'Editor',
     }
 });
 
-var ToolButton = React.createClass({displayName: 'ToolButton',
+var ToolButton = React.createClass({displayName: "ToolButton",
     onMouseDown: function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -51607,7 +51657,7 @@ var ToolButton = React.createClass({displayName: 'ToolButton',
 
 module.exports = Editor;
 
-},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../ui/Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js","./tools":"/Users/jingxiao/437/Team77/public/js/src/linerider/tools.js","kefir":"/Users/jingxiao/437/Team77/node_modules/kefir/dist/kefir.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js":[function(require,module,exports){
+},{"../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../ui/Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","./actions":"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js","./store":"/Users/jingxiao/lineonline/public/js/src/linerider/store.js","./tools":"/Users/jingxiao/lineonline/public/js/src/linerider/tools.js","kefir":"/Users/jingxiao/lineonline/node_modules/kefir/dist/kefir.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js":[function(require,module,exports){
 var Reflux = require('reflux');
 
 var EditorActions = Reflux.createActions([
@@ -51622,7 +51672,7 @@ var EditorActions = Reflux.createActions([
 
 module.exports = EditorActions;
 
-},{"reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/store.js":[function(require,module,exports){
+},{"reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/linerider/store.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var _ = require('underscore');
 var EditorActions = require('./actions');
@@ -51823,7 +51873,7 @@ var SceneStore = Reflux.createStore({
 
 module.exports = SceneStore;
 
-},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/linerider/tools.js":[function(require,module,exports){
+},{"./actions":"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/linerider/tools.js":[function(require,module,exports){
 var Kefir = require('kefir');
 var Actions = require('./actions');
 
@@ -52020,7 +52070,7 @@ var ToolsMixin = {
 
 module.exports = ToolsMixin;
 
-},{"./actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","kefir":"/Users/jingxiao/437/Team77/node_modules/kefir/dist/kefir.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/auth.js":[function(require,module,exports){
+},{"./actions":"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js","kefir":"/Users/jingxiao/lineonline/node_modules/kefir/dist/kefir.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/auth.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52134,7 +52184,7 @@ var AuthStore = Reflux.createStore({
 
 module.exports = AuthStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/current-user.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52216,7 +52266,7 @@ var CurrentUserStore = Reflux.createStore({
 
 module.exports = CurrentUserStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/editor.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
@@ -52368,7 +52418,7 @@ var EditorStore = Reflux.createStore({
 
 module.exports = EditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/error.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../linerider/actions":"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js","../stores/local-editor":"/Users/jingxiao/lineonline/public/js/src/stores/local-editor.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/error.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var ErrorActions = require('../actions-error');
 
@@ -52389,7 +52439,7 @@ var ErrorStore = Reflux.createStore({
 
 module.exports =  ErrorStore;
 
-},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js":[function(require,module,exports){
+},{"../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/favorites.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52475,7 +52525,7 @@ var FavoritesStore = Reflux.createStore({
 
 module.exports = FavoritesStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/featured.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52540,7 +52590,7 @@ var FeaturedStore = Reflux.createStore({
 
 module.exports = FeaturedStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/gallery.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/gallery.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52607,7 +52657,7 @@ var GalleryStore = Reflux.createStore({
 
 module.exports = GalleryStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/home.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/home.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52794,7 +52844,7 @@ var HomeStore = Reflux.createStore({
 
 module.exports = HomeStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/index.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/index.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -52828,7 +52878,7 @@ var FavoritesStore = Reflux.createStore({
 
 module.exports = FavoritesStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/local-editor.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/local-editor.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var Actions = require('../actions');
 
@@ -52921,7 +52971,7 @@ var LocalEditorStore = Reflux.createStore({
 
 module.exports = LocalEditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/profile.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -53025,7 +53075,7 @@ var ProfileStore = Reflux.createStore({
 
 module.exports = ProfileStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/realtime-editor.js":[function(require,module,exports){
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
@@ -53118,7 +53168,7 @@ var RealtimeEditorStore = Reflux.createStore({
 
 module.exports = RealtimeEditorStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/actions":"/Users/jingxiao/437/Team77/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","socket.io-client":"/Users/jingxiao/437/Team77/node_modules/socket.io-client/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../linerider/actions":"/Users/jingxiao/lineonline/public/js/src/linerider/actions.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","socket.io-client":"/Users/jingxiao/lineonline/node_modules/socket.io-client/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/subscriptions.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -53210,7 +53260,7 @@ var SubscriptionsStore = Reflux.createStore({
 
 module.exports = SubscriptionsStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/stores/track.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/stores/track.js":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 var Actions = require('../actions');
@@ -53244,13 +53294,13 @@ var TrackStore = Reflux.createStore({
 
 module.exports = TrackStore;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","status-types":"util/status-types.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","status-types":"/Users/jingxiao/lineonline/util/status-types.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Conversation.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
 var Icon = require('./Icon.jsx');
 
-var Conversation = React.createClass({displayName: 'Conversation',
+var Conversation = React.createClass({displayName: "Conversation",
     render: function() {
         return (
             React.createElement("section", {className: "side-panel side-panel-conversation minimized"}, 
@@ -53281,7 +53331,7 @@ var Conversation = React.createClass({displayName: 'Conversation',
     }
 });
 
-var Message = React.createClass({displayName: 'Message',
+var Message = React.createClass({displayName: "Message",
     render: function() {
         return (
             React.createElement("div", {className: "message"}, 
@@ -53298,7 +53348,7 @@ var Message = React.createClass({displayName: 'Message',
 
 module.exports = Conversation;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Editor.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Editor.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -53324,7 +53374,7 @@ var SaveModal = require('./SaveModal.jsx');
 //Linerider
 var LineriderEditor = require('../linerider/Editor.jsx');
 
-var Editor = React.createClass({displayName: 'Editor',
+var Editor = React.createClass({displayName: "Editor",
     mixins: [
         Reflux.listenTo(EditorStore, 'onDataChanged'),
         Reflux.listenTo(RealtimeEditorStore, 'onSessionUpdate'),
@@ -53499,11 +53549,11 @@ var Editor = React.createClass({displayName: 'Editor',
 
 module.exports = Editor;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Editor.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/437/Team77/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/437/Team77/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../linerider/Editor.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Editor.jsx","../stores/editor":"/Users/jingxiao/lineonline/public/js/src/stores/editor.js","../stores/realtime-editor":"/Users/jingxiao/lineonline/public/js/src/stores/realtime-editor.js","./Conversation.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Conversation.jsx","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Panel.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Panel.jsx","./SaveModal.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/SaveModal.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/ErrorModal.jsx":[function(require,module,exports){
 var ErrorActions = require('../actions-error');
 var React = require('react');
 
-var ErrorModal = React.createClass({displayName: 'ErrorModal',
+var ErrorModal = React.createClass({displayName: "ErrorModal",
     onConfirm: function() {
         if (this.props.error.onConfirm) {
             this.props.error.onConfirm();
@@ -53570,7 +53620,7 @@ var ErrorModal = React.createClass({displayName: 'ErrorModal',
 
 module.exports = ErrorModal;
 
-},{"../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","react":"/Users/jingxiao/437/Team77/node_modules/react/react.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
+},{"../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","react":"/Users/jingxiao/lineonline/node_modules/react/react.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Favorites.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53588,7 +53638,7 @@ var TracksPreview = require('./TracksPreview.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
-var Favorites = React.createClass({displayName: 'Favorites',
+var Favorites = React.createClass({displayName: "Favorites",
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged')
     ],
@@ -53647,10 +53697,10 @@ var Favorites = React.createClass({displayName: 'Favorites',
 
 module.exports = Favorites;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../stores/favorites":"/Users/jingxiao/lineonline/public/js/src/stores/favorites.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
-var Footer = React.createClass({displayName: 'Footer',
+var Footer = React.createClass({displayName: "Footer",
     // <footer className='section panel footerbar'>
     //     <p>
     //         Copyright © 2014 LineOnline. All Rights Reserved.
@@ -53665,7 +53715,7 @@ var Footer = React.createClass({displayName: 'Footer',
 
 module.exports = Footer;
 
-},{"react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx":[function(require,module,exports){
+},{"react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Gallery.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53683,7 +53733,7 @@ var TracksCol = require('./TracksCol.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
-var Gallery = React.createClass({displayName: 'Gallery',
+var Gallery = React.createClass({displayName: "Gallery",
     mixins: [
         Reflux.listenTo(GalleryStore, 'onDataChanged')
     ],
@@ -53750,7 +53800,7 @@ var Gallery = React.createClass({displayName: 'Gallery',
     }
 });
 
-var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
+var GalleryPreview = React.createClass({displayName: "GalleryPreview",
     render: function() {
         return (
             React.createElement("div", {className: "section group"}, 
@@ -53797,7 +53847,7 @@ var GalleryPreview = React.createClass({displayName: 'GalleryPreview',
     }
 });
 
-var SearchBar = React.createClass({displayName: 'SearchBar',
+var SearchBar = React.createClass({displayName: "SearchBar",
     render: function() {
         return (
             React.createElement("div", {className: "section group"}, 
@@ -53822,7 +53872,7 @@ var SearchBar = React.createClass({displayName: 'SearchBar',
 
 module.exports = Gallery;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/gallery":"/Users/jingxiao/437/Team77/public/js/src/stores/gallery.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Home.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../stores/gallery":"/Users/jingxiao/lineonline/public/js/src/stores/gallery.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksCol.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksCol.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Home.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53843,7 +53893,7 @@ var NotFound = require('./NotFound.jsx');
 var Icon = require('./Icon.jsx');
 var MediaIcons = require('./MediaIcons.jsx');
 
-var Home = React.createClass({displayName: 'Home',
+var Home = React.createClass({displayName: "Home",
     mixins: [
         Reflux.listenTo(HomeStore, 'onDataChanged')
     ],
@@ -53917,7 +53967,7 @@ var Home = React.createClass({displayName: 'Home',
     }
 });
 
-var FlexiblePanel = React.createClass({displayName: 'FlexiblePanel',
+var FlexiblePanel = React.createClass({displayName: "FlexiblePanel",
     render: function() {
         return (
             React.createElement("section", {className: "panel-flexible"}, 
@@ -53937,17 +53987,17 @@ var FlexiblePanel = React.createClass({displayName: 'FlexiblePanel',
 
 module.exports = Home;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../stores/home":"/Users/jingxiao/437/Team77/public/js/src/stores/home.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./NotFound.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../stores/home":"/Users/jingxiao/lineonline/public/js/src/stores/home.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/MediaIcons.jsx","./NotFound.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/NotFound.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksPreview.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
-var Icon = React.createClass({displayName: 'Icon',
+var Icon = React.createClass({displayName: "Icon",
     render: function() {
         return (
             React.createElement("span", {
                 className: this.props.class + ' oi', 
-                'data-glyph': this.props.icon, 
+                "data-glyph": this.props.icon, 
                 title: this.props.icon, 
-                'aria-hidden': "true"}
+                "aria-hidden": "true"}
             )
         );
     }
@@ -53955,7 +54005,7 @@ var Icon = React.createClass({displayName: 'Icon',
 
 module.exports = Icon;
 
-},{"react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Index.jsx":[function(require,module,exports){
+},{"react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Index.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53979,7 +54029,7 @@ var FeaturedTrack = require('./featured-track.jsx');
 
 var Display = require('../linerider/Display.jsx');
 
-var Index = React.createClass({displayName: 'Index',
+var Index = React.createClass({displayName: "Index",
     trackId: 1,
     mixins: [
         Reflux.listenTo(IndexStore, 'onDataChanged')
@@ -54025,13 +54075,13 @@ var Index = React.createClass({displayName: 'Index',
 
 module.exports = Index;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/index":"/Users/jingxiao/437/Team77/public/js/src/stores/index.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","../stores/index":"/Users/jingxiao/lineonline/public/js/src/stores/index.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Gallery.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Gallery.jsx","./Panel.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Panel.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./ScrollDivider.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/ScrollDivider.jsx","./featured-track.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/MediaIcons.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
 var Icon = require('./Icon.jsx');
 
-var MediaIcons = React.createClass({displayName: 'MediaIcons',
+var MediaIcons = React.createClass({displayName: "MediaIcons",
     render: function() {
         return (
             React.createElement("div", {className: "media-icons"}, 
@@ -54046,7 +54096,7 @@ var MediaIcons = React.createClass({displayName: 'MediaIcons',
 
 module.exports = MediaIcons;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/NotFound.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/NotFound.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //Actions
@@ -54056,7 +54106,7 @@ var Actions = require('../actions');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
-var NotFound = React.createClass({displayName: 'NotFound',
+var NotFound = React.createClass({displayName: "NotFound",
     render: function() {
         return (
             React.createElement("div", {className: "main-content"}, 
@@ -54071,10 +54121,10 @@ var NotFound = React.createClass({displayName: 'NotFound',
 
 module.exports = NotFound;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Panel.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
-var Panel = React.createClass({displayName: 'Panel',
+var Panel = React.createClass({displayName: "Panel",
     render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
@@ -54102,10 +54152,10 @@ module.exports = Panel;
 
 
 
-},{"react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx":[function(require,module,exports){
+},{"react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
-var PanelPadded = React.createClass({displayName: 'PanelPadded',
+var PanelPadded = React.createClass({displayName: "PanelPadded",
     render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
@@ -54133,7 +54183,7 @@ var PanelPadded = React.createClass({displayName: 'PanelPadded',
 
 module.exports = PanelPadded;
 
-},{"react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Playback.jsx":[function(require,module,exports){
+},{"react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Playback.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -54154,7 +54204,7 @@ var MediaIcons = require('./MediaIcons.jsx');
 //Linerider
 var Display = require('../linerider/Display.jsx');
 
-var Playback = React.createClass({displayName: 'Playback',
+var Playback = React.createClass({displayName: "Playback",
     mixins: [
         Reflux.listenTo(TrackStore, 'onDataChanged'),
         Navigation
@@ -54204,7 +54254,7 @@ var Playback = React.createClass({displayName: 'Playback',
 
 module.exports = Playback;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/track":"/Users/jingxiao/437/Team77/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Profile.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","../stores/track":"/Users/jingxiao/lineonline/public/js/src/stores/track.js","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/MediaIcons.jsx","./Panel.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Panel.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Profile.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -54228,7 +54278,7 @@ var ProfileFeaturedTrack = require('./featured-track.jsx')
 //Linerider
 var Display = require('../linerider/Display.jsx');
 
-var Profile = React.createClass({displayName: 'Profile',
+var Profile = React.createClass({displayName: "Profile",
     mixins: [
         Reflux.listenTo(ProfileStore, 'onDataChanged')
     ],
@@ -54311,7 +54361,7 @@ var Profile = React.createClass({displayName: 'Profile',
     }
 });
 
-var ProfileTrackSnippets = React.createClass({displayName: 'ProfileTrackSnippets',
+var ProfileTrackSnippets = React.createClass({displayName: "ProfileTrackSnippets",
     render: function() {
         return (
             React.createElement("section", {className: "profile-collections"}, 
@@ -54331,7 +54381,7 @@ var ProfileTrackSnippets = React.createClass({displayName: 'ProfileTrackSnippets
     }
 });
 
-var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
+var ProfileCollections = React.createClass({displayName: "ProfileCollections",
     render: function() {
         var trackCollections = this.props.collections.map(function(collection) {
             return (
@@ -54351,7 +54401,7 @@ var ProfileCollections = React.createClass({displayName: 'ProfileCollections',
     }
 });
 
-var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
+var ProfileSidebar = React.createClass({displayName: "ProfileSidebar",
     render: function() {
         var bgSrc = this.props.avatarUrl;
         var profileAvatarStyle = {
@@ -54371,7 +54421,7 @@ var ProfileSidebar = React.createClass({displayName: 'ProfileSidebar',
     }
 });
 
-var ProfileContactDetail = React.createClass({displayName: 'ProfileContactDetail',
+var ProfileContactDetail = React.createClass({displayName: "ProfileContactDetail",
     render: function() {
         return (
             React.createElement("div", {className: "detail contact"}, 
@@ -54399,7 +54449,7 @@ var ProfileContactDetail = React.createClass({displayName: 'ProfileContactDetail
     }
 });
 
-var ProfileAboutDetail = React.createClass({displayName: 'ProfileAboutDetail',
+var ProfileAboutDetail = React.createClass({displayName: "ProfileAboutDetail",
     render: function() {
         return (
             React.createElement("div", {className: "detail about"}, 
@@ -54417,7 +54467,7 @@ var ProfileAboutDetail = React.createClass({displayName: 'ProfileAboutDetail',
     }
 });
 
-var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDetail',
+var ProfileInteractDetail = React.createClass({displayName: "ProfileInteractDetail",
     render: function() {
         return (
             React.createElement("div", {className: "detail interact"}, 
@@ -54435,7 +54485,7 @@ var ProfileInteractDetail = React.createClass({displayName: 'ProfileInteractDeta
 
 module.exports = Profile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/lineonline/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/SaveModal.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -54447,7 +54497,7 @@ var request = require('superagent');
 var Icon = require('./Icon.jsx');
 
 var DEBOUNCE_DELAY = 350; // in ms, amount to delay before continuing
-var InviteSearch = React.createClass({displayName: 'InviteSearch',
+var InviteSearch = React.createClass({displayName: "InviteSearch",
     mixins: [ReactBacon.BaconMixin],
     getInitialState: function() {
         return {
@@ -54541,7 +54591,7 @@ var InviteSearch = React.createClass({displayName: 'InviteSearch',
     }
 });
 
-var AutocompleteBox = React.createClass({displayName: 'AutocompleteBox',
+var AutocompleteBox = React.createClass({displayName: "AutocompleteBox",
     render: function() {
         var users = this.props.users.map(function(user) {
             var handleSelectUser = function(e) {
@@ -54563,7 +54613,7 @@ var AutocompleteBox = React.createClass({displayName: 'AutocompleteBox',
     }
 });
 
-var SaveModal = React.createClass({displayName: 'SaveModal',
+var SaveModal = React.createClass({displayName: "SaveModal",
     getInitialState: function() {
         return {
             track: this.props.track
@@ -54732,7 +54782,7 @@ var SaveModal = React.createClass({displayName: 'SaveModal',
     }
 });
 
-var UserBubble = React.createClass({displayName: 'UserBubble',
+var UserBubble = React.createClass({displayName: "UserBubble",
     render: function() {
         var bgSrc = this.props.imageSrc;
         var avatarStyle = {
@@ -54749,13 +54799,13 @@ var UserBubble = React.createClass({displayName: 'UserBubble',
 
 module.exports = SaveModal;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/437/Team77/node_modules/react-bacon/src/react-bacon.js","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","superagent":"/Users/jingxiao/437/Team77/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","react-bacon":"/Users/jingxiao/lineonline/node_modules/react-bacon/src/react-bacon.js","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","superagent":"/Users/jingxiao/lineonline/node_modules/superagent/lib/client.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/ScrollDivider.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
 var Icon = require('./Icon.jsx');
 
-var ScrollDivider = React.createClass({displayName: 'ScrollDivider',
+var ScrollDivider = React.createClass({displayName: "ScrollDivider",
     render: function() {
         return (
             React.createElement("div", {className: "scroll-divider"}, 
@@ -54769,7 +54819,7 @@ var ScrollDivider = React.createClass({displayName: 'ScrollDivider',
 
 module.exports = ScrollDivider;
 
-},{"./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Settings.jsx":[function(require,module,exports){
+},{"./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Settings.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -54787,7 +54837,7 @@ var CurrentUserStore = require('../stores/current-user');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
-var Settings = React.createClass({displayName: 'Settings',
+var Settings = React.createClass({displayName: "Settings",
     mixins: [
         Reflux.listenTo(CurrentUserStore, 'onDataChanged')
     ],
@@ -55080,7 +55130,7 @@ var Settings = React.createClass({displayName: 'Settings',
 
 module.exports = Settings;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/current-user":"/Users/jingxiao/437/Team77/public/js/src/stores/current-user.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Subscriptions.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../stores/current-user":"/Users/jingxiao/lineonline/public/js/src/stores/current-user.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Subscriptions.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -55099,7 +55149,7 @@ var TracksSlider = require('./TracksSlider.jsx');
 var PanelPadded = require('./PanelPadded.jsx');
 var Footer = require('./Footer.jsx');
 
-var Subscriptions = React.createClass({displayName: 'Subscriptions',
+var Subscriptions = React.createClass({displayName: "Subscriptions",
     mixins: [
         Reflux.listenTo(SubscriptionsStore, 'onDataChanged')
     ],
@@ -55175,7 +55225,7 @@ var Subscriptions = React.createClass({displayName: 'Subscriptions',
     }
 });
 
-var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
+var SubscriptionPicture = React.createClass({displayName: "SubscriptionPicture",
     handleUnsubscribe: function(e) {
         e.preventDefault();
         this.props.onUnsubscribe(this.props.userId);
@@ -55204,7 +55254,7 @@ var SubscriptionPicture = React.createClass({displayName: 'SubscriptionPicture',
 
 module.exports = Subscriptions;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../stores/subscriptions":"/Users/jingxiao/437/Team77/public/js/src/stores/subscriptions.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksSlider.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksSlider.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/Tile.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../stores/subscriptions":"/Users/jingxiao/lineonline/public/js/src/stores/subscriptions.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksSlider.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksSlider.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/Tile.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -55226,7 +55276,7 @@ var Icon = require('./Icon.jsx');
 var Display = require('../linerider/Display.jsx');
 
 // this.props.trackPreview
-var Tile = React.createClass({displayName: 'Tile',
+var Tile = React.createClass({displayName: "Tile",
     mixins: [
         Reflux.listenTo(FavoritesStore, 'onDataChanged'),
         Reflux.listenTo(FeaturedStore, 'onFeaturedChanged'),
@@ -55524,7 +55574,7 @@ var Tile = React.createClass({displayName: 'Tile',
 
 module.exports = Tile;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../actions-error":"/Users/jingxiao/437/Team77/public/js/src/actions-error.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/437/Team77/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/437/Team77/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../actions-error":"/Users/jingxiao/lineonline/public/js/src/actions-error.js","../linerider/Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","../stores/favorites":"/Users/jingxiao/lineonline/public/js/src/stores/favorites.js","../stores/featured":"/Users/jingxiao/lineonline/public/js/src/stores/featured.js","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/TracksCol.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 
@@ -55535,7 +55585,7 @@ var Actions = require('../actions');
 var Tile = require('./Tile.jsx');
 var Icon = require('./Icon.jsx');
 
-var TracksCol = React.createClass({displayName: 'TracksCol',
+var TracksCol = React.createClass({displayName: "TracksCol",
     render: function() {
         var tracks = this.props.tracks;
         var tiles = this.props.tracks.map(function(track) {
@@ -55567,7 +55617,7 @@ var TracksCol = React.createClass({displayName: 'TracksCol',
     }
 });
 
-var Header = React.createClass({displayName: 'Header',
+var Header = React.createClass({displayName: "Header",
     render: function() {
         return (
             React.createElement("div", {className: "gallery-row section group"}, 
@@ -55584,7 +55634,7 @@ var Header = React.createClass({displayName: 'Header',
 
 module.exports = TracksCol;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./Tile.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Tile.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./Tile.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Tile.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/TracksPreview.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Reflux = require('reflux');
 
@@ -55594,7 +55644,7 @@ var Actions = require('../actions');
 //UI Components
 var TracksCol = require('./TracksCol.jsx');
 
-var TracksPreview = React.createClass({displayName: 'TracksPreview',
+var TracksPreview = React.createClass({displayName: "TracksPreview",
     render: function() {
         var tracksCols = {
             0: [],
@@ -55640,13 +55690,13 @@ var TracksPreview = React.createClass({displayName: 'TracksPreview',
 
 module.exports = TracksPreview;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/TracksSlider.jsx":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","./TracksCol.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/TracksSlider.jsx":[function(require,module,exports){
 var React = require('react/addons');
 
 //UI Components
 var TracksCol = require('./TracksCol.jsx');
 
-var TracksSlider = React.createClass({displayName: 'TracksSlider',
+var TracksSlider = React.createClass({displayName: "TracksSlider",
     render: function() {
         console.log(this.props.tracks);
         var tracks = [];
@@ -55688,7 +55738,7 @@ var TracksSlider = React.createClass({displayName: 'TracksSlider',
 
 module.exports = TracksSlider;
 
-},{"./TracksCol.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js"}],"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx":[function(require,module,exports){
+},{"./TracksCol.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksCol.jsx","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js"}],"/Users/jingxiao/lineonline/public/js/src/ui/featured-track.jsx":[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -55712,7 +55762,7 @@ var ProfileFeaturedTrack = require('./featured-track.jsx');
 //Linerider
 var Display = require('../linerider/Display.jsx');
 
-var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack',
+var ProfileFeaturedTrack = React.createClass({displayName: "ProfileFeaturedTrack",
     render: function() {
         var collaboratorListItems = this.props.featuredTrack.collaborators.map(function(collaborator) {
             return (
@@ -55770,7 +55820,7 @@ var ProfileFeaturedTrack = React.createClass({displayName: 'ProfileFeaturedTrack
 
 module.exports = ProfileFeaturedTrack;
 
-},{"../actions":"/Users/jingxiao/437/Team77/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/437/Team77/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/437/Team77/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/437/Team77/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/437/Team77/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/437/Team77/node_modules/react/addons.js","reflux":"/Users/jingxiao/437/Team77/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/437/Team77/node_modules/underscore/underscore.js"}],"util/status-types.js":[function(require,module,exports){
+},{"../actions":"/Users/jingxiao/lineonline/public/js/src/actions.js","../linerider/Display.jsx":"/Users/jingxiao/lineonline/public/js/src/linerider/Display.jsx","../stores/profile":"/Users/jingxiao/lineonline/public/js/src/stores/profile.js","./Footer.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Footer.jsx","./Icon.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/Icon.jsx","./MediaIcons.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/MediaIcons.jsx","./PanelPadded.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/PanelPadded.jsx","./TracksPreview.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/TracksPreview.jsx","./featured-track.jsx":"/Users/jingxiao/lineonline/public/js/src/ui/featured-track.jsx","react-router":"/Users/jingxiao/lineonline/node_modules/react-router/modules/index.js","react/addons":"/Users/jingxiao/lineonline/node_modules/react/addons.js","reflux":"/Users/jingxiao/lineonline/node_modules/reflux/src/index.js","underscore":"/Users/jingxiao/lineonline/node_modules/underscore/underscore.js"}],"/Users/jingxiao/lineonline/util/status-types.js":[function(require,module,exports){
 var StatusTypes = {
     info: 100,
     ok: 200,
