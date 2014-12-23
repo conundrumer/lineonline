@@ -54884,12 +54884,6 @@ var Settings = React.createClass({displayName: "Settings",
             if (http !== 'http://' && https !== 'https://') {
                 console.log('not equal!');
                 newUrl = 'http://' + url;
-                var newData = {};
-                newData['avatar_url'] = newUrl;
-                var newProfile = _.extend(this.state.data.profile, newData)
-                this.setState({
-                    data: _.extend(this.state.data, { profile: newProfile })
-                });
             }
             return newUrl;
         }
@@ -54898,7 +54892,7 @@ var Settings = React.createClass({displayName: "Settings",
         e.preventDefault();
         console.log('submitting profile...');
         var profileData = {
-            avatar_url: this.sanitizeTextData(this.state.data.profile.avatar_url),
+            avatar_url: this.sanitizeAvatarUrl(this.sanitizeTextData(this.state.data.profile.avatar_url)),
             location: this.sanitizeTextData(this.state.data.profile.location),
             about: this.sanitizeTextData(this.state.data.profile.about)
         };
@@ -54929,18 +54923,6 @@ var Settings = React.createClass({displayName: "Settings",
     handleChange: function(inputName) {
         return function(e) {
             var value = e.target.value;
-            if (inputName === 'avatar_url') {
-                if (value === '') {
-                    value = '/images/default.png';
-                } else {
-                    var http = value.slice(0, 7);
-                    var https = value.slice(0, 8);
-                    if (http !== 'http://' && https !== 'https://') {
-                        console.log('not equal!');
-                        value = 'http://' + value;
-                    }
-                }
-            }
             var newData = {};
             newData[inputName] = value;
             var newProfile = _.extend(this.state.data.profile, newData)
