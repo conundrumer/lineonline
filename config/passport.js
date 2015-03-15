@@ -1,7 +1,7 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
-var encrypt = require('encrypt');
+var encrypt = require(__base + 'util/encrypt');
 
 module.exports = function (passport, config) {
 

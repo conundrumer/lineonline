@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 var Favorite = require('../models/favorite');
 
 exports.addFavorite = function(req, res) {

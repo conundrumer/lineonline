@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 var User = require('../models/user');
-var encrypt = require('encrypt');
+var encrypt = require(__base + 'util/encrypt');
 var passport = require('passport');
 
 

@@ -1,3 +1,6 @@
+// temp hack to avoid using NODE_ENV
+global.__base = __dirname + '/../';
+
 // tests will only pass for an initially empty database
 
 // Begin with no data

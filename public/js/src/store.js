@@ -315,7 +315,7 @@ Data.onUpdate = function() {
 var Reflux = require('reflux');
 var Actions = require('./actions');
 var request = require('superagent');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 
 // module.exports = Data;
 var DataStore = Reflux.createStore({

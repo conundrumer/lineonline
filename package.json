@@ -4,9 +4,9 @@
   "description": "Web Apps Final Project",
   "main": "server.js",
   "scripts": {
-    "start": "NODE_PATH=./util nodemon -i public",
-    "gulp": "NODE_PATH=./util gulp",
-    "test": "node db/reset && NODE_PATH=./util mocha test/test.js --require mocha-clean",
+    "start": "nodemon -i public",
+    "gulp": "gulp",
+    "test": "node db/reset && mocha test/test.js --require mocha-clean",
     "db-reset": "node db/reset",
     "db-pop": "node db/populate",
     "db-repop": "node db/reset && node db/populate"

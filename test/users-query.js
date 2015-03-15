@@ -1,7 +1,7 @@
 var demand = require('must');
 var request = require('supertest-as-promised');
 var Promise = require('bluebird');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 
 var users = require('./util/test-users');
 var dolan = users.dolan;

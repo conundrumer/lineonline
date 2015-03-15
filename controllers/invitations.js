@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 var Invitation = require('../models/invitation');
 var Collaboration = require('../models/collaboration');
 

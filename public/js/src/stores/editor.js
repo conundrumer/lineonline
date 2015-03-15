@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var Actions = require('../actions');
 var request = require('superagent');
-var StatusTypes = require('status-types');
+var StatusTypes = require(__base + 'util/status-types');
 var _ = require('underscore');
 var LineRiderActions = require('../linerider/actions');
 var LocalEditorStore = require('../stores/local-editor');

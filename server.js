@@ -1,3 +1,5 @@
+// temp hack to avoid using NODE_ENV
+global.__base = __dirname + '/';
 
 var express = require('express');
 var passport = require('passport');
